@@ -94,16 +94,18 @@ export default function Cadastro() {
       </Head>
       
       <div className="min-h-screen bg-black text-white relative overflow-hidden page-with-bg-image">
-        <div className="absolute top-0 left-0 p-3 sm:p-5 z-50">
-          <Link href="/" className="block">
-            <Image 
-              src="/icons/logo.svg" 
-              alt="Camera Real" 
-              width={220} 
-              height={70}
-              className="h-12 sm:h-16 w-auto cursor-pointer hover:opacity-80 transition-opacity"
-            />
-          </Link>
+        <div className="absolute top-0 left-0 right-0 p-3 sm:p-5 z-50">
+          <div className="container mx-auto px-4">
+            <Link href="/" className="block w-fit">
+              <Image 
+                src="/icons/logo.svg" 
+                alt="Camera Real" 
+                width={220} 
+                height={70}
+                className="h-12 sm:h-16 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+              />
+            </Link>
+          </div>
         </div>
         
         <div className="absolute top-0 right-0 p-3 sm:p-5 z-50">
@@ -115,8 +117,8 @@ export default function Cadastro() {
         {/* Main Content */}
         <div className="flex flex-col lg:flex-row min-h-screen pt-20 lg:pt-0">
             {/* Left Column - Welcome Text with Background Image */}
-            <div className="w-full lg:w-1/2 flex flex-col justify-center items-center text-center p-6 sm:p-8 lg:p-12 bg-[url('/images/Group\ 26.png')] bg-cover bg-center z-10 relative min-h-[50vh] lg:min-h-screen">
-              <div className="max-w-lg mx-auto">
+            <div className="w-full lg:w-1/2 flex flex-col justify-center items-start text-left p-6 sm:p-8 lg:p-12 xl:p-16 bg-[url('/images/Group\ 26.png')] bg-cover bg-center z-10 relative min-h-[50vh] lg:min-h-screen">
+              <div className="max-w-lg ml-4 sm:ml-8 lg:ml-12 xl:ml-20">
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 lg:mb-6">
                   Bem-vindo, ao<br />
                   <span className="text-[#F25790]">Camera Real.</span>
@@ -130,8 +132,8 @@ export default function Cadastro() {
             </div>
             
             {/* Right Column - Registration Form */}
-            <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 lg:p-8 min-h-[50vh] lg:min-h-screen">
-              <div className="max-w-sm sm:max-w-md w-full">
+            <div className="w-full lg:w-1/2 flex items-center justify-center lg:justify-start p-4 sm:p-6 lg:p-8 xl:p-12 min-h-[50vh] lg:min-h-screen">
+              <div className="max-w-sm sm:max-w-md w-full lg:ml-4 xl:ml-8">
                 <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-[#F25790]">Cadastro usuário</h2>
                 
                 {formError && (

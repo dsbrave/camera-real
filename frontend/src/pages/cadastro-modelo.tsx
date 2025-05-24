@@ -1,315 +1,408 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
-import Header from '@/components/Header';
+import Image from 'next/image';
 import Footer from '@/components/Footer';
 
 export default function CadastroModelo() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     nomeCompleto: '',
     email: '',
     confirmEmail: '',
     dataNascimento: '',
     genero: '',
-    documentoFrente: null,
-    documentoVerso: null,
-    fotoComDocumento: null,
+    documentoFrente: null as File | null,
+    documentoVerso: null as File | null,
+    fotoComDocumento: null as File | null,
     nomeUsuario: '',
     senha: '',
-    confirmarSenha: ''
+    confirmSenha: ''
   });
+  
+  const [formError, setFormError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const { name } = e.target;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target;
+    if (type === 'file') {
+      const files = (e.target as HTMLInputElement).files;
       setFormData(prev => ({
         ...prev,
-        [name]: e.target.files ? e.target.files[0] : null
+        [name]: files ? files[0] : null
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
       }));
     }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Implementar lógica de cadastro de modelo
-    console.log('Cadastro de modelo:', formData);
+    setFormError('');
+    
+    // Validações
+    if (formData.senha !== formData.confirmSenha) {
+      setFormError('As senhas não coincidem.');
+      return;
+    }
+    
+    if (formData.email !== formData.confirmEmail) {
+      setFormError('Os e-mails não coincidem.');
+      return;
+    }
+    
+    if (!formData.documentoFrente || !formData.documentoVerso || !formData.fotoComDocumento) {
+      setFormError('Todos os documentos são obrigatórios.');
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setShowSuccessModal(true);
+      
+      setTimeout(() => {
+        router.push('/login');
+      }, 3000);
+    }, 2000);
   };
 
   return (
     <>
       <Head>
-        <title>Cadastro para Modelo - Camera Real</title>
-        <meta name="description" content="Cadastre-se como modelo no Camera Real e comece a gerar rendimentos. Processo simples e seguro." />
+        <title>Cadastro para Modelo | Camera Real</title>
+        <meta name="description" content="Cadastre-se como modelo na Camera Real e comece a gerar renda" />
       </Head>
-      <div className="min-h-screen bg-black text-white">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex justify-between items-center mb-10">
-            <Link href="/" className="flex items-center">
-              <Image 
-                src="/icons/logo.svg" 
-                alt="Camera Real" 
-                width={140} 
-                height={45} 
-                priority
-              />
-            </Link>
-            <h2 className="text-2xl text-[#F25790] font-bold">Cadastro para modelo</h2>
-          </div>
-          
-          <div className="flex flex-col md:flex-row gap-8">
-            {/* Coluna da esquerda com texto e imagem */}
-            <div className="w-full md:w-1/2">
-              <h1 className="text-4xl font-bold mb-4">
-                Bem-vinda ao<br />
-                <span className="text-[#F25790]">Camera Real</span>
-              </h1>
-              <p className="text-lg mb-6">
-                Junte-se a nós e comece a gerar
-                remuneração proporcional à sua
-                quantidade de transmissões feitas.
-              </p>
-              
-              <div className="h-96 rounded-lg overflow-hidden relative">
-                <Image 
-                  src="/images/model-signup.jpg" 
-                  alt="Modelo Camera Real" 
-                  fill 
-                  className="object-cover rounded-lg"  
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
-                <div className="absolute bottom-0 left-0 p-6">
-                  <p className="text-xl font-semibold text-white">Faça parte do nosso time de modelos e ganhe até R$ 20.000 por mês</p>
-                </div>
+      
+      <div className="min-h-screen bg-black text-white relative overflow-hidden">
+        {/* Background Image with Overlay */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ 
+            backgroundImage: "url('/images/high-resolution_studio_photo_of_a_confident_brazilian-inspired_model_wearing_an_elegant_black_lace__i7mo7j07sng27o0fv86l_2.png')",
+            transform: 'scaleX(-1)'
+          }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/75 to-black/90" style={{ transform: 'scaleX(-1)' }}></div>
+        </div>
+        
+        <div className="relative z-10" style={{ transform: 'scaleX(-1)' }}>
+          <div style={{ transform: 'scaleX(-1)' }}>
+            {/* Logo */}
+            <div className="absolute top-6 left-0 right-0 z-50">
+              <div className="container mx-auto px-4">
+                <Link href="/" className="block w-fit">
+                  <Image 
+                    src="/icons/logo.svg" 
+                    alt="Camera Real" 
+                    width={220} 
+                    height={70}
+                    className="h-16 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+                  />
+                </Link>
               </div>
             </div>
             
-            {/* Coluna da direita com formulário */}
-            <div className="w-full md:w-1/2">
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label htmlFor="nomeCompleto" className="block text-sm text-[#F25790] mb-1">Nome completo</label>
-                  <input 
-                    type="text" 
-                    id="nomeCompleto"
-                    name="nomeCompleto"
-                    value={formData.nomeCompleto}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F25790] text-white"
-                    placeholder="Escreva seu nome completo que consta em seus documentos" 
-                    required
-                  />
+            {/* Main Content */}
+            <div className="flex min-h-screen">
+              {/* Left Column - Welcome Text */}
+              <div className="w-1/2 flex flex-col justify-start items-center text-left pl-8 pr-8 pt-64">
+                <div className="max-w-lg ml-16">
+                  <h1 className="text-5xl font-bold mb-6 leading-tight">
+                    Bem-vinda, ao<br />
+                    <span className="text-[#F25790]">Camera Real.</span>
+                  </h1>
+                  <p className="text-xl leading-relaxed text-gray-200">
+                    Junte-se a nós e comece a gerar<br/>
+                    remuneração proporcional à sua<br/>
+                    quantidade de transmissões feitas.
+                  </p>
                 </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="email" className="block text-sm text-[#F25790] mb-1">E-mail</label>
-                    <input 
-                      type="email" 
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F25790] text-white"
-                      placeholder="Escreva seu e-mail" 
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="confirmEmail" className="block text-sm text-[#ff4d8d] mb-1">Confirmação do e-mail</label>
-                    <input 
-                      type="email" 
-                      id="confirmEmail"
-                      name="confirmEmail"
-                      value={formData.confirmEmail}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 bg-transparent border border-[#ff4d8d] rounded-md focus:outline-none focus:ring-1 focus:ring-[#ff4d8d]"
-                      placeholder="Escreva seu e-mail" 
-                      required
-                    />
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="dataNascimento" className="block text-sm text-[#ff4d8d] mb-1">Data de nascimento</label>
-                    <div className="relative">
-                      <input 
-                        type="date" 
-                        id="dataNascimento"
-                        name="dataNascimento"
-                        value={formData.dataNascimento}
-                        onChange={handleChange}
-                        className="w-full px-3 py-2 bg-transparent border border-[#ff4d8d] rounded-md focus:outline-none focus:ring-1 focus:ring-[#ff4d8d] text-gray-300"
-                        placeholder="Selecionar data" 
-                        required
-                      />
-                      <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                        <span className="text-[#ff4d8d]">📅</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <label htmlFor="genero" className="block text-sm text-[#ff4d8d] mb-1">Gênero</label>
-                    <div className="relative">
-                      <select 
-                        id="genero"
-                        name="genero"
-                        value={formData.genero}
-                        onChange={(e) => setFormData(prev => ({ ...prev, genero: e.target.value }))}
-                        className="w-full px-3 py-2 bg-transparent border border-[#ff4d8d] rounded-md focus:outline-none focus:ring-1 focus:ring-[#ff4d8d] appearance-none"
-                        required
-                      >
-                        <option value="" disabled>Selecionar gênero</option>
-                        <option value="feminino">Feminino</option>
-                        <option value="masculino">Masculino</option>
-                        <option value="outro">Outro</option>
-                      </select>
-                      <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                        <span className="text-[#ff4d8d]">⌄</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div>
-                  <label htmlFor="documentoFrente" className="block text-sm text-[#ff4d8d] mb-1">Documento frente</label>
-                  <div className="w-full px-3 py-3 bg-transparent border border-[#ff4d8d] rounded-md cursor-pointer">
-                    <div className="flex items-center">
-                      <span className="text-[#ff4d8d] mr-2">📄</span>
-                      <label htmlFor="documentoFrente" className="cursor-pointer text-sm">
-                        Clique aqui para anexar o arquivo. As fotos devem estar legíveis e 
-                        conter todas as informações do RG, CNH ou passaporte
-                      </label>
-                      <input 
-                        type="file" 
-                        id="documentoFrente"
-                        name="documentoFrente"
-                        onChange={handleFileChange}
-                        className="hidden" 
-                        accept="image/*"
-                        required
-                      />
-                    </div>
-                  </div>
-                </div>
-                
-                <div>
-                  <label htmlFor="documentoVerso" className="block text-sm text-[#ff4d8d] mb-1">Documento verso</label>
-                  <div className="w-full px-3 py-3 bg-transparent border border-[#ff4d8d] rounded-md cursor-pointer">
-                    <div className="flex items-center">
-                      <span className="text-[#ff4d8d] mr-2">📄</span>
-                      <label htmlFor="documentoVerso" className="cursor-pointer text-sm">
-                        Clique aqui para anexar o arquivo. As fotos devem estar legíveis e 
-                        conter todas as informações do RG, CNH ou passaporte
-                      </label>
-                      <input 
-                        type="file" 
-                        id="documentoVerso"
-                        name="documentoVerso"
-                        onChange={handleFileChange}
-                        className="hidden" 
-                        accept="image/*"
-                        required
-                      />
-                    </div>
-                  </div>
-                </div>
-                
-                <div>
-                  <label htmlFor="fotoComDocumento" className="block text-sm text-[#ff4d8d] mb-1">Foto com documento</label>
-                  <div className="w-full px-3 py-3 bg-transparent border border-[#ff4d8d] rounded-md cursor-pointer">
-                    <div className="flex items-center">
-                      <span className="text-[#ff4d8d] mr-2">📷</span>
-                      <label htmlFor="fotoComDocumento" className="cursor-pointer text-sm">
-                        Clique aqui para anexar a foto: Faça uma foto segurando o
-                        documento sem cobrir seu rosto.
-                      </label>
-                      <input 
-                        type="file" 
-                        id="fotoComDocumento"
-                        name="fotoComDocumento"
-                        onChange={handleFileChange}
-                        className="hidden" 
-                        accept="image/*"
-                        required
-                      />
-                    </div>
-                  </div>
-                </div>
-                
-                <div>
-                  <label htmlFor="nomeUsuario" className="block text-sm text-[#ff4d8d] mb-1">Nome de usuário</label>
-                  <input 
-                    type="text" 
-                    id="nomeUsuario"
-                    name="nomeUsuario"
-                    value={formData.nomeUsuario}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 bg-transparent border border-[#ff4d8d] rounded-md focus:outline-none focus:ring-1 focus:ring-[#ff4d8d]"
-                    placeholder="Insira nome de usuário, este é o nome que ficará visível no site" 
-                    required
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="senha" className="block text-sm text-[#ff4d8d] mb-1">Senha</label>
-                  <input 
-                    type="password" 
-                    id="senha"
-                    name="senha"
-                    value={formData.senha}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 bg-transparent border border-[#ff4d8d] rounded-md focus:outline-none focus:ring-1 focus:ring-[#ff4d8d]"
-                    placeholder="Inserir senha" 
-                    required
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="confirmarSenha" className="block text-sm text-[#ff4d8d] mb-1">Repetir senha</label>
-                  <input 
-                    type="password" 
-                    id="confirmarSenha"
-                    name="confirmarSenha"
-                    value={formData.confirmarSenha}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 bg-transparent border border-[#ff4d8d] rounded-md focus:outline-none focus:ring-1 focus:ring-[#ff4d8d]"
-                    placeholder="Inserir senha" 
-                    required
-                  />
-                </div>
-                
-                <div className="pt-4">
-                  <button 
-                    type="submit" 
-                    className="w-full bg-[#F25790] hover:bg-[#d93d75] text-white py-3 px-6 rounded-full font-bold transition-colors duration-200"
-                  >
-                    Registrar
-                  </button>
+              </div>
+              
+              {/* Right Column - Registration Form */}
+              <div className="w-1/2 flex items-start justify-start pl-8 pr-16 relative pt-24 pb-20">
+                <div className="w-full max-w-md relative z-10 bg-black/30 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
+                  <h2 className="text-2xl font-bold mb-4 text-[#F25790]">Cadastro para modelo</h2>
                   
-                  <div className="text-center mt-4">
-                    <p>
-                      Já tem conta? <Link href="/login" className="text-[#ff4d8d]">Entre aqui</Link>
-                    </p>
-                  </div>
+                  {formError && (
+                    <div className="bg-red-500 bg-opacity-20 border border-red-500 text-white p-3 rounded-lg mb-4 text-sm">
+                      {formError}
+                    </div>
+                  )}
+                  
+                  <form onSubmit={handleSubmit} className="space-y-3">
+                    {/* Nome Completo */}
+                    <div>
+                      <label htmlFor="nomeCompleto" className="block text-sm font-medium mb-1 text-[#F25790]">Nome completo</label>
+                      <input 
+                        type="text" 
+                        id="nomeCompleto"
+                        name="nomeCompleto"
+                        value={formData.nomeCompleto}
+                        onChange={handleChange}
+                        className="w-full px-3 py-2.5 bg-transparent border border-[#F25790] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F25790] text-white placeholder-gray-400 transition-all duration-200 text-sm"
+                        placeholder="Escreva seu nome completo que consta em seus documentos" 
+                        required
+                      />
+                    </div>
+
+                    {/* Email Row */}
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label htmlFor="email" className="block text-sm font-medium mb-1 text-[#F25790]">E-mail</label>
+                        <input 
+                          type="email" 
+                          id="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          className="w-full px-3 py-2.5 bg-transparent border border-[#F25790] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F25790] text-white placeholder-gray-400 transition-all duration-200 text-sm"
+                          placeholder="Escreva seu e-mail" 
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="confirmEmail" className="block text-sm font-medium mb-1 text-[#F25790]">Confirmação do e-mail</label>
+                        <input 
+                          type="email" 
+                          id="confirmEmail"
+                          name="confirmEmail"
+                          value={formData.confirmEmail}
+                          onChange={handleChange}
+                          className="w-full px-3 py-2.5 bg-transparent border border-[#F25790] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F25790] text-white placeholder-gray-400 transition-all duration-200 text-sm"
+                          placeholder="Escreva seu e-mail" 
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    {/* Data e Gênero Row */}
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label htmlFor="dataNascimento" className="block text-sm font-medium mb-1 text-[#F25790]">Data de nascimento</label>
+                        <div className="relative">
+                          <input 
+                            type="date" 
+                            id="dataNascimento"
+                            name="dataNascimento"
+                            value={formData.dataNascimento}
+                            onChange={handleChange}
+                            className="w-full px-3 py-2.5 bg-transparent border border-[#F25790] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F25790] text-white transition-all duration-200 text-sm"
+                            placeholder="Selecionar data"
+                            required
+                          />
+                          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                            <svg className="w-4 h-4 text-[#F25790]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <label htmlFor="genero" className="block text-sm font-medium mb-1 text-[#F25790]">Gênero</label>
+                        <div className="relative">
+                          <select 
+                            id="genero"
+                            name="genero"
+                            value={formData.genero}
+                            onChange={handleChange}
+                            className="w-full px-3 py-2.5 bg-transparent border border-[#F25790] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F25790] text-white transition-all duration-200 appearance-none text-sm"
+                            required
+                          >
+                            <option value="" className="bg-black">Selecionar gênero</option>
+                            <option value="feminino" className="bg-black">Feminino</option>
+                            <option value="masculino" className="bg-black">Masculino</option>
+                            <option value="outro" className="bg-black">Outro</option>
+                          </select>
+                          <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                            <svg className="w-4 h-4 text-[#F25790]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Documento Frente */}
+                    <div>
+                      <label htmlFor="documentoFrente" className="block text-sm font-medium mb-1 text-[#F25790]">Documento frente</label>
+                      <div className="border border-[#F25790] rounded-lg p-3 cursor-pointer hover:bg-[#F25790] hover:bg-opacity-10 transition-colors">
+                        <input 
+                          type="file" 
+                          id="documentoFrente"
+                          name="documentoFrente"
+                          onChange={handleChange}
+                          accept="image/*"
+                          className="hidden"
+                          required
+                        />
+                        <label htmlFor="documentoFrente" className="cursor-pointer flex items-center">
+                          <svg className="w-4 h-4 text-[#F25790] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                          <div>
+                            <span className="text-[#F25790] font-medium text-sm">Clique aqui para anexar o arquivo:</span>
+                            <p className="text-xs text-gray-400 mt-0.5">As fotos devem estar legíveis e conter todas as informações do RG, CNH ou passaporte</p>
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+
+                    {/* Documento Verso */}
+                    <div>
+                      <label htmlFor="documentoVerso" className="block text-sm font-medium mb-1 text-[#F25790]">Documento verso</label>
+                      <div className="border border-[#F25790] rounded-lg p-3 cursor-pointer hover:bg-[#F25790] hover:bg-opacity-10 transition-colors">
+                        <input 
+                          type="file" 
+                          id="documentoVerso"
+                          name="documentoVerso"
+                          onChange={handleChange}
+                          accept="image/*"
+                          className="hidden"
+                          required
+                        />
+                        <label htmlFor="documentoVerso" className="cursor-pointer flex items-center">
+                          <svg className="w-4 h-4 text-[#F25790] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                          <div>
+                            <span className="text-[#F25790] font-medium text-sm">Clique aqui para anexar o arquivo:</span>
+                            <p className="text-xs text-gray-400 mt-0.5">As fotos devem estar legíveis e conter todas as informações do RG, CNH ou passaporte</p>
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+
+                    {/* Foto com Documento */}
+                    <div>
+                      <label htmlFor="fotoComDocumento" className="block text-sm font-medium mb-1 text-[#F25790]">Foto com documento</label>
+                      <div className="border border-[#F25790] rounded-lg p-3 cursor-pointer hover:bg-[#F25790] hover:bg-opacity-10 transition-colors">
+                        <input 
+                          type="file" 
+                          id="fotoComDocumento"
+                          name="fotoComDocumento"
+                          onChange={handleChange}
+                          accept="image/*"
+                          className="hidden"
+                          required
+                        />
+                        <label htmlFor="fotoComDocumento" className="cursor-pointer flex items-center">
+                          <svg className="w-4 h-4 text-[#F25790] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                          <div>
+                            <span className="text-[#F25790] font-medium text-sm">Clique aqui para anexar a foto:</span>
+                            <p className="text-xs text-gray-400 mt-0.5">Faça uma foto segurando o documento sem cobrir seu rosto.</p>
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+
+                    {/* Nome de Usuário */}
+                    <div>
+                      <label htmlFor="nomeUsuario" className="block text-sm font-medium mb-1 text-[#F25790]">Nome de usuário</label>
+                      <input 
+                        type="text" 
+                        id="nomeUsuario"
+                        name="nomeUsuario"
+                        value={formData.nomeUsuario}
+                        onChange={handleChange}
+                        className="w-full px-3 py-2.5 bg-transparent border border-[#F25790] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F25790] text-white placeholder-gray-400 transition-all duration-200 text-sm"
+                        placeholder="Insira nome de usuário, este é o nome que ficará visível no site" 
+                        required
+                      />
+                    </div>
+
+                    {/* Senha */}
+                    <div>
+                      <label htmlFor="senha" className="block text-sm font-medium mb-1 text-[#F25790]">Senha</label>
+                      <input 
+                        type="password" 
+                        id="senha"
+                        name="senha"
+                        value={formData.senha}
+                        onChange={handleChange}
+                        className="w-full px-3 py-2.5 bg-transparent border border-[#F25790] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F25790] text-white placeholder-gray-400 transition-all duration-200 text-sm"
+                        placeholder="Inserir senha" 
+                        required
+                      />
+                    </div>
+
+                    {/* Repetir Senha */}
+                    <div>
+                      <label htmlFor="confirmSenha" className="block text-sm font-medium mb-1 text-[#F25790]">Repetir senha</label>
+                      <input 
+                        type="password" 
+                        id="confirmSenha"
+                        name="confirmSenha"
+                        value={formData.confirmSenha}
+                        onChange={handleChange}
+                        className="w-full px-3 py-2.5 bg-transparent border border-[#F25790] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F25790] text-white placeholder-gray-400 transition-all duration-200 text-sm"
+                        placeholder="Inserir senha" 
+                        required
+                      />
+                    </div>
+                    
+                    <button 
+                      type="submit" 
+                      className="w-full bg-[#F25790] hover:bg-[#d93d75] text-white py-3 px-6 rounded-full mt-6 transition-all duration-300 font-medium text-base shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed transform hover:-translate-y-1 active:translate-y-0"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? (
+                        <span className="flex items-center justify-center">
+                          <svg className="animate-spin -ml-1 mr-3 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Registrando...
+                        </span>
+                      ) : 'Registrar'}
+                    </button>
+                    
+                    <div className="text-center mt-4">
+                      <p className="text-sm">
+                        Já tem conta? <Link href="/login" className="text-[#F25790] hover:underline">Entre aqui</Link>
+                      </p>
+                    </div>
+                  </form>
                 </div>
-              </form>
+              </div>
             </div>
+
+            {/* Success Modal */}
+            {showSuccessModal && (
+              <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
+                <div className="bg-[#1A1A1A] p-8 rounded-xl max-w-md w-full text-center">
+                  <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8 text-white">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">Cadastro enviado com sucesso!</h3>
+                  <p className="text-gray-300 mb-6">Seu cadastro está em análise. Você receberá um e-mail com o resultado em até 48 horas.</p>
+                  <button 
+                    onClick={() => setShowSuccessModal(false)}
+                    className="bg-[#F25790] hover:bg-[#d93d75] text-white py-2 px-6 rounded-full transition-colors"
+                  >
+                    Fechar
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
-        
-        <Footer />
       </div>
+      
+      {/* Footer fora das transformações */}
+      <Footer />
     </>
   );
 }

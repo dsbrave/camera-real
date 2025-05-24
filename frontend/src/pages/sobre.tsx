@@ -38,8 +38,8 @@ export default function Sobre() {
               </div>
               <div className="relative h-80 rounded-lg overflow-hidden shadow-xl">
                 <Image 
-                  src="/images/about-history.jpg" 
-                  alt="Camera Real História" 
+                  src="/images/close-up_de_duas_mos_se_conectando_digitalmente-_a_mo_esquerda_de_uma_modelo_segurando_um_smartphon_jh4ulurb16xob05ie124_3.png" 
+                  alt="Conexão digital - mãos se conectando através da tecnologia" 
                   fill 
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -50,8 +50,8 @@ export default function Sobre() {
             <div className="grid md:grid-cols-2 gap-10 mb-16 items-center">
               <div className="order-2 md:order-1 relative h-80 rounded-lg overflow-hidden shadow-xl">
                 <Image 
-                  src="/images/about-mission.jpg" 
-                  alt="Camera Real Missão" 
+                  src="/images/fotografia_realista_de_um_escritrio_moderno__noite_com_trs_laptops_abertos_mostrando_linhas_de_cdig_7o867ohk7qss4wikqslz_3.png" 
+                  alt="Escritório moderno à noite com laptops mostrando código" 
                   fill 
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
