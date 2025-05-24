@@ -25,30 +25,39 @@ export default function SuccessModal({ isOpen, onClose, amount }: SuccessModalPr
   
   return (
   <CheckoutModal isOpen={isOpen} onClose={onClose} bgColor="bg-[#9747FF]">
-    <div className="flex flex-col text-white py-8 px-6 max-w-md mx-auto">
-
-      <div className="flex justify-center mb-6">
-        <Image 
-          src="/images/Shiny Happy - Rock n Rollin 1.png" 
-          alt="Confirmação de compra" 
-          width={420}
-          height={420}
+    <div className="flex flex-col md:flex-row text-white h-full gap-12 justify-center items-center">
+      <div className="w-2/5 flex items-center justify-center">
+        <Image
+          src="/images/Shiny Happy - Rock n Rollin 1.png"
+          alt="Confirmação de compra"
+          width={760}
+          height={760}
           className="mx-auto"
-          style={{ maxWidth: 420, width: '100%', height: 'auto', display: 'block' }}
+          style={{ maxWidth: 760, width: '100%', height: 'auto', display: 'block', margin: 'auto' }}
           priority
         />
       </div>
-      <div className="flex flex-col justify-center items-center mb-6">
+      <div className="w-3/5 flex flex-col justify-center items-center">
         <h2 className="text-2xl font-bold mb-1">Pagamento aprovado</h2>
         <p className="text-sm text-center">
           Sua transação para carregar sua conta realizada por PIX foi
           aprovada com sucesso! O saldo está disponível em sua
           conta e já pode ser utilizado.
         </p>
-      </div>
-      <div className="bg-[#9747FF]/40 rounded-md p-4 mb-6">
-        <div className="grid grid-cols-2 gap-2 text-sm">
-          <div>
+        <div className="bg-[#9747FF]/40 rounded-md p-4 mb-6">
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            <div>
+              <div className="text-gray-300">Data:</div>
+              <div>{currentDate} {currentTime}</div>
+            </div>
+            <div>
+              <div className="text-gray-300">Valor:</div>
+              <div>R$ {amount.toFixed(2).replace('.', ',')}</div>
+            </div>
+            <div className="col-span-2">
+              <div className="text-gray-300">ID:</div>
+              <div>{transactionId}</div>
+            </div>
             <div className="text-gray-300">Data:</div>
             <div>{currentDate} {currentTime}</div>
           </div>

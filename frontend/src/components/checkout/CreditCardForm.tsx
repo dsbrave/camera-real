@@ -71,20 +71,19 @@ export default function CreditCardForm({
 
   return (
     <CheckoutModal isOpen={isOpen} onClose={onClose}>
-      <div className="flex">
-        <div className="w-2/5 flex items-center justify-center">
-          <Image 
-            src="/images/Payment.png" 
-            alt="Pagamento via Cartão" 
-            width={420}
-            height={420}
-            className="mx-auto"
-            style={{ maxWidth: 420, width: '100%', height: 'auto', display: 'block' }}
-            priority
-          />
-        </div>
-        
-        <div className="w-3/5">
+      <div className="flex h-full gap-12">
+  <div className="w-2/5 flex items-center justify-center">
+  <Image
+    src="/images/Payment.png"
+    alt="Pagamento via Cartão"
+    width={760}
+    height={760}
+    className="mx-auto"
+    style={{ maxWidth: 760, width: '100%', height: 'auto', display: 'block' }}
+    priority
+  />
+  </div>
+  <div className="w-3/5">
           <h2 className="text-2xl font-bold mb-6 text-center">Cartão de Crédito</h2>
           
           <form onSubmit={handleSubmit} className="space-y-4 mb-6">

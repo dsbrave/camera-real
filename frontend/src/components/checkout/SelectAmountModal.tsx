@@ -34,20 +34,19 @@ export default function SelectAmountModal({ isOpen, onClose, onSelectAmount, onN
 
   return (
     <CheckoutModal isOpen={isOpen} onClose={onClose}>
-      <div className="flex flex-col md:flex-row items-stretch bg-gradient-to-br from-[#a259c6] via-[#b16fdc] to-[#f25790] rounded-2xl p-4 md:p-8 shadow-2xl min-w-[320px] md:min-w-[720px] max-w-[900px]">
-        <div className="md:w-2/5 flex items-center justify-center mb-6 md:mb-0">
-          <Image 
-            src="/images/Payment.png" 
-            alt="Pagamento" 
-            width={420}
-            height={420}
-            className="mx-auto"
-            style={{ maxWidth: 420, width: '100%', height: 'auto', display: 'block' }}
-            priority
-          />
-        </div>
-        
-        <div className="md:w-3/5 flex flex-col justify-center">
+      <div className="flex flex-col md:flex-row items-stretch h-full gap-12">
+  <div className="md:w-2/5 flex items-center justify-center">
+  <Image
+    src="/images/Payment.png"
+    alt="Pagamento"
+    width={760}
+    height={760}
+    className="mx-auto"
+    style={{ maxWidth: 760, width: '100%', height: 'auto', display: 'block' }}
+    priority
+  />
+  </div>
+  <div className="md:w-3/5 flex flex-col justify-center">
           <h2 className="text-3xl font-bold mb-2 text-white text-left md:text-center">Adicionar saldo</h2>
           <p className="text-white text-opacity-90 mb-8 text-left md:text-center">Selecione um valor para adicionar a sua conta:</p>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-10">

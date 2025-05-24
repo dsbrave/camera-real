@@ -32,16 +32,18 @@ export default function SelectPaymentMethodModal({
 
   return (
     <CheckoutModal isOpen={isOpen} onClose={onClose}>
-      <div className="flex">
-        <div className="w-2/5">
-          <Image 
-            src="/images/Wavy Buddies - Payment 1.png" 
-            alt="Ilustração de pagamento - Wavy Buddies" 
-            width={320} 
-            height={320}
-            className="mb-4 mx-auto"
-          />
-        </div>
+      <div className="flex h-full gap-12">
+        <div className="w-2/5 flex items-center justify-center">
+  <Image 
+    src="/images/Payment.png" 
+    alt="Pagamento" 
+    width={760}
+    height={760}
+    className="mx-auto"
+    style={{ maxWidth: 760, width: '100%', height: 'auto', display: 'block' }}
+    priority
+  />
+</div>
         
         <div className="w-3/5">
           <h2 className="text-2xl font-bold mb-2 text-center">Escolha o pagamento</h2>
