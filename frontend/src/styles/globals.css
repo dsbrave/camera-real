@@ -1,0 +1,122 @@
+@tailwind base;
+
+/* Espaçamento global para o header fixo */
+.header-spacer {
+  height: 96px;
+  min-height: 96px;
+  width: 100%;
+}
+
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
+  --camera-pink: 242, 87, 144; /* #F25790 */
+  --header-height: 5.5rem; /* 88px - altura do header com padding */
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+  font-family: var(--font-roboto), var(--font-inter), 'Helvetica', 'Arial', sans-serif;
+}
+
+/* Overlay escuro para as imagens de fundo */
+.bg-image-overlay {
+  position: relative;
+}
+
+.bg-image-overlay::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Overlay escuro semi-transparente */
+  z-index: 1;
+}
+
+.bg-image-overlay > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Espaçamento para o conteúdo após o header fixo */
+.content-after-header {
+  padding-top: var(--header-height);
+}
+
+@layer components {
+  .input-field {
+    @apply w-full p-3 bg-white bg-opacity-10 border border-gray-600 rounded-lg focus:outline-none focus:border-[#F25790] text-white;
+  }
+  
+  .btn-primary {
+    @apply bg-[#F25790] text-white px-6 py-2 rounded-full hover:bg-opacity-90 transition-all;
+  }
+  
+  .btn-secondary {
+    @apply bg-transparent border border-[#F25790] text-[#F25790] px-6 py-2 rounded-full hover:bg-[#F25790] hover:bg-opacity-10 transition-all;
+  }
+  
+  .btn-icon {
+    @apply flex items-center justify-center w-10 h-10 rounded-full bg-white bg-opacity-10 hover:bg-opacity-20 transition-all;
+  }
+  
+  .card {
+    @apply bg-black bg-opacity-70 p-6 rounded-lg;
+  }
+  
+  .modal {
+    @apply bg-[#9747FF] p-6 rounded-xl max-w-md w-full mx-auto text-white;
+  }
+  
+  .page-container {
+    @apply min-h-screen pt-32; /* Espaço para o header */
+  }
+  
+  .page-with-bg-image {
+    @apply relative bg-cover bg-center bg-no-repeat;
+  }
+  
+  .page-with-bg-image::before {
+    @apply content-[""] absolute inset-0 bg-black bg-opacity-60 z-0;
+  }
+  
+  .page-with-bg-image > * {
+    @apply relative z-10;
+  }
+  
+  .profile-picture {
+    @apply rounded-full object-cover;
+  }
+  
+  .profile-edit-button {
+    @apply bg-[#F25790] text-white text-sm px-4 py-1 rounded-md hover:bg-[#d93d75] transition-colors;
+  }
+}
+
+.btn-pink {
+  @apply bg-[#ff4d8d] text-white font-medium py-2 px-4 rounded-full hover:bg-opacity-90 transition-all;
+}
+
+.input-field {
+  @apply bg-[#f0f4f8] text-black rounded-md p-3 w-full outline-none;
+}
+
+.checkbox-custom {
+  @apply w-4 h-4 accent-[#ff4d8d];
+}
+
+.link-pink {
+  @apply text-[#ff4d8d] hover:underline cursor-pointer;
+}

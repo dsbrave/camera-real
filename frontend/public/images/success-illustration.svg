@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="300" height="300" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Rock guitarist figure -->
+  <path d="M180 150C180 150 190 140 200 140C210 140 220 150 230 170C240 190 250 220 240 240C230 260 200 280 180 260C160 240 160 220 170 200C180 180 180 150 180 150Z" fill="#F25790"/>
+  
+  <!-- Guitar neck -->
+  <rect x="150" y="50" width="10" height="150" transform="rotate(-15 150 50)" fill="#444"/>
+  
+  <!-- Guitar head -->
+  <path d="M130 30C130 30 140 25 150 25C160 25 170 30 170 40C170 50 160 55 150 55C140 55 130 50 130 40C130 30 130 30 130 30Z" fill="#444"/>
+  
+  <!-- Guitar tuning pegs -->
+  <circle cx="140" cy="35" r="3" fill="white"/>
+  <circle cx="160" cy="35" r="3" fill="white"/>
+  <circle cx="140" cy="45" r="3" fill="white"/>
+  <circle cx="160" cy="45" r="3" fill="white"/>
+  
+  <!-- Guitar body -->
+  <path d="M200 160C200 160 190 155 180 155C170 155 160 160 160 170C160 180 170 185 180 185C190 185 200 180 200 170C200 160 200 160 200 160Z" fill="#8A63D2"/>
+  
+  <!-- Guitar strings -->
+  <line x1="140" y1="40" x2="185" y2="170" stroke="white" stroke-width="1"/>
+  <line x1="150" y1="40" x2="180" y2="170" stroke="white" stroke-width="1"/>
+  <line x1="160" y1="40" x2="175" y2="170" stroke="white" stroke-width="1"/>
+  
+  <!-- Person head -->
+  <circle cx="170" cy="120" r="25" fill="#F2D3E5"/>
+  
+  <!-- Person hair -->
+  <path d="M150 105C150 105 145 95 155 90C165 85 175 90 180 95C185 100 190 110 185 120C180 130 170 125 170 125" fill="#444"/>
+  
+  <!-- Person face -->
+  <circle cx="160" cy="115" r="3" fill="#444"/>
+  <circle cx="180" cy="115" r="3" fill="#444"/>
+  <path d="M165 130C165 130 170 135 175 130" stroke="#444" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Person arm -->
+  <path d="M145 150C145 150 120 170 110 180C100 190 90 210 100 220C110 230 120 220 130 210C140 200 155 180 155 180" fill="#F25790"/>
+  
+  <!-- Person leg -->
+  <path d="M200 220C200 220 180 230 170 240C160 250 150 270 160 280C170 290 180 280 190 270C200 260 210 240 210 240" fill="#8A63D2"/>
+  
+  <!-- Decorative circles -->
+  <circle cx="80" cy="80" r="8" fill="#F25790" opacity="0.5"/>
+  <circle cx="240" cy="100" r="10" fill="#8A63D2" opacity="0.5"/>
+  <circle cx="60" cy="220" r="12" fill="#F25790" opacity="0.5"/>
+  <circle cx="240" cy="240" r="15" fill="#8A63D2" opacity="0.5"/>
+  
+  <!-- Stage spotlight effect -->
+  <circle cx="170" cy="150" r="120" fill="url(#spotlight)" opacity="0.2"/>
+  
+  <defs>
+    <radialGradient id="spotlight" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(170 150) rotate(90) scale(120)">
+      <stop stop-color="white"/>
+      <stop offset="1" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>

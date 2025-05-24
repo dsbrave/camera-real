@@ -1,0 +1,43 @@
+import React from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+
+export default function Footer() {
+  return (
+    <footer className="bg-black py-8 border-t border-gray-800 mt-auto">
+      <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
+        <div className="mb-4 md:mb-0">
+          <Link href="/">
+            <Image 
+              src="/icons/logo.svg" 
+              alt="Camera Real" 
+              width={120} 
+              height={40}
+              className="h-10 w-auto"
+            />
+          </Link>
+        </div>
+        
+        <div className="flex flex-wrap justify-center gap-6 md:gap-8">
+          <Link href="/" className="text-gray-400 hover:text-[#F25790]">
+            Início
+          </Link>
+          <Link href="/explorar" className="text-gray-400 hover:text-[#F25790]">
+            Explorar
+          </Link>
+          <Link href="/sobre" className="text-gray-400 hover:text-[#F25790]">
+            Sobre
+          </Link>
+          <Link href="/termos-condicoes" className="text-gray-400 hover:text-[#F25790]">
+            Termos de Uso
+          </Link>
+          <Link href="/contato" className="text-gray-400 hover:text-[#F25790]">
+            Contato
+          </Link>
+        </div>
+        
+        <p className="text-gray-500 mt-4 md:mt-0">&copy; 2024 Camera Real</p>
+      </div>
+    </footer>
+  );
+}
