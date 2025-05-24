@@ -55,16 +55,18 @@ export default function Header() {
             <Image 
               src="/icons/logo.svg" 
               alt="Camera Real" 
-              width={180} 
-              height={60}
-              className="h-12 w-auto"
+              width={220} 
+              height={70}
+              className="h-16 w-auto"
             />
           </Link>
         </div>
         <nav className="flex items-center space-x-6">
-          <Link href="/explorar" className="hover:text-[#F25790] font-medium">
-            Explorar
-          </Link>
+          {isLoggedIn && (
+            <Link href="/explorar" className="hover:text-[#F25790] font-medium">
+              Explorar
+            </Link>
+          )}
           <Link href="/videochats" className="hover:text-[#F25790] font-medium">
             Como Funciona
           </Link>

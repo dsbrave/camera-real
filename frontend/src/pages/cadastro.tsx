@@ -94,56 +94,58 @@ export default function Cadastro() {
       </Head>
       
       <div className="min-h-screen bg-black text-white relative overflow-hidden page-with-bg-image">
-        <div className="absolute top-0 left-0 p-5">
-          <Link href="/">
+        <div className="absolute top-0 left-0 p-3 sm:p-5 z-50">
+          <Link href="/" className="block">
             <Image 
               src="/icons/logo.svg" 
               alt="Camera Real" 
-              width={120} 
-              height={40}
-              className="h-10 w-auto"
+              width={220} 
+              height={70}
+              className="h-12 sm:h-16 w-auto cursor-pointer hover:opacity-80 transition-opacity"
             />
           </Link>
         </div>
         
-        <div className="absolute top-0 right-0 p-5">
-          <Link href="/" className="text-[#F25790] hover:underline">
-            Voltar para home
+        <div className="absolute top-0 right-0 p-3 sm:p-5 z-50">
+          <Link href="/" className="text-[#F25790] hover:underline text-xs sm:text-sm font-medium block">
+            ← Voltar para home
           </Link>
         </div>
         
         {/* Main Content */}
-        <div className="flex flex-col md:flex-row min-h-screen">
+        <div className="flex flex-col lg:flex-row min-h-screen pt-20 lg:pt-0">
             {/* Left Column - Welcome Text with Background Image */}
-            <div className="w-full md:w-1/2 flex flex-col justify-center p-8 md:p-16 bg-[url('/images/Group\ 26.png')] bg-cover bg-center z-10 relative">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                Bem-vindo, ao<br />
-                <span className="text-[#F25790]">Camera Real.</span>
-              </h1>
-              <p className="text-lg mb-8">
-                Conheça nossa plataforma inovadora de chat por vídeo.<br/>
-                Em apenas um clique descubra um novo jeito de interagir.<br/>
-                Junte-se a nós e conecte-se de forma genuína.
-              </p>
+            <div className="w-full lg:w-1/2 flex flex-col justify-center items-center text-center p-6 sm:p-8 lg:p-12 bg-[url('/images/Group\ 26.png')] bg-cover bg-center z-10 relative min-h-[50vh] lg:min-h-screen">
+              <div className="max-w-lg mx-auto">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 lg:mb-6">
+                  Bem-vindo, ao<br />
+                  <span className="text-[#F25790]">Camera Real.</span>
+                </h1>
+                <p className="text-base sm:text-lg mb-6 lg:mb-8 leading-relaxed">
+                  Conheça nossa plataforma inovadora de chat por vídeo.<br/>
+                  Em apenas um clique descubra um novo jeito de interagir.<br/>
+                  Junte-se a nós e conecte-se de forma genuína.
+                </p>
+              </div>
             </div>
             
             {/* Right Column - Registration Form */}
-            <div className="w-full md:w-1/2 flex items-center justify-center p-8">
-              <div className="max-w-md w-full">
-                <h2 className="text-2xl font-bold mb-6 text-[#F25790]">Cadastro usuário</h2>
+            <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 lg:p-8 min-h-[50vh] lg:min-h-screen">
+              <div className="max-w-sm sm:max-w-md w-full">
+                <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-[#F25790]">Cadastro usuário</h2>
                 
                 {formError && (
-                  <div className="bg-red-500 bg-opacity-20 border border-red-500 text-white p-3 rounded-lg mb-4">
+                  <div className="bg-red-500 bg-opacity-20 border border-red-500 text-white p-3 rounded-lg mb-4 text-sm">
                     {formError}
                   </div>
                 )}
                 
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="mb-3">
-                    <label htmlFor="username" className="block text-sm font-medium mb-1 text-[#F25790]">Nome de usuário</label>
+                <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
+                  <div className="mb-2 sm:mb-3">
+                    <label htmlFor="username" className="block text-xs sm:text-sm font-medium mb-1 text-[#F25790]">Nome de usuário</label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
                           <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
                         </svg>
                       </div>
@@ -153,7 +155,7 @@ export default function Cadastro() {
                         name="username"
                         value={formData.username}
                         onChange={handleChange}
-                        className="w-full pl-10 px-4 py-3 bg-black bg-opacity-50 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F25790] focus:border-[#F25790] text-white placeholder-gray-400 transition-all duration-200"
+                        className="w-full pl-8 sm:pl-10 px-3 sm:px-4 py-2.5 sm:py-3 bg-black bg-opacity-50 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F25790] focus:border-[#F25790] text-white placeholder-gray-400 transition-all duration-200 text-sm sm:text-base"
                         placeholder="Escolha um nome de usuário" 
                         required
                       />
@@ -161,11 +163,11 @@ export default function Cadastro() {
                     <p className="text-xs text-gray-400 mt-1">Este é o nome que ficará visível no site</p>
                   </div>
                   
-                  <div className="mb-3">
-                    <label htmlFor="email" className="block text-sm font-medium mb-1 text-[#F25790]">E-mail</label>
+                  <div className="mb-2 sm:mb-3">
+                    <label htmlFor="email" className="block text-xs sm:text-sm font-medium mb-1 text-[#F25790]">E-mail</label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
                           <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                           <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                         </svg>
@@ -176,18 +178,18 @@ export default function Cadastro() {
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className="w-full pl-10 px-4 py-3 bg-black bg-opacity-50 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F25790] focus:border-[#F25790] text-white placeholder-gray-400 transition-all duration-200"
+                        className="w-full pl-8 sm:pl-10 px-3 sm:px-4 py-2.5 sm:py-3 bg-black bg-opacity-50 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F25790] focus:border-[#F25790] text-white placeholder-gray-400 transition-all duration-200 text-sm sm:text-base"
                         placeholder="Seu endereço de e-mail" 
                         required
                       />
                     </div>
                   </div>
                   
-                  <div className="mb-3">
-                    <label htmlFor="confirmEmail" className="block text-sm font-medium mb-1 text-[#F25790]">Confirme seu e-mail</label>
+                  <div className="mb-2 sm:mb-3">
+                    <label htmlFor="confirmEmail" className="block text-xs sm:text-sm font-medium mb-1 text-[#F25790]">Confirme seu e-mail</label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
                           <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
                           <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
                         </svg>
@@ -198,18 +200,18 @@ export default function Cadastro() {
                         name="confirmEmail"
                         value={formData.confirmEmail}
                         onChange={handleChange}
-                        className="w-full pl-10 px-4 py-3 bg-black bg-opacity-50 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F25790] focus:border-[#F25790] text-white placeholder-gray-400 transition-all duration-200"
+                        className="w-full pl-8 sm:pl-10 px-3 sm:px-4 py-2.5 sm:py-3 bg-black bg-opacity-50 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F25790] focus:border-[#F25790] text-white placeholder-gray-400 transition-all duration-200 text-sm sm:text-base"
                         placeholder="Digite seu e-mail novamente" 
                         required
                       />
                     </div>
                   </div>
                   
-                  <div className="mb-3">
-                    <label htmlFor="password" className="block text-sm font-medium mb-1 text-[#F25790]">Senha</label>
+                  <div className="mb-2 sm:mb-3">
+                    <label htmlFor="password" className="block text-xs sm:text-sm font-medium mb-1 text-[#F25790]">Senha</label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
                           <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                         </svg>
                       </div>
@@ -219,18 +221,18 @@ export default function Cadastro() {
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
-                        className="w-full pl-10 px-4 py-3 bg-black bg-opacity-50 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F25790] focus:border-[#F25790] text-white placeholder-gray-400 transition-all duration-200"
+                        className="w-full pl-8 sm:pl-10 px-3 sm:px-4 py-2.5 sm:py-3 bg-black bg-opacity-50 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F25790] focus:border-[#F25790] text-white placeholder-gray-400 transition-all duration-200 text-sm sm:text-base"
                         placeholder="Crie uma senha segura" 
                         required
                       />
                     </div>
                   </div>
                   
-                  <div className="mb-5">
-                    <label htmlFor="confirmPassword" className="block text-sm font-medium mb-1 text-[#F25790]">Confirme sua senha</label>
+                  <div className="mb-4 sm:mb-5">
+                    <label htmlFor="confirmPassword" className="block text-xs sm:text-sm font-medium mb-1 text-[#F25790]">Confirme sua senha</label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
                           <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                         </svg>
                       </div>
@@ -240,26 +242,26 @@ export default function Cadastro() {
                         name="confirmPassword"
                         value={formData.confirmPassword}
                         onChange={handleChange}
-                        className="w-full pl-10 px-4 py-3 bg-black bg-opacity-50 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F25790] focus:border-[#F25790] text-white placeholder-gray-400 transition-all duration-200"
+                        className="w-full pl-8 sm:pl-10 px-3 sm:px-4 py-2.5 sm:py-3 bg-black bg-opacity-50 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F25790] focus:border-[#F25790] text-white placeholder-gray-400 transition-all duration-200 text-sm sm:text-base"
                         placeholder="Digite sua senha novamente" 
                         required
                       />
                     </div>
                   </div>
                   
-                  <div className="flex items-start space-x-2 mb-6">
-                    <div className="flex items-center h-5">
+                  <div className="flex items-start space-x-2 mb-4 sm:mb-6">
+                    <div className="flex items-center h-5 mt-0.5">
                       <input 
                         type="checkbox" 
                         id="isAdult" 
                         name="isAdult"
                         checked={formData.isAdult}
                         onChange={handleChange}
-                        className="h-5 w-5 text-[#F25790] focus:ring-[#F25790] border-gray-600 rounded accent-[#F25790]"
+                        className="h-4 w-4 sm:h-5 sm:w-5 text-[#F25790] focus:ring-[#F25790] border-gray-600 rounded accent-[#F25790]"
                         required
                       />
                     </div>
-                    <label htmlFor="isAdult" className="text-sm text-gray-300">
+                    <label htmlFor="isAdult" className="text-xs sm:text-sm text-gray-300">
                       <span className="block font-medium">Confirmo que possuo 18 anos ou mais.</span>
                       <span className="block mt-1">Ao criar sua conta, você concorda com nossos <Link href="/termos-condicoes" className="text-[#F25790] hover:underline">Termos e Condições</Link>.</span>
                     </label>
@@ -267,12 +269,12 @@ export default function Cadastro() {
                   
                   <button 
                     type="submit" 
-                    className="w-full bg-[#F25790] hover:bg-[#d93d75] text-white py-4 px-6 rounded-full mt-6 transition-all duration-300 font-medium text-lg shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed transform hover:-translate-y-1 active:translate-y-0"
+                    className="w-full bg-[#F25790] hover:bg-[#d93d75] text-white py-3 sm:py-4 px-4 sm:px-6 rounded-full mt-4 sm:mt-6 transition-all duration-300 font-medium text-base sm:text-lg shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed transform hover:-translate-y-1 active:translate-y-0"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (
                       <span className="flex items-center justify-center">
-                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <svg className="animate-spin -ml-1 mr-3 h-4 w-4 sm:h-5 sm:w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
@@ -281,8 +283,8 @@ export default function Cadastro() {
                     ) : 'Registre-se agora'}
                   </button>
                   
-                  <div className="text-center mt-4">
-                    <p>
+                  <div className="text-center mt-3 sm:mt-4">
+                    <p className="text-sm">
                       Já tem conta? <Link href="/login" className="text-[#F25790] hover:underline">Entre aqui</Link>
                     </p>
                   </div>

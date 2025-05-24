@@ -22,9 +22,6 @@ export default function Footer() {
           <Link href="/" className="text-gray-400 hover:text-[#F25790]">
             Início
           </Link>
-          <Link href="/explorar" className="text-gray-400 hover:text-[#F25790]">
-            Explorar
-          </Link>
           <Link href="/sobre" className="text-gray-400 hover:text-[#F25790]">
             Sobre
           </Link>
@@ -36,7 +33,7 @@ export default function Footer() {
           </Link>
         </div>
         
-        <p className="text-gray-500 mt-4 md:mt-0">&copy; 2024 Camera Real</p>
+        <p className="text-gray-500 mt-4 md:mt-0">&copy; 2025 Camera Real</p>
       </div>
     </footer>
   );

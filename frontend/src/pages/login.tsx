@@ -99,28 +99,28 @@ export default function Login() {
       </Head>
       
       <div className="min-h-screen bg-black text-white relative overflow-hidden" style={{ backgroundImage: "url('/images/Group 26.png')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundBlendMode: 'darken' }}>
-        <div className="absolute top-0 left-0 p-5">
-          <Link href="/">
+        <div className="absolute top-0 left-0 p-3 sm:p-5 z-50">
+          <Link href="/" className="block">
             <Image 
               src="/icons/logo.svg" 
               alt="Camera Real" 
-              width={120} 
-              height={40}
-              className="h-10 w-auto"
+              width={220} 
+              height={70}
+              className="h-12 sm:h-16 w-auto cursor-pointer hover:opacity-80 transition-opacity"
             />
           </Link>
         </div>
         
-        <div className="absolute top-0 right-0 p-5">
-          <Link href="/" className="text-[#F25790] hover:underline">
-            Voltar para home
+        <div className="absolute top-0 right-0 p-3 sm:p-5 z-50">
+          <Link href="/" className="text-[#F25790] hover:underline text-xs sm:text-sm font-medium block">
+            ← Voltar para home
           </Link>
         </div>
         
-        <div className="flex justify-center items-center min-h-screen px-4">
+        <div className="flex justify-center items-center min-h-screen px-4 pt-20 sm:pt-0">
           {/* Login Form */}
-          <div className="w-full max-w-md p-6 bg-[#1A1A1A] bg-opacity-80 rounded-xl shadow-lg">
-              <h2 className="text-3xl font-bold mb-6 text-center text-[#F25790]">Login</h2>
+          <div className="w-full max-w-sm sm:max-w-md p-4 sm:p-6 bg-[#1A1A1A] bg-opacity-80 rounded-xl shadow-lg">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-center text-[#F25790]">Login</h2>
               
               {error && (
                 <div className="bg-red-500 bg-opacity-20 border border-red-500 text-white p-3 rounded-lg mb-4 text-sm">
@@ -128,36 +128,36 @@ export default function Login() {
                 </div>
               )}
               
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium mb-1 text-[#F25790]">E-mail</label>
+                  <label htmlFor="email" className="block text-xs sm:text-sm font-medium mb-1 text-[#F25790]">E-mail</label>
                   <input 
                     type="email" 
                     id="email"
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 bg-transparent border border-[#F25790] rounded-md focus:outline-none focus:ring-1 focus:ring-[#F25790] text-white"
+                    className="w-full px-3 py-2.5 sm:py-3 bg-transparent border border-[#F25790] rounded-md focus:outline-none focus:ring-1 focus:ring-[#F25790] text-white text-sm sm:text-base"
                     placeholder="Insira seu e-mail de cadastro" 
                     required
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="password" className="block text-sm font-medium mb-1 text-[#F25790]">Senha</label>
+                  <label htmlFor="password" className="block text-xs sm:text-sm font-medium mb-1 text-[#F25790]">Senha</label>
                   <input 
                     type="password" 
                     id="password"
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 bg-transparent border border-[#F25790] rounded-md focus:outline-none focus:ring-1 focus:ring-[#F25790] text-white"
+                    className="w-full px-3 py-2.5 sm:py-3 bg-transparent border border-[#F25790] rounded-md focus:outline-none focus:ring-1 focus:ring-[#F25790] text-white text-sm sm:text-base"
                     placeholder="Inserir senha" 
                     required
                   />
                 </div>
                 
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-2 sm:space-y-0">
                   <div className="flex items-center">
                     <input
                       type="checkbox"
@@ -167,12 +167,12 @@ export default function Login() {
                       onChange={handleChange}
                       className="w-4 h-4 mr-2 accent-[#F25790]"
                     />
-                    <label htmlFor="remember" className="text-sm">Lembrar-me</label>
+                    <label htmlFor="remember" className="text-xs sm:text-sm">Lembrar-me</label>
                   </div>
                   <button 
                     type="button" 
                     onClick={() => setShowForgotPasswordModal(true)}
-                    className="text-sm text-[#F25790] hover:underline"
+                    className="text-xs sm:text-sm text-[#F25790] hover:underline text-left sm:text-right"
                   >
                     Esqueceu sua senha? Clique aqui.
                   </button>
@@ -180,14 +180,14 @@ export default function Login() {
                 
                 <button 
                   type="submit" 
-                  className="w-full bg-[#F25790] hover:bg-[#d93d75] text-white py-3 px-4 rounded-full mt-6 transition-colors font-medium"
+                  className="w-full bg-[#F25790] hover:bg-[#d93d75] text-white py-3 sm:py-4 px-4 rounded-full mt-4 sm:mt-6 transition-colors font-medium text-base sm:text-lg"
                   disabled={loading}
                 >
                   {loading ? 'Entrando...' : 'Entrar'}
                 </button>
                 
-                <div className="mt-6 text-center">
-                  <p className="text-sm">
+                <div className="mt-4 sm:mt-6 text-center">
+                  <p className="text-xs sm:text-sm">
                     Não tem uma conta?{' '}
                     <Link href="/cadastro" className="text-[#F25790] hover:underline">
                       Cadastre-se
@@ -196,7 +196,7 @@ export default function Login() {
                 </div>
               </form>
               
-              <div className="mt-6 text-center text-xs text-gray-400">
+              <div className="mt-4 sm:mt-6 text-center text-xs text-gray-400">
                 <p>Para fins de demonstração, use:</p>
                 <p className="mt-1">Usuário: teste@camera.real / Senha: senha123</p>
                 <p className="mt-1">Modelo: modelo@camera.real / Senha: modelo123</p>
