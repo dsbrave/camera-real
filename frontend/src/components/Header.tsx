@@ -78,9 +78,16 @@ export default function Header() {
               <Link href="/seja-modelo" className="hover:text-[#F25790] font-medium">
                 Seja modelo
               </Link>
-              <Link href="/login" className="btn-primary">
-                Entrar
-              </Link>
+              <div className="flex flex-col items-end">
+                <div className="grid grid-cols-1 justify-items-end">
+                  <Link href="/login" className="btn-primary px-4 py-2 text-center text-sm whitespace-nowrap w-full">
+                    Entrar
+                  </Link>
+                  <div className="text-xs text-gray-400 mt-1 whitespace-nowrap">
+                    Primeira vez? <Link href="/cadastro" className="text-[#F25790] hover:underline">Cadastre-se</Link>
+                  </div>
+                </div>
+              </div>
             </>
           ) : (
             <div className="relative" ref={dropdownRef}>

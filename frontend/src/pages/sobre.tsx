@@ -22,7 +22,7 @@ export default function Sobre() {
               <p className="text-xl text-gray-300">Como nasceu a maior plataforma brasileira de videochat adulto</p>
             </div>
             
-            <div className="grid md:grid-cols-2 gap-10 mb-16 items-center">
+            <div className="grid md:grid-cols-2 gap-10 mb-16 items-start">
               <div>
                 <h2 className="text-2xl font-bold mb-4 text-[#F25790]">O início de tudo</h2>
                 <p className="mb-4 text-gray-300">
@@ -36,28 +36,7 @@ export default function Sobre() {
                   estáveis para as modelos e uma experiência premium para os usuários.
                 </p>
               </div>
-              <div className="relative h-80 rounded-lg overflow-hidden shadow-xl">
-                <Image 
-                  src="/images/close-up_de_duas_mos_se_conectando_digitalmente-_a_mo_esquerda_de_uma_modelo_segurando_um_smartphon_jh4ulurb16xob05ie124_3.png" 
-                  alt="Conexão digital - mãos se conectando através da tecnologia" 
-                  fill 
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-              </div>
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-10 mb-16 items-center">
-              <div className="order-2 md:order-1 relative h-80 rounded-lg overflow-hidden shadow-xl">
-                <Image 
-                  src="/images/fotografia_realista_de_um_escritrio_moderno__noite_com_trs_laptops_abertos_mostrando_linhas_de_cdig_7o867ohk7qss4wikqslz_3.png" 
-                  alt="Escritório moderno à noite com laptops mostrando código" 
-                  fill 
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-              </div>
-              <div className="order-1 md:order-2">
+              <div>
                 <h2 className="text-2xl font-bold mb-4 text-[#F25790]">Nossa Missão</h2>
                 <p className="mb-4 text-gray-300">
                   Acreditamos em criar conexões genuínas e proporcionar momentos de intimidade e prazer 
@@ -109,59 +88,6 @@ export default function Sobre() {
                   <p className="text-gray-300 text-center">
                     Promovemos um ambiente de respeito mútuo entre modelos e usuários, com tolerância zero a assédio.
                   </p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="bg-gray-900 p-8 rounded-xl text-center mb-16">
-              <h2 className="text-2xl font-bold mb-6 text-[#F25790]">Nossa Equipe</h2>
-              <p className="text-xl text-gray-300 mb-8">
-                Somos mais de 30 profissionais dedicados a criar a melhor experiência 
-                de videochat adulto do Brasil, incluindo desenvolvedores, designers, 
-                atendimento ao cliente e especialistas em marketing.
-              </p>
-              
-              <div className="flex justify-center gap-6 flex-wrap">
-                <div className="text-center">
-                  <div className="w-24 h-24 rounded-full overflow-hidden mb-3 mx-auto border-2 border-[#F25790]">
-                    <Image
-                      src="/images/team-1.jpg"
-                      alt="Fundador"
-                      width={96}
-                      height={96}
-                      className="object-cover w-full h-full"
-                    />
-                  </div>
-                  <h3 className="font-bold">Ricardo Mendes</h3>
-                  <p className="text-sm text-gray-400">CEO & Fundador</p>
-                </div>
-                
-                <div className="text-center">
-                  <div className="w-24 h-24 rounded-full overflow-hidden mb-3 mx-auto border-2 border-[#F25790]">
-                    <Image
-                      src="/images/team-2.jpg"
-                      alt="CTO"
-                      width={96}
-                      height={96}
-                      className="object-cover w-full h-full"
-                    />
-                  </div>
-                  <h3 className="font-bold">Marcela Silva</h3>
-                  <p className="text-sm text-gray-400">CTO</p>
-                </div>
-                
-                <div className="text-center">
-                  <div className="w-24 h-24 rounded-full overflow-hidden mb-3 mx-auto border-2 border-[#F25790]">
-                    <Image
-                      src="/images/team-3.jpg"
-                      alt="COO"
-                      width={96}
-                      height={96}
-                      className="object-cover w-full h-full"
-                    />
-                  </div>
-                  <h3 className="font-bold">André Santos</h3>
-                  <p className="text-sm text-gray-400">COO</p>
                 </div>
               </div>
             </div>
