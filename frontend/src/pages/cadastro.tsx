@@ -81,7 +81,7 @@ export default function Cadastro() {
       
       // Redirecionar para a página inicial após 3 segundos
       setTimeout(() => {
-        router.push('/painel-usuario');
+        router.push('/');
       }, 3000);
     }, 2000);
   };

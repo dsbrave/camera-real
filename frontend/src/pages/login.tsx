@@ -66,7 +66,7 @@ export default function Login() {
         }));
         
         // Redirecionar para a página principal após o login
-        router.push('/painel-usuario');
+        router.push('/');
       } else if (formData.email === 'modelo@camera.real' && formData.password === 'modelo123') {
         // Armazenar dados do modelo no localStorage
         localStorage.setItem('user', JSON.stringify({
