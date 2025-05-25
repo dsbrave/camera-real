@@ -15,21 +15,19 @@ export default function AnimatedBackground({
 }: AnimatedBackgroundProps) {
   const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
 
-  // Mouse tracking with throttling for better performance - only if not static
   useEffect(() => {
-    if (isStatic) return; // Skip mouse tracking for static backgrounds
+    if (isStatic) return;
     
     let timeoutId: NodeJS.Timeout;
     
     const handleMouseMove = (e: MouseEvent) => {
-      // Throttle mouse updates to reduce performance impact
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
         setMousePosition({
           x: (e.clientX / window.innerWidth) * 100,
           y: (e.clientY / window.innerHeight) * 100
         });
-      }, 100); // Update every 100ms instead of every frame
+      }, 100);
     };
 
     window.addEventListener('mousemove', handleMouseMove);
@@ -39,7 +37,6 @@ export default function AnimatedBackground({
     };
   }, [isStatic]);
 
-  // Intensity settings - much more subtle
   const intensitySettings = {
     subtle: {
       baseOpacity: 0.04,
@@ -71,14 +68,11 @@ export default function AnimatedBackground({
   };
 
   const settings = intensitySettings[intensity];
-
-  // For static backgrounds, use fixed position
-  const staticPosition = { x: 50, y: 50 };
-  const currentPosition = isStatic ? staticPosition : mousePosition;
+  const fixedPosition = { x: 50, y: 50 };
+  const currentPosition = isStatic ? fixedPosition : mousePosition;
 
   return (
     <div className={`absolute inset-0 overflow-hidden ${className}`}>
-      {/* Base gradient background - very slow transition */}
       <div 
         className={`absolute inset-0 ${isStatic ? '' : 'transition-all duration-[8000ms] ease-out'}`}
         style={{
@@ -92,14 +86,13 @@ export default function AnimatedBackground({
         }}
       />
       
-      {/* Camera flash effect - subtle pulse */}
       {!isStatic && (
         <div className="absolute inset-0">
           <div 
             className="absolute inset-0 animate-pulse" 
             style={{ 
               opacity: settings.waveOpacity,
-              animationDuration: '12s', // Very slow pulse
+              animationDuration: '12s',
               animationTimingFunction: 'ease-in-out'
             }}
           >
@@ -120,7 +113,6 @@ export default function AnimatedBackground({
         </div>
       )}
 
-      {/* Secondary flash - even more subtle */}
       {!isStatic && (
         <div className="absolute inset-0">
           <div 
@@ -128,7 +120,7 @@ export default function AnimatedBackground({
             style={{ 
               opacity: settings.waveOpacity * 0.5,
               animationDelay: '6s',
-              animationDuration: '18s', // Extra slow
+              animationDuration: '18s',
               animationTimingFunction: 'ease-in-out'
             }}
           >
@@ -149,7 +141,6 @@ export default function AnimatedBackground({
         </div>
       )}
 
-      {/* Ambient glow - very subtle */}
       {!isStatic && (
         <div className="absolute inset-0">
           <div 
@@ -157,7 +148,7 @@ export default function AnimatedBackground({
             style={{ 
               opacity: settings.waveOpacity * 0.3,
               animationDelay: '3s',
-              animationDuration: '25s', // Ultra slow
+              animationDuration: '25s',
               animationTimingFunction: 'ease-in-out'
             }}
           >
@@ -176,7 +167,6 @@ export default function AnimatedBackground({
         </div>
       )}
       
-      {/* Camera lens flare effect - more subtle */}
       {showLensFlare && !isStatic && (
         <div 
           className="absolute transition-all duration-[1000ms] ease-out pointer-events-none"
@@ -186,7 +176,6 @@ export default function AnimatedBackground({
             transform: 'translate(-50%, -50%)'
           }}
         >
-          {/* Main lens reflection - smaller and more subtle */}
           <div 
             className="absolute w-4 h-4 rounded-full"
             style={{
@@ -197,7 +186,6 @@ export default function AnimatedBackground({
             }}
           />
           
-          {/* Secondary lens ring - very subtle */}
           <div 
             className="absolute w-8 h-8 rounded-full"
             style={{
@@ -208,7 +196,6 @@ export default function AnimatedBackground({
             }}
           />
           
-          {/* Lens reflection cross - minimal */}
           <div 
             className="absolute w-0.5 h-2"
             style={{
@@ -230,7 +217,6 @@ export default function AnimatedBackground({
         </div>
       )}
       
-      {/* Overlay to control intensity - darker for more subtlety */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{ 
