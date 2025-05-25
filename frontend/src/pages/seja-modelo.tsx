@@ -35,27 +35,58 @@ export default function SejaModelo() {
                   Com seu formato exclusivo, o Camera Real proporciona mais interação aos usuários com rendimentos significativos.
                 </p>
                 
-                {/* Benefits section for mobile */}
-                <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 sm:mb-8">
-                  <div className="bg-gray-900 bg-opacity-50 p-4 rounded-lg">
-                    <div className="text-[#F25790] text-2xl mb-2">💰</div>
-                    <h3 className="font-bold text-sm sm:text-base mb-1">Ganhos Altos</h3>
-                    <p className="text-xs sm:text-sm text-gray-400">60-70% de comissão</p>
+                {/* Benefits section - always visible, responsive grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 sm:mb-8">
+                  <div className="bg-gray-900 bg-opacity-50 p-4 rounded-lg flex items-center gap-4">
+                    <span className="text-[#F25790] flex items-center justify-center w-10 h-10">
+                      {/* Ícone padrão de dinheiro */}
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                      </svg>
+                    </span>
+                    <div>
+                      <h3 className="font-bold text-sm sm:text-base mb-1">Ganhos Altos</h3>
+                      <p className="text-xs sm:text-sm text-gray-400">60-70% de comissão</p>
+                    </div>
                   </div>
-                  <div className="bg-gray-900 bg-opacity-50 p-4 rounded-lg">
-                    <div className="text-[#F25790] text-2xl mb-2">🔒</div>
-                    <h3 className="font-bold text-sm sm:text-base mb-1">Segurança</h3>
-                    <p className="text-xs sm:text-sm text-gray-400">Plataforma segura</p>
+                  <div className="bg-gray-900 bg-opacity-50 p-4 rounded-lg flex items-center gap-4">
+                    <span className="text-[#F25790] flex items-center justify-center w-10 h-10">
+                      {/* Ícone padrão de cadeado/segurança */}
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M16 10V7a4 4 0 10-8 0v3M5 10h14a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2z" />
+                      </svg>
+                    </span>
+                    <div>
+                      <h3 className="font-bold text-sm sm:text-base mb-1">Segurança</h3>
+                      <p className="text-xs sm:text-sm text-gray-400">Plataforma segura</p>
+                    </div>
                   </div>
-                  <div className="bg-gray-900 bg-opacity-50 p-4 rounded-lg">
-                    <div className="text-[#F25790] text-2xl mb-2">⏰</div>
-                    <h3 className="font-bold text-sm sm:text-base mb-1">Flexibilidade</h3>
-                    <p className="text-xs sm:text-sm text-gray-400">Horários livres</p>
+                  <div className="bg-gray-900 bg-opacity-50 p-4 rounded-lg flex items-center gap-4">
+                    <span className="text-[#F25790] flex items-center justify-center w-10 h-10">
+                      {/* Ícone padrão de relógio/flexibilidade */}
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2" />
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth={1.5} fill="none" />
+                      </svg>
+                    </span>
+                    <div>
+                      <h3 className="font-bold text-sm sm:text-base mb-1">Flexibilidade</h3>
+                      <p className="text-xs sm:text-sm text-gray-400">Horários livres</p>
+                    </div>
                   </div>
-                  <div className="bg-gray-900 bg-opacity-50 p-4 rounded-lg">
-                    <div className="text-[#F25790] text-2xl mb-2">🎯</div>
-                    <h3 className="font-bold text-sm sm:text-base mb-1">Suporte</h3>
-                    <p className="text-xs sm:text-sm text-gray-400">Equipe dedicada</p>
+                  <div className="bg-gray-900 bg-opacity-50 p-4 rounded-lg flex items-center gap-4">
+                    <span className="text-[#F25790] flex items-center justify-center w-10 h-10">
+                      {/* Ícone padrão de alvo/suporte */}
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth={1.5} fill="none" />
+                        <circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth={1.5} fill="none" />
+                        <circle cx="12" cy="12" r="2" fill="#F25790" />
+                      </svg>
+                    </span>
+                    <div>
+                      <h3 className="font-bold text-sm sm:text-base mb-1">Suporte</h3>
+                      <p className="text-xs sm:text-sm text-gray-400">Equipe dedicada</p>
+                    </div>
                   </div>
                 </div>
                 
@@ -66,8 +97,8 @@ export default function SejaModelo() {
                   Registre-se agora
                 </Link>
                 
-                {/* Additional info for mobile */}
-                <div className="lg:hidden mt-6 sm:mt-8 p-4 bg-gray-900 bg-opacity-30 rounded-lg">
+                {/* Informações adicionais - sempre visível, layout responsivo */}
+                <div className="mt-6 sm:mt-8 p-4 bg-gray-900 bg-opacity-30 rounded-lg">
                   <p className="text-xs sm:text-sm text-gray-400 text-center">
                     ✨ Processo de aprovação rápido<br/>
                     📱 Suporte 24/7 para modelos<br/>

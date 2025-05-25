@@ -10,8 +10,8 @@ const Navbar = () => {
   const isActive = (path: string) => router.pathname === path;
 
   return (
-    <nav className="bg-black bg-opacity-90 fixed w-full z-50 border-b border-gray-800">
-      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+    <nav className="bg-black bg-opacity-90 fixed w-full z-50 border-b border-gray-800 select-none">
+      <div className="container mx-auto px-4 py-3 flex justify-between items-center overflow-x-auto">
         <Link href="/" className="flex items-center">
           <Image 
             src="/icons/logo.svg" 
@@ -24,7 +24,7 @@ const Navbar = () => {
         
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-6">
-          <Link href="/explorar" className={`font-medium ${isActive('/explorar') ? 'text-[#F25790]' : 'text-white hover:text-[#F25790]'} transition-colors`}>
+          <Link href="/explorar" className={`font-medium break-words truncate max-w-[120px] ${isActive('/explorar') ? 'text-[#F25790]' : 'text-white hover:text-[#F25790]'} transition-colors`}>
             Explorar
           </Link>
           <Link href="/videochats" className={`font-medium ${isActive('/videochats') ? 'text-[#F25790]' : 'text-white hover:text-[#F25790]'} transition-colors`}>
@@ -66,7 +66,7 @@ const Navbar = () => {
       
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-black bg-opacity-95 py-4 border-b border-gray-800">
+        <div className="fixed inset-0 bg-black bg-opacity-95 z-50 flex flex-col items-center justify-center p-6 md:hidden transition-all duration-300 overflow-y-auto">
           <div className="container mx-auto px-4 flex flex-col space-y-2">
             <Link 
               href="/explorar" 

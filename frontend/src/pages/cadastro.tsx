@@ -314,8 +314,8 @@ export default function Cadastro() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold mb-2">Cadastro realizado com sucesso!</h3>
-                <p className="text-gray-300 mb-6">Bem-vindo(a) à Camera Real! Você será redirecionado para seu painel em instantes.</p>
+                <h3 className="text-xl font-bold mb-2 break-words truncate">Cadastro realizado com sucesso!</h3>
+                <p className="text-gray-300 mb-6 break-words truncate">Bem-vindo(a) à Camera Real! Você será redirecionado para seu painel em instantes.</p>
                 <button 
                   onClick={() => setShowSuccessModal(false)}
                   className="bg-[#F25790] hover:bg-[#d93d75] text-white py-2 px-6 rounded-full transition-colors"
@@ -335,8 +335,8 @@ export default function Cadastro() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold mb-2">Erro no cadastro</h3>
-                <p className="text-gray-300 mb-6">{errorMessage}</p>
+                <h3 className="text-xl font-bold mb-2 break-words truncate">Erro no cadastro</h3>
+                <p className="text-gray-300 mb-6 break-words truncate">{errorMessage}</p>
                 <button 
                   onClick={() => setShowErrorModal(false)}
                   className="bg-[#F25790] hover:bg-[#d93d75] text-white py-2 px-6 rounded-full transition-colors"

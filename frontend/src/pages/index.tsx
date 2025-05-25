@@ -95,7 +95,7 @@ export default function Home() {
               <div className="flex flex-col lg:flex-row lg:items-start lg:gap-12 xl:gap-16">
                 {/* Seção de texto à esquerda */}
                 <div className="flex-1 lg:max-w-2xl text-center lg:text-left">
-                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight">
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight break-words truncate">
                     Olá <span className="text-[#F25790]">{userName}</span>!<br/>
                     Seus videochats personalizados<br/>
                     te aguardam em <span className="text-[#F25790]">tempo real</span>.
@@ -230,12 +230,12 @@ export default function Home() {
               // Layout para usuários não logados - centralizado
               <div className="flex justify-center lg:justify-start">
                 <div className="w-full max-w-3xl text-center lg:text-left">
-                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight">
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight break-words truncate">
                     Videochats: explore o<br/>
                     <span className="text-[#F25790]">prazer</span> em tempo real.
                   </h1>
                   
-                  <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-8 sm:mb-10 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                  <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-8 sm:mb-10 leading-relaxed max-w-2xl mx-auto lg:mx-0 break-words truncate">
                     Conheça nossa plataforma inovadora de chat por vídeo.<br className="hidden sm:block"/>
                     Em apenas um clique descubra um novo jeito de interagir.<br className="hidden sm:block"/>
                     Junte-se a nós e conecte-se de forma genuína.

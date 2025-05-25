@@ -54,10 +54,10 @@ export default function Header() {
   };
 
   return (
-    <header className="py-3 md:py-6 border-b border-gray-800 bg-black bg-opacity-85 backdrop-blur-sm sticky top-0 w-full z-50 shadow-lg">
+    <header className="py-3 md:py-6 border-b border-gray-800 bg-black bg-opacity-85 backdrop-blur-sm sticky top-0 w-full z-50 shadow-lg select-none">
       <div className="container mx-auto px-4 flex justify-between items-center">
         {/* Logo */}
-        <div className="logo">
+        <div className="logo overflow-hidden">
           <Link href="/">
             <Image 
               src="/icons/logo.svg" 
@@ -173,12 +173,12 @@ export default function Header() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden bg-black bg-opacity-95 border-t border-gray-800">
-          <div className="container mx-auto px-4 py-4 space-y-4">
+        <div className="fixed inset-0 bg-black bg-opacity-95 z-50 flex flex-col items-center justify-center p-6 lg:hidden transition-all duration-300 overflow-y-auto">
+          <div className="w-full max-w-xs mx-auto">
             {isLoggedIn && (
               <Link 
                 href="/explorar" 
-                className="block py-2 text-white hover:text-[#F25790] font-medium transition-colors"
+                className="block py-2 text-white hover:text-[#F25790] font-medium transition-colors break-words overflow-hidden"
                 onClick={closeMobileMenu}
               >
                 Explorar
@@ -240,8 +240,8 @@ export default function Header() {
                     )}
                   </div>
                   <div>
-                    <p className="text-white font-medium">{userData?.name || 'Usuário'}</p>
-                    <p className="text-gray-400 text-sm">{userData?.email}</p>
+                    <p className="text-white font-medium break-words max-w-[120px] truncate">{userData?.name || 'Usuário'}</p>
+                    <p className="text-gray-400 text-sm break-words max-w-[160px] truncate">{userData?.email}</p>
                   </div>
                 </div>
                 

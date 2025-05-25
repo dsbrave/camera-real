@@ -354,8 +354,8 @@ export default function CadastroModelo() {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                     </svg>
                   </div>
-                  <h3 className="text-xl sm:text-2xl font-bold mb-2">Cadastro enviado com sucesso!</h3>
-                  <p className="text-gray-300 mb-6 text-sm sm:text-base">Seu cadastro está em análise. Você receberá um e-mail com o resultado em até 48 horas.</p>
+                  <h3 className="text-xl sm:text-2xl font-bold mb-2 break-words truncate">Cadastro enviado com sucesso!</h3>
+                  <p className="text-gray-300 mb-6 text-sm sm:text-base break-words truncate">Seu cadastro está em análise. Você receberá um e-mail com o resultado em até 48 horas.</p>
                   <button 
                     onClick={() => setShowSuccessModal(false)}
                     className="bg-[#F25790] hover:bg-[#d93d75] text-white py-2 sm:py-3 px-6 sm:px-8 rounded-full transition-colors text-sm sm:text-base"

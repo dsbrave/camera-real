@@ -259,7 +259,7 @@ export default function Explorar() {
                         
                         {/* Nome e avaliação */}
                         <div className="absolute bottom-3 left-3 right-3">
-                          <h3 className="text-lg sm:text-xl font-bold text-white mb-1.5 drop-shadow-lg">{modelo.nome}</h3>
+                          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 break-words truncate max-w-[120px]">{modelo.nome}</h2>
                           <div className="flex items-center gap-2">
                             <div className="flex">
                               {[...Array(5)].map((_, i) => (
@@ -273,7 +273,7 @@ export default function Explorar() {
                                 </svg>
                               ))}
                             </div>
-                            <span className="text-sm text-white/80 font-medium drop-shadow">{modelo.avaliacoes}</span>
+                            <p className="text-gray-400 text-sm break-words truncate max-w-[120px]">{modelo.idade ? `${modelo.idade} anos` : ''} {modelo.localizacao ? `• ${modelo.localizacao}` : ''}</p>
                           </div>
                         </div>
                       </div>
@@ -284,7 +284,7 @@ export default function Explorar() {
                           {modelo.categorias.slice(0, 2).map((categoria, index) => (
                             <span 
                               key={index} 
-                              className="text-xs bg-white/10 backdrop-blur-sm border border-white/20 px-2.5 py-1 rounded-full text-white/90 font-medium"
+                              className="text-xs bg-white/10 backdrop-blur-sm border border-white/20 px-2.5 py-1 rounded-full text-white/90 font-medium break-words truncate max-w-[80px]"
                             >
                               {categoria.charAt(0).toUpperCase() + categoria.slice(1)}
                             </span>
