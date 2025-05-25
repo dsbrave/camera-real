@@ -141,7 +141,7 @@ export default function Faq() {
         <meta name="description" content="Encontre respostas para as perguntas mais frequentes sobre o Camera Real. Tire suas dúvidas sobre pagamentos, videochat, cadastro e muito mais." />
       </Head>
 
-      <div className="min-h-screen flex flex-col bg-black text-white page-with-bg-image">
+      <div className="min-h-screen flex flex-col bg-black text-white page-with-bg-image" style={{ background: 'linear-gradient(135deg, #1a0033 0%, #330033 50%, #220022 100%)' }}>
         <Header />
         
         <main className="flex-1 py-12 content-after-header">

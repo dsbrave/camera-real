@@ -95,7 +95,7 @@ export default function Sobre() {
             <div className="text-center">
               <h2 className="text-2xl font-bold mb-6 text-[#F25790]">Faça Parte Dessa História</h2>
               <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
-                Seja um usuário ou uma modelo, você é bem-vindo à nossa comunidade.
+                Seja um usuário ou uma modelo, você é bem-vindo(a) à nossa comunidade.
                 Junte-se a nós e descubra por que a Camera Real é a plataforma que mais cresce no Brasil.
               </p>
               

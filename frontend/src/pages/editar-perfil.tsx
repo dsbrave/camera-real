@@ -71,7 +71,7 @@ export default function EditarPerfil() {
   };
 
   return (
-    <div className="min-h-screen bg-black bg-opacity-90 page-with-bg-image">
+    <div className="min-h-screen bg-black bg-opacity-90 page-with-bg-image" style={{ background: 'linear-gradient(135deg, #1a0033 0%, #330033 50%, #220022 100%)' }}>
       <Head>
         <title>Editar Perfil | Camera Real</title>
         <meta name="description" content="Atualize suas informações de perfil" />

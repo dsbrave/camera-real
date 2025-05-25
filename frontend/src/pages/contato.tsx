@@ -261,7 +261,7 @@ class AdvancedAIAssistant {
   getContextualGreeting(): string {
     const greetings = [
       "Olá! Sou o assistente virtual avançado da Camera Real. Como posso ajudar você hoje?",
-      "Oi! Bem-vindo ao suporte inteligente da Camera Real. Estou aqui para esclarecer todas suas dúvidas!",
+      "Oi! Bem-vindo(a) ao suporte inteligente da Camera Real. Estou aqui para esclarecer todas suas dúvidas!",
       "Olá! Sou seu assistente pessoal da Camera Real, equipado com IA avançada. O que gostaria de saber?"
     ];
     return greetings[Math.floor(Math.random() * greetings.length)];
@@ -402,31 +402,39 @@ export default function Contato() {
         <meta name="description" content="Entre em contato com a equipe da Camera Real. Estamos aqui para ajudar com qualquer dúvida ou sugestão." />
       </Head>
 
-      <div className="min-h-screen flex flex-col bg-black text-white page-with-bg-image">
+      <div className="min-h-screen flex flex-col bg-black text-white page-with-bg-image" style={{ background: 'linear-gradient(135deg, #1a0033 0%, #330033 50%, #220022 100%)' }}>
         <Header />
         
-        <main className="flex-1 py-12 content-after-header">
+        <main className="flex-1 py-8 sm:py-12 content-after-header">
           <div className="container mx-auto px-4 max-w-6xl">
-            <div className="text-center mb-12">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4">Entre em <span className="text-[#F25790]">Contato</span></h1>
-              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <div className="text-center mb-8 sm:mb-12">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">Entre em <span className="text-[#F25790]">Contato</span></h1>
+              <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto">
                 Estamos aqui para ajudar! Escolha a forma mais conveniente para entrar em contato conosco.
               </p>
             </div>
             
-            <div className="bg-gray-900 rounded-xl overflow-hidden shadow-xl mb-16">
-              <div className="flex border-b border-gray-800">
-                <button 
-                  className={`px-6 py-4 font-medium flex-1 text-center ${activeTab === 'form' ? 'text-[#F25790] border-b-2 border-[#F25790]' : 'text-gray-400 hover:text-white'}`}
+            <div className="bg-gray-900 rounded-2xl overflow-hidden shadow-2xl max-w-4xl mx-auto">
+              <div className="flex flex-col sm:flex-row">
+                <button
                   onClick={() => setActiveTab('form')}
+                  className={`flex-1 py-4 px-6 text-center font-medium transition-colors ${
+                    activeTab === 'form' 
+                      ? 'bg-[#F25790] text-white' 
+                      : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                  }`}
                 >
-                  Formulário de Contato
+                  📧 Formulário de Contato
                 </button>
-                <button 
-                  className={`px-6 py-4 font-medium flex-1 text-center ${activeTab === 'chat' ? 'text-[#F25790] border-b-2 border-[#F25790]' : 'text-gray-400 hover:text-white'}`}
+                <button
                   onClick={() => setActiveTab('chat')}
+                  className={`flex-1 py-4 px-6 text-center font-medium transition-colors ${
+                    activeTab === 'chat' 
+                      ? 'bg-[#F25790] text-white' 
+                      : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                  }`}
                 >
-                  Chat com Assistente Virtual
+                  🤖 Chat com IA
                 </button>
               </div>
               
@@ -521,7 +529,7 @@ export default function Contato() {
                     )}
                   </div>
                 ) : (
-                  <div className="h-[600px] flex flex-col">
+                  <div className="h-[400px] sm:h-[500px] md:h-[600px] flex flex-col">
                     <div className="bg-gray-800 p-4 rounded-t-lg flex items-center space-x-3 border-b border-gray-700">
                       <div className="w-10 h-10 rounded-full bg-[#F25790] flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -656,7 +664,7 @@ export default function Contato() {
               </div>
             </div>
             
-            <div className="grid md:grid-cols-3 gap-8 mb-16">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
               <div className="bg-gray-900 p-6 rounded-xl text-center">
                 <div className="w-16 h-16 rounded-full bg-[#F25790] flex items-center justify-center mb-4 mx-auto">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">

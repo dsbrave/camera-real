@@ -89,7 +89,7 @@ body {
   }
   
   .page-with-bg-image::before {
-    @apply content-[""] absolute inset-0 bg-black bg-opacity-60 z-0;
+    @apply content-[""] absolute inset-0 bg-black bg-opacity-70 z-0;
   }
   
   .page-with-bg-image > * {

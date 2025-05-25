@@ -24,7 +24,7 @@ export default function TermosCondicoes() {
               </p>
               
               <p>
-                Bem-vindo à Camera Real. Estes Termos e Condições ("Termos") regem seu acesso e uso do site, 
+                Bem-vindo(a) à Camera Real. Estes Termos e Condições ("Termos") regem seu acesso e uso do site, 
                 serviços, aplicativos e ferramentas da Camera Real (coletivamente, os "Serviços").
               </p>
               
