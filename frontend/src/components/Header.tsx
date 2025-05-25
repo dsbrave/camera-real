@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/router';
 
 // Para evitar sobreposição do conteúdo pelo header fixo, adicione <div className="header-spacer" /> logo após o <Header /> em cada página principal.
 export default function Header() {
+  const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState<any>(null);
   const [creditos, setCreditos] = useState(0);
@@ -50,7 +52,7 @@ export default function Header() {
     setCreditos(0);
     setIsDropdownOpen(false);
     setIsMobileMenuOpen(false);
-    window.location.href = '/';
+    router.push('/');
   };
 
   const closeMobileMenu = () => {

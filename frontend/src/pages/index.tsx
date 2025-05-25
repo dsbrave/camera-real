@@ -21,19 +21,32 @@ export default function Home() {
   const [userName, setUserName] = useState('');
   
   useEffect(() => {
-    // Verificar se o usuário está logado através do localStorage
-    try {
-      const userStorage = localStorage.getItem('user');
-      if (userStorage) {
-        const user = JSON.parse(userStorage);
-        setIsLoggedIn(!!user.isLoggedIn);
-        if (user.isLoggedIn && user.name) {
-          setUserName(user.name);
+    // Função para verificar login
+    const checkLogin = () => {
+      try {
+        const userStorage = localStorage.getItem('user');
+        if (userStorage) {
+          const user = JSON.parse(userStorage);
+          setIsLoggedIn(!!user.isLoggedIn);
+          if (user.isLoggedIn && user.name) {
+            setUserName(user.name);
+          } else {
+            setUserName('');
+          }
+        } else {
+          setIsLoggedIn(false);
+          setUserName('');
         }
+      } catch (error) {
+        setIsLoggedIn(false);
+        setUserName('');
+        console.error('Erro ao verificar login:', error);
       }
-    } catch (error) {
-      console.error('Erro ao verificar login:', error);
-    }
+    };
+    checkLogin();
+    // Adiciona eventListener para mudanças no localStorage (logout em qualquer aba)
+    window.addEventListener('storage', checkLogin);
+    return () => window.removeEventListener('storage', checkLogin);
   }, []);
 
   // Modelos em destaque (mesmos dados da página explorar)
