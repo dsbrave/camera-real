@@ -32,7 +32,7 @@ export default function Home() {
         {/* Overlay igual ao das páginas de cadastro */}
         <div className="absolute inset-0 bg-black bg-opacity-80 z-0"></div>
         
-        <div style={{ transform: 'scaleX(-1)' }} className="relative z-10"> {/* Contra-flipa os elementos para ficarem corretos */}
+        <div className="relative z-10" style={{ transform: 'scaleX(-1)' }}> {/* Contra-flipa os elementos para ficarem corretos */}
           <Header />
           <div className="h-20 sm:h-24 md:h-32" />
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-20 z-10 relative">
