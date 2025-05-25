@@ -294,7 +294,7 @@ export default function Explorar() {
                         {/* Preço e botão lado a lado */}
                         <div className="flex items-center justify-between">
                           <div className="text-[#F25790] font-bold text-lg drop-shadow">
-                            {modelo.valorPorMinuto.toFixed(0)} <span className="text-sm text-white/70">ChatCoins/min</span>
+                            {modelo.valorPorMinuto.toFixed(0)} <span className="text-sm text-white/70">Créditos/min</span>
                           </div>
                           <Link href={`/chat-video?id=${modelo.id}`}>
                             <button className="bg-gradient-to-r from-[#F25790] to-[#d93d75] hover:from-[#d93d75] hover:to-[#c12d65] text-white font-medium py-2 px-5 rounded-full text-sm transition-all duration-300 hover:shadow-lg hover:shadow-[#F25790]/25 backdrop-blur-sm">

@@ -235,25 +235,17 @@ export default function Faq() {
             </div>
             
             {/* Seção de contato */}
-            <div className="bg-gradient-to-r from-[#F25790] to-[#d93d75] rounded-xl p-8 text-center">
-              <h2 className="text-2xl font-bold mb-4">Não encontrou o que procurava?</h2>
-              <p className="mb-6 text-lg opacity-90">
-                Nossa equipe de suporte está disponível 24/7 para ajudar com qualquer dúvida.
+            <div className="text-center">
+              <h2 className="text-2xl font-bold mb-4">Ainda tem dúvidas?</h2>
+              <p className="text-gray-400 mb-6">
+                Nossa equipe de suporte está sempre pronta para ajudar você.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link 
-                  href="/contato" 
-                  className="px-8 py-3 bg-white text-[#F25790] rounded-full hover:bg-gray-100 font-bold transition-colors duration-200"
-                >
-                  Falar com Suporte
-                </Link>
-                <a 
-                  href="mailto:suporte@camerareal.com" 
-                  className="px-8 py-3 border-2 border-white text-white rounded-full hover:bg-white hover:text-[#F25790] font-bold transition-all duration-200"
-                >
-                  suporte@camerareal.com
-                </a>
-              </div>
+              <Link
+                href="/suporte"
+                className="inline-flex items-center px-6 py-3 bg-[#F25790] hover:bg-[#d93d75] text-white font-medium rounded-lg transition-colors duration-200"
+              >
+                Falar com Suporte
+              </Link>
             </div>
           </div>
         </main>

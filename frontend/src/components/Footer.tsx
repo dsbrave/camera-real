@@ -28,8 +28,8 @@ export default function Footer() {
           <Link href="/termos-condicoes" className="text-gray-400 hover:text-[#F25790]">
             Termos de Uso
           </Link>
-          <Link href="/contato" className="text-gray-400 hover:text-[#F25790]">
-            Contato
+          <Link href="/suporte" className="text-gray-400 hover:text-[#F25790]">
+            Suporte
           </Link>
         </div>
         

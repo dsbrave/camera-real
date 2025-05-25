@@ -1,27 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
-import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import CheckoutController from '../components/checkout/CheckoutController';
+import SelectPaymentMethodModal from '@/components/checkout/SelectPaymentMethodModal';
+import PixPaymentForm from '@/components/checkout/PixPaymentForm';
+import CreditCardForm from '@/components/checkout/CreditCardForm';
+// import CheckoutController from '@/components/checkout/CheckoutController';
 
 const Carteira: React.FC = () => {
   const router = useRouter();
   const { pagamento } = router.query;
   
+  const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const [isAddCreditsModalOpen, setIsAddCreditsModalOpen] = useState(false);
-  const [saldoAtual, setSaldoAtual] = useState(0);
+  const [isPaymentMethodModalOpen, setIsPaymentMethodModalOpen] = useState(false);
+  const [isPixModalOpen, setIsPixModalOpen] = useState(false);
+  const [isCreditCardModalOpen, setIsCreditCardModalOpen] = useState(false);
+  const [selectedAmount, setSelectedAmount] = useState(100);
+  const [withdrawData, setWithdrawData] = useState({
+    amount: '',
+    bank: '',
+    agency: '',
+    account: '',
+    accountType: 'corrente',
+    cpf: '',
+    name: ''
+  });
+  const [creditos, setCreditos] = useState(150); // Mudança de chatCoins para creditos
   const [transacoes, setTransacoes] = useState([
-    { data: '22/05/2025', tipo: 'Adição de créditos', valor: 'R$ 100,00', saldoFinal: 'R$ 150,00' },
-    { data: '20/05/2025', tipo: 'Chat privado com Julia', valor: 'R$ 50,00-', saldoFinal: 'R$ 50,00' },
-    { data: '15/05/2025', tipo: 'Adição de créditos', valor: 'R$ 50,00', saldoFinal: 'R$ 100,00' },
-    { data: '10/05/2025', tipo: 'Chat privado com Amanda', valor: 'R$ 30,00-', saldoFinal: 'R$ 50,00' },
-    { data: '05/05/2025', tipo: 'Adição de créditos', valor: 'R$ 80,00', saldoFinal: 'R$ 80,00' },
+    { data: '22/05/2025', tipo: 'Adição de créditos', valor: '200 Créditos', saldoFinal: '150 Créditos' },
+    { data: '20/05/2025', tipo: 'Chat privado com Julia', valor: '100 Créditos-', saldoFinal: '50 Créditos' },
+    { data: '15/05/2025', tipo: 'Adição de créditos', valor: '100 Créditos', saldoFinal: '150 Créditos' },
+    { data: '10/05/2025', tipo: 'Chat privado com Amanda', valor: '60 Créditos-', saldoFinal: '50 Créditos' },
+    { data: '05/05/2025', tipo: 'Adição de créditos', valor: '160 Créditos', saldoFinal: '110 Créditos' },
   ]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showSucessoBanner, setShowSucessoBanner] = useState(false);
+  
+  // Conversão: 1 Crédito = R$ 1,00
+  const creditValue = 1.00;
+  const totalValueInReais = creditos * creditValue;
   
   useEffect(() => {
     // Verifica se o usuário está logado
@@ -29,8 +48,7 @@ const Carteira: React.FC = () => {
     if (userStorage) {
       try {
         const userData = JSON.parse(userStorage);
-        setIsLoggedIn(!!userData.isLoggedIn);
-        setSaldoAtual(userData.credits || 0);
+        setCreditos(userData.creditos || 150); // Usar Créditos em vez de chatCoins
       } catch (error) {
         console.error('Erro ao verificar login:', error);
         router.push('/login');
@@ -53,40 +71,146 @@ const Carteira: React.FC = () => {
   }, [pagamento, router]);
 
   const handleAddCredits = (amount: number) => {
-    const novoSaldo = saldoAtual + amount;
-    setSaldoAtual(novoSaldo);
+    // Converter o valor em reais para Créditos (1:1)
+    const creditosToAdd = amount;
+    const novoSaldo = creditos + creditosToAdd;
+    setCreditos(novoSaldo);
     
     // Adiciona transação ao histórico
     const novaTransacao = {
       data: new Date().toLocaleDateString('pt-BR'),
       tipo: 'Adição de créditos',
-      valor: `R$ ${amount.toFixed(2).replace('.', ',')}`,
-      saldoFinal: `R$ ${novoSaldo.toFixed(2).replace('.', ',')}`,
+      valor: `${creditosToAdd} Créditos`,
+      saldoFinal: `${novoSaldo} Créditos`,
     };
     
     setTransacoes([novaTransacao, ...transacoes]);
     
-    // Atualiza os créditos no localStorage
+    // Atualiza os Créditos no localStorage
     try {
       const userStorage = localStorage.getItem('user');
       if (userStorage) {
         const userData = JSON.parse(userStorage);
         const updatedUser = {
           ...userData,
-          credits: novoSaldo
+          creditos: novoSaldo
         };
         localStorage.setItem('user', JSON.stringify(updatedUser));
       }
     } catch (error) {
-      console.error('Erro ao atualizar créditos:', error);
+      console.error('Erro ao atualizar Créditos:', error);
     }
+    
+    // Fechar modal se estiver aberto
+    setIsWithdrawModalOpen(false);
+    
+    // Mostrar mensagem de sucesso
+    alert(`${creditosToAdd} Créditos adicionados com sucesso!`);
+  };
+
+  const handleWithdrawInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setWithdrawData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+
+  const handleWithdraw = (e: React.FormEvent) => {
+    e.preventDefault();
+    const withdrawAmount = parseInt(withdrawData.amount);
+    
+    if (withdrawAmount > creditos) {
+      alert('Saldo insuficiente para saque!');
+      return;
+    }
+
+    if (withdrawAmount < 50) {
+      alert('Valor mínimo para saque é de 50 Créditos (R$ 50,00)');
+      return;
+    }
+
+    const novoSaldo = creditos - withdrawAmount;
+    setCreditos(novoSaldo);
+    
+    // Adiciona transação ao histórico
+    const novaTransacao = {
+      data: new Date().toLocaleDateString('pt-BR'),
+      tipo: 'Saque para conta bancária',
+      valor: `${withdrawAmount} Créditos-`,
+      saldoFinal: `${novoSaldo} Créditos`,
+    };
+    
+    setTransacoes([novaTransacao, ...transacoes]);
+    
+    // Atualiza os Créditos no localStorage
+    try {
+      const userStorage = localStorage.getItem('user');
+      if (userStorage) {
+        const userData = JSON.parse(userStorage);
+        const updatedUser = {
+          ...userData,
+          creditos: novoSaldo
+        };
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar Créditos:', error);
+    }
+
+    // Reset form and close modal
+    setWithdrawData({
+      amount: '',
+      bank: '',
+      agency: '',
+      account: '',
+      accountType: 'corrente',
+      cpf: '',
+      name: ''
+    });
+    setIsWithdrawModalOpen(false);
+    
+    alert(`Solicitação de saque de R$ ${(withdrawAmount * creditValue).toFixed(2).replace('.', ',')} enviada! O valor será processado em até 3 dias úteis.`);
+  };
+
+  const handleSelectPaymentMethod = () => {
+    // setSelectedPaymentMethod(method);
+  };
+
+  const handlePaymentMethodNext = (selectedMethod: 'pix' | 'credit-card') => {
+    setIsPaymentMethodModalOpen(false);
+    if (selectedMethod === 'pix') {
+      setIsPixModalOpen(true);
+    } else if (selectedMethod === 'credit-card') {
+      setIsCreditCardModalOpen(true);
+    }
+  };
+
+  const handlePaymentMethodBack = () => {
+    setIsPaymentMethodModalOpen(false);
+    setIsAddCreditsModalOpen(true);
+  };
+
+  const handlePixBack = () => {
+    setIsPixModalOpen(false);
+    setIsPaymentMethodModalOpen(true);
+  };
+
+  const handleCreditCardBack = () => {
+    setIsCreditCardModalOpen(false);
+    setIsPaymentMethodModalOpen(true);
+  };
+
+  const handlePaymentSuccess = () => {
+    setIsPixModalOpen(false);
+    setIsCreditCardModalOpen(false);
+    handleAddCredits(selectedAmount);
   };
 
   return (
     <>
       <Head>
         <title>Carteira | Camera Real</title>
-        <meta name="description" content="Gerencie seus créditos e compras" />
+        <meta name="description" content="Gerencie seus Créditos e compras" />
       </Head>
 
       <div className="min-h-screen text-white page-with-bg-image" style={{ background: 'linear-gradient(135deg, #1a0033 0%, #330033 50%, #220022 100%)' }}>
@@ -103,7 +227,7 @@ const Carteira: React.FC = () => {
               </div>
               <div>
                 <p className="text-white font-bold">Pagamento realizado com sucesso!</p>
-                <p className="text-white text-sm">Seus créditos foram adicionados à sua conta.</p>
+                <p className="text-white text-sm">Seus Créditos foram adicionados à sua conta.</p>
               </div>
             </div>
           )}
@@ -114,16 +238,29 @@ const Carteira: React.FC = () => {
             {/* Card de Saldo */}
             <div className="bg-black bg-opacity-80 border border-gray-800 rounded-lg p-6 col-span-1">
               <h2 className="text-xl font-medium mb-2">Seu saldo atual</h2>
-              <p className="text-4xl font-bold mb-4 text-[#F25790]">R$ {saldoAtual.toFixed(2).replace('.', ',')}</p>
-              <button 
-                onClick={() => setIsAddCreditsModalOpen(true)}
-                className="w-full flex items-center justify-center px-4 py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-full transition-colors"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
-                Adicionar saldo
-              </button>
+              <p className="text-4xl font-bold mb-2 text-[#F25790]">{creditos} Créditos</p>
+              <p className="text-lg text-gray-300 mb-2">≈ R$ {totalValueInReais.toFixed(2).replace('.', ',')}</p>
+              <p className="text-sm text-gray-400 mb-4">1 Crédito = R$ 1,00</p>
+              <div className="space-y-2">
+                <button 
+                  onClick={() => setIsAddCreditsModalOpen(true)}
+                  className="w-full flex items-center justify-center px-4 py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-full transition-colors"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>
+                  Adicionar Crédito
+                </button>
+                <button 
+                  onClick={() => setIsWithdrawModalOpen(true)}
+                  className="w-full flex items-center justify-center px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-full transition-colors"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 19.5v-15m0 0l-6.75 6.75M12 4.5l6.75 6.75" />
+                  </svg>
+                  Sacar para conta
+                </button>
+              </div>
             </div>
 
             {/* Card de Benefícios */}
@@ -200,7 +337,7 @@ const Carteira: React.FC = () => {
           </div>
 
           {/* Pacotes de Crédito */}
-          <h2 className="text-2xl font-bold mb-6">Comprar créditos</h2>
+          <h2 className="text-2xl font-bold mb-6">Comprar Créditos</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             {/* Pacote Básico */}
             <div className="bg-black bg-opacity-80 border border-gray-800 rounded-lg p-6 hover:shadow-xl transition-shadow">
@@ -214,20 +351,20 @@ const Carteira: React.FC = () => {
                   <svg className="w-5 h-5 text-[#F25790] mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
                   </svg>
-                  <span className="text-sm">15 minutos em chat privado</span>
+                  <span className="text-sm">50 Créditos</span>
                 </li>
                 <li className="flex items-center">
                   <svg className="w-5 h-5 text-[#F25790] mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
                   </svg>
-                  <span className="text-sm">5 presentes virtuais</span>
+                  <span className="text-sm">Acesso básico ao chat</span>
                 </li>
               </ul>
               <button 
-                onClick={() => setIsAddCreditsModalOpen(true)}
+                onClick={() => handleAddCredits(50)}
                 className="w-full py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-full transition-colors"
               >
-                Comprar pacote
+                Comprar R$ 50,00
               </button>
             </div>
 
@@ -246,13 +383,13 @@ const Carteira: React.FC = () => {
                   <svg className="w-5 h-5 text-[#F25790] mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
                   </svg>
-                  <span className="text-sm">45 minutos em chat privado</span>
+                  <span className="text-sm">150 Créditos</span>
                 </li>
                 <li className="flex items-center">
                   <svg className="w-5 h-5 text-[#F25790] mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
                   </svg>
-                  <span className="text-sm">20 presentes virtuais</span>
+                  <span className="text-sm">20 Créditos BÔNUS</span>
                 </li>
                 <li className="flex items-center">
                   <svg className="w-5 h-5 text-[#F25790] mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -260,12 +397,18 @@ const Carteira: React.FC = () => {
                   </svg>
                   <span className="text-sm">Acesso a shows exclusivos</span>
                 </li>
+                <li className="flex items-center">
+                  <svg className="w-5 h-5 text-[#F25790] mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+                  </svg>
+                  <span className="text-sm">Presentes virtuais inclusos</span>
+                </li>
               </ul>
               <button 
-                onClick={() => setIsAddCreditsModalOpen(true)}
+                onClick={() => handleAddCredits(170)}
                 className="w-full py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-full transition-colors"
               >
-                Comprar pacote
+                Comprar R$ 150,00
               </button>
             </div>
 
@@ -281,19 +424,25 @@ const Carteira: React.FC = () => {
                   <svg className="w-5 h-5 text-[#F25790] mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
                   </svg>
-                  <span className="text-sm">90 minutos em chat privado</span>
+                  <span className="text-sm">300 Créditos</span>
                 </li>
                 <li className="flex items-center">
                   <svg className="w-5 h-5 text-[#F25790] mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
                   </svg>
-                  <span className="text-sm">50 presentes virtuais premium</span>
+                  <span className="text-sm">50 Créditos BÔNUS</span>
                 </li>
                 <li className="flex items-center">
                   <svg className="w-5 h-5 text-[#F25790] mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
                   </svg>
-                  <span className="text-sm">Acesso a todos os shows exclusivos</span>
+                  <span className="text-sm">Acesso VIP completo</span>
+                </li>
+                <li className="flex items-center">
+                  <svg className="w-5 h-5 text-[#F25790] mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+                  </svg>
+                  <span className="text-sm">Shows exclusivos ilimitados</span>
                 </li>
                 <li className="flex items-center">
                   <svg className="w-5 h-5 text-[#F25790] mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -303,10 +452,10 @@ const Carteira: React.FC = () => {
                 </li>
               </ul>
               <button 
-                onClick={() => setIsAddCreditsModalOpen(true)}
+                onClick={() => handleAddCredits(350)}
                 className="w-full py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-full transition-colors"
               >
-                Comprar pacote
+                Comprar R$ 300,00
               </button>
             </div>
           </div>
@@ -315,12 +464,252 @@ const Carteira: React.FC = () => {
         <Footer />
       </div>
 
+      {/* Modal de Adicionar Crédito */}
+      {isAddCreditsModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-gradient-to-br from-purple-600 to-purple-800 rounded-2xl p-8 w-full max-w-4xl max-h-[90vh] overflow-y-auto relative">
+            {/* Botão de fechar */}
+            <button 
+              onClick={() => setIsAddCreditsModalOpen(false)}
+              className="absolute top-6 right-6 text-white hover:text-gray-300 transition-colors z-10"
+            >
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            <div className="flex items-center gap-8">
+              {/* Imagem à esquerda */}
+              <div className="flex-shrink-0 relative">
+                <div className="relative w-96 h-96 flex items-center justify-center">
+                  <Image 
+                    src="/images/Payment.png" 
+                    alt="Adicionar crédito" 
+                    width={384}
+                    height={384}
+                    className="object-contain filter brightness-110 contrast-110"
+                  />
+                </div>
+              </div>
+
+              {/* Conteúdo principal */}
+              <div className="flex-1 max-w-md">
+                <h2 className="text-3xl font-bold text-white mb-2 text-center">Adicionar Crédito</h2>
+                <p className="text-white text-center mb-2 opacity-90">Selecione um valor para adicionar a sua conta:</p>
+                <p className="text-white text-center mb-8 opacity-75 text-sm">
+                  {selectedAmount} Crédito{selectedAmount !== 1 ? 's' : ''} = R$ {selectedAmount.toFixed(2).replace('.', ',')}
+                </p>
+                
+                {/* Grid de valores */}
+                <div className="grid grid-cols-3 gap-3 mb-8">
+                  {[10, 30, 50, 100, 150, 300].map((value) => (
+                    <button
+                      key={value}
+                      onClick={() => setSelectedAmount(value)}
+                      className={`p-4 rounded-xl border-2 transition-all hover:scale-105 ${
+                        selectedAmount === value 
+                          ? 'border-white bg-white bg-opacity-20 shadow-lg' 
+                          : 'border-gray-400 border-opacity-50 hover:border-white hover:bg-white hover:bg-opacity-10'
+                      }`}
+                    >
+                      <div className="text-white text-xs opacity-80 mb-1">Carregue</div>
+                      <div className="text-white text-lg font-bold">R$ {value}</div>
+                    </button>
+                  ))}
+                </div>
+
+                {/* Botão Avançar */}
+                <button 
+                  onClick={() => {
+                    setIsAddCreditsModalOpen(false);
+                    setIsPaymentMethodModalOpen(true);
+                  }}
+                  className="w-full bg-[#F25790] hover:bg-[#d93d75] text-white py-4 px-6 rounded-full text-lg font-semibold transition-all transform hover:scale-105 shadow-lg"
+                >
+                  Avançar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Seleção de Método de Pagamento */}
+      <SelectPaymentMethodModal
+        isOpen={isPaymentMethodModalOpen}
+        onClose={() => setIsPaymentMethodModalOpen(false)}
+        onBack={handlePaymentMethodBack}
+        selectedAmount={selectedAmount}
+        onSelectMethod={handleSelectPaymentMethod}
+        onNext={handlePaymentMethodNext}
+      />
+
+      {/* Modal PIX */}
+      <PixPaymentForm
+        isOpen={isPixModalOpen}
+        onClose={() => setIsPixModalOpen(false)}
+        onBack={handlePixBack}
+        selectedAmount={selectedAmount}
+        onSubmit={handlePaymentSuccess}
+      />
+
+      {/* Modal Cartão de Crédito */}
+      <CreditCardForm
+        isOpen={isCreditCardModalOpen}
+        onClose={() => setIsCreditCardModalOpen(false)}
+        onBack={handleCreditCardBack}
+        selectedAmount={selectedAmount}
+        onSubmit={handlePaymentSuccess}
+      />
+
+      {/* Modal de Saque */}
+      {isWithdrawModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-900 rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-bold">Sacar para Conta Bancária</h2>
+              <button 
+                onClick={() => setIsWithdrawModalOpen(false)}
+                className="text-gray-400 hover:text-white"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <form onSubmit={handleWithdraw} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">Valor em Créditos *</label>
+                <input
+                  type="number"
+                  name="amount"
+                  value={withdrawData.amount}
+                  onChange={handleWithdrawInputChange}
+                  min="50"
+                  max={creditos}
+                  required
+                  className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white"
+                  placeholder="Mínimo 50 Créditos"
+                />
+                <p className="text-xs text-gray-400 mt-1">
+                  Disponível: {creditos} Créditos | Valor em R$: {withdrawData.amount ? (parseInt(withdrawData.amount || '0') * creditValue).toFixed(2).replace('.', ',') : '0,00'}
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Nome Completo *</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={withdrawData.name}
+                  onChange={handleWithdrawInputChange}
+                  required
+                  className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white"
+                  placeholder="Nome do titular da conta"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">CPF *</label>
+                <input
+                  type="text"
+                  name="cpf"
+                  value={withdrawData.cpf}
+                  onChange={handleWithdrawInputChange}
+                  required
+                  className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white"
+                  placeholder="000.000.000-00"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Banco *</label>
+                <input
+                  type="text"
+                  name="bank"
+                  value={withdrawData.bank}
+                  onChange={handleWithdrawInputChange}
+                  required
+                  className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white"
+                  placeholder="Nome do banco"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Agência *</label>
+                  <input
+                    type="text"
+                    name="agency"
+                    value={withdrawData.agency}
+                    onChange={handleWithdrawInputChange}
+                    required
+                    className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white"
+                    placeholder="0000"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Conta *</label>
+                  <input
+                    type="text"
+                    name="account"
+                    value={withdrawData.account}
+                    onChange={handleWithdrawInputChange}
+                    required
+                    className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white"
+                    placeholder="00000-0"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Tipo de Conta *</label>
+                <select
+                  name="accountType"
+                  value={withdrawData.accountType}
+                  onChange={handleWithdrawInputChange}
+                  required
+                  className="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white"
+                >
+                  <option value="corrente">Conta Corrente</option>
+                  <option value="poupanca">Conta Poupança</option>
+                </select>
+              </div>
+
+              <div className="bg-yellow-900 bg-opacity-50 border border-yellow-600 rounded-lg p-3 mt-4">
+                <p className="text-yellow-200 text-sm">
+                  <strong>Importante:</strong> O saque será processado em até 3 dias úteis. 
+                  Valor mínimo: 50 Créditos (R$ 50,00). Taxa de processamento: R$ 2,00.
+                </p>
+              </div>
+
+              <div className="flex space-x-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setIsWithdrawModalOpen(false)}
+                  className="flex-1 py-2 px-4 bg-gray-600 hover:bg-gray-500 text-white rounded-lg transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-2 px-4 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-lg transition-colors"
+                >
+                  Solicitar Saque
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Fluxo de Checkout */}
-      <CheckoutController
+      {/* <CheckoutController
         isOpen={isAddCreditsModalOpen} 
         onClose={() => setIsAddCreditsModalOpen(false)} 
         onSuccess={handleAddCredits}
-      />
+      /> */}
     </>
   );
 };

@@ -92,10 +92,10 @@ export default function Home() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-20 z-10 relative">
             {isLoggedIn ? (
               // Layout para usuários logados - texto à esquerda, carrossel à direita
-              <div className="flex flex-col lg:flex-row lg:items-start lg:gap-12 xl:gap-16">
+              <div className="flex flex-col lg:flex-row lg:items-center lg:gap-8 xl:gap-12">
                 {/* Seção de texto à esquerda */}
-                <div className="flex-1 lg:max-w-2xl text-center lg:text-left">
-                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight break-words truncate">
+                <div className="flex-1 lg:max-w-xl text-center lg:text-left">
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight">
                     Olá <span className="text-[#F25790]">{userName}</span>!<br/>
                     Seus videochats personalizados<br/>
                     te aguardam em <span className="text-[#F25790]">tempo real</span>.
@@ -111,108 +111,117 @@ export default function Home() {
                       <Link href="/explorar" className="bg-[#F25790] hover:bg-[#d93d75] text-white font-medium py-3 sm:py-4 px-8 sm:px-10 rounded-full inline-block text-center transition-colors duration-200 text-sm sm:text-base">
                         Explorar Agora
                       </Link>
-                      <Link href="/carteira" className="bg-[#F25790] hover:bg-[#d93d75] text-white font-medium py-3 sm:py-4 px-8 sm:px-10 rounded-full inline-block text-center transition-colors duration-200 text-sm sm:text-base flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
-                        </svg>
-                        Comprar ChatCoin
+                      <Link 
+                        href="/carteira" 
+                        className="btn-secondary px-6 py-3 text-center"
+                      >
+                        Comprar Créditos
                       </Link>
                     </div>
                   </div>
                 </div>
 
                 {/* Carrossel de Modelos em Destaque à direita */}
-                <div className="flex-1 lg:max-w-2xl">
+                <div className="flex-1 lg:max-w-xl">
                   <h2 className="text-xl sm:text-2xl font-bold mb-6 text-center lg:text-left text-white flex items-center justify-center lg:justify-start gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-[#F25790]">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M15.75 4.5c0-1.38-1.12-2.5-2.5-2.5s-2.5 1.12-2.5 2.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5Z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
                     </svg>
                     <span className="text-[#F25790]">Modelos em Destaque</span>
                   </h2>
                   
-                  <div className="flex overflow-x-auto scrollbar-hide gap-4 pb-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                    {modelosDestaque.slice(0, 2).map(modelo => (
-                      <div 
-                        key={modelo.id} 
-                        className="flex-shrink-0 w-64 sm:w-72 bg-gradient-to-br from-[#F25790]/10 via-purple-500/5 to-blue-500/10 backdrop-blur-sm rounded-2xl overflow-hidden hover:from-[#F25790]/15 hover:via-purple-500/10 hover:to-blue-500/15 transition-all duration-300 hover:scale-105 hover:shadow-2xl border border-white/20 hover:border-[#F25790]/50"
-                      >
-                        <div className="relative h-64 sm:h-80 bg-gradient-to-br from-black/30 to-black/50">
-                          {/* Imagem da modelo */}
-                          {modelo.fotoPerfil && (
-                            <Image
-                              src={modelo.fotoPerfil}
-                              alt={modelo.nome}
-                              fill
-                              className="object-cover opacity-95"
-                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                            />
-                          )}
-                          
-                          {/* Overlay gradiente sutil */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
-                          
-                          {/* Status e Destaque */}
-                          <div className="absolute top-3 left-3 right-3 flex justify-between items-start z-10">
-                            <div className="bg-gradient-to-r from-[#F25790] to-[#d93d75] text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-lg backdrop-blur-sm flex items-center gap-1">
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3 h-3">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M15.75 4.5c0-1.38-1.12-2.5-2.5-2.5s-2.5 1.12-2.5 2.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5Z" />
-                              </svg>
-                              DESTAQUE
-                            </div>
-                            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full backdrop-blur-md bg-green-500/20 border border-green-400/30">
-                              <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></div>
-                              <span className="text-xs font-medium text-green-300">Online</span>
-                            </div>
-                          </div>
-                          
-                          {/* Nome e avaliação */}
-                          <div className="absolute bottom-3 left-3 right-3">
-                            <h3 className="text-lg sm:text-xl font-bold text-white mb-1.5 drop-shadow-lg">{modelo.nome}</h3>
-                            <div className="flex items-center gap-2">
-                              <div className="flex">
-                                {[...Array(5)].map((_, i) => (
-                                  <svg 
-                                    key={i} 
-                                    className={`w-3.5 h-3.5 ${i < Math.floor(modelo.avaliacoes) ? 'text-yellow-400' : 'text-white/30'}`} 
-                                    fill="currentColor" 
-                                    viewBox="0 0 20 20"
-                                  >
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                  </svg>
-                                ))}
+                  <div className="overflow-x-auto scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                    <div className="flex gap-4 pb-4 min-w-max">
+                      {modelosDestaque.slice(0, 2).map(modelo => (
+                        <div 
+                          key={modelo.id} 
+                          className="flex-shrink-0 w-64 sm:w-72 bg-gradient-to-br from-[#F25790]/10 via-purple-500/5 to-blue-500/10 backdrop-blur-sm rounded-2xl overflow-hidden hover:from-[#F25790]/15 hover:via-purple-500/10 hover:to-blue-500/15 transition-all duration-300 hover:scale-105 hover:shadow-2xl border border-white/20 hover:border-[#F25790]/50 group"
+                        >
+                          <div className="relative h-64 sm:h-72 bg-gradient-to-br from-black/30 to-black/50">
+                            {/* Imagem da modelo */}
+                            {modelo.fotoPerfil && (
+                              <Image
+                                src={modelo.fotoPerfil}
+                                alt={modelo.nome}
+                                fill
+                                className="object-cover opacity-95"
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                              />
+                            )}
+                            
+                            {/* Overlay gradiente sutil */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+                            
+                            {/* Status e Destaque */}
+                            <div className="absolute top-3 left-3 right-3 flex justify-between items-start z-10">
+                              <div className="bg-gradient-to-r from-[#F25790] to-[#d93d75] text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-lg backdrop-blur-sm flex items-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3 h-3">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M15.75 4.5c0-1.38-1.12-2.5-2.5-2.5s-2.5 1.12-2.5 2.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5Z" />
+                                </svg>
+                                DESTAQUE
                               </div>
-                              <span className="text-sm text-white/80 font-medium drop-shadow">{modelo.avaliacoes}</span>
+                              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full backdrop-blur-md bg-green-500/20 border border-green-400/30">
+                                <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></div>
+                                <span className="text-xs font-medium text-green-300">Online</span>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                        
-                        <div className="p-4 sm:p-5 bg-gradient-to-br from-white/5 via-white/3 to-transparent backdrop-blur-sm">
-                          {/* Categorias */}
-                          <div className="flex flex-wrap gap-2 mb-4">
-                            {modelo.categorias.slice(0, 2).map((categoria, index) => (
-                              <span 
-                                key={index} 
-                                className="text-xs bg-white/10 backdrop-blur-sm border border-white/20 px-2.5 py-1 rounded-full text-white/90 font-medium"
-                              >
-                                {categoria.charAt(0).toUpperCase() + categoria.slice(1)}
-                              </span>
-                            ))}
+                            
+                            {/* Nome e avaliação */}
+                            <div className="absolute bottom-3 left-3 right-3">
+                              <h3 className="text-lg sm:text-xl font-bold text-white mb-2 drop-shadow-lg">{modelo.nome}</h3>
+                              <div className="flex items-center gap-2">
+            <div className="flex">
+                                  {[...Array(5)].map((_, i) => (
+                                    <svg 
+                                      key={i} 
+                                      className={`w-3.5 h-3.5 ${i < Math.floor(modelo.avaliacoes) ? 'text-yellow-400' : 'text-white/30'}`} 
+                                      fill="currentColor" 
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                    </svg>
+                                  ))}
+                                </div>
+                                <span className="text-sm text-white/80 font-medium drop-shadow">{modelo.avaliacoes}</span>
+                              </div>
+                            </div>
+
+                            {/* Botão Ver Perfil */}
+                            <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-all duration-300 flex items-center justify-center group-hover:backdrop-blur-sm">
+                              <button className="bg-gradient-to-r from-[#F25790] to-[#d93d75] text-white px-4 py-2 rounded-lg font-medium text-sm hover:scale-105 transition-all duration-200 shadow-lg">
+                                Ver Perfil
+                              </button>
+                            </div>
                           </div>
                           
-                          {/* Preço e botão */}
-                          <div className="flex items-center justify-between">
-                            <div className="text-[#F25790] font-bold text-lg drop-shadow">
-                              {modelo.valorPorMinuto.toFixed(0)} <span className="text-sm text-white/70">ChatCoins/min</span>
+                          <div className="p-3 sm:p-4 bg-gradient-to-br from-white/5 via-white/3 to-transparent backdrop-blur-sm">
+                            {/* Categorias */}
+                            <div className="flex flex-wrap gap-1.5 mb-3">
+                              {modelo.categorias.slice(0, 2).map((categoria, index) => (
+                                <span 
+                                  key={index} 
+                                  className="text-xs bg-white/10 backdrop-blur-sm border border-white/20 px-2 py-0.5 rounded-full text-white/90 font-medium"
+                                >
+                                  {categoria.charAt(0).toUpperCase() + categoria.slice(1)}
+                                </span>
+                              ))}
                             </div>
-                            <Link href={`/chat-video?id=${modelo.id}`}>
-                              <button className="bg-gradient-to-r from-[#F25790] to-[#d93d75] hover:from-[#d93d75] hover:to-[#c12d65] text-white font-medium py-2 px-5 rounded-full text-sm transition-all duration-300 hover:shadow-lg hover:shadow-[#F25790]/25 backdrop-blur-sm">
-                                Conversar
-                              </button>
-                            </Link>
+                            
+                            {/* Preço e botão */}
+                            <div className="flex items-center justify-between">
+                              <div className="text-[#F25790] font-bold text-base drop-shadow">
+                                {modelo.valorPorMinuto.toFixed(0)} <span className="text-xs text-white/70">Créditos/min</span>
+                              </div>
+                              <Link href={`/chat-video?id=${modelo.id}`}>
+                                <button className="bg-gradient-to-r from-[#F25790] to-[#d93d75] hover:from-[#d93d75] hover:to-[#c12d65] text-white font-medium py-1.5 px-4 rounded-full text-xs transition-all duration-300 hover:shadow-lg hover:shadow-[#F25790]/25 backdrop-blur-sm">
+                                  Conversar
+                                </button>
+                              </Link>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                   
                   {/* Indicador de scroll mais sutil */}
@@ -230,18 +239,18 @@ export default function Home() {
               // Layout para usuários não logados - centralizado
               <div className="flex justify-center lg:justify-start">
                 <div className="w-full max-w-3xl text-center lg:text-left">
-                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight break-words truncate">
-                    Videochats: explore o<br/>
-                    <span className="text-[#F25790]">prazer</span> em tempo real.
-                  </h1>
-                  
-                  <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-8 sm:mb-10 leading-relaxed max-w-2xl mx-auto lg:mx-0 break-words truncate">
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight">
+                  Videochats: explore o<br/>
+                  <span className="text-[#F25790]">prazer</span> em tempo real.
+                </h1>
+                
+                  <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-8 sm:mb-10 leading-relaxed max-w-2xl mx-auto lg:mx-0">
                     Conheça nossa plataforma inovadora de chat por vídeo.<br className="hidden sm:block"/>
                     Em apenas um clique descubra um novo jeito de interagir.<br className="hidden sm:block"/>
-                    Junte-se a nós e conecte-se de forma genuína.
-                  </p>
-                  
-                  <div className="mb-12">
+                  Junte-se a nós e conecte-se de forma genuína.
+                </p>
+                
+                <div className="mb-12">
                     <Link href="/cadastro" className="bg-[#F25790] hover:bg-[#d93d75] text-white font-medium py-3 sm:py-4 px-8 sm:px-10 rounded-full inline-block text-center transition-colors duration-200 text-sm sm:text-base">
                       Cadastre-se agora
                     </Link>

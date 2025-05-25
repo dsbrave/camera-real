@@ -7,9 +7,9 @@ Uma plataforma moderna de videochat ao vivo construída com Next.js, oferecendo 
 - **Interface Moderna**: Design responsivo e elegante com animações suaves
 - **Carrossel de Modelos**: Exibição destacada de modelos em destaque para usuários logados
 - **Sistema de Autenticação**: Login/cadastro com diferentes tipos de usuário
-- **Chat em Tempo Real**: Videochat interativo com sistema de moedas (ChatCoins)
+- **Chat em Tempo Real**: Videochat interativo com sistema de moedas (Créditos)
 - **Painel do Usuário**: Área personalizada para gerenciamento de conta
-- **Sistema de Carteira**: Compra e gerenciamento de ChatCoins
+- **Sistema de Carteira**: Compra e gerenciamento de Créditos
 - **Páginas Institucionais**: Sobre, FAQ, Termos, Política de Privacidade
 
 ## 🛠️ Tecnologias Utilizadas
@@ -76,32 +76,28 @@ npm run dev
 
 5. Abra [http://localhost:3000](http://localhost:3000) no seu navegador
 
-## 📱 Funcionalidades Principais
+## 🎯 Funcionalidades Principais
 
-### Página Principal
-- Layout diferenciado para usuários logados e não logados
-- Carrossel de modelos em destaque (apenas para usuários logados)
-- Botões de ação: "Explorar Agora" e "Comprar ChatCoin"
-- Background animado responsivo
+### 🎨 Design e UX
+- **Hero Section**: Apresentação impactante com vídeo de fundo
+- **Cards de Modelos**: Grid responsivo com informações dos modelos
+- **Navegação Intuitiva**: Menu responsivo com dropdown de usuário
+- **Botões de ação**: "Explorar Agora" e "Comprar Créditos"
 
-### Sistema de Usuários
-- **Usuários**: Podem navegar, comprar ChatCoins e iniciar videochats
-- **Modelos**: Podem se cadastrar e oferecer serviços de videochat
+### 👥 Tipos de Usuário
+- **Visitantes**: Podem visualizar a página inicial e se cadastrar
+- **Usuários**: Podem navegar, comprar Créditos e iniciar videochats
+- **Modelos**: Podem gerenciar perfis, definir preços e atender clientes
 
-### Páginas Disponíveis
-- `/` - Página principal
-- `/explorar` - Galeria de modelos
-- `/login` - Autenticação
-- `/cadastro` - Registro de usuários
-- `/cadastro-modelo` - Registro de modelos
-- `/painel-usuario` - Painel do usuário
-- `/carteira` - Gerenciamento de ChatCoins
-- `/videochats` - Histórico de videochats
-- `/sobre` - Sobre a plataforma
-- `/contato` - Contato
-- `/faq` - Perguntas frequentes
-- `/termos-condicoes` - Termos e condições
-- `/politica-privacidade` - Política de privacidade
+### 📱 Páginas Principais
+- `/` - Homepage com apresentação e modelos em destaque
+- `/explorar` - Catálogo completo de modelos
+- `/carteira` - Gerenciamento de Créditos
+- `/chat-video` - Interface de videochat
+- `/painel-usuario` - Dashboard do usuário
+- `/painel-modelo` - Dashboard do modelo
+- `/login` e `/cadastro` - Autenticação
+- `/suporte` - Página de suporte com IA
 
 ## 🎨 Design
 
@@ -126,14 +122,15 @@ npm run start    # Servidor de produção
 npm run lint     # Verificação de código
 ```
 
-## 📝 Próximas Funcionalidades
+## 🚀 Próximos Passos
 
-- [ ] Integração com backend real
-- [ ] Sistema de pagamento para ChatCoins
-- [ ] Chat em tempo real com WebRTC
-- [ ] Sistema de notificações
-- [ ] App mobile com React Native
+- [ ] Sistema de pagamento para Créditos
+- [ ] Implementação completa do WebRTC
+- [ ] Sistema de notificações em tempo real
+- [ ] Chat por texto durante videochamadas
 - [ ] Sistema de avaliações e comentários
+- [ ] Programa de afiliados
+- [ ] App mobile nativo
 
 ## 🤝 Contribuição
 
@@ -147,9 +144,9 @@ npm run lint     # Verificação de código
 
 Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
 
-## 📞 Contato
+## 📞 Suporte
 
-Para dúvidas ou sugestões, entre em contato através da página de contato da plataforma.
+Para dúvidas ou sugestões, entre em contato através da página de suporte da plataforma.
 
 ---
 

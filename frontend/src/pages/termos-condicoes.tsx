@@ -186,7 +186,7 @@ export default function TermosCondicoes() {
                   Política de Privacidade
                 </Link>
                 {' | '}
-                <Link href="/contato" className="text-[#F25790] hover:underline">
+                <Link href="/suporte" className="text-[#F25790] hover:underline">
                   Entre em Contato
                 </Link>
               </div>

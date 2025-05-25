@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from 'react';
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState<any>(null);
+  const [creditos, setCreditos] = useState(0);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -19,6 +20,8 @@ export default function Header() {
           const user = JSON.parse(userStorage);
           setIsLoggedIn(!!user.isLoggedIn);
           setUserData(user);
+          // Simular saldo de Créditos (em uma aplicação real, isso viria da API)
+          setCreditos(user.creditos || 150);
         }
       } catch (error) {
         console.error('Erro ao verificar login:', error);
@@ -44,6 +47,7 @@ export default function Header() {
     localStorage.removeItem('user');
     setIsLoggedIn(false);
     setUserData(null);
+    setCreditos(0);
     setIsDropdownOpen(false);
     setIsMobileMenuOpen(false);
     window.location.href = '/';
@@ -79,9 +83,29 @@ export default function Header() {
           <Link href="/videochats" className="hover:text-[#F25790] font-medium transition-colors">
             Como Funciona
           </Link>
-          <Link href="/sobre" className="hover:text-[#F25790] font-medium transition-colors">
-            Sobre
-          </Link>
+          {isLoggedIn ? (
+            <Link href="/suporte" className="hover:text-[#F25790] font-medium transition-colors">
+              Suporte
+            </Link>
+          ) : (
+            <Link href="/sobre" className="hover:text-[#F25790] font-medium transition-colors">
+              Sobre
+            </Link>
+          )}
+          
+          {isLoggedIn && (
+            <>
+              {/* Saldo de Créditos como botão */}
+              <Link href="/carteira" className="flex items-center space-x-2 bg-gradient-to-r from-[#F25790]/20 to-purple-600/20 backdrop-blur-sm border border-[#F25790]/30 hover:border-[#F25790]/50 rounded-full px-3 py-1.5 transition-all duration-200 hover:bg-[#F25790]/10">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-[#F25790]">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                <span className="text-white font-medium text-sm">{creditos}</span>
+                <span className="text-gray-300 text-xs">Créditos</span>
+              </Link>
+            </>
+          )}
+          
           {!isLoggedIn ? (
             <>
               <Link href="/seja-modelo" className="hover:text-[#F25790] font-medium transition-colors">
@@ -191,13 +215,23 @@ export default function Header() {
             >
               Como Funciona
             </Link>
-            <Link 
-              href="/sobre" 
-              className="block py-2 text-white hover:text-[#F25790] font-medium transition-colors"
-              onClick={closeMobileMenu}
-            >
-              Sobre
-            </Link>
+            {isLoggedIn ? (
+              <Link 
+                href="/suporte" 
+                className="block py-2 text-white hover:text-[#F25790] font-medium transition-colors"
+                onClick={closeMobileMenu}
+              >
+                Suporte
+              </Link>
+            ) : (
+              <Link 
+                href="/sobre" 
+                className="block py-2 text-white hover:text-[#F25790] font-medium transition-colors"
+                onClick={closeMobileMenu}
+              >
+                Sobre
+              </Link>
+            )}
             
             {!isLoggedIn ? (
               <>
@@ -223,6 +257,19 @@ export default function Header() {
               </>
             ) : (
               <div className="pt-4 border-t border-gray-700 space-y-2">
+                {/* Saldo de Créditos como botão no Mobile */}
+                <Link 
+                  href="/carteira"
+                  className="flex items-center justify-center space-x-2 bg-gradient-to-r from-[#F25790]/20 to-purple-600/20 backdrop-blur-sm border border-[#F25790]/30 hover:border-[#F25790]/50 rounded-full px-4 py-2 mb-4 transition-all duration-200 hover:bg-[#F25790]/10"
+                  onClick={closeMobileMenu}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-[#F25790]">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  </svg>
+                  <span className="text-white font-medium">{creditos}</span>
+                  <span className="text-gray-300 text-sm">Créditos</span>
+                </Link>
+                
                 <div className="flex items-center space-x-3 mb-4">
                   <div className="w-10 h-10 rounded-full bg-[#F25790] flex items-center justify-center overflow-hidden">
                     {userData?.photo ? (

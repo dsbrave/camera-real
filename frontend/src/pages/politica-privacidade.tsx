@@ -150,7 +150,7 @@ export default function PoliticaPrivacidade() {
                   Termos e Condições
                 </Link>
                 {' | '}
-                <Link href="/contato" className="text-[#F25790] hover:underline">
+                <Link href="/suporte" className="text-[#F25790] hover:underline">
                   Entre em Contato
                 </Link>
               </div>
