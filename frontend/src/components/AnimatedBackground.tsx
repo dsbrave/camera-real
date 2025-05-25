@@ -4,17 +4,21 @@ interface AnimatedBackgroundProps {
   className?: string;
   intensity?: 'subtle' | 'medium' | 'strong';
   showLensFlare?: boolean;
+  isStatic?: boolean;
 }
 
 export default function AnimatedBackground({ 
   className = '', 
   intensity = 'subtle',
-  showLensFlare = true 
+  showLensFlare = true,
+  isStatic = false
 }: AnimatedBackgroundProps) {
   const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
 
-  // Mouse tracking with throttling for better performance
+  // Mouse tracking with throttling for better performance - only if not static
   useEffect(() => {
+    if (isStatic) return; // Skip mouse tracking for static backgrounds
+    
     let timeoutId: NodeJS.Timeout;
     
     const handleMouseMove = (e: MouseEvent) => {
@@ -33,7 +37,7 @@ export default function AnimatedBackground({
       window.removeEventListener('mousemove', handleMouseMove);
       clearTimeout(timeoutId);
     };
-  }, []);
+  }, [isStatic]);
 
   // Intensity settings - much more subtle
   const intensitySettings = {
@@ -41,7 +45,7 @@ export default function AnimatedBackground({
       baseOpacity: 0.04,
       waveOpacity: 0.015,
       flareOpacity: 0.08,
-      overlayOpacity: 0.7,
+      overlayOpacity: 0.25,
       blur: 150,
       rotation: 0.008,
       scale: 0.00005
@@ -50,7 +54,7 @@ export default function AnimatedBackground({
       baseOpacity: 0.08,
       waveOpacity: 0.025,
       flareOpacity: 0.12,
-      overlayOpacity: 0.6,
+      overlayOpacity: 0.2,
       blur: 130,
       rotation: 0.012,
       scale: 0.0001
@@ -59,7 +63,7 @@ export default function AnimatedBackground({
       baseOpacity: 0.15,
       waveOpacity: 0.04,
       flareOpacity: 0.18,
-      overlayOpacity: 0.5,
+      overlayOpacity: 0.15,
       blur: 110,
       rotation: 0.018,
       scale: 0.00015
@@ -68,14 +72,18 @@ export default function AnimatedBackground({
 
   const settings = intensitySettings[intensity];
 
+  // For static backgrounds, use fixed position
+  const staticPosition = { x: 50, y: 50 };
+  const currentPosition = isStatic ? staticPosition : mousePosition;
+
   return (
     <div className={`absolute inset-0 overflow-hidden ${className}`}>
       {/* Base gradient background - very slow transition */}
       <div 
-        className="absolute inset-0 transition-all duration-[8000ms] ease-out"
+        className={`absolute inset-0 ${isStatic ? '' : 'transition-all duration-[8000ms] ease-out'}`}
         style={{
           opacity: settings.baseOpacity,
-          background: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, 
+          background: `radial-gradient(circle at ${currentPosition.x}% ${currentPosition.y}%, 
             #F25790 0%, 
             #8B5CF6 40%, 
             #3B82F6 70%, 
@@ -85,90 +93,96 @@ export default function AnimatedBackground({
       />
       
       {/* Camera flash effect - subtle pulse */}
-      <div className="absolute inset-0">
-        <div 
-          className="absolute inset-0 animate-pulse" 
-          style={{ 
-            opacity: settings.waveOpacity,
-            animationDuration: '12s', // Very slow pulse
-            animationTimingFunction: 'ease-in-out'
-          }}
-        >
+      {!isStatic && (
+        <div className="absolute inset-0">
           <div 
-            className="absolute w-full h-full transition-transform duration-[10000ms] ease-out"
-            style={{
-              background: `conic-gradient(from ${mousePosition.x * 0.15}deg at 50% 50%, 
-                transparent 0deg, 
-                #F25790 90deg, 
-                transparent 180deg, 
-                #8B5CF6 270deg, 
-                transparent 360deg)`,
-              filter: `blur(${settings.blur}px)`,
-              transform: `rotate(${mousePosition.x * settings.rotation}deg) scale(${1 + mousePosition.y * settings.scale})`
+            className="absolute inset-0 animate-pulse" 
+            style={{ 
+              opacity: settings.waveOpacity,
+              animationDuration: '12s', // Very slow pulse
+              animationTimingFunction: 'ease-in-out'
             }}
-          />
+          >
+            <div 
+              className="absolute w-full h-full transition-transform duration-[10000ms] ease-out"
+              style={{
+                background: `conic-gradient(from ${currentPosition.x * 0.15}deg at 50% 50%, 
+                  transparent 0deg, 
+                  #F25790 90deg, 
+                  transparent 180deg, 
+                  #8B5CF6 270deg, 
+                  transparent 360deg)`,
+                filter: `blur(${settings.blur}px)`,
+                transform: `rotate(${currentPosition.x * settings.rotation}deg) scale(${1 + currentPosition.y * settings.scale})`
+              }}
+            />
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Secondary flash - even more subtle */}
-      <div className="absolute inset-0">
-        <div 
-          className="absolute inset-0 animate-pulse" 
-          style={{ 
-            opacity: settings.waveOpacity * 0.5,
-            animationDelay: '6s',
-            animationDuration: '18s', // Extra slow
-            animationTimingFunction: 'ease-in-out'
-          }}
-        >
+      {!isStatic && (
+        <div className="absolute inset-0">
           <div 
-            className="absolute w-full h-full transition-transform duration-[15000ms] ease-out"
-            style={{
-              background: `conic-gradient(from ${-mousePosition.y * 0.1}deg at 30% 70%, 
-                transparent 0deg, 
-                #8B5CF6 60deg, 
-                transparent 120deg, 
-                #F25790 240deg, 
-                transparent 300deg)`,
-              filter: `blur(${settings.blur + 30}px)`,
-              transform: `rotate(${-mousePosition.y * settings.rotation * 0.3}deg) scale(${1 + mousePosition.x * settings.scale * 0.3})`
+            className="absolute inset-0 animate-pulse" 
+            style={{ 
+              opacity: settings.waveOpacity * 0.5,
+              animationDelay: '6s',
+              animationDuration: '18s', // Extra slow
+              animationTimingFunction: 'ease-in-out'
             }}
-          />
+          >
+            <div 
+              className="absolute w-full h-full transition-transform duration-[15000ms] ease-out"
+              style={{
+                background: `conic-gradient(from ${-currentPosition.y * 0.1}deg at 30% 70%, 
+                  transparent 0deg, 
+                  #8B5CF6 60deg, 
+                  transparent 120deg, 
+                  #F25790 240deg, 
+                  transparent 300deg)`,
+                filter: `blur(${settings.blur + 30}px)`,
+                transform: `rotate(${-currentPosition.y * settings.rotation * 0.3}deg) scale(${1 + currentPosition.x * settings.scale * 0.3})`
+              }}
+            />
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Ambient glow - very subtle */}
-      <div className="absolute inset-0">
-        <div 
-          className="absolute inset-0 animate-pulse" 
-          style={{ 
-            opacity: settings.waveOpacity * 0.3,
-            animationDelay: '3s',
-            animationDuration: '25s', // Ultra slow
-            animationTimingFunction: 'ease-in-out'
-          }}
-        >
+      {!isStatic && (
+        <div className="absolute inset-0">
           <div 
-            className="absolute w-full h-full transition-transform duration-[20000ms] ease-out"
-            style={{
-              background: `radial-gradient(ellipse at ${mousePosition.x * 0.8}% ${mousePosition.y * 0.8}%, 
-                rgba(242, 87, 144, 0.1) 0%, 
-                rgba(139, 92, 246, 0.05) 50%, 
-                transparent 80%)`,
-              filter: `blur(${settings.blur + 50}px)`,
-              transform: `scale(${1 + mousePosition.x * settings.scale * 0.2})`
+            className="absolute inset-0 animate-pulse" 
+            style={{ 
+              opacity: settings.waveOpacity * 0.3,
+              animationDelay: '3s',
+              animationDuration: '25s', // Ultra slow
+              animationTimingFunction: 'ease-in-out'
             }}
-          />
+          >
+            <div 
+              className="absolute w-full h-full transition-transform duration-[20000ms] ease-out"
+              style={{
+                background: `radial-gradient(ellipse at ${currentPosition.x * 0.8}% ${currentPosition.y * 0.8}%, 
+                  rgba(242, 87, 144, 0.1) 0%, 
+                  rgba(139, 92, 246, 0.05) 50%, 
+                  transparent 80%)`,
+                filter: `blur(${settings.blur + 50}px)`,
+                transform: `scale(${1 + currentPosition.x * settings.scale * 0.2})`
+              }}
+            />
+          </div>
         </div>
-      </div>
+      )}
       
       {/* Camera lens flare effect - more subtle */}
-      {showLensFlare && (
+      {showLensFlare && !isStatic && (
         <div 
           className="absolute transition-all duration-[1000ms] ease-out pointer-events-none"
           style={{
-            left: `${mousePosition.x}%`,
-            top: `${mousePosition.y}%`,
+            left: `${currentPosition.x}%`,
+            top: `${currentPosition.y}%`,
             transform: 'translate(-50%, -50%)'
           }}
         >

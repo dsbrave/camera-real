@@ -13,7 +13,7 @@ export default function SejaModelo() {
       
       <div className="min-h-screen bg-black text-white" style={{ backgroundImage: "url('/images/high-quality_fashion_studio_photo_of_a_fit_brazilian-inspired_model_in_a_streaming_room_setup_the_m_6xmeh5hwdbulnwsdojt2_3.png')", backgroundSize: 'cover', backgroundPosition: 'right 5%', transform: 'scaleX(-1)' }}>
         {/* Overlay padronizado mais escuro */}
-        <div className="absolute inset-0 bg-black bg-opacity-80 z-0"></div>
+        <div className="absolute inset-0 bg-black bg-opacity-70 z-0"></div>
         <div className="relative z-10" style={{ transform: 'scaleX(-1)' }}>
           <Header />
           <div className="h-16 sm:h-20 md:h-24" />

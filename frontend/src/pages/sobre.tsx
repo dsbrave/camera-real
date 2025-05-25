@@ -3,7 +3,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import AnimatedBackground from '@/components/AnimatedBackground';
 
 export default function Sobre() {
   return (
@@ -14,9 +13,7 @@ export default function Sobre() {
       </Head>
 
       <div className="min-h-screen flex flex-col text-white relative bg-black">
-        {/* Animated Background */}
-        <AnimatedBackground intensity="subtle" />
-        
+        {/* Background */}
         <div className="relative z-10 flex flex-col min-h-screen">
           <Header />
           

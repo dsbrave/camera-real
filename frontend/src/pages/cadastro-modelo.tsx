@@ -81,7 +81,7 @@ export default function CadastroModelo() {
       
       <div className="min-h-screen bg-black text-white relative overflow-hidden" style={{ backgroundImage: "url('/images/high-resolution_studio_photo_of_a_confident_brazilian-inspired_model_wearing_an_elegant_black_lace__i7mo7j07sng27o0fv86l_2.png')", backgroundSize: 'cover', backgroundPosition: 'center', transform: 'scaleX(-1)' }}>
         {/* Overlay padronizado mais escuro */}
-        <div className="absolute inset-0 bg-black bg-opacity-80 z-0"></div>
+        <div className="absolute inset-0 bg-black bg-opacity-70 z-0"></div>
         <div className="relative z-10" style={{ transform: 'scaleX(-1)' }}>
           {/* Logo posicionada como no header original, mas sem tarja */}
           <div className="py-3 md:py-6 w-full z-50">

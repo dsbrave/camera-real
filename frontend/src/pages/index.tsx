@@ -30,7 +30,7 @@ export default function Home() {
       
       <div className="min-h-screen bg-black text-white" style={{ backgroundImage: "url('/images/high-quality_fashion_studio_photo_of_a_fit_brazilian-inspired_model_in_a_streaming_room_setup_the_m_l1g01p6hm0p1kyxw2q42_0.png')", backgroundSize: 'cover', backgroundPosition: 'center 15%', transform: 'scaleX(-1)' }}>
         {/* Overlay igual ao das páginas de cadastro */}
-        <div className="absolute inset-0 bg-black bg-opacity-80 z-0"></div>
+        <div className="absolute inset-0 bg-black bg-opacity-70 z-0"></div>
         
         <div className="relative z-10" style={{ transform: 'scaleX(-1)' }}> {/* Contra-flipa os elementos para ficarem corretos */}
           <Header />

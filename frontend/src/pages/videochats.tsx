@@ -4,7 +4,6 @@ import Image from 'next/image';
 import Head from 'next/head';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import AnimatedBackground from '@/components/AnimatedBackground';
 import { useRouter } from 'next/router';
 
 export default function Videochats() {
@@ -50,9 +49,7 @@ export default function Videochats() {
       </Head>
 
       <div className="min-h-screen bg-black text-white relative">
-        {/* Animated Background */}
-        <AnimatedBackground intensity="medium" />
-        
+        {/* Background */}
         <div className="relative z-10">
           <Header />
           
@@ -63,7 +60,7 @@ export default function Videochats() {
             <div className="flex flex-col md:flex-row items-center gap-8 mb-16">
               {/* Left Side - Video Chat Explanation */}
               <div className="w-full md:w-1/2 mb-8 md:mb-0">
-                <div className="bg-black bg-opacity-70 p-8 rounded-xl border border-gray-800 relative min-h-[400px] flex flex-col justify-center">
+                <div className="bg-black bg-opacity-40 p-8 rounded-xl border border-gray-800 relative min-h-[400px] flex flex-col justify-center">
                   <h2 className="text-2xl font-bold mb-4 text-[#F25790]">Converse em tempo real</h2>
                   <p className="mb-4 text-lg text-gray-300">
                     Nossos videochats permitem que você se conecte diretamente com modelos ao vivo em tempo real, em uma experiência exclusiva e privada.
@@ -109,7 +106,7 @@ export default function Videochats() {
               
               {/* Right Side - How it Works */}
               <div className="w-full md:w-1/2">
-                <div className="bg-black bg-opacity-70 p-8 rounded-xl border border-gray-800">
+                <div className="bg-black bg-opacity-40 p-8 rounded-xl border border-gray-800">
                   <h2 className="text-2xl font-bold mb-6 text-[#F25790]">Como funciona</h2>
                   
                   <div className="space-y-6">
@@ -167,7 +164,7 @@ export default function Videochats() {
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Basic Package */}
-                <div className="bg-black bg-opacity-70 border border-gray-800 rounded-xl p-6 hover:border-[#F25790] transition-colors">
+                <div className="bg-black bg-opacity-40 border border-gray-800 rounded-xl p-6 hover:border-[#F25790] transition-colors">
                   <h3 className="text-xl font-bold mb-2">Pacote Básico</h3>
                   <div className="text-3xl font-bold text-[#F25790] mb-2">R$ 50</div>
                   <p className="text-sm text-gray-400 mb-4">100 créditos</p>
@@ -194,7 +191,7 @@ export default function Videochats() {
                 </div>
                 
                 {/* Popular Package */}
-                <div className="bg-black bg-opacity-70 border-2 border-[#F25790] rounded-xl p-6 relative transform hover:scale-105 transition-transform">
+                <div className="bg-black bg-opacity-40 border-2 border-[#F25790] rounded-xl p-6 relative transform hover:scale-105 transition-transform">
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-[#F25790] text-white text-sm font-bold px-3 py-1 rounded-full">
                     MAIS POPULAR
                   </div>
@@ -230,7 +227,7 @@ export default function Videochats() {
                 </div>
                 
                 {/* Pro Package */}
-                <div className="bg-black bg-opacity-70 border border-gray-800 rounded-xl p-6 hover:border-[#F25790] transition-colors">
+                <div className="bg-black bg-opacity-40 border border-gray-800 rounded-xl p-6 hover:border-[#F25790] transition-colors">
                   <h3 className="text-xl font-bold mb-2">Pacote Master</h3>
                   <div className="text-3xl font-bold text-[#F25790] mb-2">R$ 300</div>
                   <p className="text-sm text-gray-400 mb-4">1000 créditos <span className="text-white font-bold">(50% de desconto)</span></p>
@@ -269,22 +266,22 @@ export default function Videochats() {
               <h2 className="text-3xl font-bold mb-8 text-center">Perguntas <span className="text-[#F25790]">Frequentes</span></h2>
               
               <div className="space-y-4">
-                <div className="bg-black bg-opacity-70 border border-gray-800 rounded-xl p-6">
+                <div className="bg-black bg-opacity-40 border border-gray-800 rounded-xl p-6">
                   <h3 className="text-xl font-bold mb-2">Como funciona o pagamento?</h3>
                   <p className="text-gray-300">Você compra créditos que são gastos durante suas sessões de chat por vídeo. Cada modelo define seu próprio valor por minuto, e os créditos são descontados enquanto você está em uma chamada.</p>
                 </div>
                 
-                <div className="bg-black bg-opacity-70 border border-gray-800 rounded-xl p-6">
+                <div className="bg-black bg-opacity-40 border border-gray-800 rounded-xl p-6">
                   <h3 className="text-xl font-bold mb-2">Posso solicitar ações específicas durante o chat?</h3>
                   <p className="text-gray-300">Sim, você pode fazer solicitações aos modelos durante a sessão. O atendimento dessas solicitações está sujeito à disponibilidade e conforto do modelo, sempre dentro dos termos de serviço da plataforma.</p>
                 </div>
                 
-                <div className="bg-black bg-opacity-70 border border-gray-800 rounded-xl p-6">
+                <div className="bg-black bg-opacity-40 border border-gray-800 rounded-xl p-6">
                   <h3 className="text-xl font-bold mb-2">Como garantir minha privacidade?</h3>
                   <p className="text-gray-300">Todas as sessões são privadas e não são gravadas pela plataforma. Utilizamos criptografia de ponta a ponta para proteger sua chamada. Você pode optar por não mostrar seu rosto ou usar apelidos para manter sua privacidade.</p>
                 </div>
                 
-                <div className="bg-black bg-opacity-70 border border-gray-800 rounded-xl p-6">
+                <div className="bg-black bg-opacity-40 border border-gray-800 rounded-xl p-6">
                   <h3 className="text-xl font-bold mb-2">Os créditos expiram?</h3>
                   <p className="text-gray-300">Sim, os créditos têm um período de validade que depende do pacote adquirido. O período de validade varia de 30 a 90 dias após a compra, dependendo do pacote escolhido.</p>
                 </div>
