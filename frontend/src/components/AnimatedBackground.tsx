@@ -68,8 +68,8 @@ export default function AnimatedBackground({
   };
 
   const settings = intensitySettings[intensity];
-  const fixedPosition = { x: 50, y: 50 };
-  const currentPosition = isStatic ? fixedPosition : mousePosition;
+  const staticPosition = { x: 50, y: 50 };
+  const currentPosition = isStatic ? staticPosition : mousePosition;
 
   return (
     <div className={`absolute inset-0 overflow-hidden ${className}`}>

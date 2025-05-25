@@ -19,7 +19,7 @@ interface Modelo {
 }
 
 export default function Explorar() {
-  const [filtroCategoria, setFiltroCategoria] = useState('todas');
+  const [filtroCategoria, setFiltroCategoria] = useState('destaque');
   const [pesquisa, setPesquisa] = useState('');
   const [ordenarPor, setOrdenarPor] = useState('popularidade');
   const [apenasOnline, setApenasOnline] = useState(false);
@@ -43,7 +43,7 @@ export default function Explorar() {
     {
       id: 'm1',
       nome: 'Ana Silva',
-      fotoPerfil: '/images/Tutto Ricco - Pride Month 1.png',
+      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_ko2t9z7547m30wzu3dsv_1.png',
       categorias: ['conversa', 'dança'],
       online: true,
       destacado: true,
@@ -53,7 +53,7 @@ export default function Explorar() {
     {
       id: 'm2',
       nome: 'Júlia Santos',
-      fotoPerfil: '/images/Tutto Ricco - Alone Time 1.png',
+      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_hgg1km82rvo2tgmhd39a_3.png',
       categorias: ['conversa', 'música'],
       online: true,
       destacado: false,
@@ -63,7 +63,7 @@ export default function Explorar() {
     {
       id: 'm3',
       nome: 'Carla Oliveira',
-      fotoPerfil: '/images/Open Doodles - Loving 1.png',
+      fotoPerfil: '/images/high-quality_fashion_studio_photo_of_a_fit_brazilian-inspired_model_in_a_streaming_room_setup_the_m_xcuvvf5mb98aiguyg0ar_3.png',
       categorias: ['dança', 'fitness'],
       online: false,
       destacado: false,
@@ -73,7 +73,7 @@ export default function Explorar() {
     {
       id: 'm4',
       nome: 'Marina Pereira',
-      fotoPerfil: '/images/Tutto Ricco - Walking In the Park 1.png',
+      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_2wu5n7gdr6dsrmj98ak9_2.png',
       categorias: ['conversa', 'artes'],
       online: true,
       destacado: true,
@@ -83,7 +83,7 @@ export default function Explorar() {
     {
       id: 'm5',
       nome: 'Larissa Costa',
-      fotoPerfil: '/images/Open Doodles - Coffee 1.png',
+      fotoPerfil: '/images/high-quality_fashion_studio_photo_of_a_fit_brazilian-inspired_model_in_a_streaming_room_setup_the_m_pbqy208mxdxlbokwwd6m_1.png',
       categorias: ['música', 'jogos'],
       online: false,
       destacado: false,
@@ -93,7 +93,7 @@ export default function Explorar() {
     {
       id: 'm6',
       nome: 'Natália Souza',
-      fotoPerfil: '/images/Open Doodles - Meditating 1.png',
+      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_8dcmfx9cfacmkla3y56r_3.png',
       categorias: ['fitness', 'conversa'],
       online: true,
       destacado: false,
@@ -103,7 +103,7 @@ export default function Explorar() {
     {
       id: 'm7',
       nome: 'Fernanda Lima',
-      fotoPerfil: '/images/Open Doodles - Studying 1.png',
+      fotoPerfil: '/images/high-resolution_studio_photo_of_a_confident_brazilian-inspired_model_wearing_an_elegant_black_lace__i7mo7j07sng27o0fv86l_2.png',
       categorias: ['conversa', 'jogos'],
       online: true,
       destacado: true,
@@ -113,7 +113,7 @@ export default function Explorar() {
     {
       id: 'm8',
       nome: 'Camila Mendes',
-      fotoPerfil: '/images/Tutto Ricco - Layered Flower 1.png',
+      fotoPerfil: '/images/high-resolution_studio_photo_of_a_confident_brazilian-inspired_model_wearing_an_elegant_black_lace__qxnhg17arbpzwvqdae8r_1.png',
       categorias: ['artes', 'música'],
       online: false,
       destacado: false,
@@ -123,16 +123,11 @@ export default function Explorar() {
   ];
 
   const categorias = [
-    { id: 'todas', nome: 'Todas' },
-    { id: 'hétero', nome: 'Hétero' },
-    { id: 'travesti', nome: 'Travesti' },
-    { id: 'gay', nome: 'Gay' },
-    { id: 'peitos-grandes', nome: 'Peitos Grandes' },
-    { id: 'bunda-grande', nome: 'Bunda Grande' },
-    { id: 'asiática', nome: 'Asiática' },
-    { id: 'latina', nome: 'Latina' },
-    { id: 'loira', nome: 'Loira' },
-    { id: 'fetiche', nome: 'Fetiche' }
+    { id: 'destaque', nome: 'Em Destaque' },
+    { id: 'mulheres', nome: 'Mulheres' },
+    { id: 'homens', nome: 'Homens' },
+    { id: 'casais', nome: 'Casais' },
+    { id: 'trans', nome: 'Trans' }
   ];
 
   // Filtrar e ordenar modelos
@@ -142,7 +137,18 @@ export default function Explorar() {
       const pesquisaMatch = modelo.nome.toLowerCase().includes(pesquisa.toLowerCase());
       
       // Filtro de categoria
-      const categoriaMatch = filtroCategoria === 'todas' || modelo.categorias.includes(filtroCategoria);
+      let categoriaMatch = true;
+      if (filtroCategoria === 'destaque') {
+        categoriaMatch = modelo.destacado;
+      } else if (filtroCategoria === 'mulheres') {
+        categoriaMatch = modelo.categorias.includes('mulher') || modelo.categorias.includes('conversa');
+      } else if (filtroCategoria === 'homens') {
+        categoriaMatch = modelo.categorias.includes('homem');
+      } else if (filtroCategoria === 'casais') {
+        categoriaMatch = modelo.categorias.includes('casal');
+      } else if (filtroCategoria === 'trans') {
+        categoriaMatch = modelo.categorias.includes('trans');
+      }
       
       // Filtro de status online
       const onlineMatch = !apenasOnline || modelo.online;
@@ -173,7 +179,7 @@ export default function Explorar() {
         <meta name="description" content="Encontre os melhores modelos para conversar em tempo real" />
       </Head>
 
-      <div className="min-h-screen text-white page-with-bg-image" style={{ background: 'linear-gradient(135deg, #1a0033 0%, #330033 50%, #220022 100%)' }}>
+      <div className="min-h-screen text-white bg-black">
         <Header />
         
         <div className="pt-16 pb-12 px-4 content-after-header">
@@ -211,101 +217,112 @@ export default function Explorar() {
             
             {/* Lista de modelos */}
             {modelosFiltrados.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
-                {modelosFiltrados.map(modelo => (
-                  <div 
-                    key={modelo.id} 
-                    className="bg-black border border-gray-800 rounded-xl overflow-hidden hover:border-[#F25790] transition-all hover:shadow-lg hover:shadow-[#F25790]/20"
-                  >
-                    <div className="relative aspect-[3/4] bg-black">
-                      {/* Sem imagem - fundo preto conforme solicitado */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#00000090] via-transparent to-[#00000060] z-10"></div>
-                      
-                      {modelo.destacado && (
-                        <div className="absolute top-3 left-3 bg-[#F25790] text-white text-xs font-bold px-2 py-1 rounded z-20">
-                          DESTAQUE
-                        </div>
-                      )}
-                      
-                      <div className={`absolute top-3 right-3 flex items-center z-20 ${modelo.online ? 'text-green-500' : 'text-gray-500'}`}>
-                        <div className={`w-3 h-3 rounded-full mr-1 ${modelo.online ? 'bg-green-500' : 'bg-gray-500'}`}></div>
-                        <span className="text-xs font-medium">{modelo.online ? 'Online' : 'Offline'}</span>
-                      </div>
-                      
-                      <div className="absolute bottom-0 left-0 right-0 p-4 z-20">
-                        <h3 className="text-xl font-bold text-white mb-1">{modelo.nome}</h3>
-                        <div className="flex items-center">
-                          <div className="flex">
-                            {[...Array(5)].map((_, i) => (
-                              <svg 
-                                key={i} 
-                                className={`w-4 h-4 ${i < Math.floor(modelo.avaliacoes) ? 'text-yellow-400' : 'text-gray-500'}`} 
-                                fill="currentColor" 
-                                viewBox="0 0 20 20"
-                              >
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              <div className="w-full">
+                <div className="flex overflow-x-auto scrollbar-hide gap-6 pb-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                  {modelosFiltrados.map(modelo => (
+                    <div 
+                      key={modelo.id} 
+                      className="flex-shrink-0 w-64 sm:w-72 bg-gradient-to-br from-[#F25790]/10 via-purple-500/5 to-blue-500/10 backdrop-blur-sm rounded-2xl overflow-hidden hover:from-[#F25790]/15 hover:via-purple-500/10 hover:to-blue-500/15 transition-all duration-300 hover:scale-105 hover:shadow-2xl border border-white/20 hover:border-[#F25790]/50"
+                    >
+                      <div className="relative h-64 sm:h-80 bg-gradient-to-br from-black/30 to-black/50">
+                        {/* Imagem da modelo */}
+                        {modelo.fotoPerfil && (
+                          <Image
+                            src={modelo.fotoPerfil}
+                            alt={modelo.nome}
+                            fill
+                            className="object-cover opacity-95"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          />
+                        )}
+                        
+                        {/* Overlay gradiente sutil */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+                        
+                        {/* Status e Destaque */}
+                        <div className="absolute top-3 left-3 right-3 flex justify-between items-start z-10">
+                          {modelo.destacado && (
+                            <div className="bg-gradient-to-r from-[#F25790] to-[#d93d75] text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-lg backdrop-blur-sm flex items-center gap-1">
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3 h-3">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M15.75 4.5c0-1.38-1.12-2.5-2.5-2.5s-2.5 1.12-2.5 2.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5Z" />
                               </svg>
-                            ))}
+                              DESTAQUE
+                            </div>
+                          )}
+                          <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full backdrop-blur-md border ${modelo.online ? 'bg-green-500/20 border-green-400/30' : 'bg-red-500/20 border-red-400/30'}`}>
+                            <div className={`w-1.5 h-1.5 rounded-full ${modelo.online ? 'bg-green-400 animate-pulse' : 'bg-red-400'}`}></div>
+                            <span className={`text-xs font-medium ${modelo.online ? 'text-green-300' : 'text-red-300'}`}>
+                              {modelo.online ? 'Online' : 'Offline'}
+                            </span>
                           </div>
-                          <span className="ml-1 text-sm">{modelo.avaliacoes}</span>
                         </div>
-                      </div>
-                    </div>
-                    
-                    <div className="p-4">
-                      <div className="flex flex-wrap gap-1 mb-3">
-                        {modelo.categorias.map((categoria, index) => (
-                          <span 
-                            key={index} 
-                            className="text-xs bg-black border border-gray-800 px-2 py-1 rounded-full"
-                          >
-                            {categoria.charAt(0).toUpperCase() + categoria.slice(1)}
-                          </span>
-                        ))}
+                        
+                        {/* Nome e avaliação */}
+                        <div className="absolute bottom-3 left-3 right-3">
+                          <h3 className="text-lg sm:text-xl font-bold text-white mb-1.5 drop-shadow-lg">{modelo.nome}</h3>
+                          <div className="flex items-center gap-2">
+                            <div className="flex">
+                              {[...Array(5)].map((_, i) => (
+                                <svg 
+                                  key={i} 
+                                  className={`w-3.5 h-3.5 ${i < Math.floor(modelo.avaliacoes) ? 'text-yellow-400' : 'text-white/30'}`} 
+                                  fill="currentColor" 
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                              ))}
+                            </div>
+                            <span className="text-sm text-white/80 font-medium drop-shadow">{modelo.avaliacoes}</span>
+                          </div>
+                        </div>
                       </div>
                       
-                      <div className="flex flex-col space-y-3">
-                        <div className="text-[#F25790] font-bold">
-                          R$ {modelo.valorPorMinuto.toFixed(2)}/min
+                      <div className="p-4 sm:p-5 bg-gradient-to-br from-white/5 via-white/3 to-transparent backdrop-blur-sm">
+                        {/* Categorias */}
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {modelo.categorias.slice(0, 2).map((categoria, index) => (
+                            <span 
+                              key={index} 
+                              className="text-xs bg-white/10 backdrop-blur-sm border border-white/20 px-2.5 py-1 rounded-full text-white/90 font-medium"
+                            >
+                              {categoria.charAt(0).toUpperCase() + categoria.slice(1)}
+                            </span>
+                          ))}
                         </div>
-                        <Link href={`/chat-video?id=${modelo.id}`} className="w-full">
-                          <button className="bg-[#F25790] hover:bg-[#d93d75] text-white font-medium py-2 px-4 rounded-full text-sm transition-colors w-full">Conversar</button>
-                        </Link>
+                        
+                        {/* Preço e botão lado a lado */}
+                        <div className="flex items-center justify-between">
+                          <div className="text-[#F25790] font-bold text-lg drop-shadow">
+                            {modelo.valorPorMinuto.toFixed(0)} <span className="text-sm text-white/70">ChatCoins/min</span>
+                          </div>
+                          <Link href={`/chat-video?id=${modelo.id}`}>
+                            <button className="bg-gradient-to-r from-[#F25790] to-[#d93d75] hover:from-[#d93d75] hover:to-[#c12d65] text-white font-medium py-2 px-5 rounded-full text-sm transition-all duration-300 hover:shadow-lg hover:shadow-[#F25790]/25 backdrop-blur-sm">
+                              Conversar
+                            </button>
+                          </Link>
+                        </div>
                       </div>
                     </div>
+                  ))}
+                </div>
+                
+                {/* Indicador de scroll */}
+                <div className="flex justify-center mt-6">
+                  <div className="text-sm text-gray-400 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+                    </svg>
+                    Deslize para ver mais modelos
                   </div>
-                ))}
+                </div>
               </div>
             ) : (
               <div className="text-center py-12">
-                <div className="inline-block p-4 rounded-full bg-white bg-opacity-10 mb-4">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-gray-400">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                  </svg>
-                </div>
                 <h3 className="text-xl font-medium mb-2">Nenhum modelo encontrado</h3>
                 <p className="text-gray-400">Tente outro termo de pesquisa ou filtro.</p>
               </div>
             )}
-            
-            {/* Paginação */}
-            <div className="mt-10 flex justify-center">
-              <div className="flex space-x-2">
-                <button className="w-10 h-10 rounded-full bg-black bg-opacity-70 border border-gray-700 flex items-center justify-center text-white hover:bg-opacity-90 transition-colors">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                  </svg>
-                </button>
-                <button className="w-10 h-10 rounded-full bg-[#F25790] text-white flex items-center justify-center">1</button>
-                <button className="w-10 h-10 rounded-full bg-black bg-opacity-70 border border-gray-700 flex items-center justify-center text-white hover:bg-opacity-90 hover:border-[#F25790] transition-colors">2</button>
-                <button className="w-10 h-10 rounded-full bg-black bg-opacity-70 border border-gray-700 flex items-center justify-center text-white hover:bg-opacity-90 hover:border-[#F25790] transition-colors">3</button>
-                <button className="w-10 h-10 rounded-full bg-black bg-opacity-70 border border-gray-700 flex items-center justify-center text-white hover:bg-opacity-90 transition-colors">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                  </svg>
-                </button>
-              </div>
-            </div>
           </div>
         </div>
         

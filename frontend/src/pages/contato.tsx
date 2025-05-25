@@ -365,7 +365,7 @@ export default function Contato() {
     setTimeout(() => {
       const context = messages.map(m => m.text);
       const aiResponse = aiAssistant.generateResponse(newMessage, context);
-      
+
       const botMessage: MessageType = {
         id: Date.now() + 1,
         sender: 'bot',
@@ -416,7 +416,7 @@ export default function Contato() {
             
             <div className="bg-gray-900 rounded-2xl overflow-hidden shadow-2xl max-w-4xl mx-auto">
               <div className="flex flex-col sm:flex-row">
-                <button
+                <button 
                   onClick={() => setActiveTab('form')}
                   className={`flex-1 py-4 px-6 text-center font-medium transition-colors ${
                     activeTab === 'form' 
@@ -426,7 +426,7 @@ export default function Contato() {
                 >
                   📧 Formulário de Contato
                 </button>
-                <button
+                <button 
                   onClick={() => setActiveTab('chat')}
                   className={`flex-1 py-4 px-6 text-center font-medium transition-colors ${
                     activeTab === 'chat' 
@@ -558,30 +558,30 @@ export default function Contato() {
                       {messages.map(message => (
                         <div key={message.id}>
                           <div className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                            {message.sender === 'bot' && (
+                          {message.sender === 'bot' && (
                               <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#F25790] to-[#9747FF] flex items-center justify-center mr-2 flex-shrink-0">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V9a2 2 0 00-2 2v6a2 2 0 002 2z" />
-                                </svg>
-                              </div>
-                            )}
-                            
-                            <div className={`max-w-[80%] rounded-xl p-3 ${
-                              message.sender === 'user' 
+                              </svg>
+                            </div>
+                          )}
+                          
+                          <div className={`max-w-[80%] rounded-xl p-3 ${
+                            message.sender === 'user' 
                                 ? 'bg-gradient-to-r from-[#F25790] to-[#d93d75] text-white rounded-tr-none shadow-lg' 
                                 : 'bg-gray-700 text-white rounded-tl-none shadow-lg border border-gray-600'
-                            }`}>
+                          }`}>
                               <p className="leading-relaxed">{message.text}</p>
                               <p className="text-xs opacity-70 mt-2 text-right">
-                                {formatTime(message.timestamp)}
-                              </p>
-                            </div>
-                            
-                            {message.sender === 'user' && (
+                              {formatTime(message.timestamp)}
+                            </p>
+                          </div>
+                          
+                          {message.sender === 'user' && (
                               <div className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center ml-2 flex-shrink-0">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                              </svg>
                               </div>
                             )}
                           </div>
@@ -629,27 +629,27 @@ export default function Contato() {
                     
                     <form onSubmit={handleSendMessage} className="p-4 bg-gray-900 border-t border-gray-700">
                       <div className="flex items-center space-x-3">
-                        <input
-                          type="text"
-                          value={newMessage}
-                          onChange={(e) => setNewMessage(e.target.value)}
+                      <input
+                        type="text"
+                        value={newMessage}
+                        onChange={(e) => setNewMessage(e.target.value)}
                           disabled={isTyping}
                           className="flex-1 px-4 py-3 rounded-full bg-gray-800 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-[#F25790] focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                           placeholder={isTyping ? "Assistente está digitando..." : "Digite sua mensagem..."}
-                        />
-                        <button
-                          type="submit"
+                      />
+                      <button
+                        type="submit"
                           disabled={isTyping || !newMessage.trim()}
                           className="w-12 h-12 rounded-full bg-gradient-to-r from-[#F25790] to-[#d93d75] flex items-center justify-center hover:from-[#d93d75] hover:to-[#c12d5f] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
-                        >
+                      >
                           {isTyping ? (
                             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                           ) : (
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                            </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                        </svg>
                           )}
-                        </button>
+                      </button>
                       </div>
                       
                       {/* Dicas rápidas */}
