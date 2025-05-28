@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import '../../styles/pix-modal.css';
+
 
 interface PixPaymentFormProps {
   isOpen: boolean;

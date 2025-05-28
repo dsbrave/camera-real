@@ -182,7 +182,7 @@ export default function Explorar() {
       <div className="min-h-screen text-white bg-black">
         <Header />
         
-        <div className="pt-16 pb-12 px-4 content-after-header">
+        <div className="pt-8 pb-8 px-4 content-after-header">
           <div className="container mx-auto flex flex-col items-center">
             <h1 className="text-4xl font-bold mb-8 text-center text-white">Explore Modelos</h1>
             
@@ -203,7 +203,7 @@ export default function Explorar() {
             </div>
             
             {/* Categorias */}
-            <div className="flex flex-wrap justify-center gap-2 mb-6 max-w-4xl mx-auto">
+            <div className="flex flex-wrap justify-center gap-2 mb-12 max-w-4xl mx-auto">
               {categorias.map((categoria) => (
                 <button
                   key={categoria.id}
@@ -240,18 +240,18 @@ export default function Explorar() {
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
                         
                         {/* Status e Destaque */}
-                        <div className="absolute top-3 left-3 right-3 flex justify-between items-start z-10">
+                        <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-10">
                           {modelo.destacado && (
-                            <div className="bg-gradient-to-r from-[#F25790] to-[#d93d75] text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-lg backdrop-blur-sm flex items-center gap-1">
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3 h-3">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M15.75 4.5c0-1.38-1.12-2.5-2.5-2.5s-2.5 1.12-2.5 2.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5Z" />
+                            <div className="bg-gradient-to-r from-[#F25790] to-[#d93d75] text-white text-xs font-bold px-4 py-1 rounded-full shadow-lg backdrop-blur-sm flex items-center gap-1">
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="#FCD34D" viewBox="0 0 24 24" className="w-4 h-4">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 17.25l-5.197 3.102 1.4-5.92-4.203-3.632 5.962-.513L12 4l2.038 6.287 5.962.513-4.203 3.632 1.4 5.92z" />
                               </svg>
                               DESTAQUE
                             </div>
                           )}
-                          <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full backdrop-blur-md border ${modelo.online ? 'bg-green-500/20 border-green-400/30' : 'bg-red-500/20 border-red-400/30'}`}>
+                          <div className={`flex items-center gap-1.5 px-4 py-1 rounded-full backdrop-blur-md bg-green-500/20 border border-green-400/30`}>
                             <div className={`w-1.5 h-1.5 rounded-full ${modelo.online ? 'bg-green-400 animate-pulse' : 'bg-red-400'}`}></div>
-                            <span className={`text-xs font-medium ${modelo.online ? 'text-green-300' : 'text-red-300'}`}>
+                            <span className="text-xs font-medium text-green-300">
                               {modelo.online ? 'Online' : 'Offline'}
                             </span>
                           </div>
@@ -284,7 +284,7 @@ export default function Explorar() {
                           {modelo.categorias.slice(0, 2).map((categoria, index) => (
                             <span 
                               key={index} 
-                              className="text-xs bg-white/10 backdrop-blur-sm border border-white/20 px-2.5 py-1 rounded-full text-white/90 font-medium break-words truncate max-w-[80px]"
+                              className="text-xs bg-white/10 backdrop-blur-sm border border-white/20 px-5 py-1.5 rounded-full text-white/90 font-medium break-words truncate max-w-[80px]"
                             >
                               {categoria.charAt(0).toUpperCase() + categoria.slice(1)}
                             </span>

@@ -2,7 +2,7 @@ import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useState, useEffect } from 'react';
-import AgeVerification from '@/components/AgeVerification';
+import AgeVerification, { TestButton } from '@/components/AgeVerification';
 
 export default function App({ Component, pageProps }: AppProps) {
   const [isAgeVerified, setIsAgeVerified] = useState(false);
@@ -33,6 +33,8 @@ export default function App({ Component, pageProps }: AppProps) {
           <AgeVerification onVerify={handleAgeVerification} />
         )}
         {(isAgeVerified || !initialCheck) && <Component {...pageProps} />}
+        {/* Botão de teste para a verificação de idade */}
+        <TestButton />
       </main>
     </>
   );

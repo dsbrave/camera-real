@@ -56,37 +56,46 @@ export default function Sobre() {
               <div className="mb-16">
                 <h2 className="text-2xl font-bold mb-6 text-center text-[#F25790]">Nossos Valores</h2>
                 <div className="grid md:grid-cols-3 gap-8">
-                  <div className="bg-gray-900 p-6 rounded-xl">
-                    <div className="w-16 h-16 bg-[#F25790] rounded-full flex items-center justify-center mb-4 mx-auto">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                      </svg>
+                  <div className="bg-black/60 p-8 rounded-xl">
+                    <div className="flex items-center justify-center mb-4 mx-auto">
+                      <div className="bg-[#2a151b] p-4 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="#F25790" strokeWidth={2}>
+  <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" strokeLinecap="round" strokeLinejoin="round" />
+</svg>
+                      </div>
                     </div>
-                    <h3 className="text-xl font-bold mb-2 text-center">Segurança</h3>
+                    
+                    <h3 className="text-xl font-bold mb-2 text-center text-white">Segurança</h3>
                     <p className="text-gray-300 text-center">
                       Protegemos os dados e a privacidade de todos os usuários e modelos com os mais altos padrões de segurança.
                     </p>
                   </div>
                   
-                  <div className="bg-gray-900 p-6 rounded-xl">
-                    <div className="w-16 h-16 bg-[#F25790] rounded-full flex items-center justify-center mb-4 mx-auto">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-                      </svg>
+                  <div className="bg-black/60 p-8 rounded-xl">
+                    <div className="flex items-center justify-center mb-4 mx-auto">
+                      <div className="bg-[#2a151b] p-4 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="#F25790" strokeWidth={2}>
+  <path d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" strokeLinecap="round" strokeLinejoin="round" />
+</svg>
+                      </div>
                     </div>
-                    <h3 className="text-xl font-bold mb-2 text-center">Transparência</h3>
+                    
+                    <h3 className="text-xl font-bold mb-2 text-center text-white">Transparência</h3>
                     <p className="text-gray-300 text-center">
                       Garantimos total transparência nas cobranças e nos pagamentos às modelos, sem taxas ocultas.
                     </p>
                   </div>
                   
-                  <div className="bg-gray-900 p-6 rounded-xl">
-                    <div className="w-16 h-16 bg-[#F25790] rounded-full flex items-center justify-center mb-4 mx-auto">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
+                  <div className="bg-black/60 p-8 rounded-xl">
+                    <div className="flex items-center justify-center mb-4 mx-auto">
+                      <div className="bg-[#2a151b] p-4 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="#F25790" strokeWidth={2}>
+  <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" />
+</svg>
+                      </div>
                     </div>
-                    <h3 className="text-xl font-bold mb-2 text-center">Respeito</h3>
+                    
+                    <h3 className="text-xl font-bold mb-2 text-center text-white">Respeito</h3>
                     <p className="text-gray-300 text-center">
                       Promovemos um ambiente de respeito mútuo entre modelos e usuários, com tolerância zero a assédio.
                     </p>

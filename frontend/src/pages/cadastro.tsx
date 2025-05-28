@@ -98,7 +98,7 @@ export default function Cadastro() {
         <div className="absolute inset-0 bg-black bg-opacity-70 z-0"></div>
         <div className="relative z-10" style={{ transform: 'scaleX(-1)' }}>
           {/* Logo posicionada como no header original, mas sem tarja */}
-          <div className="py-3 md:py-6 w-full z-50">
+          <div className="py-1 md:py-2 w-full z-50">
             <div className="container mx-auto px-4 flex justify-between items-center">
               <div className="logo">
                 <Link href="/">

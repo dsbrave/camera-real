@@ -6,7 +6,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useRouter } from 'next/router';
 
-export default function Videochats() {
+export default function ComoFunciona() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showCreditModal, setShowCreditModal] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<string>('');
@@ -44,8 +44,8 @@ export default function Videochats() {
   return (
     <>
       <Head>
-        <title>Videochats - Camera Real</title>
-        <meta name="description" content="Conheça o funcionamento dos videochats ao vivo no Camera Real" />
+        <title>Como Funciona - Camera Real</title>
+        <meta name="description" content="Saiba como funciona o Camera Real e aproveite ao máximo a experiência de videochats ao vivo" />
       </Head>
 
       <div className="min-h-screen bg-black text-white relative">
@@ -55,52 +55,79 @@ export default function Videochats() {
           
           {/* Main Content */}
           <div className="container mx-auto px-4 py-16 content-after-header">
-            <h1 className="text-4xl font-bold mb-10 text-center">Como funcionam nossos <span className="text-[#F25790]">Videochats</span></h1>
+            <h1 className="text-4xl font-bold mb-10 text-center">Como Funciona o <span className="text-[#F25790]">Camera Real</span>?</h1>
             
             <div className="flex flex-col md:flex-row items-center gap-8 mb-16">
               {/* Left Side - Video Chat Explanation */}
               <div className="w-full md:w-1/2 mb-8 md:mb-0">
                 <div className="bg-black bg-opacity-40 p-8 rounded-xl border border-gray-800 relative min-h-[400px] flex flex-col justify-center">
-                  <h2 className="text-2xl font-bold mb-4 text-[#F25790]">Converse em tempo real</h2>
-                  <p className="mb-4 text-lg text-gray-300">
-                    Nossos videochats permitem que você se conecte diretamente com modelos ao vivo em tempo real, em uma experiência exclusiva e privada.
-                  </p>
-                  <ul className="space-y-3 mb-6">
-                    <li className="flex items-start">
-                      <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-[#F25790]">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <span className="font-medium">Vídeo em alta definição</span>
-                        <p className="text-sm text-gray-400">Transmissão em HD para uma experiência imersiva</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-[#F25790]">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <span className="font-medium">Ambiente seguro</span>
-                        <p className="text-sm text-gray-400">Privacidade garantida e conexão criptografada</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-[#F25790]">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <span className="font-medium">Pagamento flexível</span>
-                        <p className="text-sm text-gray-400">Compre créditos e pague apenas pelo tempo utilizado</p>
-                      </div>
-                    </li>
-                  </ul>
+                  <h2 className="text-2xl font-bold mb-4 text-[#F25790]">Descubra uma experiência única de videochats ao vivo</h2>
+<p className="mb-4 text-lg text-gray-300">
+O Camera Real foi criado para você interagir com modelos ao vivo de forma simples, divertida e segura. Veja como funciona:
+</p>
+<ul className="space-y-3 mb-6">
+  <li className="flex items-start">
+    <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-[#F25790]">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-3A2.25 2.25 0 008.25 5.25V9" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m0 0a2 2 0 100-4 2 2 0 000 4zm0 0v2m0-2h2m-2 0H10" />
+      </svg>
+    </div>
+    <div>
+      <span className="font-medium">1. Escolha uma modelo</span>
+      <p className="text-sm text-gray-400">Navegue pela nossa seleção e encontre quem mais combina com você.</p>
+    </div>
+  </li>
+  <li className="flex items-start">
+  <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-[#F25790]">
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth={1.5} fill="none" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 2" />
+    </svg>
+  </div>
+  <div>
+    <span className="font-medium">2. Teste grátis por 10 segundos</span>
+    <p className="text-sm text-gray-400">Você tem 10 segundos gratuitos para conhecer a modelo antes de começar a gastar créditos.</p>
+  </div>
+</li>
+<li className="flex items-start">
+  <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-[#F25790]">
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth={1.5} fill="none" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 2" />
+    </svg>
+  </div>
+  <div>
+    <span className="font-medium">3. Créditos descontados por minuto</span>
+    <p className="text-sm text-gray-400">Após o teste grátis, cada minuto de conversa consome 1 crédito (R$1,00).</p>
+  </div>
+</li>
+  <li className="flex items-start">
+    <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-[#F25790]">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12l4.5 4.5M15 12l4.5-4.5M9 12l-4.5 4.5M9 12l-4.5-4.5" />
+      </svg>
+    </div>
+    <div>
+      <span className="font-medium">4. Troque de modelo com um swipe</span>
+<p className="text-sm text-gray-400">Você pode trocar de modelo até 10 vezes gratuitamente. Após isso, cada nova troca desconta 1 crédito (equivalente a 1 minuto) para evitar uso indevido.</p>
+    </div>
+  </li>
+  <li className="flex items-start">
+    <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-[#F25790]">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+      </svg>
+    </div>
+    <div>
+      <span className="font-medium">5. Surpreenda e interaja mais!</span>
+      <p className="text-sm text-gray-400">Envie emojis, presentes virtuais e convide para chamadas privadas. Novas formas de interação para tornar sua experiência ainda mais divertida.</p>
+    </div>
+  </li>
+</ul>
+<div className="mt-6">
+  <p className="text-center text-lg font-semibold text-[#F25790]">Cadastre-se agora e ganhe créditos de boas-vindas para começar!</p>
+</div>
                 </div>
               </div>
               
@@ -166,8 +193,8 @@ export default function Videochats() {
                 {/* Basic Package */}
                 <div className="bg-black bg-opacity-40 border border-gray-800 rounded-xl p-6 hover:border-[#F25790] transition-colors">
                   <h3 className="text-xl font-bold mb-2">Pacote Básico</h3>
-                  <div className="text-3xl font-bold text-[#F25790] mb-2">R$ 50</div>
-                  <p className="text-sm text-gray-400 mb-4">100 créditos</p>
+                  <div className="text-3xl font-bold text-[#F25790] mb-2">R$ 29</div>
+                  <p className="text-sm text-gray-400 mb-4">40 créditos</p>
                   <ul className="space-y-2 mb-6">
                     <li className="flex items-center">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-green-500 mr-2">
@@ -179,7 +206,7 @@ export default function Videochats() {
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-green-500 mr-2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                       </svg>
-                      Válido por 30 dias
+                      +2 minutos grátis
                     </li>
                   </ul>
                   <button 
@@ -193,29 +220,23 @@ export default function Videochats() {
                 {/* Popular Package */}
                 <div className="bg-black bg-opacity-40 border-2 border-[#F25790] rounded-xl p-6 relative transform hover:scale-105 transition-transform">
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-[#F25790] text-white text-sm font-bold px-3 py-1 rounded-full">
-                    MAIS POPULAR
+                    MAIS VENDIDO!
                   </div>
-                  <h3 className="text-xl font-bold mb-2 mt-2">Pacote Premium</h3>
-                  <div className="text-3xl font-bold text-[#F25790] mb-2">R$ 150</div>
-                  <p className="text-sm text-gray-400 mb-4">400 créditos <span className="text-white font-bold">(33% de desconto)</span></p>
+                  <h3 className="text-xl font-bold mb-2">Pacote Popular</h3>
+                  <div className="text-3xl font-bold text-[#F25790] mb-2">R$ 79</div>
+                  <p className="text-sm text-gray-400 mb-4">100 créditos + 10 bônus</p>
                   <ul className="space-y-2 mb-6">
                     <li className="flex items-center">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-green-500 mr-2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                       </svg>
-                      Aproximadamente 160 minutos
+                      Aproximadamente 100 minutos
                     </li>
                     <li className="flex items-center">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-green-500 mr-2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                       </svg>
-                      Válido por 60 dias
-                    </li>
-                    <li className="flex items-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-green-500 mr-2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                      </svg>
-                      30 créditos bônus
+                      +10 créditos bônus
                     </li>
                   </ul>
                   <button 
@@ -229,27 +250,22 @@ export default function Videochats() {
                 {/* Pro Package */}
                 <div className="bg-black bg-opacity-40 border border-gray-800 rounded-xl p-6 hover:border-[#F25790] transition-colors">
                   <h3 className="text-xl font-bold mb-2">Pacote Master</h3>
-                  <div className="text-3xl font-bold text-[#F25790] mb-2">R$ 300</div>
-                  <p className="text-sm text-gray-400 mb-4">1000 créditos <span className="text-white font-bold">(50% de desconto)</span></p>
+                  <div className="text-3xl font-bold text-[#F25790] mb-2">R$ 199</div>
+                  <p className="text-sm text-gray-400 mb-4">300 créditos + 50 bônus</p>
                   <ul className="space-y-2 mb-6">
                     <li className="flex items-center">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-green-500 mr-2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                       </svg>
-                      Aproximadamente 400 minutos
+                      Aproximadamente 300 minutos
                     </li>
                     <li className="flex items-center">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-green-500 mr-2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                       </svg>
-                      Válido por 90 dias
+                      +50 créditos bônus
                     </li>
-                    <li className="flex items-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-green-500 mr-2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                      </svg>
-                      100 créditos bônus
-                    </li>
+                    
                   </ul>
                   <button 
                     onClick={() => handlePurchaseClick('master')}
@@ -325,14 +341,14 @@ export default function Videochats() {
                     <>
                       <p>• 100 créditos</p>
                       <p>• Aproximadamente 40 minutos</p>
-                      <p>• Válido por 30 dias</p>
+                      <p>• </p>
                     </>
                   )}
                   {selectedPackage === 'premium' && (
                     <>
                       <p>• 400 créditos + 30 bônus</p>
                       <p>• Aproximadamente 160 minutos</p>
-                      <p>• Válido por 60 dias</p>
+                      <p>• </p>
                       <p>• 33% de desconto</p>
                     </>
                   )}
@@ -340,7 +356,7 @@ export default function Videochats() {
                     <>
                       <p>• 1000 créditos + 100 bônus</p>
                       <p>• Aproximadamente 400 minutos</p>
-                      <p>• Válido por 90 dias</p>
+                      <p>• </p>
                       <p>• 50% de desconto</p>
                     </>
                   )}

@@ -49,22 +49,28 @@ export default function Suporte() {
       
       <div className="min-h-screen bg-black text-white">
         <Header />
-        <div className="h-16 sm:h-20" />
         
-        <div className="container mx-auto px-4 py-8">
+        
+        <div className="container mx-auto px-4 pt-0 mt-0 pb-8 content-after-header">
           <div className="max-w-2xl mx-auto">
             {/* Header da página */}
-            <div className="text-center mb-8">
-              <h1 className="text-3xl md:text-4xl font-bold mb-4">
-                Suporte <span className="text-[#F25790]">Camera Real</span>
-              </h1>
-              <p className="text-gray-300 text-lg">
+            <div className="text-center mb-10 flex flex-col items-center">
+  <div className="flex items-center justify-center mb-2">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#F25790" strokeWidth={2} className="w-8 h-8 mr-2">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4" />
+    <circle cx="12" cy="12" r="9" stroke="#F25790" strokeWidth={2} fill="none" />
+  </svg>
+  <h1 className="text-3xl md:text-4xl font-bold text-white">
+    Suporte <span className="text-[#F25790]">Camera Real</span>
+  </h1>
+</div>
+              <p className="text-white text-lg">
                 Nossa equipe está aqui para te ajudar. Envie sua mensagem!
               </p>
             </div>
             
             {/* Formulário de contato */}
-            <div className="bg-gray-900 rounded-2xl p-8 shadow-2xl">
+            <div className="bg-black bg-opacity-60 border border-gray-800 rounded-2xl p-8 shadow-2xl backdrop-blur-lg transition-all duration-200 focus-within:border-[#F25790]">
               <form onSubmit={handleFormSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
@@ -78,7 +84,7 @@ export default function Suporte() {
                       value={formData.name}
                       onChange={handleInputChange}
                       required
-                      className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-[#F25790] transition-colors duration-200"
+                      className="w-full bg-transparent border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-[#F25790] transition-colors duration-200"
                       placeholder="Seu nome"
                     />
                   </div>
@@ -94,7 +100,7 @@ export default function Suporte() {
                       value={formData.email}
                       onChange={handleInputChange}
                       required
-                      className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-[#F25790] transition-colors duration-200"
+                      className="w-full bg-transparent border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-[#F25790] transition-colors duration-200"
                       placeholder="seu@email.com"
                     />
                   </div>
@@ -112,7 +118,7 @@ export default function Suporte() {
                       value={formData.subject}
                       onChange={handleInputChange}
                       required
-                      className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-[#F25790] transition-colors duration-200"
+                      className="w-full bg-transparent border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-[#F25790] transition-colors duration-200"
                       placeholder="Assunto da mensagem"
                     />
                   </div>
@@ -147,7 +153,7 @@ export default function Suporte() {
                     onChange={handleInputChange}
                     required
                     rows={5}
-                    className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-[#F25790] transition-colors duration-200 resize-none"
+                    className="w-full bg-transparent border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-[#F25790] transition-colors duration-200 resize-none"
                     placeholder="Descreva sua dúvida ou problema em detalhes..."
                   />
                 </div>
@@ -183,7 +189,7 @@ export default function Suporte() {
                 
                 <button
                   type="submit"
-                  className="w-full bg-[#F25790] hover:bg-[#d93d75] text-white font-medium py-4 px-6 rounded-lg transition-all duration-200 transform hover:scale-105"
+                  className="w-full bg-[#F25790] hover:bg-[#d93d75] text-white font-bold py-3 rounded-full transition-colors duration-200 text-lg shadow-md"
                 >
                   Enviar Mensagem
                 </button>
@@ -192,9 +198,9 @@ export default function Suporte() {
             
             {/* Informações de contato */}
             <div className="mt-8 grid md:grid-cols-3 gap-6 text-center">
-              <div className="bg-gray-900 rounded-xl p-6">
-                <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full flex items-center justify-center mx-auto mb-4 w-12 h-12">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-[#F25790]">
+              <div className="rounded-xl p-4">
+                <div className="flex items-center justify-center mx-auto mb-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7 text-[#F25790]">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                   </svg>
                 </div>
@@ -202,9 +208,9 @@ export default function Suporte() {
                 <p className="text-gray-400 text-sm">suporte@camerareal.com</p>
               </div>
               
-              <div className="bg-gray-900 rounded-xl p-6">
-                <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full flex items-center justify-center mx-auto mb-4 w-12 h-12">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-[#F25790]">
+              <div className="rounded-xl p-4">
+                <div className="flex items-center justify-center mx-auto mb-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7 text-[#F25790]">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
@@ -212,9 +218,9 @@ export default function Suporte() {
                 <p className="text-gray-400 text-sm">24h por dia, 7 dias por semana</p>
               </div>
               
-              <div className="bg-gray-900 rounded-xl p-6">
-                <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full flex items-center justify-center mx-auto mb-4 w-12 h-12">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-[#F25790]">
+              <div className="rounded-xl p-4">
+                <div className="flex items-center justify-center mx-auto mb-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7 text-[#F25790]">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
                   </svg>
                 </div>

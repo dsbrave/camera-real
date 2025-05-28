@@ -96,12 +96,12 @@ export default function Home() {
       </Head>
       
       <div className="min-h-screen bg-black text-white" style={{ backgroundImage, backgroundSize: 'cover', backgroundPosition: 'center 15%', transform: 'scaleX(-1)' }}>
-        {/* Overlay igual ao das páginas de cadastro */}
+        {/* Background Overlay */}
         <div className="absolute inset-0 bg-black bg-opacity-70 z-0"></div>
         
         <div className="relative z-10" style={{ transform: 'scaleX(-1)' }}> {/* Contra-flipa os elementos para ficarem corretos */}
           <Header />
-          <div className="h-20 sm:h-24 md:h-32" />
+          <div className="h-10 sm:h-16 md:h-20" />
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-20 z-10 relative">
             {isLoggedIn ? (
               // Layout para usuários logados - texto à esquerda, carrossel à direita
@@ -166,14 +166,14 @@ export default function Home() {
                             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
                             
                             {/* Status e Destaque */}
-                            <div className="absolute top-3 left-3 right-3 flex justify-between items-start z-10">
-                              <div className="bg-gradient-to-r from-[#F25790] to-[#d93d75] text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-lg backdrop-blur-sm flex items-center gap-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3 h-3">
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M15.75 4.5c0-1.38-1.12-2.5-2.5-2.5s-2.5 1.12-2.5 2.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5Z" />
-                                </svg>
+                            <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-10">
+                              <div className="bg-gradient-to-r from-[#F25790] to-[#d93d75] text-white text-xs font-bold px-4 py-1 rounded-full shadow-lg backdrop-blur-sm flex items-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="#FCD34D" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#FCD34D" className="w-4 h-4">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M12 17.25l-5.197 3.102 1.4-5.92-4.203-3.632 5.962-.513L12 4l2.038 6.287 5.962.513-4.203 3.632 1.4 5.92z" />
+</svg> 
                                 DESTAQUE
                               </div>
-                              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full backdrop-blur-md bg-green-500/20 border border-green-400/30">
+                              <div className="flex items-center gap-1.5 px-4 py-1 rounded-full backdrop-blur-md bg-green-500/20 border border-green-400/30">
                                 <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></div>
                                 <span className="text-xs font-medium text-green-300">Online</span>
                               </div>
