@@ -7,22 +7,7 @@ interface AgeVerificationProps {
   onVerify?: () => void;
 }
 
-// Componente de botão temporário para testar a verificação de idade
-const TestButton: React.FC = () => {
-  const handleClick = () => {
-    localStorage.removeItem('age-verified');
-    window.location.reload();
-  };
-
-  return (
-    <button
-      onClick={handleClick}
-      className="fixed bottom-4 right-4 bg-[#ff4d8d] text-white py-2 px-4 rounded-full shadow-lg z-50"
-    >
-      Testar Verificação de Idade
-    </button>
-  );
-};
+// Componente removido conforme solicitado
 
 const AgeVerification: React.FC<AgeVerificationProps> = ({ onVerify }) => {
   const [showVerification, setShowVerification] = useState(false);
@@ -168,6 +153,9 @@ const AgeVerification: React.FC<AgeVerificationProps> = ({ onVerify }) => {
             </div>
             
             <div className="relative z-10">
+              <div className="flex flex-col items-center justify-center mb-2">
+                <div className="text-white text-8xl font-bold mb-4">!</div>
+              </div>
               <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-center text-[#F25790]">Verificação de Idade</h2>
               
               <p className="text-gray-300 mb-6 text-center">
@@ -313,6 +301,5 @@ const AgeVerification: React.FC<AgeVerificationProps> = ({ onVerify }) => {
   );
 };
 
-// Exportar tanto o componente principal quanto o botão de teste
+
 export default AgeVerification;
-export { TestButton };

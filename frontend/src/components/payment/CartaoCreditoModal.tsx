@@ -80,10 +80,10 @@ const CartaoCreditoModal: React.FC<CartaoCreditoModalProps> = ({
                   required
                 />
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center">
-                  <Image src="/icons/card.png" alt="Cartão" width={16} height={16} />
+                  <Image src="/icons/action/credit_card.svg" alt="Cartão" width={16} height={16} />
                 </div>
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
-                  <Image src="/icons/visa.png" alt="Visa" width={28} height={10} />
+                  <Image src="/icons/action/payment.svg" alt="Visa" width={28} height={10} />
                 </div>
               </div>
               
@@ -111,7 +111,7 @@ const CartaoCreditoModal: React.FC<CartaoCreditoModalProps> = ({
                   />
                   <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
                     <button type="button" className="text-gray-400 hover:text-gray-600">
-                      <Image src="/icons/info.png" alt="Info" width={16} height={16} />
+                      <Image src="/icons/action/info.svg" alt="Info" width={16} height={16} />
                     </button>
                   </div>
                 </div>

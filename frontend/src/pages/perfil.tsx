@@ -46,7 +46,7 @@ const Perfil: React.FC = () => {
                 />
               </div>
               <div>
-                <h2 className="text-xl font-semibold">{profileData.username}</h2>
+                <h2 className="text-xl font-semibold">João</h2>
                 <p className="text-gray-300">{profileData.email}</p>
                 <button 
                   onClick={() => setIsModalOpen(true)}

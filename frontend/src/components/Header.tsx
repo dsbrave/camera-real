@@ -98,10 +98,14 @@ export default function Header() {
           {isLoggedIn && (
             <>
               {/* Saldo de Créditos como botão */}
-              <Link href="/carteira" className="flex items-center space-x-2 bg-gradient-to-r from-[#F25790]/20 to-purple-600/20 backdrop-blur-sm border border-[#F25790]/30 hover:border-[#F25790]/50 rounded-full px-3 py-1.5 transition-all duration-200 hover:bg-[#F25790]/10">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-[#F25790]">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                </svg>
+              <Link href="/carteira" className="flex items-center space-x-2 bg-gradient-to-r from-[#F25790]/20 to-purple-600/20 backdrop-blur-sm border border-[#F25790]/30 hover:border-[#F25790]/50 rounded-full px-3 py-1.5 transition-all duration-200 hover:bg-[#F25790]/10 group">
+                <Image
+                  src="/icons/action/account_balance_wallet.svg"
+                  alt="Créditos"
+                  width={16}
+                  height={16}
+                  className="w-4 h-4 text-white filter invert group-hover:text-[#F25790] transition-colors duration-200"
+                />
                 <span className="text-white font-medium text-sm">{creditos}</span>
                 <span className="text-gray-300 text-xs">Créditos</span>
               </Link>
@@ -139,11 +143,11 @@ export default function Header() {
                     />
                   ) : (
                     <span className="text-white text-sm font-bold">
-                      {userData?.name?.charAt(0) || 'U'}
+                      J
                     </span>
                   )}
                 </div>
-                <span className="text-white font-medium">{userData?.name?.split(' ')[0] || 'Usuário'}</span>
+                <span className="text-white font-medium">João</span>
               </button>
 
               {isDropdownOpen && (
@@ -182,18 +186,23 @@ export default function Header() {
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Menu"
         >
-          <svg 
-            className="w-6 h-6" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
-            {isMobileMenuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
+          {isMobileMenuOpen ? (
+            <Image 
+              src="/icons/navigation/close.svg"
+              alt="Fechar menu"
+              width={24}
+              height={24}
+              className="w-6 h-6 text-white"
+            />
+          ) : (
+            <Image 
+              src="/icons/navigation/menu.svg"
+              alt="Abrir menu"
+              width={24}
+              height={24}
+              className="w-6 h-6 text-white"
+            />
+          )}
         </button>
       </div>
 
@@ -265,9 +274,13 @@ export default function Header() {
                   className="flex items-center justify-center space-x-2 bg-gradient-to-r from-[#F25790]/20 to-purple-600/20 backdrop-blur-sm border border-[#F25790]/30 hover:border-[#F25790]/50 rounded-full px-4 py-2 mb-4 transition-all duration-200 hover:bg-[#F25790]/10"
                   onClick={closeMobileMenu}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-[#F25790]">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                  </svg>
+                  <Image
+                    src="/icons/action/account_balance_wallet.svg"
+                    alt="Créditos"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5 text-white filter invert"
+                  />
                   <span className="text-white font-medium">{creditos}</span>
                   <span className="text-gray-300 text-sm">Créditos</span>
                 </Link>

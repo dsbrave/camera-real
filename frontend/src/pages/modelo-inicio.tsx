@@ -22,10 +22,10 @@ const ModeloInicio: React.FC = () => {
             Regras e ajuda
           </Link>
           <button className="text-white">
-            <Image src="/icons/bell.png" alt="Notificações" width={24} height={24} />
+            <Image src="/icons/notification/notifications.svg" alt="Notificações" width={24} height={24} />
           </button>
           <button className="text-white">
-            <Image src="/icons/user.png" alt="Perfil" width={24} height={24} />
+            <Image src="/icons/action/account_circle.svg" alt="Perfil" width={24} height={24} />
           </button>
         </div>
       </header>
@@ -41,7 +41,7 @@ const ModeloInicio: React.FC = () => {
             Faça novas amizades e vivencie experiências únicas. Crie vínculos a cada conversa e aumente seus ganhos!
           </p>
           <Link href="/ficar-online" className="inline-flex items-center px-6 py-3 rounded-full bg-camera-pink text-white font-medium text-lg transition-all hover:bg-pink-600">
-            <Image src="/icons/chat.png" alt="Chat" width={24} height={24} className="mr-2" />
+            <Image src="/icons/communication/chat.svg" alt="Chat" width={24} height={24} className="mr-2" />
             Ficar Online
           </Link>
         </div>
@@ -53,7 +53,7 @@ const ModeloInicio: React.FC = () => {
               <h2 className="text-lg font-medium text-gray-300">Seus likes</h2>
             </div>
             <div className="flex items-center mt-2">
-              <Image src="/icons/heart.png" alt="Likes" width={32} height={32} className="text-camera-pink" />
+              <Image src="/icons/action/favorite.svg" alt="Likes" width={32} height={32} className="text-camera-pink" />
               <span className="text-4xl font-bold ml-2">12k</span>
             </div>
           </div>

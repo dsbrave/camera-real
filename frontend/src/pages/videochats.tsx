@@ -67,22 +67,20 @@ O Camera Real foi criado para você interagir com modelos ao vivo de forma simpl
 </p>
 <ul className="space-y-3 mb-6">
   <li className="flex items-start">
-    <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-[#F25790]">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-3A2.25 2.25 0 008.25 5.25V9" />
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m0 0a2 2 0 100-4 2 2 0 000 4zm0 0v2m0-2h2m-2 0H10" />
-      </svg>
-    </div>
+    <div className="mr-3">
+  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+  </svg>
+</div>
     <div>
       <span className="font-medium">1. Escolha uma modelo</span>
       <p className="text-sm text-gray-400">Navegue pela nossa seleção e encontre quem mais combina com você.</p>
     </div>
   </li>
   <li className="flex items-start">
-  <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-[#F25790]">
-      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth={1.5} fill="none" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 2" />
+  <div className="mr-3">
+    <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 20c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm0-18c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm1 5h-2v6l5.25 3.15 1-1.65-4.25-2.5V7z" fill="currentColor"/>
     </svg>
   </div>
   <div>
@@ -91,10 +89,9 @@ O Camera Real foi criado para você interagir com modelos ao vivo de forma simpl
   </div>
 </li>
 <li className="flex items-start">
-  <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-[#F25790]">
-      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth={1.5} fill="none" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 2" />
+  <div className="mr-3">
+    <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 20c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm0-18c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm1 5h-2v6l5.25 3.15 1-1.65-4.25-2.5V7z" fill="currentColor"/>
     </svg>
   </div>
   <div>
@@ -103,27 +100,29 @@ O Camera Real foi criado para você interagir com modelos ao vivo de forma simpl
   </div>
 </li>
   <li className="flex items-start">
-    <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-[#F25790]">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12l4.5 4.5M15 12l4.5-4.5M9 12l-4.5 4.5M9 12l-4.5-4.5" />
-      </svg>
-    </div>
-    <div>
-      <span className="font-medium">4. Troque de modelo com um swipe</span>
-<p className="text-sm text-gray-400">Você pode trocar de modelo até 10 vezes gratuitamente. Após isso, cada nova troca desconta 1 crédito (equivalente a 1 minuto) para evitar uso indevido.</p>
-    </div>
-  </li>
+  <div className="mr-3">
+  <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+    <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+</div>
+  <div>
+    <span className="font-medium">4. Troque de modelo com um swipe</span>
+    <p className="text-sm text-gray-400">Você pode trocar de modelo até 10 vezes gratuitamente. Após isso, cada nova troca desconta 1 crédito (equivalente a 1 minuto) para evitar uso indevido.</p>
+  </div>
+</li>
   <li className="flex items-start">
-    <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-[#F25790]">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-      </svg>
-    </div>
-    <div>
-      <span className="font-medium">5. Surpreenda e interaja mais!</span>
-      <p className="text-sm text-gray-400">Envie emojis, presentes virtuais e convide para chamadas privadas. Novas formas de interação para tornar sua experiência ainda mais divertida.</p>
-    </div>
-  </li>
+  <div className="mr-3">
+  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="12" r="10" />
+    <path d="M15.5 11c-.828 0-1.5.672-1.5 1.5S14.672 14 15.5 14s1.5-.672 1.5-1.5S16.328 11 15.5 11zm-7 0c-.828 0-1.5.672-1.5 1.5S7.672 14 8.5 14s1.5-.672 1.5-1.5S9.328 11 8.5 11zM12 17c2.21 0 4-1.343 4-3H8c0 1.657 1.79 3 4 3z" fill="#000" />
+  </svg>
+</div>
+  <div>
+    <span className="font-medium">5. Surpreenda e interaja mais!</span>
+    <p className="text-sm text-gray-400">Envie emojis, presentes virtuais e convide para chamadas privadas. Novas formas de interação para tornar sua experiência ainda mais divertida.</p>
+  </div>
+</li>
 </ul>
 <div className="mt-6">
   <p className="text-center text-lg font-semibold text-[#F25790]">Cadastre-se agora e ganhe créditos de boas-vindas para começar!</p>
@@ -138,7 +137,11 @@ O Camera Real foi criado para você interagir com modelos ao vivo de forma simpl
                   
                   <div className="space-y-6">
                     <div className="flex">
-                      <div className="bg-[#F25790] w-8 h-8 rounded-full flex items-center justify-center font-bold mr-4 flex-shrink-0">1</div>
+                      <div className="mr-4 flex-shrink-0">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7 text-white">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+  </svg>
+</div>
                       <div>
                         <h3 className="font-bold text-lg mb-1">Escolha um modelo</h3>
                         <p className="text-gray-300">Navegue pela nossa seleção de modelos e encontre o perfil que mais combina com você.</p>
@@ -146,7 +149,11 @@ O Camera Real foi criado para você interagir com modelos ao vivo de forma simpl
                     </div>
                     
                     <div className="flex">
-                      <div className="bg-[#F25790] w-8 h-8 rounded-full flex items-center justify-center font-bold mr-4 flex-shrink-0">2</div>
+                      <div className="mr-4 flex-shrink-0">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7 text-white">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M17 6V4a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-2m4-5a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v5z" />
+  </svg>
+</div>
                       <div>
                         <h3 className="font-bold text-lg mb-1">Compre créditos</h3>
                         <p className="text-gray-300">Adquira créditos para usar durante suas chamadas. Quanto mais comprar, melhor o valor.</p>
@@ -154,7 +161,11 @@ O Camera Real foi criado para você interagir com modelos ao vivo de forma simpl
                     </div>
                     
                     <div className="flex">
-                      <div className="bg-[#F25790] w-8 h-8 rounded-full flex items-center justify-center font-bold mr-4 flex-shrink-0">3</div>
+                      <div className="mr-4 flex-shrink-0">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7 text-white">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0 1 21 8.618v6.764a1 1 0 0 1-1.447.894L15 14M4 6h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" />
+  </svg>
+</div>
                       <div>
                         <h3 className="font-bold text-lg mb-1">Inicie o chat por vídeo</h3>
                         <p className="text-gray-300">Com apenas um clique, você está em uma chamada privada com o modelo escolhido.</p>
@@ -162,7 +173,11 @@ O Camera Real foi criado para você interagir com modelos ao vivo de forma simpl
                     </div>
                     
                     <div className="flex">
-                      <div className="bg-[#F25790] w-8 h-8 rounded-full flex items-center justify-center font-bold mr-4 flex-shrink-0">4</div>
+                      <div className="mr-4 flex-shrink-0">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-7 h-7 text-white">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+  </svg>
+</div>
                       <div>
                         <h3 className="font-bold text-lg mb-1">Aproveite a experiência</h3>
                         <p className="text-gray-300">Converse, faça pedidos e aproveite uma experiência totalmente personalizada.</p>
@@ -197,16 +212,14 @@ O Camera Real foi criado para você interagir com modelos ao vivo de forma simpl
                   <p className="text-sm text-gray-400 mb-4">40 créditos</p>
                   <ul className="space-y-2 mb-6">
                     <li className="flex items-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-green-500 mr-2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                      </svg>
+                      <Image 
+                        src="/icons/action/check_circle.svg"
+                        alt="Check"
+                        width={20}
+                        height={20}
+                        className="w-5 h-5 text-white mr-2"
+                      />
                       Aproximadamente 40 minutos
-                    </li>
-                    <li className="flex items-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-green-500 mr-2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                      </svg>
-                      +2 minutos grátis
                     </li>
                   </ul>
                   <button 
@@ -227,16 +240,14 @@ O Camera Real foi criado para você interagir com modelos ao vivo de forma simpl
                   <p className="text-sm text-gray-400 mb-4">100 créditos + 10 bônus</p>
                   <ul className="space-y-2 mb-6">
                     <li className="flex items-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-green-500 mr-2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                      </svg>
-                      Aproximadamente 100 minutos
-                    </li>
-                    <li className="flex items-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-green-500 mr-2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                      </svg>
-                      +10 créditos bônus
+                      <Image 
+                        src="/icons/action/check_circle.svg"
+                        alt="Check"
+                        width={20}
+                        height={20}
+                        className="w-5 h-5 text-white mr-2"
+                      />
+                      Aproximadamente 110 minutos
                     </li>
                   </ul>
                   <button 
@@ -254,18 +265,15 @@ O Camera Real foi criado para você interagir com modelos ao vivo de forma simpl
                   <p className="text-sm text-gray-400 mb-4">300 créditos + 50 bônus</p>
                   <ul className="space-y-2 mb-6">
                     <li className="flex items-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-green-500 mr-2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                      </svg>
-                      Aproximadamente 300 minutos
+                      <Image 
+                        src="/icons/action/check_circle.svg"
+                        alt="Check"
+                        width={20}
+                        height={20}
+                        className="w-5 h-5 text-white mr-2"
+                      />
+                      Aproximadamente 350 minutos
                     </li>
-                    <li className="flex items-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-green-500 mr-2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                      </svg>
-                      +50 créditos bônus
-                    </li>
-                    
                   </ul>
                   <button 
                     onClick={() => handlePurchaseClick('master')}

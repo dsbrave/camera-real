@@ -305,7 +305,7 @@ export default function PixPaymentForm({ isOpen, onClose, onBack, selectedAmount
             <div className="text-center py-4">
               <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-2 success-checkmark">
                 <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"></path>
                 </svg>
               </div>
               <h3 className="text-base font-semibold text-white mb-1 status-success">Pagamento confirmado!</h3>
@@ -318,7 +318,7 @@ export default function PixPaymentForm({ isOpen, onClose, onBack, selectedAmount
             <div className="text-center py-4">
               <div className="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-2">
                 <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
               </div>
               <h3 className="text-base font-semibold text-white mb-1 status-expired">Código expirado</h3>

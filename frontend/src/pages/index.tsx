@@ -109,7 +109,7 @@ export default function Home() {
                 {/* Seção de texto à esquerda */}
                 <div className="flex-1 lg:max-w-xl text-center lg:text-left">
                   <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight">
-                    Olá <span className="text-[#F25790]">{userName}</span>!<br/>
+                    Olá <span className="text-[#F25790]">João</span>!<br/>
                     Seus videochats personalizados<br/>
                     te aguardam em <span className="text-[#F25790]">tempo real</span>.
                   </h1>
@@ -137,10 +137,14 @@ export default function Home() {
                 {/* Carrossel de Modelos em Destaque à direita */}
                 <div className="flex-1 lg:max-w-xl">
                   <h2 className="text-xl sm:text-2xl font-bold mb-6 text-center lg:text-left text-white flex items-center justify-center lg:justify-start gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-[#F25790]">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
-                    </svg>
-                    <span className="text-[#F25790]">Modelos em Destaque</span>
+                    <Image 
+                      src="/icons/toggle/star.svg"
+                      alt="Estrela"
+                      width={24}
+                      height={24}
+                      className="w-6 h-6 text-white filter invert"
+                    />
+                    <span className="text-white">Modelos em Destaque</span>
                   </h2>
                   
                   <div className="overflow-x-auto scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>

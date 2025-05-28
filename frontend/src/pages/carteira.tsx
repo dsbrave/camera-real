@@ -246,18 +246,26 @@ const Carteira: React.FC = () => {
                   onClick={() => setIsAddCreditsModalOpen(true)}
                   className="w-full flex items-center justify-center px-4 py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-full transition-colors"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-2">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                  </svg>
+                  <Image 
+                    src="/icons/content/add.svg"
+                    alt="Adicionar"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5 mr-2 text-white"
+                  />
                   Adicionar Crédito
                 </button>
                 <button 
                   onClick={() => setIsWithdrawModalOpen(true)}
                   className="w-full flex items-center justify-center px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-full transition-colors"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mr-2">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 19.5v-15m0 0l-6.75 6.75M12 4.5l6.75 6.75" />
-                  </svg>
+                  <Image 
+                    src="/icons/navigation/arrow_upward.svg"
+                    alt="Sacar"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5 mr-2 text-white"
+                  />
                   Sacar para conta
                 </button>
               </div>
@@ -344,118 +352,82 @@ const Carteira: React.FC = () => {
               <div className="mb-4">
                 <span className="inline-block px-3 py-1 text-xs bg-[#F25790] text-white rounded-full">Básico</span>
               </div>
-              <p className="text-3xl font-bold mb-2">R$ 50,00</p>
-              <p className="text-sm text-gray-300 mb-4">Ideal para novos usuários experimentarem a plataforma.</p>
+              <p className="text-3xl font-bold mb-2">R$ 29</p>
+              <p className="text-sm text-gray-300 mb-4">40 créditos</p>
               <ul className="space-y-2 mb-6">
                 <li className="flex items-center">
-                  <svg className="w-5 h-5 text-[#F25790] mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
-                  </svg>
-                  <span className="text-sm">50 Créditos</span>
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-[#F25790] mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
-                  </svg>
-                  <span className="text-sm">Acesso básico ao chat</span>
+                  <Image 
+                    src="/icons/action/check_circle.svg"
+                    alt="Check"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5 text-white mr-2"
+                  />
+                  <span className="text-sm">Aproximadamente 40 minutos</span>
                 </li>
               </ul>
               <button 
-                onClick={() => handleAddCredits(50)}
+                onClick={() => handleAddCredits(40)}
                 className="w-full py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-full transition-colors"
               >
-                Comprar R$ 50,00
+                Comprar R$ 29
               </button>
             </div>
 
             {/* Pacote Popular */}
             <div className="bg-black bg-opacity-80 border-2 border-[#F25790] rounded-lg p-6 hover:shadow-xl transition-shadow relative">
               <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-[#F25790] text-white text-xs px-4 py-1 rounded-full">
-                MAIS POPULAR
+                MAIS VENDIDO!
               </div>
               <div className="mb-4">
                 <span className="inline-block px-3 py-1 text-xs bg-[#F25790] text-white rounded-full">Popular</span>
               </div>
-              <p className="text-3xl font-bold mb-2">R$ 150,00</p>
-              <p className="text-sm text-gray-300 mb-4">Nossa opção mais popular com ótimo custo-benefício.</p>
+              <p className="text-3xl font-bold mb-2">R$ 79</p>
+              <p className="text-sm text-gray-300 mb-4">100 créditos + 10 bônus</p>
               <ul className="space-y-2 mb-6">
                 <li className="flex items-center">
-                  <svg className="w-5 h-5 text-[#F25790] mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
-                  </svg>
-                  <span className="text-sm">150 Créditos</span>
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-[#F25790] mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
-                  </svg>
-                  <span className="text-sm">20 Créditos BÔNUS</span>
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-[#F25790] mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
-                  </svg>
-                  <span className="text-sm">Acesso a shows exclusivos</span>
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-[#F25790] mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
-                  </svg>
-                  <span className="text-sm">Presentes virtuais inclusos</span>
+                  <Image 
+                    src="/icons/action/check_circle.svg"
+                    alt="Check"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5 text-white mr-2"
+                  />
+                  <span className="text-sm">Aproximadamente 110 minutos</span>
                 </li>
               </ul>
               <button 
-                onClick={() => handleAddCredits(170)}
+                onClick={() => handleAddCredits(110)}
                 className="w-full py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-full transition-colors"
               >
-                Comprar R$ 150,00
+                Comprar R$ 79
               </button>
             </div>
 
-            {/* Pacote Premium */}
+            {/* Pacote Master */}
             <div className="bg-black bg-opacity-80 border border-gray-800 rounded-lg p-6 hover:shadow-xl transition-shadow">
               <div className="mb-4">
-                <span className="inline-block px-3 py-1 text-xs bg-[#F25790] text-white rounded-full">Premium</span>
+                <span className="inline-block px-3 py-1 text-xs bg-[#F25790] text-white rounded-full">Master</span>
               </div>
-              <p className="text-3xl font-bold mb-2">R$ 300,00</p>
-              <p className="text-sm text-gray-300 mb-4">A experiência completa para os usuários mais exigentes.</p>
+              <p className="text-3xl font-bold mb-2">R$ 199</p>
+              <p className="text-sm text-gray-300 mb-4">300 créditos + 50 bônus</p>
               <ul className="space-y-2 mb-6">
                 <li className="flex items-center">
-                  <svg className="w-5 h-5 text-[#F25790] mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
-                  </svg>
-                  <span className="text-sm">300 Créditos</span>
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-[#F25790] mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
-                  </svg>
-                  <span className="text-sm">50 Créditos BÔNUS</span>
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-[#F25790] mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
-                  </svg>
-                  <span className="text-sm">Acesso VIP completo</span>
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-[#F25790] mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
-                  </svg>
-                  <span className="text-sm">Shows exclusivos ilimitados</span>
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-[#F25790] mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
-                  </svg>
-                  <span className="text-sm">Badge VIP em seu perfil</span>
+                  <Image 
+                    src="/icons/action/check_circle.svg"
+                    alt="Check"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5 text-white mr-2"
+                  />
+                  <span className="text-sm">Aproximadamente 350 minutos</span>
                 </li>
               </ul>
               <button 
                 onClick={() => handleAddCredits(350)}
                 className="w-full py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-full transition-colors"
               >
-                Comprar R$ 300,00
+                Comprar R$ 199
               </button>
             </div>
           </div>

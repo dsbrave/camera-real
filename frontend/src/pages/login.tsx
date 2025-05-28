@@ -59,7 +59,7 @@ export default function Login() {
       if (formData.email === 'teste@camera.real' && formData.password === 'senha123') {
         // Armazenar dados do usuário no localStorage
         localStorage.setItem('user', JSON.stringify({
-          name: 'Usuário Teste',
+          name: 'João',
           email: formData.email,
           isLoggedIn: true,
           credits: 300

@@ -84,7 +84,7 @@ const MetodoPagamentoModal: React.FC<MetodoPagamentoModalProps> = ({
               >
                 <div className="w-10 h-10 mb-2 bg-white rounded-full flex items-center justify-center">
                   <Image 
-                    src="/icons/pix.png" 
+                    src="/icons/action/payment.svg" 
                     alt="PIX" 
                     width={24} 
                     height={24} 
@@ -104,7 +104,7 @@ const MetodoPagamentoModal: React.FC<MetodoPagamentoModalProps> = ({
               >
                 <div className="w-10 h-10 mb-2 bg-white rounded-full flex items-center justify-center">
                   <Image 
-                    src="/icons/credit-card.png" 
+                    src="/icons/action/credit_card.svg" 
                     alt="Cartão de Crédito" 
                     width={24} 
                     height={24} 

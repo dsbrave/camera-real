@@ -18,9 +18,13 @@ const ResgateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
           onClick={onClose}
           className="absolute top-4 right-4 text-white hover:text-gray-200"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          <Image
+            src="/icons/navigation/close.svg"
+            alt="Fechar"
+            width={24}
+            height={24}
+            className="h-6 w-6"
+          />
         </button>
 
         <h2 className="text-2xl font-bold text-white mb-6 text-center">Resgate</h2>
@@ -37,9 +41,13 @@ const ResgateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
               onChange={(e) => setStartDate(e.target.value)}
             />
             <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-              <svg className="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd"></path>
-              </svg>
+              <Image
+                src="/icons/action/date_range.svg"
+                alt="Calendário"
+                width={20}
+                height={20}
+                className="w-5 h-5 text-gray-500"
+              />
             </div>
           </div>
         </div>
@@ -55,9 +63,13 @@ const ResgateModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
               onChange={(e) => setEndDate(e.target.value)}
             />
             <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-              <svg className="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd"></path>
-              </svg>
+              <Image
+                src="/icons/action/date_range.svg"
+                alt="Calendário"
+                width={20}
+                height={20}
+                className="w-5 h-5 text-gray-500"
+              />
             </div>
           </div>
         </div>
@@ -199,10 +211,10 @@ const Financeiro: React.FC = () => {
             Regras e ajuda
           </Link>
           <button className="text-white">
-            <Image src="/icons/bell.png" alt="Notificações" width={24} height={24} />
+            <Image src="/icons/notification/notifications.svg" alt="Notificações" width={24} height={24} />
           </button>
           <button className="text-white">
-            <Image src="/icons/user.png" alt="Perfil" width={24} height={24} />
+            <Image src="/icons/action/account_circle.svg" alt="Perfil" width={24} height={24} />
           </button>
         </div>
       </header>
@@ -219,11 +231,11 @@ const Financeiro: React.FC = () => {
                 onClick={() => setIsModalOpen(true)}
                 className="flex items-center justify-center px-4 py-2 bg-camera-pink text-white rounded-full hover:bg-pink-600 transition-colors"
               >
-                <Image src="/icons/money.png" alt="Resgate" width={20} height={20} className="mr-2" />
+                <Image src="/icons/action/account_balance_wallet.svg" alt="Resgate" width={20} height={20} className="mr-2" />
                 Resgatar Agora
               </button>
               <button className="flex items-center justify-center px-4 py-2 bg-[#4D2D5A] text-white rounded-full hover:bg-[#5D3D6A] transition-colors">
-                <Image src="/icons/camera.png" alt="Online" width={20} height={20} className="mr-2" />
+                <Image src="/icons/hardware/videocam.svg" alt="Online" width={20} height={20} className="mr-2" />
                 Ficar Online
               </button>
             </div>
