@@ -260,10 +260,7 @@ export default function ChatVideo() {
     }]);
   };
 
-  // Função para testar a mudança de cor da carteira
-  const handleTestWalletColor = (amount: number) => {
-    setUserCredits(amount);
-  };
+
 
   const handleToggleMute = () => {
     setIsMuted(!isMuted);
@@ -602,25 +599,6 @@ export default function ChatVideo() {
           >
             GROUP CHAT
           </button>
-          
-          {/* Botões de teste para a carteira (discretos no canto direito) */}
-          <div className="absolute right-4 flex gap-1 items-center">
-            <span className="text-xs text-gray-400">Testar carteira:</span>
-            <button 
-              onClick={() => handleTestWalletColor(150)} 
-              className="w-6 h-6 bg-green-500 rounded-full text-xs flex items-center justify-center text-white hover:opacity-80 transition-opacity"
-              title="Simular 150 créditos"
-            >
-              +
-            </button>
-            <button 
-              onClick={() => handleTestWalletColor(0)} 
-              className="w-6 h-6 bg-red-500 rounded-full text-xs flex items-center justify-center text-white hover:opacity-80 transition-opacity"
-              title="Simular 0 créditos"
-            >
-              0
-            </button>
-          </div>
         </div>
 
         {/* Modal para continuar após tempo grátis */}

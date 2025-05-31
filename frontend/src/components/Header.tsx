@@ -133,24 +133,6 @@ export default function Header() {
                   <span className="text-white font-medium text-sm">{creditos}</span>
                   <span className="text-gray-300 text-xs">Créditos</span>
                 </Link>
-                
-                {/* Botões de teste para a carteira (discretos) */}
-                <div className="absolute -bottom-5 left-0 flex gap-1 items-center opacity-30 hover:opacity-100 transition-opacity">
-                  <button 
-                    onClick={() => handleTestWalletColor(150)} 
-                    className="w-4 h-4 bg-green-500 rounded-full text-[8px] flex items-center justify-center text-white"
-                    title="Simular 150 créditos"
-                  >
-                    +
-                  </button>
-                  <button 
-                    onClick={() => handleTestWalletColor(0)} 
-                    className="w-4 h-4 bg-red-500 rounded-full text-[8px] flex items-center justify-center text-white"
-                    title="Simular 0 créditos"
-                  >
-                    0
-                  </button>
-                </div>
               </div>
             </>
           )}
