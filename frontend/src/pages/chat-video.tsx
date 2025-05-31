@@ -1,7 +1,6 @@
-import React from 'react';
-import Link from 'next/link';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 
@@ -14,6 +13,8 @@ interface Gift {
 export default function ChatVideo() {
   const router = useRouter();
   const { id } = router.query;
+  
+  // Estados
   const [modelIndex, setModelIndex] = useState(0);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<any[]>([]);
@@ -21,12 +22,16 @@ export default function ChatVideo() {
   const [isCallActive, setIsCallActive] = useState(true);
   const [creditsSpent, setCreditsSpent] = useState(0);
   const [showContinuePrompt, setShowContinuePrompt] = useState(false);
-  const [userCredits, setUserCredits] = useState(150); // Créditos do usuário
-  const [sessionTime, setSessionTime] = useState(0); // Tempo da sessão em segundos
+  const [userCredits, setUserCredits] = useState<number>(150);
+  const [userName, setUserName] = useState<string>('');
+  const [sessionTime, setSessionTime] = useState(0);
   const [showPrivateCallModal, setShowPrivateCallModal] = useState(false);
   const [showGiftModal, setShowGiftModal] = useState(false);
   const [selectedGift, setSelectedGift] = useState<number | null>(null);
   const [isPrivateCall, setIsPrivateCall] = useState(false);
+  const [chatType, setChatType] = useState<'exclusive' | 'private' | 'group'>('exclusive');
+  const [showChat, setShowChat] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
   
   // Refs
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -80,6 +85,16 @@ export default function ChatVideo() {
     { name: 'Diamante', price: 25, image: '/icons/action/card_giftcard.svg' },
     { name: 'Coroa', price: 50, image: '/icons/action/card_giftcard.svg' },
   ];
+
+  // Efeito para simular o carregamento do nome do usuário
+  useEffect(() => {
+    // Simula o carregamento do nome do usuário de uma API
+    const timeout = setTimeout(() => {
+      setUserName('DiogoBR');
+    }, 1000);
+    
+    return () => clearTimeout(timeout);
+  }, []);
 
   // Timer para sessão ativa
   useEffect(() => {
@@ -138,8 +153,16 @@ export default function ChatVideo() {
   };
 
   const handleContinueCall = () => {
-    setShowContinuePrompt(false);
-    setIsCallActive(true);
+    const currentModel = models[modelIndex];
+    const cost = isPrivateCall ? currentModel.privateCallPrice : currentModel.pricePerMinute;
+    if (userCredits >= cost) {
+      setShowContinuePrompt(false);
+      setIsCallActive(true);
+      setFreeTimeRemaining(0);
+      setMessages(prev => [...prev, { id: Date.now(), text: `💰 Sessão continuada! Custo: ${cost} créditos/min`, sender: 'system', timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) }]);
+    } else {
+      setMessages(prev => [...prev, { id: Date.now(), text: `⚠️ Créditos insuficientes para continuar. Necessário: ${cost} créditos/min.`, sender: 'system', timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) }]);
+    }
   };
 
   const handleSendMessage = (e: React.FormEvent) => {
@@ -192,6 +215,21 @@ export default function ChatVideo() {
     }
   };
 
+  const handleTogglePrivateRoom = () => {
+    if (isPrivateCall) {
+      setIsPrivateCall(false);
+      setMessages(prev => [...prev, { id: Date.now(), text: `🔓 Você voltou para o chat aberto com todos os usuários.`, sender: 'system', timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) }]);
+    } else {
+      const currentModel = models[modelIndex];
+      if (userCredits >= currentModel.privateCallPrice) {
+        setIsPrivateCall(true);
+        setMessages(prev => [...prev, { id: Date.now(), text: `🔒 Sala privada iniciada com ${currentModel.name}`, sender: 'system', timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) }]);
+      } else {
+        setMessages(prev => [...prev, { id: Date.now(), text: `⚠️ Créditos insuficientes para sala privada. Necessário: ${currentModel.privateCallPrice} créditos.`, sender: 'system', timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) }]);
+      }
+    }
+  };
+
   const handlePrivateCall = () => {
     const currentModel = models[modelIndex];
     if (userCredits >= currentModel.privateCallPrice) {
@@ -212,6 +250,28 @@ export default function ChatVideo() {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
+  const handleChangeChatType = (type: 'exclusive' | 'private' | 'group') => {
+    setChatType(type);
+    
+    // Adicionar mensagem de sistema sobre a mudança de tipo de chat
+    setMessages(prev => [...prev, { 
+      id: Date.now(), 
+      text: `Você entrou no chat ${
+        type === 'exclusive' ? 'exclusivo' : 
+        type === 'private' ? 'privado' : 'em grupo'
+      }`, 
+      sender: 'system',
+      timestamp: new Date()
+    }]);
+  };
+
+  const handleToggleMute = () => {
+    setIsMuted(!isMuted);
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+    }
+  };
+
   const currentModel = models[modelIndex];
 
   return (
@@ -221,37 +281,87 @@ export default function ChatVideo() {
         <meta name="description" content={`Videochat ao vivo com ${currentModel.name} na Camera Real.`} />
       </Head>
       
-      <div className="min-h-screen bg-black text-white flex">
-        {/* Main Video Area */}
-        <div className="flex-1 relative">
-          {/* Top Bar */}
-          <div className="absolute top-0 left-0 right-0 z-20 bg-gradient-to-b from-black/80 to-transparent p-4">
-            <div className="flex items-center justify-between">
-              <Link href="/explorar" className="flex items-center gap-2 text-white hover:text-[#F25790] transition-colors">
-                <Image
-                  src="/icons/hardware/keyboard_arrow_left.svg"
-                  alt="Voltar"
-                  width={20}
-                  height={20}
-                  className="w-5 h-5 filter invert"
-                />
-                <span className="font-medium">Voltar</span>
-              </Link>
-              
-              <Link href="/carteira" className="bg-gradient-to-r from-[#F25790] to-purple-600 rounded-full px-4 py-2 flex items-center gap-2 hover:from-[#d93d75] hover:to-purple-700 transition-all">
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                </svg>
-                <span className="font-bold">{userCredits}</span>
-                <span className="text-sm opacity-90">créditos</span>
-              </Link>
+      <div className="min-h-screen bg-black text-white flex flex-col">
+        {/* Barra superior com logo e informações do usuário */}
+        <header className="bg-[#1e0a1e] border-b border-[#3d1f3d] py-2 px-4 flex items-center justify-between">
+          <div className="flex items-center">
+            <Link href="/" className="mr-6">
+              <Image 
+                src="/images/logo.png" 
+                alt="Camera Real" 
+                width={150} 
+                height={40} 
+                className="h-10 w-auto"
+              />
+            </Link>
+            
+            <div className="hidden md:flex space-x-4 text-sm">
+              <Link href="/explorar" className="text-gray-300 hover:text-white transition-colors">Explorar</Link>
+              <Link href="/videochats" className="text-gray-300 hover:text-white transition-colors">Videochats</Link>
+              <Link href="/carteira" className="text-gray-300 hover:text-white transition-colors">Carteira</Link>
             </div>
           </div>
+          
+          <div className="flex items-center gap-4">
+            <div className="bg-[#F25790] rounded-full px-3 py-1 flex items-center">
+              <span className="font-bold mr-1">{userCredits}</span>
+              <span className="text-xs">créditos</span>
+            </div>
+            
+            <Link href="/carteira" className="bg-green-600 hover:bg-green-700 rounded-full px-3 py-1 text-sm font-medium transition-colors">
+              LOAD ACCOUNT
+            </Link>
+            
+            <div className="bg-[#2a142a] rounded-full px-3 py-1 text-sm">
+              <span>{userName || 'Usuário'}</span>
+            </div>
+          </div>
+        </header>
 
-          {/* Video Container */}
-          <div className="relative h-screen bg-black flex items-center justify-center">
-            {/* Model Image/Video Placeholder */}
-            <div className="relative w-full h-full max-w-4xl">
+        {/* Área principal com vídeo e chat */}
+        <div className="flex-1 flex flex-col md:flex-row relative">
+
+          {/* Área do vídeo */}
+          <div className={`flex-1 relative ${showContinuePrompt ? 'blur-sm' : ''}`}>
+            {/* Informações da modelo no canto superior esquerdo */}
+            <div className="absolute top-4 left-4 z-20 flex items-center bg-black/70 backdrop-blur-sm rounded-full px-2 py-1">
+              <div className="w-8 h-8 rounded-full overflow-hidden mr-2">
+                <Image 
+                  src={currentModel.profileImage} 
+                  alt={currentModel.name} 
+                  width={32} 
+                  height={32} 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold flex items-center">
+                  {currentModel.name} 
+                  <svg className="w-4 h-4 ml-1 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                  </svg>
+                </h3>
+                <div className="flex items-center text-xs">
+                  <span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-1"></span>
+                  <span>ONLINE</span>
+                  <span className="mx-1">•</span>
+                  <span>{currentModel.age}</span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Botão de saída no canto superior direito */}
+            <div className="absolute top-4 right-4 z-20">
+              <button 
+                onClick={() => router.push('/explorar')}
+                className="bg-black/70 backdrop-blur-sm rounded-md px-3 py-1 text-sm font-medium hover:bg-black transition-colors"
+              >
+                EXIT ROOM
+              </button>
+            </div>
+            
+            {/* Vídeo/Imagem da modelo */}
+            <div className="relative w-full h-[calc(100vh-120px)]">
               <Image
                 src={currentModel.profileImage}
                 alt={currentModel.name}
@@ -263,36 +373,48 @@ export default function ChatVideo() {
                 }}
               />
               
-              {/* Overlay com informações da modelo */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-6">
-                <div className="flex items-end justify-between">
-                  <div>
-                    <h2 className="text-3xl font-bold mb-2">{currentModel.name}</h2>
-                    <div className="flex items-center gap-4 text-sm text-gray-300 mb-3">
-                      <span>{currentModel.age} anos</span>
-                      <span>•</span>
-                      <span>{currentModel.location}</span>
-                      <span>•</span>
-                      <div className="flex items-center gap-1">
-                        <span className="text-yellow-400">★</span>
-                        <span>{currentModel.rating}</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <div className="bg-[#F25790]/20 border border-[#F25790]/30 rounded-full px-3 py-1">
-                        <span className="text-sm font-medium">{currentModel.pricePerMinute} créditos/min</span>
-                      </div>
-                      <div className="bg-purple-600/20 border border-purple-600/30 rounded-full px-3 py-1">
-                        <span className="text-sm font-medium">Privado: {currentModel.privateCallPrice} créditos/min</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              {/* Overlay com gradiente na parte inferior */}
+              <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent"></div>
+            </div>
+            
+            {/* Controles de vídeo na parte inferior */}
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20 flex items-center gap-4">
+              <button className="p-3 bg-black/70 hover:bg-black rounded-full transition-all">
+                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+                </svg>
+              </button>
+              
+              <button 
+                onClick={handleToggleMute}
+                className="p-3 bg-black/70 hover:bg-black rounded-full transition-all"
+              >
+                {isMuted ? (
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+                  </svg>
+                ) : (
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                  </svg>
+                )}
+              </button>
+              
+              <button className="p-3 bg-black/70 hover:bg-black rounded-full transition-all">
+                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+                </svg>
+              </button>
+              
+              <button className="p-3 bg-black/70 hover:bg-black rounded-full transition-all">
+                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M15 8v8H5V8h10m1-2H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4V7c0-.55-.45-1-1-1z"/>
+                </svg>
+              </button>
             </div>
           </div>
 
-          {/* Navigation Controls - Only on video */}
+          {/* Navigation Controls - Setas laterais */}
           <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20">
             <button
               onClick={handlePrevModel}
@@ -323,23 +445,7 @@ export default function ChatVideo() {
             </button>
           </div>
 
-          {/* Private Room Button - On video */}
-          <div className="absolute top-1/2 right-20 transform -translate-y-1/2 z-20">
-            <button
-              onClick={() => setShowPrivateCallModal(true)}
-              className={`p-4 rounded-full transition-all hover:scale-110 shadow-lg border-2 ${
-                isPrivateCall 
-                  ? 'bg-purple-600 hover:bg-purple-700 border-purple-400' 
-                  : 'bg-purple-500/80 hover:bg-purple-600 border-purple-300 backdrop-blur-sm'
-              }`}
-            >
-              <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1z"/>
-              </svg>
-            </button>
-          </div>
-
-          {/* Timer Progress Bar - Below video */}
+          {/* Timer Progress Bar - Abaixo do vídeo */}
           <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-20 w-80">
             <div className="bg-black/70 backdrop-blur-sm rounded-full p-4 border border-white/20">
               <div className="flex items-center justify-between mb-2">
@@ -374,129 +480,109 @@ export default function ChatVideo() {
             </div>
           </div>
 
-          {/* Bottom Controls - Below video */}
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20">
-            <div className="flex items-center gap-4">
-              {/* Encerrar Chamada */}
-              <Link href="/explorar" className="p-4 bg-red-500 hover:bg-red-600 rounded-full transition-all hover:scale-110 shadow-lg border-2 border-red-300">
-                <Image
-                  src="/icons/notification/phone_missed.svg"
-                  alt="Encerrar"
-                  width={24}
-                  height={24}
-                  className="w-6 h-6 filter invert"
-                />
-              </Link>
-
-              {/* Presentes */}
-              <button
-                onClick={() => setShowGiftModal(true)}
-                className="p-4 bg-yellow-500 hover:bg-yellow-600 rounded-full transition-all hover:scale-110 shadow-lg border-2 border-yellow-300"
-              >
-                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M20 6h-2.18c.11-.31.18-.65.18-1a2.996 2.996 0 0 0-5.5-1.65l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1z"/>
-                </svg>
-              </button>
-
-              {/* Volume */}
-              <button className="p-4 bg-gray-700 hover:bg-gray-600 rounded-full transition-all hover:scale-110 shadow-lg border-2 border-gray-500">
-                <Image
-                  src="/icons/audio_video/volume_mute.svg"
-                  alt="Volume"
-                  width={24}
-                  height={24}
-                  className="w-6 h-6 filter invert"
-                />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Chat Sidebar - Always Open with Black Background */}
-        <div className="w-96 bg-black flex flex-col border-l border-gray-800">
-          {/* Chat Header */}
-          <div className="p-4 border-b border-gray-800 bg-gray-900">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-[#F25790] flex items-center justify-center">
-                <span className="text-lg font-bold">{currentModel.name[0]}</span>
-              </div>
-              <div className="flex-1">
-                <h3 className="font-bold text-lg">{currentModel.name}</h3>
-                <div className="flex items-center gap-2 text-sm text-gray-400">
-                  <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
-                  <span>Online</span>
-                  <span>•</span>
-                  <span>{currentModel.pricePerMinute} créditos/min</span>
+          {/* Área de chat (visível apenas em telas maiores) */}
+          {showChat && (
+            <div className="w-full md:w-80 bg-[#1e0a1e] border-l border-[#3d1f3d] flex flex-col">
+              {/* Cabeçalho do chat */}
+              <div className="p-4 border-b border-[#3d1f3d]">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold">Chat</h3>
+                  <button 
+                    onClick={() => setShowChat(false)}
+                    className="text-gray-400 hover:text-white"
+                  >
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                  </button>
                 </div>
               </div>
-            </div>
-          </div>
-
-          {/* Chat Messages */}
-          <div ref={chatRef} className="flex-1 overflow-y-auto p-4 space-y-3 bg-black">
-            {messages.length === 0 && (
-              <div className="text-center text-gray-500 py-8">
-                <p className="mb-2">💬 Inicie uma conversa com {currentModel.name}</p>
-                <p className="text-sm opacity-75">Seja respeitoso e divirta-se!</p>
+              
+              {/* Mensagens do chat */}
+              <div ref={chatRef} className="flex-1 overflow-y-auto p-4 space-y-3">
+                {messages.length === 0 && (
+                  <div className="text-center text-gray-500 py-8">
+                    <p className="mb-2">💬 Inicie uma conversa com {currentModel.name}</p>
+                    <p className="text-sm opacity-75">Seja respeitoso e divirta-se!</p>
+                  </div>
+                )}
+                {messages.map((msg) => (
+                  <div
+                    key={msg.id}
+                    className={`flex ${msg.sender === 'user' ? 'justify-end' : msg.sender === 'system' ? 'justify-center' : 'justify-start'}`}
+                  >
+                    <div
+                      className={`max-w-[85%] rounded-2xl px-4 py-2 ${
+                        msg.sender === 'user' 
+                          ? 'bg-[#F25790] text-white' 
+                          : msg.sender === 'system'
+                          ? 'bg-yellow-500/20 text-yellow-200 text-sm'
+                          : 'bg-gray-800 text-white'
+                      }`}
+                    >
+                      <p>{msg.text}</p>
+                      {msg.timestamp && (
+                        <p className="text-xs opacity-70 mt-1">
+                          {msg.timestamp.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+                <div ref={messagesEndRef} />
               </div>
-            )}
-            {messages.map((msg) => (
-              <div
-                key={msg.id}
-                className={`flex ${msg.sender === 'user' ? 'justify-end' : msg.sender === 'system' ? 'justify-center' : 'justify-start'}`}
-              >
-                <div
-                  className={`max-w-[85%] rounded-2xl px-4 py-2 ${
-                    msg.sender === 'user' 
-                      ? 'bg-[#F25790] text-white' 
-                      : msg.sender === 'system'
-                      ? 'bg-yellow-500/20 text-yellow-200 text-sm'
-                      : 'bg-gray-800 text-white'
-                  }`}
-                >
-                  <p>{msg.text}</p>
-                  {msg.timestamp && (
-                    <p className="text-xs opacity-70 mt-1">
-                      {msg.timestamp.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
-                    </p>
-                  )}
+              
+              {/* Input de mensagem */}
+              <form onSubmit={handleSendMessage} className="p-4 border-t border-[#3d1f3d]">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder="Digite sua mensagem..."
+                    className="flex-1 bg-[#2a142a] text-white placeholder-gray-500 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#F25790] transition-all"
+                  />
+                  <button
+                    type="submit"
+                    disabled={!message.trim()}
+                    className="p-2 bg-[#F25790] hover:bg-[#d93d75] disabled:bg-gray-600 disabled:cursor-not-allowed rounded-full transition-all"
+                  >
+                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                  </button>
                 </div>
-              </div>
-            ))}
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Message Input */}
-          <form onSubmit={handleSendMessage} className="p-4 border-t border-gray-800 bg-gray-900">
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Digite sua mensagem..."
-                className="flex-1 bg-gray-800 text-white placeholder-gray-500 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#F25790] transition-all"
-              />
-              <button
-                type="submit"
-                disabled={!message.trim()}
-                className="p-3 bg-[#F25790] hover:bg-[#d93d75] disabled:bg-gray-600 disabled:cursor-not-allowed rounded-full transition-all"
-              >
-                <Image
-                  src="/icons/content/send.svg"
-                  alt="Enviar"
-                  width={20}
-                  height={20}
-                  className="w-5 h-5 filter invert"
-                />
-              </button>
+              </form>
             </div>
-          </form>
+          )}
         </div>
 
-        {/* Modal para continuar após tempo grátis - Melhorado */}
+        {/* Barra inferior com opções de chat */}
+        <div className="bg-[#1e0a1e] border-t border-[#3d1f3d] grid grid-cols-3 text-center">
+          <button 
+            onClick={() => handleChangeChatType('exclusive')}
+            className={`py-3 font-medium transition-colors ${chatType === 'exclusive' ? 'bg-[#F25790] text-white' : 'text-gray-300 hover:bg-[#2a142a]'}`}
+          >
+            EXCLUSIVE CHAT
+          </button>
+          <button 
+            onClick={() => handleChangeChatType('private')}
+            className={`py-3 font-medium transition-colors ${chatType === 'private' ? 'bg-[#F25790] text-white' : 'text-gray-300 hover:bg-[#2a142a]'}`}
+          >
+            PRIVATE CHAT
+          </button>
+          <button 
+            onClick={() => handleChangeChatType('group')}
+            className={`py-3 font-medium transition-colors ${chatType === 'group' ? 'bg-[#F25790] text-white' : 'text-gray-300 hover:bg-[#2a142a]'}`}
+          >
+            GROUP CHAT
+          </button>
+        </div>
+
+        {/* Modal para continuar após tempo grátis */}
         {showContinuePrompt && (
           <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-gray-900 border border-gray-700 p-8 rounded-2xl max-w-md w-full text-white shadow-2xl">
+            <div className="bg-[#1e0a1e] border border-[#3d1f3d] p-8 rounded-2xl max-w-md w-full text-white shadow-2xl">
               <div className="text-center mb-6">
                 <div className="w-16 h-16 rounded-full bg-[#F25790] flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
@@ -509,7 +595,7 @@ export default function ChatVideo() {
                 </p>
               </div>
               
-              <div className="bg-gray-800 rounded-lg p-4 mb-6 border border-gray-700">
+              <div className="bg-[#2a142a] rounded-lg p-4 mb-6 border border-[#3d1f3d]">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-gray-300">Custo por minuto:</span>
                   <span className="font-bold text-[#F25790]">{currentModel.pricePerMinute} créditos</span>
@@ -523,7 +609,7 @@ export default function ChatVideo() {
               <div className="flex gap-3">
                 <button 
                   onClick={handleNextModel}
-                  className="flex-1 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg font-medium transition-all border border-gray-600"
+                  className="flex-1 py-3 bg-[#2a142a] hover:bg-[#3d1f3d] rounded-lg font-medium transition-all border border-[#3d1f3d]"
                 >
                   Próxima Modelo
                 </button>
@@ -538,10 +624,10 @@ export default function ChatVideo() {
           </div>
         )}
 
-        {/* Modal Sala Privada - Melhorado */}
+        {/* Modal Sala Privada */}
         {showPrivateCallModal && (
           <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-gray-900 border border-purple-500/30 p-8 rounded-2xl max-w-md w-full text-white shadow-2xl">
+            <div className="bg-[#1e0a1e] border border-purple-500/30 p-8 rounded-2xl max-w-md w-full text-white shadow-2xl">
               <div className="text-center mb-6">
                 <div className="w-16 h-16 rounded-full bg-purple-600 flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
@@ -554,7 +640,7 @@ export default function ChatVideo() {
                 </p>
               </div>
               
-              <div className="bg-gray-800 rounded-lg p-4 mb-6 border border-gray-700">
+              <div className="bg-[#2a142a] rounded-lg p-4 mb-6 border border-[#3d1f3d]">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-gray-300">Custo por minuto:</span>
                   <span className="font-bold text-purple-400">{currentModel.privateCallPrice} créditos</span>
@@ -568,7 +654,7 @@ export default function ChatVideo() {
               <div className="flex gap-3">
                 <button 
                   onClick={() => setShowPrivateCallModal(false)}
-                  className="flex-1 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg font-medium transition-all border border-gray-600"
+                  className="flex-1 py-3 bg-[#2a142a] hover:bg-[#3d1f3d] rounded-lg font-medium transition-all border border-[#3d1f3d]"
                 >
                   Cancelar
                 </button>
@@ -584,10 +670,10 @@ export default function ChatVideo() {
           </div>
         )}
 
-        {/* Modal Presentes - Melhorado */}
+        {/* Modal Presentes */}
         {showGiftModal && (
           <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-gray-900 border border-yellow-500/30 p-8 rounded-2xl max-w-lg w-full text-white shadow-2xl">
+            <div className="bg-[#1e0a1e] border border-yellow-500/30 p-8 rounded-2xl max-w-lg w-full text-white shadow-2xl">
               <div className="text-center mb-6">
                 <div className="w-16 h-16 rounded-full bg-yellow-500 flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
@@ -606,7 +692,7 @@ export default function ChatVideo() {
                     key={gift.name}
                     onClick={() => handleSendGift(gift, index)}
                     disabled={userCredits < gift.price}
-                    className="bg-gray-800 hover:bg-gray-700 disabled:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg p-4 text-center transition-all hover:scale-105 border border-gray-700 hover:border-yellow-500/50"
+                    className="bg-[#2a142a] hover:bg-[#3d1f3d] disabled:bg-[#2a142a] disabled:opacity-50 disabled:cursor-not-allowed rounded-lg p-4 text-center transition-all hover:scale-105 border border-[#3d1f3d] hover:border-yellow-500/50"
                   >
                     <svg className="w-8 h-8 mx-auto mb-2 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M20 6h-2.18c.11-.31.18-.65.18-1a2.996 2.996 0 0 0-5.5-1.65l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1z"/>
@@ -617,11 +703,11 @@ export default function ChatVideo() {
                 ))}
               </div>
               
-              <div className="text-center border-t border-gray-700 pt-4">
+              <div className="text-center border-t border-[#3d1f3d] pt-4">
                 <p className="text-gray-400 mb-4">Seus créditos: <span className="font-bold text-white">{userCredits}</span></p>
                 <button 
                   onClick={() => setShowGiftModal(false)}
-                  className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg font-medium transition-all border border-gray-600"
+                  className="px-6 py-2 bg-[#2a142a] hover:bg-[#3d1f3d] rounded-lg font-medium transition-all border border-[#3d1f3d]"
                 >
                   Fechar
                 </button>
