@@ -309,7 +309,21 @@ export default function ChatVideo() {
               className={`flex items-center space-x-1 ${userCredits > 0 ? 'bg-gradient-to-r from-[#F25790]/20 to-purple-600/20 hover:bg-green-600/20' : 'bg-gradient-to-r from-red-500/20 to-red-700/20 hover:bg-red-600/20'} backdrop-blur-sm border border-[#F25790]/30 rounded-full px-2 py-1 transition-all duration-200 text-xs group`}
             >
               <div className="relative w-3.5 h-3.5">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={`w-3.5 h-3.5 text-white filter invert ${userCredits > 0 ? 'group-hover:text-green-500' : 'group-hover:text-red-500'} transition-colors duration-200 absolute top-0 left-0`}>
+                <svg 
+                  width="16" 
+                  height="16" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-3.5 h-3.5 filter invert absolute top-0 left-0 transition-all duration-200"
+                  style={{ color: 'white' }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.color = userCredits > 0 ? '#22c55e' : '#ef4444';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.color = 'white';
+                  }}
+                >
                   <path d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z" fill="currentColor"/>
                 </svg>
               </div>
