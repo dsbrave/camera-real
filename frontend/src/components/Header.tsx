@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 // Para evitar sobreposição do conteúdo pelo header fixo, adicione <div className="header-spacer" /> logo após o <Header /> em cada página principal.
 export default function Header() {
   const router = useRouter();
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState<any>(null);
   const [creditos, setCreditos] = useState(150);
   
@@ -25,17 +25,48 @@ export default function Header() {
         const userStorage = localStorage.getItem('user');
         if (userStorage) {
           const user = JSON.parse(userStorage);
-          setIsLoggedIn(!!user.isLoggedIn);
-          setUserData(user);
-          // Simular saldo de Créditos (em uma aplicação real, isso viria da API)
-          setCreditos(user.creditos || 150);
+          // Verificar se o objeto do usuário tem as propriedades necessárias
+          if (user && typeof user === 'object') {
+            setIsLoggedIn(true); // Se temos dados do usuário, consideramos como logado
+            setUserData(user);
+            // Simular saldo de Créditos (em uma aplicação real, isso viria da API)
+            setCreditos(user.creditos || 150);
+          } else {
+            // Dados inválidos, considerar como deslogado
+            setIsLoggedIn(false);
+            setUserData(null);
+            localStorage.removeItem('user'); // Limpar dados inválidos
+          }
+        } else {
+          // Não há dados do usuário no localStorage
+          setIsLoggedIn(false);
+          setUserData(null);
         }
       } catch (error) {
         console.error('Erro ao verificar login:', error);
+        setIsLoggedIn(false);
+        setUserData(null);
+        localStorage.removeItem('user'); // Limpar dados inválidos em caso de erro
       }
     };
 
     checkLoginStatus();
+    
+    // APENAS PARA DESENVOLVIMENTO: Simular um usuário logado se não houver nenhum
+    if (!localStorage.getItem('user')) {
+      const mockUser = {
+        id: '123',
+        name: 'João',
+        email: 'joao@example.com',
+        creditos: 150,
+        photo: '',
+        isLoggedIn: true
+      };
+      localStorage.setItem('user', JSON.stringify(mockUser));
+      setIsLoggedIn(true);
+      setUserData(mockUser);
+      setCreditos(mockUser.creditos);
+    }
 
     // Fechar dropdown quando clicar fora dele
     const handleClickOutside = (event: MouseEvent) => {
