@@ -281,7 +281,6 @@ export default function ChatVideo() {
       
       <div className="min-h-screen bg-black text-white flex flex-col">
         <Header />
-        <div className="h-10 sm:h-16 md:h-20" />
 
         {/* Área principal com vídeo e chat */}
         <div className="flex-1 flex flex-col md:flex-row relative">
