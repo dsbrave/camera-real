@@ -113,23 +113,11 @@ export default function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center space-x-6">
-          {isLoggedIn && (
-            <Link href="/explorar" className="hover:text-[#F25790] font-medium transition-colors">
-              Explorar
-            </Link>
-          )}
-          <Link href="/videochats" className="hover:text-[#F25790] font-medium transition-colors">
-            Como Funciona
-          </Link>
-          {isLoggedIn ? (
-            <Link href="/suporte" className="hover:text-[#F25790] font-medium transition-colors">
-              Suporte
-            </Link>
-          ) : (
-            <Link href="/sobre" className="hover:text-[#F25790] font-medium transition-colors">
-              Sobre
-            </Link>
-          )}
+          {!isLoggedIn && (
+  <Link href="/sobre" className="hover:text-[#F25790] font-medium transition-colors">
+    Sobre
+  </Link>
+)}
           
           {isLoggedIn && (
             <>

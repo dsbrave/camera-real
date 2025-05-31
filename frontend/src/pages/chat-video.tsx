@@ -12,6 +12,8 @@ interface Gift {
 }
 
 export default function ChatVideo() {
+  // ... outros estados ...
+  const [showGiftModal, setShowGiftModal] = useState(false);
   const router = useRouter();
   const { id } = router.query;
   
@@ -22,13 +24,9 @@ export default function ChatVideo() {
   const [freeTimeRemaining, setFreeTimeRemaining] = useState(10); // 10 segundos grátis
   const [isCallActive, setIsCallActive] = useState(true);
   const [creditsSpent, setCreditsSpent] = useState(0);
-  const [showContinuePrompt, setShowContinuePrompt] = useState(false);
   const [userCredits, setUserCredits] = useState<number>(150);
   const [userName, setUserName] = useState<string>('');
   const [sessionTime, setSessionTime] = useState(0);
-  const [showPrivateCallModal, setShowPrivateCallModal] = useState(false);
-  const [showGiftModal, setShowGiftModal] = useState(false);
-  const [selectedGift, setSelectedGift] = useState<number | null>(null);
   const [isPrivateCall, setIsPrivateCall] = useState(false);
   const [chatType, setChatType] = useState<'exclusive' | 'private' | 'group'>('exclusive');
   const [showChat, setShowChat] = useState(true);
@@ -113,7 +111,6 @@ export default function ChatVideo() {
             setUserCredits(prev => prev - cost);
             setCreditsSpent(prev => prev + cost);
           } else {
-            setShowContinuePrompt(true);
             setIsCallActive(false);
           }
         }
@@ -130,14 +127,13 @@ export default function ChatVideo() {
         setFreeTimeRemaining(prev => prev - 1);
       }, 1000);
       return () => clearTimeout(timer);
-    } else if (freeTimeRemaining === 0 && !showContinuePrompt && sessionTime > 10) {
-      setShowContinuePrompt(true);
+    } else if (freeTimeRemaining === 0 && sessionTime > 10) {
+      setIsCallActive(false);
     }
-  }, [freeTimeRemaining, isCallActive, showContinuePrompt, sessionTime]);
+  }, [freeTimeRemaining, isCallActive, sessionTime]);
 
   const handleNextModel = () => {
     setModelIndex((prevIndex) => (prevIndex + 1) % models.length);
-    setShowContinuePrompt(false);
     setSessionTime(0);
     setCreditsSpent(0);
     setFreeTimeRemaining(10);
@@ -146,26 +142,10 @@ export default function ChatVideo() {
 
   const handlePrevModel = () => {
     setModelIndex((prevIndex) => (prevIndex - 1 + models.length) % models.length);
-    setShowContinuePrompt(false);
     setSessionTime(0);
     setCreditsSpent(0);
     setFreeTimeRemaining(10);
     setIsPrivateCall(false);
-  };
-
-  const handleContinueCall = () => {
-    const currentModel = models[modelIndex];
-    const cost = isPrivateCall ? currentModel.privateCallPrice : currentModel.pricePerMinute;
-    if (userCredits >= cost) {
-      setShowContinuePrompt(false);
-      setIsCallActive(true);
-      setFreeTimeRemaining(0);
-      setMessages(prev => [...prev, { id: Date.now(), text: `💰 Sessão continuada! Custo: ${cost} créditos/min`, sender: 'system', timestamp: new Date() }]);
-      // Atualizar créditos do usuário
-      setUserCredits(prev => prev - cost);
-    } else {
-      setMessages(prev => [...prev, { id: Date.now(), text: `⚠️ Créditos insuficientes para continuar. Necessário: ${cost} créditos/min.`, sender: 'system', timestamp: new Date() }]);
-    }
   };
 
   const handleSendMessage = (e: React.FormEvent) => {
@@ -194,30 +174,6 @@ export default function ChatVideo() {
     }
   };
 
-  const handleSendGift = (gift: Gift, index: number) => {
-    if (userCredits >= gift.price) {
-      setUserCredits(prev => prev - gift.price);
-      setSelectedGift(index);
-      setMessages([...messages, { 
-        id: Date.now(), 
-        text: `🎁 Enviou um presente: ${gift.name} (${gift.price} créditos)`, 
-        sender: 'system',
-        timestamp: new Date()
-      }]);
-      setShowGiftModal(false);
-      
-      // Resposta da modelo
-      setTimeout(() => {
-        setMessages(prev => [...prev, { 
-          id: Date.now(), 
-          text: `Muito obrigada pelo presente! Você é incrível! 😍💕`, 
-          sender: 'model',
-          timestamp: new Date()
-        }]);
-      }, 1500);
-    }
-  };
-
   const handleTogglePrivateRoom = () => {
     if (isPrivateCall) {
       setIsPrivateCall(false);
@@ -232,20 +188,6 @@ export default function ChatVideo() {
       } else {
         setMessages(prev => [...prev, { id: Date.now(), text: `⚠️ Créditos insuficientes para sala privada. Necessário: ${currentModel.privateCallPrice} créditos.`, sender: 'system', timestamp: new Date() }]);
       }
-    }
-  };
-
-  const handlePrivateCall = () => {
-    const currentModel = models[modelIndex];
-    if (userCredits >= currentModel.privateCallPrice) {
-      setIsPrivateCall(true);
-      setShowPrivateCallModal(false);
-      setMessages([...messages, { 
-        id: Date.now(), 
-        text: `🔒 Sala privada iniciada com ${currentModel.name}`, 
-        sender: 'system',
-        timestamp: new Date()
-      }]);
     }
   };
 
@@ -264,8 +206,6 @@ export default function ChatVideo() {
       timestamp: new Date() 
     }]);
   };
-
-
 
   const handleToggleMute = () => {
     setIsMuted(!isMuted);
@@ -290,7 +230,7 @@ export default function ChatVideo() {
         <div className="flex-1 flex flex-col md:flex-row relative">
 
           {/* Área do vídeo */}
-          <div className={`flex-1 relative ${showContinuePrompt ? 'blur-sm' : ''}`}>
+          <div className={`flex-1 relative`}>
             {/* Informações da modelo no canto superior esquerdo */}
             <div className="absolute top-4 left-4 z-20 flex items-center bg-black/70 backdrop-blur-sm rounded-full px-2 py-1">
               <div className="w-8 h-8 rounded-full overflow-hidden mr-2">
@@ -376,41 +316,10 @@ export default function ChatVideo() {
               
               <button className="p-3 bg-black/70 hover:bg-black rounded-full transition-all">
                 <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M15 8v8H5V8h10m1-2H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4V7c0-.55-.45-1-1-1z"/>
+                  <path d="M15 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
                 </svg>
               </button>
             </div>
-          </div>
-
-          {/* Navigation Controls - Setas laterais */}
-          <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20">
-            <button
-              onClick={handlePrevModel}
-              className="p-3 bg-black/70 hover:bg-black/90 rounded-full backdrop-blur-sm transition-all hover:scale-110 border border-white/20"
-            >
-              <Image
-                src="/icons/hardware/keyboard_arrow_left.svg"
-                alt="Modelo anterior"
-                width={24}
-                height={24}
-                className="w-6 h-6 filter invert"
-              />
-            </button>
-          </div>
-          
-          <div className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20">
-            <button
-              onClick={handleNextModel}
-              className="p-3 bg-black/70 hover:bg-black/90 rounded-full backdrop-blur-sm transition-all hover:scale-110 border border-white/20"
-            >
-              <Image
-                src="/icons/hardware/keyboard_arrow_right.svg"
-                alt="Próxima modelo"
-                width={24}
-                height={24}
-                className="w-6 h-6 filter invert"
-              />
-            </button>
           </div>
 
           {/* Timer Progress Bar - Abaixo do vídeo */}
@@ -516,7 +425,7 @@ export default function ChatVideo() {
                     className="p-2 bg-[#F25790] hover:bg-[#d93d75] disabled:bg-gray-600 disabled:cursor-not-allowed rounded-full transition-all"
                   >
                     <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                      <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2V7c0-1.1.9-2 2-2h18c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V10l15-2 15 2z"/>
                     </svg>
                   </button>
                 </div>
@@ -527,162 +436,89 @@ export default function ChatVideo() {
 
         {/* Barra inferior com opções de chat */}
         <div className="fixed bottom-0 left-0 right-0 bg-[#1e0a1e] border-t border-[#3d1f3d] py-2 px-4 flex justify-center items-center gap-3 z-20">
-          <button 
-            onClick={() => handleChangeChatType('exclusive')} 
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${chatType === 'exclusive' ? 'bg-[#F25790] text-white' : 'bg-[#2a142a] text-gray-300 hover:bg-[#3d1f3d]'}`}
-          >
-            EXCLUSIVE CHAT
-          </button>
-          <button 
-            onClick={() => handleChangeChatType('private')} 
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${chatType === 'private' ? 'bg-[#F25790] text-white' : 'bg-[#2a142a] text-gray-300 hover:bg-[#3d1f3d]'}`}
-          >
-            PRIVATE CHAT
-          </button>
-          <button 
-            onClick={() => handleChangeChatType('group')} 
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${chatType === 'group' ? 'bg-[#F25790] text-white' : 'bg-[#2a142a] text-gray-300 hover:bg-[#3d1f3d]'}`}
-          >
-            GROUP CHAT
-          </button>
+  {/* Botões de passar modelo (setas) adicionados ao lado dos botões de chat */}
+  <button
+    onClick={handlePrevModel}
+    className="p-2 bg-black/70 hover:bg-black/90 rounded-full backdrop-blur-sm transition-all hover:scale-110 border border-white/20"
+    aria-label="Modelo anterior"
+  >
+    <Image
+      src="/icons/hardware/keyboard_arrow_left.svg"
+      alt="Modelo anterior"
+      width={24}
+      height={24}
+      className="w-6 h-6 filter invert"
+    />
+  </button>
+  <button 
+    onClick={() => handleChangeChatType('private')} 
+    className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${chatType === 'private' ? 'bg-[#F25790] text-white' : 'bg-[#2a142a] text-gray-300 hover:bg-[#3d1f3d]'}`}
+    type="button"
+  >
+    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24">
+      <rect x="5" y="11" width="14" height="9" rx="2" fill="#39FF14" fillOpacity="0.15" />
+      <rect x="5" y="11" width="14" height="9" rx="2" stroke="#39FF14" strokeWidth="2" />
+      <path d="M8 11V8a4 4 0 1 1 8 0v3" stroke="#39FF14" strokeWidth="2" strokeLinecap="round"/>
+      <circle cx="12" cy="16" r="1.5" fill="#39FF14" />
+      <rect x="11.25" y="17.5" width="1.5" height="2" rx="0.75" fill="#39FF14" />
+    </svg>
+    Chat Privado
+  </button>
+  <button
+    onClick={() => setShowGiftModal(true)}
+    className="px-4 py-2 rounded-full text-sm font-medium transition-all bg-[#2a142a] text-gray-300 hover:bg-[#3d1f3d] flex items-center gap-2"
+    type="button"
+  >
+    <svg className="w-5 h-5 text-pink-400" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M20 7h-1.35A3.35 3.35 0 0 0 12 3.35 3.35 3.35 0 0 0 5.35 7H4a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM12 5.35A1.65 1.65 0 0 1 13.65 7h-3.3A1.65 1.65 0 0 1 12 5.35zM20 11H4V9h16zm-2 9H6v-7h12z" />
+    </svg>
+    Presentes
+  </button>
+  <button
+    onClick={handleNextModel}
+    className="p-2 bg-black/70 hover:bg-black/90 rounded-full backdrop-blur-sm transition-all hover:scale-110 border border-white/20"
+    aria-label="Próxima modelo"
+  >
+    <Image
+      src="/icons/hardware/keyboard_arrow_right.svg"
+      alt="Próxima modelo"
+      width={24}
+      height={24}
+      className="w-6 h-6 filter invert"
+    />
+  </button>
+</div>
+
+      {/* Gift Modal */}
+      {showGiftModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80">
+          <div className="bg-[#1e0a1e] rounded-2xl p-8 max-w-md w-full shadow-lg relative">
+            <button
+              onClick={() => setShowGiftModal(false)}
+              className="absolute top-2 right-2 text-gray-400 hover:text-white text-xl"
+              aria-label="Fechar"
+            >
+              ×
+            </button>
+            <h2 className="text-2xl font-bold mb-4 text-white">Enviar Presente</h2>
+            <div className="grid grid-cols-3 gap-4">
+              {gifts.map((gift) => (
+                <button
+                  key={gift.name}
+                  className="flex flex-col items-center p-3 bg-[#2a142a] rounded-xl hover:bg-[#F25790]/20 transition-all"
+                  // onClick={() => handleSendGift(gift)}
+                  type="button"
+                >
+                  <img src={gift.image} alt={gift.name} className="w-10 h-10 mb-2" />
+                  <span className="text-white text-sm font-medium">{gift.name}</span>
+                  <span className="text-pink-400 text-xs font-bold">{gift.price} créditos</span>
+                </button>
+              ))}
+            </div>
+            <p className="text-xs text-gray-400 mt-6 text-center">Selecione um presente para enviar durante o chat!</p>
+          </div>
         </div>
-
-        {/* Modal para continuar após tempo grátis */}
-        {showContinuePrompt && (
-          <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-[#1e0a1e] border border-[#3d1f3d] p-8 rounded-2xl max-w-md w-full text-white shadow-2xl">
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 rounded-full bg-[#F25790] flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold mb-2">Tempo grátis encerrado</h3>
-                <p className="text-gray-400">
-                  Continue aproveitando com <span className="text-[#F25790] font-bold">{currentModel.name}</span>
-                </p>
-              </div>
-              
-              <div className="bg-[#2a142a] rounded-lg p-4 mb-6 border border-[#3d1f3d]">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-gray-300">Custo por minuto:</span>
-                  <span className="font-bold text-[#F25790]">{currentModel.pricePerMinute} créditos</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-300">Seus créditos:</span>
-                  <span className="font-bold text-white">{userCredits} créditos</span>
-                </div>
-              </div>
-              
-              <div className="flex gap-3">
-                <button 
-                  onClick={handleNextModel}
-                  className="flex-1 py-3 bg-[#2a142a] hover:bg-[#3d1f3d] rounded-lg font-medium transition-all border border-[#3d1f3d]"
-                >
-                  Próxima Modelo
-                </button>
-                <button 
-                  onClick={handleContinueCall}
-                  className="flex-1 py-3 bg-[#F25790] hover:bg-[#d93d75] rounded-lg font-medium transition-all"
-                >
-                  Continuar
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Modal Sala Privada */}
-        {showPrivateCallModal && (
-          <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-[#1e0a1e] border border-purple-500/30 p-8 rounded-2xl max-w-md w-full text-white shadow-2xl">
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 rounded-full bg-purple-600 flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM12 17c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM15.1 8H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold mb-2">🔒 Sala Privada</h3>
-                <p className="text-gray-400">
-                  Tenha um momento exclusivo com {currentModel.name}
-                </p>
-              </div>
-              
-              <div className="bg-[#2a142a] rounded-lg p-4 mb-6 border border-[#3d1f3d]">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-gray-300">Custo por minuto:</span>
-                  <span className="font-bold text-purple-400">{currentModel.privateCallPrice} créditos</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-300">Seus créditos:</span>
-                  <span className="font-bold text-white">{userCredits} créditos</span>
-                </div>
-              </div>
-              
-              <div className="flex gap-3">
-                <button 
-                  onClick={() => setShowPrivateCallModal(false)}
-                  className="flex-1 py-3 bg-[#2a142a] hover:bg-[#3d1f3d] rounded-lg font-medium transition-all border border-[#3d1f3d]"
-                >
-                  Cancelar
-                </button>
-                <button 
-                  onClick={handlePrivateCall}
-                  disabled={userCredits < currentModel.privateCallPrice}
-                  className="flex-1 py-3 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 disabled:cursor-not-allowed rounded-lg font-medium transition-all"
-                >
-                  Iniciar
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Modal Presentes */}
-        {showGiftModal && (
-          <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-[#1e0a1e] border border-yellow-500/30 p-8 rounded-2xl max-w-lg w-full text-white shadow-2xl">
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 rounded-full bg-yellow-500 flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M20 6h-2.18c.11-.31.18-.65.18-1a2.996 2.996 0 0 0-5.5-1.65l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1z"/>
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold mb-2">🎁 Enviar Presente</h3>
-                <p className="text-gray-400">
-                  Demonstre seu carinho por {currentModel.name}
-                </p>
-              </div>
-              
-              <div className="grid grid-cols-3 gap-3 mb-6">
-                {gifts.map((gift, index) => (
-                  <button
-                    key={gift.name}
-                    onClick={() => handleSendGift(gift, index)}
-                    disabled={userCredits < gift.price}
-                    className="bg-[#2a142a] hover:bg-[#3d1f3d] disabled:bg-[#2a142a] disabled:opacity-50 disabled:cursor-not-allowed rounded-lg p-4 text-center transition-all hover:scale-105 border border-[#3d1f3d] hover:border-yellow-500/50"
-                  >
-                    <svg className="w-8 h-8 mx-auto mb-2 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M20 6h-2.18c.11-.31.18-.65.18-1a2.996 2.996 0 0 0-5.5-1.65l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1z"/>
-                    </svg>
-                    <p className="font-medium text-sm text-white">{gift.name}</p>
-                    <p className="text-yellow-400 text-xs font-bold">{gift.price} créditos</p>
-                  </button>
-                ))}
-              </div>
-              
-              <div className="text-center border-t border-[#3d1f3d] pt-4">
-                <p className="text-gray-400 mb-4">Seus créditos: <span className="font-bold text-white">{userCredits}</span></p>
-                <button 
-                  onClick={() => setShowGiftModal(false)}
-                  className="px-6 py-2 bg-[#2a142a] hover:bg-[#3d1f3d] rounded-lg font-medium transition-all border border-[#3d1f3d]"
-                >
-                  Fechar
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+      )}
       </div>
     </>
   );
