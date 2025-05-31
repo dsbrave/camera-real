@@ -160,9 +160,11 @@ export default function ChatVideo() {
       setShowContinuePrompt(false);
       setIsCallActive(true);
       setFreeTimeRemaining(0);
-      setMessages(prev => [...prev, { id: Date.now(), text: `💰 Sessão continuada! Custo: ${cost} créditos/min`, sender: 'system', timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) }]);
+      setMessages(prev => [...prev, { id: Date.now(), text: `💰 Sessão continuada! Custo: ${cost} créditos/min`, sender: 'system', timestamp: new Date() }]);
+      // Atualizar créditos do usuário
+      setUserCredits(prev => prev - cost);
     } else {
-      setMessages(prev => [...prev, { id: Date.now(), text: `⚠️ Créditos insuficientes para continuar. Necessário: ${cost} créditos/min.`, sender: 'system', timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) }]);
+      setMessages(prev => [...prev, { id: Date.now(), text: `⚠️ Créditos insuficientes para continuar. Necessário: ${cost} créditos/min.`, sender: 'system', timestamp: new Date() }]);
     }
   };
 
@@ -219,14 +221,16 @@ export default function ChatVideo() {
   const handleTogglePrivateRoom = () => {
     if (isPrivateCall) {
       setIsPrivateCall(false);
-      setMessages(prev => [...prev, { id: Date.now(), text: `🔓 Você voltou para o chat aberto com todos os usuários.`, sender: 'system', timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) }]);
+      setMessages(prev => [...prev, { id: Date.now(), text: `🔓 Você voltou para o chat aberto com todos os usuários.`, sender: 'system', timestamp: new Date() }]);
     } else {
       const currentModel = models[modelIndex];
       if (userCredits >= currentModel.privateCallPrice) {
         setIsPrivateCall(true);
-        setMessages(prev => [...prev, { id: Date.now(), text: `🔒 Sala privada iniciada com ${currentModel.name}`, sender: 'system', timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) }]);
+        // Descontar créditos da sala privada
+        setUserCredits(prev => prev - currentModel.privateCallPrice);
+        setMessages(prev => [...prev, { id: Date.now(), text: `🔒 Sala privada iniciada com ${currentModel.name}`, sender: 'system', timestamp: new Date() }]);
       } else {
-        setMessages(prev => [...prev, { id: Date.now(), text: `⚠️ Créditos insuficientes para sala privada. Necessário: ${currentModel.privateCallPrice} créditos.`, sender: 'system', timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) }]);
+        setMessages(prev => [...prev, { id: Date.now(), text: `⚠️ Créditos insuficientes para sala privada. Necessário: ${currentModel.privateCallPrice} créditos.`, sender: 'system', timestamp: new Date() }]);
       }
     }
   };
