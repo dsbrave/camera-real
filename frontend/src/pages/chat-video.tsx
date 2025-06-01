@@ -227,12 +227,13 @@ export default function ChatVideo() {
         <Header />
 
         {/* Área principal com vídeo e chat */}
-        <div className="flex-1 flex flex-col md:flex-row relative">
+        <div className="flex-1 flex flex-col md:flex-row relative h-[calc(100vh-80px)]">
 
           {/* Área do vídeo */}
-          <div className={`flex-1 relative`}>
+          <div className={`flex-1 relative flex flex-col`}>
+            
             {/* Vídeo/Player da modelo */}
-            <div className="relative w-full h-[calc(100vh-120px)] bg-gradient-to-br from-purple-900 via-pink-900 to-black">
+            <div className="relative w-full flex-1 bg-gradient-to-br from-purple-900 via-pink-900 to-black">
               {/* Mock Video Player */}
               <div className="relative w-full h-full bg-black overflow-hidden">
                 {/* Simulação de stream de vídeo com gradiente animado */}
@@ -366,48 +367,114 @@ export default function ChatVideo() {
               {/* Overlay com gradiente na parte inferior */}
               <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent pointer-events-none"></div>
             </div>
-            
-            {/* Timer Progress Bar - Abaixo do vídeo */}
-            <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-20 w-80">
-              <div className="bg-black/70 backdrop-blur-sm rounded-full p-4 border border-white/20">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium">
-                    {freeTimeRemaining > 0 ? 'Tempo grátis' : 'Sessão ativa'}
-                  </span>
-                  <span className="text-sm font-bold text-[#F25790]">
-                    {freeTimeRemaining > 0 ? formatTime(freeTimeRemaining) : formatTime(sessionTime)}
-                  </span>
-                </div>
-                
-                {/* Progress Bar */}
-                <div className="w-full bg-gray-700 rounded-full h-2 mb-2">
-                  <div 
-                    className={`h-2 rounded-full transition-all duration-1000 ${
-                      freeTimeRemaining > 0 ? 'bg-green-400' : 'bg-[#F25790]'
-                    }`}
-                    style={{
-                      width: freeTimeRemaining > 0 
-                        ? `${((10 - freeTimeRemaining) / 10) * 100}%`
-                        : '100%'
-                    }}
-                  ></div>
-                </div>
-                
-                {freeTimeRemaining === 0 && (
-                  <div className="flex justify-between text-xs text-gray-300">
-                    <span>Gasto: {creditsSpent} créditos</span>
-                    <span>Restam: {userCredits} créditos</span>
-                  </div>
-                )}
-              </div>
+
+            {/* Botões de controle abaixo do player - alinhados com o player */}
+            <div className="hidden md:flex justify-center items-center py-2 gap-4 bg-black/20">
+              {/* Botão modelo anterior */}
+              <button
+                onClick={handlePrevModel}
+                className="p-4 bg-black/70 hover:bg-black/90 rounded-full backdrop-blur-sm transition-all hover:scale-110 border border-white/20 shadow-lg"
+                aria-label="Modelo anterior"
+                title="Modelo anterior"
+              >
+                <Image
+                  src="/icons/hardware/keyboard_arrow_left.svg"
+                  alt="Modelo anterior"
+                  width={24}
+                  height={24}
+                  className="w-6 h-6 filter invert"
+                />
+              </button>
+
+              {/* Botão Chat Privado */}
+              <button 
+                onClick={() => handleChangeChatType('private')} 
+                className={`p-4 rounded-full transition-all hover:scale-110 shadow-lg ${chatType === 'private' ? 'bg-[#F25790] border-2 border-[#F25790]' : 'bg-black/70 hover:bg-black/90 border border-white/20'}`}
+                type="button"
+                title="Chat Privado"
+              >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24">
+                  <rect x="5" y="11" width="14" height="9" rx="2" fill="#39FF14" fillOpacity="0.15" />
+                  <rect x="5" y="11" width="14" height="9" rx="2" stroke="#39FF14" strokeWidth="2" />
+                  <path d="M8 11V8a4 4 0 1 1 8 0v3" stroke="#39FF14" strokeWidth="2" strokeLinecap="round"/>
+                  <circle cx="12" cy="16" r="1.5" fill="#39FF14" />
+                  <rect x="11.25" y="17.5" width="1.5" height="2" rx="0.75" fill="#39FF14" />
+                </svg>
+              </button>
+
+              {/* Botão Presentes */}
+              <button
+                onClick={() => setShowGiftModal(true)}
+                className="p-4 rounded-full transition-all bg-black/70 hover:bg-black/90 border border-white/20 shadow-lg hover:scale-110"
+                type="button"
+                title="Presentes"
+              >
+                <svg className="w-6 h-6 text-pink-400" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M20 7h-1.35A3.35 3.35 0 0 0 12 3.35 3.35 3.35 0 0 0 5.35 7H4a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM12 5.35A1.65 1.65 0 0 1 13.65 7h-3.3A1.65 1.65 0 0 1 12 5.35zM20 11H4V9h16zm-2 9H6v-7h12z" />
+                </svg>
+              </button>
+
+              {/* Botão próxima modelo */}
+              <button
+                onClick={handleNextModel}
+                className="p-4 bg-black/70 hover:bg-black/90 rounded-full backdrop-blur-sm transition-all hover:scale-110 border border-white/20 shadow-lg"
+                aria-label="Próxima modelo"
+                title="Próxima modelo"
+              >
+                <Image
+                  src="/icons/hardware/keyboard_arrow_right.svg"
+                  alt="Próxima modelo"
+                  width={24}
+                  height={24}
+                  className="w-6 h-6 filter invert"
+                />
+              </button>
             </div>
           </div>
 
-          {/* Área de chat (visível apenas em telas maiores) */}
+          {/* Timer Vertical - Entre player e chat */}
+          <div className="hidden md:flex flex-col justify-center items-center w-16 bg-black/40 backdrop-blur-sm border-x border-white/10 flex-shrink-0">
+            {/* Timer compacto vertical */}
+            <div className="flex flex-col items-center gap-3 p-3">
+              {/* Tempo */}
+              <div className="text-center">
+                <div className="text-[#F25790] font-bold text-sm mb-1">
+                  {freeTimeRemaining > 0 ? formatTime(freeTimeRemaining) : formatTime(sessionTime)}
+                </div>
+                <div className="text-white text-xs opacity-70">
+                  {freeTimeRemaining > 0 ? 'grátis' : 'ativo'}
+                </div>
+              </div>
+              
+              {/* Progress bar vertical */}
+              <div className="w-1 h-24 bg-white/10 rounded-full relative">
+                <div 
+                  className={`w-1 rounded-full transition-all duration-1000 absolute bottom-0 ${
+                    freeTimeRemaining > 0 ? 'bg-[#39FF14] shadow-[0_0_10px_#39FF14]' : 'bg-[#F25790] shadow-[0_0_10px_#F25790]'
+                  }`}
+                  style={{
+                    height: freeTimeRemaining > 0 
+                      ? `${((10 - freeTimeRemaining) / 10) * 100}%`
+                      : '100%'
+                  }}
+                ></div>
+              </div>
+              
+              {/* Créditos */}
+              {freeTimeRemaining === 0 && (
+                <div className="text-center">
+                  <div className="text-[#F25790] text-xs font-medium mb-1">-{creditsSpent}</div>
+                  <div className="text-[#39FF14] text-xs font-medium">{userCredits}</div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Área de chat (mais larga) */}
           {showChat && (
-            <div className="w-full md:w-80 bg-[#1e0a1e] border-l border-[#3d1f3d] flex flex-col relative">
+            <div className="w-full md:w-96 bg-[#1e0a1e] border-l border-[#3d1f3d] flex flex-col h-full">
               {/* Cabeçalho do chat */}
-              <div className="p-4 border-b border-[#3d1f3d]">
+              <div className="p-3 border-b border-[#3d1f3d] flex-shrink-0">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full overflow-hidden">
                     <Image 
@@ -443,7 +510,7 @@ export default function ChatVideo() {
               </div>
               
               {/* Mensagens do chat */}
-              <div ref={chatRef} className="flex-1 overflow-y-auto p-4 space-y-3">
+              <div ref={chatRef} className="flex-1 overflow-y-auto p-4 space-y-3 min-h-0">
                 {messages.length === 0 && (
                   <div className="text-center text-gray-500 py-8">
                     <p className="mb-2">💬 Inicie uma conversa com {currentModel.name}</p>
@@ -477,7 +544,7 @@ export default function ChatVideo() {
               </div>
               
               {/* Input de mensagem */}
-              <form onSubmit={handleSendMessage} className="p-4 border-t border-[#3d1f3d]">
+              <form onSubmit={handleSendMessage} className="p-3 border-t border-[#3d1f3d] bg-[#1e0a1e] flex-shrink-0">
                 <div className="flex gap-2">
                   <input
                     type="text"
@@ -497,98 +564,35 @@ export default function ChatVideo() {
                   </button>
                 </div>
               </form>
-
-              {/* Botões de controle abaixo do chat - apenas desktop */}
-              <div className="hidden md:flex justify-center items-center bg-[#2a142a] border-t border-[#3d1f3d] p-4 gap-4">
-                {/* Botão modelo anterior */}
-                <button
-                  onClick={handlePrevModel}
-                  className="p-4 bg-black/70 hover:bg-black/90 rounded-full backdrop-blur-sm transition-all hover:scale-110 border border-white/20 shadow-lg"
-                  aria-label="Modelo anterior"
-                  title="Modelo anterior"
-                >
-                  <Image
-                    src="/icons/hardware/keyboard_arrow_left.svg"
-                    alt="Modelo anterior"
-                    width={24}
-                    height={24}
-                    className="w-6 h-6 filter invert"
-                  />
-                </button>
-
-                {/* Botão Chat Privado */}
-                <button 
-                  onClick={() => handleChangeChatType('private')} 
-                  className={`p-4 rounded-full transition-all hover:scale-110 shadow-lg ${chatType === 'private' ? 'bg-[#F25790] border-2 border-[#F25790]' : 'bg-black/70 hover:bg-black/90 border border-white/20'}`}
-                  type="button"
-                  title="Chat Privado"
-                >
-                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24">
-                    <rect x="5" y="11" width="14" height="9" rx="2" fill="#39FF14" fillOpacity="0.15" />
-                    <rect x="5" y="11" width="14" height="9" rx="2" stroke="#39FF14" strokeWidth="2" />
-                    <path d="M8 11V8a4 4 0 1 1 8 0v3" stroke="#39FF14" strokeWidth="2" strokeLinecap="round"/>
-                    <circle cx="12" cy="16" r="1.5" fill="#39FF14" />
-                    <rect x="11.25" y="17.5" width="1.5" height="2" rx="0.75" fill="#39FF14" />
-                  </svg>
-                </button>
-
-                {/* Botão Presentes */}
-                <button
-                  onClick={() => setShowGiftModal(true)}
-                  className="p-4 rounded-full transition-all bg-black/70 hover:bg-black/90 border border-white/20 shadow-lg hover:scale-110"
-                  type="button"
-                  title="Presentes"
-                >
-                  <svg className="w-6 h-6 text-pink-400" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M20 7h-1.35A3.35 3.35 0 0 0 12 3.35 3.35 3.35 0 0 0 5.35 7H4a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM12 5.35A1.65 1.65 0 0 1 13.65 7h-3.3A1.65 1.65 0 0 1 12 5.35zM20 11H4V9h16zm-2 9H6v-7h12z" />
-                  </svg>
-                </button>
-
-                {/* Botão próxima modelo */}
-                <button
-                  onClick={handleNextModel}
-                  className="p-4 bg-black/70 hover:bg-black/90 rounded-full backdrop-blur-sm transition-all hover:scale-110 border border-white/20 shadow-lg"
-                  aria-label="Próxima modelo"
-                  title="Próxima modelo"
-                >
-                  <Image
-                    src="/icons/hardware/keyboard_arrow_right.svg"
-                    alt="Próxima modelo"
-                    width={24}
-                    height={24}
-                    className="w-6 h-6 filter invert"
-                  />
-                </button>
-              </div>
             </div>
           )}
         </div>
 
         {/* Barra inferior simplificada para mobile */}
-        <div className="md:hidden fixed bottom-0 left-0 right-0 bg-[#1e0a1e] border-t border-[#3d1f3d] py-4 px-4 flex justify-center items-center gap-6 z-20">
+        <div className="md:hidden fixed bottom-12 left-2 right-2 bg-[#1e0a1e] border border-[#3d1f3d] py-5 px-4 flex justify-center items-center gap-6 z-30 rounded-xl shadow-lg">
           {/* Botões de passar modelo (setas) */}
           <button
             onClick={handlePrevModel}
-            className="p-5 bg-black/70 hover:bg-black/90 rounded-full backdrop-blur-sm transition-all hover:scale-110 border border-white/20 shadow-lg active:scale-95"
+            className="p-7 bg-black/70 hover:bg-black/90 rounded-full backdrop-blur-sm transition-all hover:scale-110 border border-white/20 shadow-lg active:scale-95"
             aria-label="Modelo anterior"
             title="Modelo anterior"
           >
             <Image
               src="/icons/hardware/keyboard_arrow_left.svg"
               alt="Modelo anterior"
-              width={32}
-              height={32}
-              className="w-8 h-8 filter invert"
+              width={40}
+              height={40}
+              className="w-10 h-10 filter invert"
             />
           </button>
           
           <button 
             onClick={() => handleChangeChatType('private')} 
-            className={`p-5 rounded-full transition-all hover:scale-110 shadow-lg active:scale-95 ${chatType === 'private' ? 'bg-[#F25790] border-2 border-[#F25790]' : 'bg-black/70 hover:bg-black/90 border border-white/20'}`}
+            className={`p-7 rounded-full transition-all hover:scale-110 shadow-lg active:scale-95 ${chatType === 'private' ? 'bg-[#F25790] border-2 border-[#F25790]' : 'bg-black/70 hover:bg-black/90 border border-white/20'}`}
             type="button"
             title="Chat Privado"
           >
-            <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24">
+            <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24">
               <rect x="5" y="11" width="14" height="9" rx="2" fill="#39FF14" fillOpacity="0.15" />
               <rect x="5" y="11" width="14" height="9" rx="2" stroke="#39FF14" strokeWidth="2" />
               <path d="M8 11V8a4 4 0 1 1 8 0v3" stroke="#39FF14" strokeWidth="2" strokeLinecap="round"/>
@@ -599,27 +603,27 @@ export default function ChatVideo() {
           
           <button
             onClick={() => setShowGiftModal(true)}
-            className="p-5 bg-black/70 hover:bg-black/90 rounded-full backdrop-blur-sm transition-all hover:scale-110 border border-white/20 shadow-lg active:scale-95"
+            className="p-7 bg-black/70 hover:bg-black/90 rounded-full backdrop-blur-sm transition-all hover:scale-110 border border-white/20 shadow-lg active:scale-95"
             type="button"
             title="Presentes"
           >
-            <svg className="w-8 h-8 text-pink-400" fill="currentColor" viewBox="0 0 24 24">
+            <svg className="w-10 h-10 text-pink-400" fill="currentColor" viewBox="0 0 24 24">
               <path d="M20 7h-1.35A3.35 3.35 0 0 0 12 3.35 3.35 3.35 0 0 0 5.35 7H4a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM12 5.35A1.65 1.65 0 0 1 13.65 7h-3.3A1.65 1.65 0 0 1 12 5.35zM20 11H4V9h16zm-2 9H6v-7h12z" />
             </svg>
           </button>
           
           <button
             onClick={handleNextModel}
-            className="p-5 bg-black/70 hover:bg-black/90 rounded-full backdrop-blur-sm transition-all hover:scale-110 border border-white/20 shadow-lg active:scale-95"
+            className="p-7 bg-black/70 hover:bg-black/90 rounded-full backdrop-blur-sm transition-all hover:scale-110 border border-white/20 shadow-lg active:scale-95"
             aria-label="Próxima modelo"
             title="Próxima modelo"
           >
             <Image
               src="/icons/hardware/keyboard_arrow_right.svg"
               alt="Próxima modelo"
-              width={32}
-              height={32}
-              className="w-8 h-8 filter invert"
+              width={40}
+              height={40}
+              className="w-10 h-10 filter invert"
             />
           </button>
         </div>
