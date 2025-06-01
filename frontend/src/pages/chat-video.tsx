@@ -291,11 +291,11 @@ export default function ChatVideo() {
         <meta name="description" content={`Videochat ao vivo com ${currentModel.name} na Camera Real.`} />
       </Head>
       
-      <div className="min-h-screen bg-black text-white flex flex-col">
+      <div className="min-h-screen bg-black text-white flex flex-col overflow-hidden">
         <Header />
 
-        {/* Área principal com vídeo e chat */}
-        <div className="flex-1 flex flex-col md:flex-row relative h-[calc(100vh-80px)]">
+        {/* Área principal com vídeo e chat - Layout fixo sem scroll */}
+        <div className="flex-1 flex flex-col md:flex-row relative overflow-hidden" style={{ height: 'calc(100vh - 80px)', maxHeight: 'calc(100vh - 80px)' }}>
 
           {/* Área do vídeo */}
           <div className={`flex-1 relative flex flex-col`}>
@@ -306,14 +306,6 @@ export default function ChatVideo() {
               <div className="relative w-full h-full bg-black overflow-hidden">
                 {/* Simulação de stream de vídeo com gradiente animado */}
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-pink-600/20 to-transparent animate-pulse"></div>
-                
-                {/* Indicador de transmissão ao vivo */}
-                <div className="absolute top-4 left-4 z-30">
-                  <div className="flex items-center bg-red-600 text-white px-3 py-1 rounded-full shadow-lg">
-                    <div className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></div>
-                    <span className="text-xs font-bold">AO VIVO</span>
-                  </div>
-                </div>
                 
                 {/* Controles simplificados - só aparecem no hover */}
                 <div className="absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 transition-opacity duration-300 group">
@@ -345,7 +337,7 @@ export default function ChatVideo() {
                           )}
                         </button>
                         
-                        <span className="text-[#F25790] font-bold text-xs">LIVE</span>
+                        <span className="text-[#F25790] font-bold text-xs">AO VIVO</span>
                       </div>
                       
                       <div className="flex items-center gap-3">
@@ -361,23 +353,6 @@ export default function ChatVideo() {
                         </button>
                       </div>
                     </div>
-                  </div>
-                </div>
-                
-                {/* Indicadores de qualidade compactos */}
-                <div className="absolute top-4 right-4 z-20 flex gap-2">
-                  <div className="bg-black/60 backdrop-blur-sm rounded px-2 py-1 text-white text-xs flex items-center gap-1">
-                    <svg className="w-3 h-3 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                    </svg>
-                    <span>4.8</span>
-                  </div>
-                  
-                  <div className="bg-black/60 backdrop-blur-sm rounded px-2 py-1 text-white text-xs flex items-center gap-1">
-                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A2.996 2.996 0 0 0 16.96 6c-.8 0-1.54.37-2.01.97L12 10.5 8.05 6.97A2.996 2.996 0 0 0 5.04 6c-.8 0-1.54.37-2.01.97L.5 14H3v8h2v-6h2.5l1.5-4.5L12 14.5l2.5-3L16 16v6h4z"/>
-                    </svg>
-                    <span>247</span>
                   </div>
                 </div>
               </div>
@@ -519,7 +494,7 @@ export default function ChatVideo() {
 
           {/* Área de chat (mais larga) */}
           {showChat && (
-            <div className="w-full md:w-[480px] border-l border-white/10 flex flex-col relative overflow-hidden" style={{ height: 'calc(100vh - 100px)' }}>
+            <div className="w-full md:w-[480px] border-l border-white/10 flex flex-col relative overflow-hidden" style={{ height: 'calc(100vh - 80px)' }}>
               {/* Efeito neon de fundo */}
               <div className="absolute inset-0 bg-gradient-to-br from-[#F25790]/5 via-transparent to-[#39FF14]/5 pointer-events-none"></div>
               <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-50"></div>
@@ -623,8 +598,8 @@ export default function ChatVideo() {
                 </div>
               </div>
               
-              {/* Mensagens do chat com altura fixa e scroll interno */}
-              <div ref={chatRef} className="flex-1 overflow-y-auto p-4 space-y-4 relative z-10">
+              {/* Mensagens do chat com altura calculada para não sobrepor o input */}
+              <div ref={chatRef} className="flex-1 overflow-y-auto p-4 space-y-4 relative z-10 custom-scrollbar" style={{ height: 'calc(100% - 160px)' }}>
                 {messages.length === 0 && (
                   <div className="text-center py-8">
                     <div className="text-gray-400 text-sm">
@@ -635,7 +610,7 @@ export default function ChatVideo() {
                 {messages.map((msg) => (
                   <div
                     key={msg.id}
-                    className={`flex ${msg.sender === 'user' ? 'justify-end' : msg.sender === 'system' ? 'justify-center' : 'justify-start'}`}
+                    className={`flex ${msg.sender === 'user' ? 'justify-end' : msg.sender === 'system' ? 'justify-end' : 'justify-start'}`}
                   >
                     <div
                       className={`max-w-[85%] rounded-2xl px-3 py-2 relative ${
@@ -681,9 +656,9 @@ export default function ChatVideo() {
                 <div ref={messagesEndRef} />
               </div>
               
-              {/* Input de mensagem fixo na altura dos botões principais */}
-              <div className="flex-shrink-0 relative z-10" style={{ height: '96px' }}>
-                <form onSubmit={handleSendMessage} className="p-4 border-t border-white/10 h-full flex items-center">
+              {/* Input de mensagem fixo na mesma altura dos botões principais */}
+              <div className="flex-shrink-0 border-t border-white/10 bg-black/95 backdrop-blur-sm relative z-10" style={{ height: '80px' }}>
+                <form onSubmit={handleSendMessage} className="p-4 h-full flex items-center">
                   <div className="flex gap-3 w-full">
                     <input
                       type="text"
@@ -794,13 +769,6 @@ export default function ChatVideo() {
           <div className="flex-1 relative bg-gradient-to-br from-purple-900 via-pink-900 to-black">
             <div className="relative w-full h-full bg-black overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-pink-600/20 to-transparent animate-pulse"></div>
-              
-              <div className="absolute top-4 left-4 z-30">
-                <div className="flex items-center bg-red-600 text-white px-3 py-1 rounded-full shadow-lg">
-                  <div className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></div>
-                  <span className="text-xs font-bold">AO VIVO</span>
-                </div>
-              </div>
             </div>
           </div>
 
