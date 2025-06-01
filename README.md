@@ -8,9 +8,11 @@ Uma plataforma moderna de videochat ao vivo construída com Next.js, oferecendo 
 - **Carrossel de Modelos**: Exibição destacada de modelos em destaque para usuários logados
 - **Sistema de Autenticação**: Login/cadastro com diferentes tipos de usuário
 - **Chat em Tempo Real**: Videochat interativo com sistema de moedas (Créditos)
+- **Video Player Profissional**: Mock de player com controles hover, indicadores HD e badge AO VIVO
 - **Painel do Usuário**: Área personalizada para gerenciamento de conta
 - **Sistema de Carteira**: Compra e gerenciamento de Créditos
 - **Páginas Institucionais**: Sobre, FAQ, Termos, Política de Privacidade
+- **UX Mobile Otimizada**: Botões redondos mobile-friendly com feedback tátil
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -27,7 +29,8 @@ camera-real/
 ├── frontend/
 │   ├── public/
 │   │   ├── images/          # Imagens do projeto
-│   │   │   └── icons/           # Ícones SVG
+│   │   │   ├── icons/           # Ícones SVG
+│   │   │   └── video-player-placeholder.png  # Placeholder do video player
 │   │   ├── src/
 │   │   │   ├── components/      # Componentes reutilizáveis
 │   │   │   │   ├── Header.tsx
@@ -38,6 +41,7 @@ camera-real/
 │   │   │   │   ├── explorar.tsx # Explorar modelos
 │   │   │   │   ├── login.tsx    # Login
 │   │   │   │   ├── cadastro.tsx # Cadastro
+│   │   │   │   ├── chat-video.tsx # Interface de videochat
 │   │   │   │   └── ...
 │   │   │   └── styles/          # Estilos globais
 │   │   └── package.json
@@ -55,7 +59,7 @@ camera-real/
 
 1. Clone o repositório:
 ```bash
-git clone <url-do-repositorio>
+git clone https://github.com/dsbrave/camera-real.git
 cd camera-real
 ```
 
@@ -83,6 +87,15 @@ npm run dev
 - **Cards de Modelos**: Grid responsivo com informações dos modelos
 - **Navegação Intuitiva**: Menu responsivo com dropdown de usuário
 - **Botões de ação**: "Explorar Agora" e "Comprar Créditos"
+- **Video Player Mockup**: Interface profissional com controles hover-only
+
+### 🎥 Video Player Features
+- **Controles Hover**: Controles aparecem apenas no hover para experiência limpa
+- **Badge AO VIVO**: Indicador de transmissão ao vivo
+- **Indicadores HD**: Qualidade, rating e número de visualizadores
+- **Barra de Progresso**: Timer visual com cores da marca
+- **Identidade Visual**: Cores rosa (#F25790) aplicadas consistentemente
+- **Responsivo**: Otimizado para desktop e mobile
 
 ### 👥 Tipos de Usuário
 - **Visitantes**: Podem visualizar a página inicial e se cadastrar
@@ -93,7 +106,7 @@ npm run dev
 - `/` - Homepage com apresentação e modelos em destaque
 - `/explorar` - Catálogo completo de modelos
 - `/carteira` - Gerenciamento de Créditos
-- `/chat-video` - Interface de videochat
+- `/chat-video` - Interface de videochat com player profissional
 - `/painel-usuario` - Dashboard do usuário
 - `/painel-modelo` - Dashboard do modelo
 - `/login` e `/cadastro` - Autenticação
@@ -112,6 +125,8 @@ O projeto utiliza uma paleta de cores moderna com:
 - Cards com efeitos de hover e blur
 - Gradientes responsivos
 - Ícones SVG personalizados
+- Video player com animações suaves
+- Botões mobile-friendly com feedback tátil
 
 ## 🔧 Scripts Disponíveis
 
@@ -122,6 +137,14 @@ npm run start    # Servidor de produção
 npm run lint     # Verificação de código
 ```
 
+## 📱 Mobile Experience
+
+### Otimizações Mobile
+- **Botões Redondos**: Design mobile-friendly com área de toque otimizada
+- **Feedback Tátil**: Animações de hover e active states
+- **Layout Responsivo**: Adaptação automática para diferentes tamanhos de tela
+- **Navegação Simplificada**: Botões posicionados abaixo do chat para fácil acesso
+
 ## 🚀 Próximos Passos
 
 - [ ] Sistema de pagamento para Créditos
@@ -131,6 +154,7 @@ npm run lint     # Verificação de código
 - [ ] Sistema de avaliações e comentários
 - [ ] Programa de afiliados
 - [ ] App mobile nativo
+- [ ] Integração com streaming real
 
 ## 🤝 Contribuição
 
