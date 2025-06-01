@@ -95,6 +95,13 @@ export default function ChatVideo() {
     return () => clearTimeout(timeout);
   }, []);
 
+  // Efeito para scroll automático para a última mensagem
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
+
   // Timer para sessão ativa
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -316,11 +323,11 @@ export default function ChatVideo() {
             </div>
 
             {/* Botões de controle principais - com mais destaque */}
-            <div className="hidden md:flex justify-center items-center gap-8 py-6 bg-black/30 backdrop-blur-sm relative z-10">
+            <div className="hidden md:flex justify-center items-center gap-8 py-6 relative z-10">
               {/* Botão modelo anterior */}
               <button
                 onClick={handlePrevModel}
-                className="p-5 bg-black/80 hover:bg-black/90 rounded-full backdrop-blur-sm transition-all hover:scale-110 border border-white/30 shadow-xl"
+                className="p-5 bg-black/80 hover:bg-black/90 rounded-full backdrop-blur-sm transition-all hover:scale-110 border border-white/10 shadow-xl"
                 aria-label="Modelo anterior"
                 title="Modelo anterior"
               >
@@ -336,7 +343,7 @@ export default function ChatVideo() {
               {/* Botão Chat Privado */}
               <button 
                 onClick={() => handleChangeChatType('private')} 
-                className={`p-5 rounded-full transition-all hover:scale-110 shadow-xl ${chatType === 'private' ? 'bg-[#F25790] border-2 border-[#F25790]' : 'bg-black/80 hover:bg-black/90 border border-white/30'}`}
+                className={`p-5 rounded-full transition-all hover:scale-110 shadow-xl ${chatType === 'private' ? 'bg-[#F25790] border-2 border-[#F25790]' : 'bg-black/80 hover:bg-black/90 border border-white/10'}`}
                 type="button"
                 title="Chat Privado"
               >
@@ -352,7 +359,7 @@ export default function ChatVideo() {
               {/* Botão Presentes */}
               <button
                 onClick={() => setShowGiftModal(true)}
-                className="p-5 rounded-full transition-all bg-black/80 hover:bg-black/90 border border-white/30 shadow-xl hover:scale-110"
+                className="p-5 rounded-full transition-all bg-black/80 hover:bg-black/90 border border-white/10 shadow-xl hover:scale-110"
                 type="button"
                 title="Presentes"
               >
@@ -364,7 +371,7 @@ export default function ChatVideo() {
               {/* Botão próxima modelo */}
               <button
                 onClick={handleNextModel}
-                className="p-5 bg-black/80 hover:bg-black/90 rounded-full backdrop-blur-sm transition-all hover:scale-110 border border-white/30 shadow-xl"
+                className="p-5 bg-black/80 hover:bg-black/90 rounded-full backdrop-blur-sm transition-all hover:scale-110 border border-white/10 shadow-xl"
                 aria-label="Próxima modelo"
                 title="Próxima modelo"
               >
@@ -419,48 +426,52 @@ export default function ChatVideo() {
 
           {/* Área de chat (mais larga) */}
           {showChat && (
-            <div className="w-full md:w-96 bg-[#1e0a1e] border-l border-[#3d1f3d] flex flex-col h-full">
-              {/* Cabeçalho do chat */}
-              <div className="p-3 border-b border-[#3d1f3d] flex-shrink-0">
+            <div className="w-full md:w-96 border-l border-white/10 flex flex-col relative overflow-hidden" style={{ height: 'calc(100vh - 100px)' }}>
+              {/* Efeito neon de fundo */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#F25790]/5 via-transparent to-[#39FF14]/5 pointer-events-none"></div>
+              <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-50"></div>
+              
+              {/* Cabeçalho do chat com efeito neon */}
+              <div className="p-4 border-b border-white/10 flex-shrink-0 relative z-10">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full overflow-hidden">
+                    <div className="w-12 h-12 rounded-full overflow-hidden ring-2 ring-white/20 shadow-[0_0_20px_rgba(255,255,255,0.1)]">
                       <Image 
                         src={currentModel.profileImage} 
                         alt={currentModel.name} 
-                        width={40} 
-                        height={40} 
+                        width={48} 
+                        height={48} 
                         className="w-full h-full object-cover"
                       />
                     </div>
                     <div>
-                      <h3 className="font-bold text-white flex items-center gap-1">
+                      <h3 className="font-bold text-white flex items-center gap-2 text-lg">
                         {currentModel.name}
-                        <svg className="w-4 h-4 text-pink-400" fill="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-5 h-5 text-[#F25790] drop-shadow-[0_0_8px_rgba(242,87,144,0.8)]" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                         </svg>
                       </h3>
-                      <div className="flex items-center gap-2 text-xs text-gray-300">
+                      <div className="flex items-center gap-3 text-sm">
                         <div className="flex items-center gap-1">
-                          <span className="inline-block w-2 h-2 rounded-full bg-green-500"></span>
-                          <span>Online</span>
+                          <span className="inline-block w-2 h-2 rounded-full bg-[#39FF14] shadow-[0_0_8px_rgba(57,255,20,0.8)] animate-pulse"></span>
+                          <span className="text-[#39FF14] font-medium">Online</span>
                         </div>
-                        <span>•</span>
+                        <span className="text-gray-500">•</span>
                         <div className="flex items-center gap-1">
-                          <svg className="w-3 h-3 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 text-yellow-400 drop-shadow-[0_0_6px_rgba(255,255,0,0.6)]" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                           </svg>
-                          <span>{currentModel.rating}</span>
+                          <span className="text-yellow-400 font-medium">{currentModel.rating}</span>
                         </div>
                       </div>
                     </div>
                   </div>
                   
-                  {/* Botões mobile na barra do chat */}
+                  {/* Botões mobile na barra do chat com efeito neon */}
                   <div className="md:hidden flex items-center gap-2">
                     <button
                       onClick={handlePrevModel}
-                      className="p-2 bg-black/70 hover:bg-black/90 rounded-full backdrop-blur-sm transition-all hover:scale-110 border border-white/20 shadow-lg active:scale-95"
+                      className="p-2 bg-black/60 hover:bg-white/10 rounded-full backdrop-blur-sm transition-all hover:scale-110 border border-white/20 shadow-[0_0_10px_rgba(255,255,255,0.1)] active:scale-95"
                       aria-label="Modelo anterior"
                       title="Modelo anterior"
                     >
@@ -475,7 +486,7 @@ export default function ChatVideo() {
                     
                     <button 
                       onClick={() => handleChangeChatType('private')} 
-                      className={`p-2 rounded-full transition-all hover:scale-110 shadow-lg active:scale-95 ${chatType === 'private' ? 'bg-[#F25790] border-2 border-[#F25790]' : 'bg-black/70 hover:bg-black/90 border border-white/20'}`}
+                      className={`p-2 rounded-full transition-all hover:scale-110 active:scale-95 ${chatType === 'private' ? 'bg-[#F25790] border-2 border-[#F25790] shadow-[0_0_20px_rgba(242,87,144,0.6)]' : 'bg-black/60 hover:bg-white/10 border border-white/20'}`}
                       type="button"
                       title="Chat Privado"
                     >
@@ -490,18 +501,18 @@ export default function ChatVideo() {
                     
                     <button
                       onClick={() => setShowGiftModal(true)}
-                      className="p-2 bg-black/70 hover:bg-black/90 rounded-full backdrop-blur-sm transition-all hover:scale-110 border border-white/20 shadow-lg active:scale-95"
+                      className="p-2 bg-black/60 hover:bg-white/10 rounded-full backdrop-blur-sm transition-all hover:scale-110 border border-white/20 shadow-[0_0_10px_rgba(255,255,255,0.1)] active:scale-95"
                       type="button"
                       title="Presentes"
                     >
-                      <svg className="w-5 h-5 text-pink-400" fill="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-[#F25790]" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M20 7h-1.35A3.35 3.35 0 0 0 12 3.35 3.35 3.35 0 0 0 5.35 7H4a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM12 5.35A1.65 1.65 0 0 1 13.65 7h-3.3A1.65 1.65 0 0 1 12 5.35zM20 11H4V9h16zm-2 9H6v-7h12z" />
                       </svg>
                     </button>
                     
                     <button
                       onClick={handleNextModel}
-                      className="p-2 bg-black/70 hover:bg-black/90 rounded-full backdrop-blur-sm transition-all hover:scale-110 border border-white/20 shadow-lg active:scale-95"
+                      className="p-2 bg-black/60 hover:bg-white/10 rounded-full backdrop-blur-sm transition-all hover:scale-110 border border-white/20 shadow-[0_0_10px_rgba(255,255,255,0.1)] active:scale-95"
                       aria-label="Próxima modelo"
                       title="Próxima modelo"
                     >
@@ -517,12 +528,14 @@ export default function ChatVideo() {
                 </div>
               </div>
               
-              {/* Mensagens do chat */}
-              <div ref={chatRef} className="flex-1 overflow-y-auto p-4 space-y-3 min-h-0">
+              {/* Mensagens do chat com altura fixa e scroll interno */}
+              <div ref={chatRef} className="flex-1 overflow-y-auto p-4 space-y-4 relative z-10">
                 {messages.length === 0 && (
-                  <div className="text-center text-gray-500 py-8">
-                    <p className="mb-2">💬 Inicie uma conversa com {currentModel.name}</p>
-                    <p className="text-sm opacity-75">Seja respeitoso e divirta-se!</p>
+                  <div className="text-center py-8">
+                    <div className="bg-gradient-to-r from-white/5 to-white/10 rounded-2xl p-6 border border-white/10 backdrop-blur-sm">
+                      <p className="text-white mb-2 text-lg font-medium">💬 Inicie uma conversa com {currentModel.name}</p>
+                      <p className="text-gray-300 text-sm opacity-75">Seja respeitoso e divirta-se!</p>
+                    </div>
                   </div>
                 )}
                 {messages.map((msg) => (
@@ -531,47 +544,61 @@ export default function ChatVideo() {
                     className={`flex ${msg.sender === 'user' ? 'justify-end' : msg.sender === 'system' ? 'justify-center' : 'justify-start'}`}
                   >
                     <div
-                      className={`max-w-[85%] rounded-2xl px-4 py-2 ${
+                      className={`max-w-[85%] rounded-2xl px-4 py-3 relative ${
                         msg.sender === 'user' 
-                          ? 'bg-[#F25790] text-white' 
+                          ? 'bg-gradient-to-r from-[#F25790] to-[#d93d75] text-white shadow-[0_0_20px_rgba(242,87,144,0.4)] border border-[#F25790]/50' 
                           : msg.sender === 'system'
-                          ? 'bg-yellow-500/20 text-yellow-200 text-sm'
-                          : 'bg-gray-800 text-white'
+                          ? 'bg-gradient-to-r from-[#39FF14]/20 to-[#2dd914]/20 text-[#39FF14] text-sm border border-[#39FF14]/30 shadow-[0_0_15px_rgba(57,255,20,0.2)]'
+                          : 'bg-gradient-to-r from-gray-800/80 to-gray-700/80 text-white border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]'
                       }`}
                     >
-                      <p>{msg.text}</p>
+                      <p className="relative z-10">{msg.text}</p>
                       {msg.timestamp && (
-                        <p className="text-xs opacity-70 mt-1">
+                        <p className="text-xs opacity-70 mt-2 relative z-10">
                           {msg.timestamp.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
                         </p>
                       )}
+                      {/* Efeito de brilho interno */}
+                      <div className={`absolute inset-0 rounded-2xl ${
+                        msg.sender === 'user' 
+                          ? 'bg-gradient-to-r from-white/10 to-transparent' 
+                          : msg.sender === 'system'
+                          ? 'bg-gradient-to-r from-[#39FF14]/10 to-transparent'
+                          : 'bg-gradient-to-r from-white/5 to-transparent'
+                      } pointer-events-none`}></div>
                     </div>
                   </div>
                 ))}
                 <div ref={messagesEndRef} />
               </div>
               
-              {/* Input de mensagem */}
-              <form onSubmit={handleSendMessage} className="p-3 border-t border-[#3d1f3d] bg-[#1e0a1e] flex-shrink-0">
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Digite sua mensagem..."
-                    className="flex-1 bg-[#2a142a] text-white placeholder-gray-500 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#F25790] transition-all"
-                  />
-                  <button
-                    type="submit"
-                    disabled={!message.trim()}
-                    className="p-2 bg-[#F25790] hover:bg-[#d93d75] disabled:bg-gray-600 disabled:cursor-not-allowed rounded-full transition-all"
-                  >
-                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2V7c0-1.1.9-2 2-2h18c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V10l15-2 15 2z"/>
-                    </svg>
-                  </button>
-                </div>
-              </form>
+              {/* Input de mensagem fixo na altura dos botões principais */}
+              <div className="flex-shrink-0 relative z-10" style={{ height: '96px' }}>
+                <form onSubmit={handleSendMessage} className="p-4 border-t border-white/10 h-full flex items-center">
+                  <div className="flex gap-3 w-full">
+                    <input
+                      type="text"
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      placeholder="Digite sua mensagem..."
+                      className="flex-1 bg-black text-white placeholder-gray-400 rounded-full px-6 py-3 focus:outline-none focus:ring-2 focus:ring-[#F25790]/50 transition-all border border-white/20 shadow-[0_0_15px_rgba(242,87,144,0.3)] focus:shadow-[0_0_25px_rgba(242,87,144,0.5)] backdrop-blur-sm"
+                    />
+                    <button
+                      type="submit"
+                      disabled={!message.trim()}
+                      className="p-3 bg-gradient-to-r from-[#F25790] to-[#d93d75] hover:from-[#d93d75] hover:to-[#F25790] disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed rounded-full transition-all shadow-[0_0_20px_rgba(242,87,144,0.4)] hover:shadow-[0_0_30px_rgba(242,87,144,0.6)] disabled:shadow-none hover:scale-105 active:scale-95"
+                    >
+                      <Image
+                        src="/icons/navigation/arrow_forward.svg"
+                        alt="Enviar"
+                        width={24}
+                        height={24}
+                        className="w-6 h-6 filter invert"
+                      />
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           )}
         </div>
