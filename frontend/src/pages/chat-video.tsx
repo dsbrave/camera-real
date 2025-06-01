@@ -546,7 +546,7 @@ export default function ChatVideo() {
                     <div
                       className={`max-w-[85%] rounded-2xl px-4 py-3 relative ${
                         msg.sender === 'user' 
-                          ? 'bg-gradient-to-r from-[#F25790] to-[#d93d75] text-white shadow-[0_0_20px_rgba(242,87,144,0.4)] border border-[#F25790]/50' 
+                          ? 'bg-gradient-to-r from-[#F25790]/60 to-[#d93d75]/60 text-white shadow-[0_0_8px_rgba(242,87,144,0.2)] border border-[#F25790]/30' 
                           : msg.sender === 'system'
                           ? 'bg-gradient-to-r from-[#39FF14]/20 to-[#2dd914]/20 text-[#39FF14] text-sm border border-[#39FF14]/30 shadow-[0_0_15px_rgba(57,255,20,0.2)]'
                           : 'bg-gradient-to-r from-gray-800/80 to-gray-700/80 text-white border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]'
@@ -586,7 +586,7 @@ export default function ChatVideo() {
                     <button
                       type="submit"
                       disabled={!message.trim()}
-                      className="p-3 bg-gradient-to-r from-[#F25790] to-[#d93d75] hover:from-[#d93d75] hover:to-[#F25790] disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed rounded-full transition-all shadow-[0_0_20px_rgba(242,87,144,0.4)] hover:shadow-[0_0_30px_rgba(242,87,144,0.6)] disabled:shadow-none hover:scale-105 active:scale-95"
+                      className="p-3 bg-gradient-to-r from-[#F25790]/60 to-[#d93d75]/60 hover:from-[#F25790]/80 hover:to-[#d93d75]/80 disabled:bg-transparent disabled:cursor-not-allowed disabled:opacity-50 rounded-full transition-all shadow-[0_0_6px_rgba(242,87,144,0.2)] hover:shadow-[0_0_10px_rgba(242,87,144,0.3)] disabled:shadow-none border border-white/10 hover:scale-105 active:scale-95"
                     >
                       <Image
                         src="/icons/navigation/arrow_forward.svg"
