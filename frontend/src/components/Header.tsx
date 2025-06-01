@@ -96,7 +96,7 @@ export default function Header() {
   };
 
   return (
-    <header className="py-3 md:py-6 border-b border-gray-800 bg-black bg-opacity-85 backdrop-blur-sm sticky top-0 w-full z-50 shadow-lg select-none">
+    <header className="py-2 md:py-3 border-b border-gray-800 bg-black bg-opacity-85 backdrop-blur-sm sticky top-0 w-full z-50 shadow-lg select-none">
       <div className="container mx-auto px-4 flex justify-between items-center">
         {/* Logo */}
         <div className="logo overflow-hidden">
@@ -104,9 +104,9 @@ export default function Header() {
             <Image 
               src="/icons/logo.svg" 
               alt="Camera Real" 
-              width={220} 
-              height={70}
-              className="h-10 sm:h-12 md:h-16 w-auto"
+              width={150} 
+              height={40}
+              className="h-8 md:h-10 w-auto max-w-[150px]"
             />
           </Link>
         </div>
