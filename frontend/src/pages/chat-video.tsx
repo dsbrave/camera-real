@@ -721,116 +721,126 @@ export default function ChatVideo() {
         {/* Free Trial Modal */}
         {showFreeTrialModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm">
-            <div className="bg-gradient-to-br from-black via-purple-900/20 to-black rounded-3xl max-w-4xl w-full mx-4 shadow-[0_0_50px_rgba(242,87,144,0.3)] border border-[#F25790]/30 overflow-hidden">
+            <div className="bg-black rounded-3xl max-w-5xl w-full mx-4 shadow-[0_0_50px_rgba(242,87,144,0.3)] border border-[#F25790]/30 overflow-hidden relative">
               {/* Efeitos neon de fundo */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#F25790]/10 via-transparent to-[#39FF14]/10 pointer-events-none"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-[#F25790]/10 via-transparent to-transparent pointer-events-none"></div>
               <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F25790] to-transparent opacity-60"></div>
-              <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#39FF14] to-transparent opacity-40"></div>
+              <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F25790] to-transparent opacity-40"></div>
               
-              <div className="flex flex-col md:flex-row relative z-10">
-                {/* Lado esquerdo - Imagem da modelo */}
+              <div className="flex flex-col md:flex-row relative z-10 min-h-[500px]">
+                {/* Lado esquerdo - Imagem da modelo (edge-to-edge) */}
                 <div className="md:w-1/2 relative overflow-hidden">
-                  <div className="aspect-[4/5] md:aspect-auto md:h-[500px] relative">
+                  {/* Imagem de fundo que vai de ponta a ponta */}
+                  <div className="absolute inset-0">
                     <Image
                       src="/images/realistic_photo_of_a_beautiful_curvy_cam_model_in_sexy_casual_clothing_in_a_pink_neon-lit_cam_studi_01vxr9sv9u5n1mi8vknf_2.png"
                       alt="Modelo"
                       fill
-                      className="object-cover"
+                      className="object-cover object-center"
                     />
-                    {/* Overlay com gradiente neon */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#F25790]/20 via-transparent to-[#39FF14]/20"></div>
-                    
-                    {/* Logo Camera Real no canto */}
-                    <div className="absolute top-4 left-4">
-                      <div className="flex items-center gap-2 bg-black/60 backdrop-blur-sm rounded-full px-3 py-2 border border-[#F25790]/30">
-                        <svg className="w-5 h-5 text-[#F25790]" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                        </svg>
-                        <span className="text-white font-bold text-sm">Camera Real</span>
-                      </div>
+                  </div>
+                  
+                  {/* Gradiente de transição para o lado direito */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-black/80 md:to-black/90"></div>
+                  
+                  {/* Gradiente inferior para melhor legibilidade */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                  
+                  {/* Overlay neon sutil */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#F25790]/20 via-transparent to-transparent mix-blend-overlay"></div>
+                  
+                  {/* Logo Camera Real no canto */}
+                  <div className="absolute top-6 left-6">
+                    <div className="flex items-center gap-2 bg-black/60 backdrop-blur-sm rounded-full px-4 py-2 border border-[#F25790]/30 shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+                      <svg className="w-5 h-5 text-[#F25790]" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                      </svg>
+                      <span className="text-white font-bold text-sm">Camera Real</span>
                     </div>
+                  </div>
+                  
+                  {/* Efeito de brilho neon nas bordas */}
+                  <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#F25790]/60 via-[#F25790]/80 to-transparent blur-sm"></div>
+                    <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#F25790]/40 via-[#F25790]/60 to-transparent blur-sm"></div>
                   </div>
                 </div>
                 
                 {/* Lado direito - Informações e botões */}
-                <div className="md:w-1/2 p-8 flex flex-col justify-center">
-                  {/* Título com efeito neon */}
-                  <div className="text-center mb-8">
-                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
-                      <span className="bg-gradient-to-r from-[#F25790] to-[#39FF14] bg-clip-text text-transparent">
-                        Tempo Grátis
-                      </span>
-                    </h2>
-                    <h3 className="text-xl md:text-2xl font-bold text-white mb-4">
-                      Acabou!
-                    </h3>
-                    <div className="w-20 h-1 bg-gradient-to-r from-[#F25790] to-[#39FF14] mx-auto rounded-full shadow-[0_0_10px_rgba(242,87,144,0.5)]"></div>
-                  </div>
+                <div className="md:w-1/2 p-8 flex flex-col justify-center relative bg-gradient-to-br from-black/95 via-black/90 to-black/95">
+                  {/* Efeito de continuidade visual */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/50 to-black pointer-events-none"></div>
                   
-                  {/* Descrição */}
-                  <div className="text-center mb-8">
-                    <p className="text-white/80 text-lg mb-4">
-                      Você experimentou <span className="text-[#F25790] font-bold">10 segundos grátis</span> com {currentModel.name}
-                    </p>
-                    <p className="text-white/60 text-sm">
-                      Continue a conversa ou explore outras modelos incríveis
-                    </p>
-                  </div>
-                  
-                  {/* Informações de preço */}
-                  <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-4 mb-8 border border-white/10">
-                    <div className="flex items-center justify-between">
-                      <div className="text-white/80 text-sm">
-                        Continuar com {currentModel.name}:
-                      </div>
-                      <div className="text-[#F25790] font-bold text-lg">
-                        {currentModel.pricePerMinute} créditos/min
-                      </div>
+                  <div className="relative z-10">
+                    {/* Título com efeito neon */}
+                    <div className="text-center mb-8">
+                      <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
+                        <span className="text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
+                          Tempo Grátis
+                        </span>
+                      </h2>
+                      <h3 className="text-xl md:text-2xl font-bold mb-4">
+                        <span className="bg-gradient-to-r from-[#F25790] to-[#d93d75] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(242,87,144,0.5)]">
+                          Acabou!
+                        </span>
+                      </h3>
+                      <div className="w-20 h-1 bg-gradient-to-r from-[#F25790] to-[#d93d75] mx-auto rounded-full shadow-[0_0_15px_rgba(242,87,144,0.6)]"></div>
                     </div>
-                    <div className="flex items-center justify-between mt-2">
-                      <div className="text-white/60 text-xs">
-                        Seus créditos:
-                      </div>
-                      <div className="text-green-400 font-bold text-sm">
-                        {userCredits} créditos
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Botões de ação */}
-                  <div className="space-y-4">
-                    {/* Botão Continuar */}
-                    <button
-                      onClick={handleContinueWithCredits}
-                      className="w-full py-4 bg-gradient-to-r from-[#F25790] to-[#d93d75] hover:from-[#F25790]/90 hover:to-[#d93d75]/90 text-white font-bold rounded-2xl transition-all duration-300 shadow-[0_0_20px_rgba(242,87,144,0.4)] hover:shadow-[0_0_30px_rgba(242,87,144,0.6)] hover:scale-105 active:scale-95 border border-[#F25790]/30"
-                    >
-                      <div className="flex items-center justify-center gap-3">
-                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M8 5v14l11-7z"/>
-                        </svg>
-                        <span>Continuar com Créditos</span>
-                      </div>
-                    </button>
                     
-                    {/* Botão Próxima Modelo */}
-                    <button
-                      onClick={handleSwitchModel}
-                      className="w-full py-4 bg-gradient-to-r from-gray-700/60 to-gray-600/60 hover:from-gray-600/80 hover:to-gray-500/80 text-white font-bold rounded-2xl transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)] hover:scale-105 active:scale-95 border border-white/20"
-                    >
-                      <div className="flex items-center justify-center gap-3">
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                          <path d="M9 18l6-6-6-6"/>
-                        </svg>
-                        <span>Próxima Modelo (10s Grátis)</span>
+                    {/* Descrição condensada */}
+                    <div className="text-center mb-8">
+                      <p className="text-white/90 text-lg mb-6 drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
+                        Seus <span className="text-[#F25790] font-bold">10 segundos grátis</span> com {currentModel.name} acabaram
+                      </p>
+                      
+                      {/* Informações organizadas em bloco único */}
+                      <div className="backdrop-blur-sm rounded-xl p-4 space-y-2 border border-[#F25790]/50 shadow-[0_0_15px_rgba(242,87,144,0.3)]">
+                        <div className="flex items-center justify-between">
+                          <span className="text-white/80 text-sm">Continuar:</span>
+                          <span className="text-[#F25790] font-bold">{currentModel.pricePerMinute} créditos/min</span>
+                        </div>
+                        
+                        <div className="flex items-center justify-between">
+                          <span className="text-white/80 text-sm">Seus créditos:</span>
+                          <span className="text-green-400 font-bold">{userCredits}</span>
+                        </div>
                       </div>
-                    </button>
+                    </div>
+                    
+                    {/* Botões de ação */}
+                    <div className="space-y-4">
+                      {/* Botão Continuar */}
+                      <button
+                        onClick={handleContinueWithCredits}
+                        className="w-full py-4 bg-gradient-to-r from-[#F25790] to-[#d93d75] hover:from-[#F25790]/90 hover:to-[#d93d75]/90 text-white font-bold rounded-2xl transition-all duration-300 shadow-[0_0_25px_rgba(242,87,144,0.4)] hover:shadow-[0_0_35px_rgba(242,87,144,0.6)] hover:scale-105 active:scale-95 border border-[#F25790]/30"
+                      >
+                        <div className="flex items-center justify-center gap-3">
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                          </svg>
+                          <span>Continuar com Créditos</span>
+                        </div>
+                      </button>
+                      
+                      {/* Botão Próxima Modelo - estilo chat privado ativado */}
+                      <button
+                        onClick={handleSwitchModel}
+                        className="w-full py-4 bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white font-bold rounded-2xl transition-all duration-300 shadow-[0_0_20px_rgba(242,87,144,0.3)] hover:shadow-[0_0_30px_rgba(242,87,144,0.5)] hover:scale-105 active:scale-95 border border-[#F25790]/50 backdrop-blur-sm"
+                      >
+                        <div className="flex items-center justify-center gap-3">
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                            <path d="M9 18l6-6-6-6"/>
+                          </svg>
+                          <span>Próxima Modelo (10s Grátis)</span>
+                        </div>
+                      </button>
+                    </div>
+                    
+                    {/* Texto pequeno */}
+                    <p className="text-white/50 text-xs text-center mt-6 drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
+                      Ao continuar, você concorda com nossos termos de uso
+                    </p>
                   </div>
-                  
-                  {/* Texto pequeno */}
-                  <p className="text-white/40 text-xs text-center mt-6">
-                    Ao continuar, você concorda com nossos termos de uso
-                  </p>
                 </div>
               </div>
             </div>
@@ -883,7 +893,6 @@ export default function ChatVideo() {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-[#39FF14] rounded-full border-2 border-black animate-pulse"></div>
               </div>
               <div>
                 <h2 className="text-white font-bold text-sm">Bella Santos</h2>
