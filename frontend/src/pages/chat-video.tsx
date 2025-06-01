@@ -231,43 +231,6 @@ export default function ChatVideo() {
 
           {/* Área do vídeo */}
           <div className={`flex-1 relative`}>
-            {/* Informações da modelo no canto superior esquerdo */}
-            <div className="absolute top-4 left-4 z-20 flex items-center bg-black/70 backdrop-blur-sm rounded-full px-2 py-1">
-              <div className="w-8 h-8 rounded-full overflow-hidden mr-2">
-                <Image 
-                  src={currentModel.profileImage} 
-                  alt={currentModel.name} 
-                  width={32} 
-                  height={32} 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div>
-                <h3 className="text-sm font-bold flex items-center">
-                  {currentModel.name} 
-                  <svg className="w-4 h-4 ml-1 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                  </svg>
-                </h3>
-                <div className="flex items-center text-xs">
-                  <span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-1"></span>
-                  <span>ONLINE</span>
-                  <span className="mx-1">•</span>
-                  <span>{currentModel.age}</span>
-                </div>
-              </div>
-            </div>
-            
-            {/* Botão de saída no canto superior direito */}
-            <div className="absolute top-4 right-4 z-20">
-              <button 
-                onClick={() => router.push('/explorar')}
-                className="bg-black/70 backdrop-blur-sm rounded-md px-3 py-1 text-sm font-medium hover:bg-black transition-colors"
-              >
-                EXIT ROOM
-              </button>
-            </div>
-            
             {/* Vídeo/Player da modelo */}
             <div className="relative w-full h-[calc(100vh-120px)] bg-gradient-to-br from-purple-900 via-pink-900 to-black">
               {/* Mock Video Player */}
@@ -445,16 +408,37 @@ export default function ChatVideo() {
             <div className="w-full md:w-80 bg-[#1e0a1e] border-l border-[#3d1f3d] flex flex-col relative">
               {/* Cabeçalho do chat */}
               <div className="p-4 border-b border-[#3d1f3d]">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-bold">Chat</h3>
-                  <button 
-                    onClick={() => setShowChat(false)}
-                    className="text-gray-400 hover:text-white"
-                  >
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                    </svg>
-                  </button>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full overflow-hidden">
+                    <Image 
+                      src={currentModel.profileImage} 
+                      alt={currentModel.name} 
+                      width={40} 
+                      height={40} 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-white flex items-center gap-1">
+                      {currentModel.name}
+                      <svg className="w-4 h-4 text-pink-400" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                      </svg>
+                    </h3>
+                    <div className="flex items-center gap-2 text-xs text-gray-300">
+                      <div className="flex items-center gap-1">
+                        <span className="inline-block w-2 h-2 rounded-full bg-green-500"></span>
+                        <span>Online</span>
+                      </div>
+                      <span>•</span>
+                      <div className="flex items-center gap-1">
+                        <svg className="w-3 h-3 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        <span>{currentModel.rating}</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               
