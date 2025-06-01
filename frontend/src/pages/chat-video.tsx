@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Header from '@/components/Header';
+import { useUser } from '@/contexts/UserContext';
 
 interface Gift {
   name: string;
@@ -18,6 +19,7 @@ export default function ChatVideo() {
   const [isUsingCredits, setIsUsingCredits] = useState(false);
   const router = useRouter();
   const { id } = router.query;
+  const { userCredits, spendCredits } = useUser();
   
   // Estados
   const [modelIndex, setModelIndex] = useState(0);
@@ -26,7 +28,6 @@ export default function ChatVideo() {
   const [freeTimeRemaining, setFreeTimeRemaining] = useState(10); // 10 segundos grátis
   const [isCallActive, setIsCallActive] = useState(true);
   const [creditsSpent, setCreditsSpent] = useState(0);
-  const [userCredits, setUserCredits] = useState<number>(150);
   const [userName, setUserName] = useState<string>('');
   const [sessionTime, setSessionTime] = useState(0);
   const [isPrivateCall, setIsPrivateCall] = useState(false);
@@ -126,8 +127,7 @@ export default function ChatVideo() {
           const currentModel = models[modelIndex];
           const cost = isPrivateCall ? currentModel.privateCallPrice : currentModel.pricePerMinute;
           
-          if (userCredits >= cost) {
-            setUserCredits(prev => prev - cost);
+          if (spendCredits(cost)) {
             setCreditsSpent(prev => prev + cost);
             // 30% para a modelo
             setModelEarnings(prev => prev + Math.floor(cost * 0.3));
@@ -139,7 +139,7 @@ export default function ChatVideo() {
     }
     
     return () => clearInterval(interval);
-  }, [isCallActive, sessionTime, modelIndex, isPrivateCall, userCredits, freeTimeRemaining]);
+  }, [isCallActive, sessionTime, modelIndex, isPrivateCall, userCredits, freeTimeRemaining, spendCredits]);
 
   // Timer para tempo grátis
   useEffect(() => {
@@ -232,10 +232,8 @@ export default function ChatVideo() {
       setMessages(prev => [...prev, { id: Date.now(), text: `🔓 Você voltou para o chat aberto com todos os usuários.`, sender: 'system', timestamp: new Date() }]);
     } else {
       const currentModel = models[modelIndex];
-      if (userCredits >= currentModel.privateCallPrice) {
+      if (spendCredits(currentModel.privateCallPrice)) {
         setIsPrivateCall(true);
-        // Descontar créditos da sala privada
-        setUserCredits(prev => prev - currentModel.privateCallPrice);
         // 30% para a modelo
         setModelEarnings(prev => prev + Math.floor(currentModel.privateCallPrice * 0.3));
         setMessages(prev => [...prev, { id: Date.now(), text: `🔒 Sala privada iniciada com ${currentModel.name}`, sender: 'system', timestamp: new Date() }]);
@@ -263,7 +261,7 @@ export default function ChatVideo() {
 
   const handleSendGift = (gift: Gift) => {
     if (userCredits >= gift.price) {
-      setUserCredits(prev => prev - gift.price);
+      spendCredits(gift.price);
       // 30% para a modelo
       setModelEarnings(prev => prev + Math.floor(gift.price * 0.3));
       setMessages(prev => [...prev, { 
@@ -394,23 +392,17 @@ export default function ChatVideo() {
                     </div>
                   )}
                 </div>
-
+                
                 {/* Progress bar sessão + créditos */}
                 <div className="flex items-center gap-3">
-                  <div className="w-48 h-2 bg-white/10 rounded-full relative overflow-hidden">
+                  <div className="w-48 h-2 rounded-full relative border border-[#F25790]/50 shadow-[0_0_8px_rgba(242,87,144,0.3)] backdrop-blur-sm">
                     <div 
-                      className={`h-2 rounded-full transition-all duration-1000 ${
-                        freeTimeRemaining > 0 
-                          ? 'bg-gradient-to-r from-green-400 to-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]' 
-                          : isUsingCredits
-                          ? 'bg-gradient-to-r from-blue-400 to-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]'
-                          : 'bg-gradient-to-r from-[#F25790] to-[#d93d75] shadow-[0_0_8px_rgba(242,87,144,0.5)]'
-                      }`}
+                      className="h-full rounded-full transition-all duration-1000 bg-gradient-to-r from-[#F25790] to-[#d93d75] shadow-[0_0_8px_rgba(242,87,144,0.5)]"
                       style={{
                         width: freeTimeRemaining > 0 
                           ? `${((10 - freeTimeRemaining) / 10) * 100}%`
                           : isUsingCredits
-                          ? '100%' // Barra cheia quando usando créditos
+                          ? `${Math.max(10, (creditsSpent / userCredits) * 100)}%` // Mostra progresso baseado nos créditos gastos
                           : '100%'
                       }}
                     ></div>
@@ -436,9 +428,9 @@ export default function ChatVideo() {
                     <div className="absolute -inset-1 bg-yellow-400/20 rounded-full blur-sm"></div>
                   </div>
                   
-                  <div className="w-48 h-2 bg-white/10 rounded-full relative overflow-hidden">
+                  <div className="w-48 h-2 rounded-full relative border border-yellow-400/50 shadow-[0_0_8px_rgba(251,191,36,0.3)] backdrop-blur-sm">
                     <div 
-                      className="h-2 rounded-full transition-all duration-1000 bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-[0_0_8px_rgba(251,191,36,0.5)]"
+                      className="h-full rounded-full transition-all duration-1000 bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-[0_0_8px_rgba(251,191,36,0.5)]"
                       style={{
                         width: `${Math.min((modelEarnings / modelGoal) * 100, 100)}%`
                       }}
@@ -560,7 +552,7 @@ export default function ChatVideo() {
                           <svg className="w-3 h-3 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                           </svg>
-                          <span className="text-yellow-400 font-medium">{currentModel.rating}</span>
+                          <span className="text-yellow-400 font-bold">{currentModel.rating}</span>
                         </div>
                       </div>
                     </div>
@@ -949,20 +941,14 @@ export default function ChatVideo() {
               {/* Progress bars */}
               <div className="flex items-center gap-3">
                 {/* Progress bar principal */}
-                <div className="w-24 h-1.5 bg-white/10 rounded-full relative">
+                <div className="w-24 h-1.5 rounded-full relative border border-[#F25790]/50 shadow-[0_0_6px_rgba(242,87,144,0.3)] backdrop-blur-sm">
                   <div 
-                    className={`h-1.5 rounded-full transition-all duration-1000 ${
-                      freeTimeRemaining > 0 
-                        ? 'bg-green-400 shadow-[0_0_6px_rgba(34,197,94,0.5)]' 
-                        : isUsingCredits
-                        ? 'bg-blue-400 shadow-[0_0_6px_rgba(59,130,246,0.5)]'
-                        : 'bg-[#F25790] shadow-[0_0_6px_rgba(242,87,144,0.5)]'
-                    }`}
+                    className="h-full rounded-full transition-all duration-1000 bg-gradient-to-r from-[#F25790] to-[#d93d75] shadow-[0_0_6px_rgba(242,87,144,0.5)]"
                     style={{
                       width: freeTimeRemaining > 0 
                         ? `${((10 - freeTimeRemaining) / 10) * 100}%`
                         : isUsingCredits
-                        ? '100%'
+                        ? `${Math.max(10, (creditsSpent / userCredits) * 100)}%`
                         : '100%'
                     }}
                   ></div>
@@ -974,9 +960,9 @@ export default function ChatVideo() {
                     <path d="M5 16L3 3l5.5 5L12 4l3.5 4L21 3l-2 13H5zm2.7-2h8.6l.9-5.4-2.1 1.4L12 8l-3.1 2L6.8 8.6L7.7 14z"/>
                   </svg>
                   
-                  <div className="w-20 h-1.5 bg-white/10 rounded-full relative">
+                  <div className="w-20 h-1.5 rounded-full relative border border-yellow-400/50 shadow-[0_0_6px_rgba(251,191,36,0.3)] backdrop-blur-sm">
                     <div 
-                      className="h-1.5 rounded-full transition-all duration-1000 bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-[0_0_6px_rgba(251,191,36,0.5)]"
+                      className="h-full rounded-full transition-all duration-1000 bg-gradient-to-r from-yellow-400 to-yellow-500 shadow-[0_0_6px_rgba(251,191,36,0.5)]"
                       style={{
                         width: `${Math.min((modelEarnings / modelGoal) * 100, 100)}%`
                       }}

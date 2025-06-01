@@ -2,17 +2,18 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
+import { useUser } from '@/contexts/UserContext';
 
 // Para evitar sobreposição do conteúdo pelo header fixo, adicione <div className="header-spacer" /> logo após o <Header /> em cada página principal.
 export default function Header() {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState<any>(null);
-  const [creditos, setCreditos] = useState(150);
+  const { userCredits, setUserCredits } = useUser();
   
   // Função para testar a mudança de cor do ícone da carteira
   const handleTestWalletColor = (amount: number) => {
-    setCreditos(amount);
+    setUserCredits(amount);
   };
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -29,8 +30,10 @@ export default function Header() {
           if (user && typeof user === 'object') {
             setIsLoggedIn(true); // Se temos dados do usuário, consideramos como logado
             setUserData(user);
-            // Simular saldo de Créditos (em uma aplicação real, isso viria da API)
-            setCreditos(user.creditos || 150);
+            // Sincronizar créditos com o contexto global
+            if (user.creditos && user.creditos !== userCredits) {
+              setUserCredits(user.creditos);
+            }
           } else {
             // Dados inválidos, considerar como deslogado
             setIsLoggedIn(false);
@@ -65,7 +68,7 @@ export default function Header() {
       localStorage.setItem('user', JSON.stringify(mockUser));
       setIsLoggedIn(true);
       setUserData(mockUser);
-      setCreditos(mockUser.creditos);
+      setUserCredits(mockUser.creditos);
     }
 
     // Fechar dropdown quando clicar fora dele
@@ -85,7 +88,7 @@ export default function Header() {
     localStorage.removeItem('user');
     setIsLoggedIn(false);
     setUserData(null);
-    setCreditos(0);
+    setUserCredits(0);
     setIsDropdownOpen(false);
     setIsMobileMenuOpen(false);
     router.push('/');
@@ -144,12 +147,12 @@ export default function Header() {
                       viewBox="0 0 24 24" 
                       fill="none" 
                       xmlns="http://www.w3.org/2000/svg"
-                      className={`w-4 h-4 absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ${creditos > 0 ? 'text-green-500' : 'text-red-500'}`}
+                      className={`w-4 h-4 absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ${userCredits > 0 ? 'text-green-500' : 'text-red-500'}`}
                     >
                       <path d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z" fill="currentColor"/>
                     </svg>
                   </div>
-                  <span className="text-white font-medium text-sm">{creditos}</span>
+                  <span className="text-white font-medium text-sm">{userCredits}</span>
                   <span className="text-gray-300 text-xs">Créditos</span>
                 </Link>
               </div>
@@ -325,7 +328,7 @@ export default function Header() {
                     height={20}
                     className="w-5 h-5 text-white filter invert"
                   />
-                  <span className="text-white font-medium">{creditos}</span>
+                  <span className="text-white font-medium">{userCredits}</span>
                   <span className="text-gray-300 text-sm">Créditos</span>
                 </Link>
                 

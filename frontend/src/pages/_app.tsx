@@ -3,6 +3,7 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import AgeVerification from '@/components/AgeVerification';
+import { UserProvider } from '@/contexts/UserContext';
 
 export default function App({ Component, pageProps }: AppProps) {
   const [isAgeVerified, setIsAgeVerified] = useState(false);
@@ -28,12 +29,14 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="description" content="Plataforma de videochat adulto com modelos reais" />
         <meta name="keywords" content="videochat, adulto, modelos, webcam" />
       </Head>
-      <main className="font-sans">
-        {initialCheck && !isAgeVerified && (
-          <AgeVerification onVerify={handleAgeVerification} />
-        )}
-        {(isAgeVerified || !initialCheck) && <Component {...pageProps} />}
-      </main>
+      <UserProvider>
+        <main className="font-sans">
+          {initialCheck && !isAgeVerified && (
+            <AgeVerification onVerify={handleAgeVerification} />
+          )}
+          {(isAgeVerified || !initialCheck) && <Component {...pageProps} />}
+        </main>
+      </UserProvider>
     </>
   );
 }
