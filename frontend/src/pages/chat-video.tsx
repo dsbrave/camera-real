@@ -258,23 +258,28 @@ export default function ChatVideo() {
   const handleTogglePrivateRoom = (e?: React.MouseEvent) => {
     e?.stopPropagation();
     
-    // Verificação adicional para garantir que não execute quando canInteract é false
-    if (!canInteract) {
-      console.log('Ação bloqueada: canInteract é false');
-      return;
-    }
+    console.log('handleTogglePrivateRoom chamado - canInteract:', canInteract, 'freeTimeRemaining:', freeTimeRemaining, 'isUsingCredits:', isUsingCredits, 'userCredits:', userCredits);
     
     if (isPrivateCall) {
+      // Se já está na sala privada, pode sair sempre
       setIsPrivateCall(false);
       setMessages(prev => [...prev, { id: Date.now(), text: `🔓 Você voltou para o chat aberto com todos os usuários.`, sender: 'system', timestamp: new Date() }]);
     } else {
-      // Atualizar créditos antes de verificar
+      // Para entrar na sala privada, verificar se tem créditos
       refreshCredits();
       
       const currentModel = models[modelIndex];
+      
+      // Se tem créditos suficientes, pode entrar na sala privada independente do canInteract
       if (userCredits >= currentModel.privateCallPrice) {
         if (spendCredits(currentModel.privateCallPrice)) {
           setIsPrivateCall(true);
+          // Se não estava usando créditos, ativar agora
+          if (!isUsingCredits) {
+            setIsUsingCredits(true);
+            setIsCallActive(true);
+            setCanInteract(true);
+          }
           // 30% para a modelo
           setModelEarnings(prev => prev + Math.floor(currentModel.privateCallPrice * 0.3));
           setMessages(prev => [...prev, { id: Date.now(), text: `🔒 Sala privada iniciada com ${currentModel.name}`, sender: 'system', timestamp: new Date() }]);
@@ -282,7 +287,13 @@ export default function ChatVideo() {
           setMessages(prev => [...prev, { id: Date.now(), text: `⚠️ Erro ao processar pagamento da sala privada.`, sender: 'system', timestamp: new Date() }]);
         }
       } else {
-        setMessages(prev => [...prev, { id: Date.now(), text: `⚠️ Créditos insuficientes para sala privada. Necessário: ${currentModel.privateCallPrice} créditos.`, sender: 'system', timestamp: new Date() }]);
+        // Se não tem créditos suficientes, mostrar mensagem
+        setMessages(prev => [...prev, { 
+          id: Date.now(), 
+          text: `⚠️ Créditos insuficientes para sala privada. Necessário: ${currentModel.privateCallPrice} créditos.`, 
+          sender: 'system', 
+          timestamp: new Date() 
+        }]);
       }
     }
   };
@@ -577,16 +588,22 @@ export default function ChatVideo() {
               {/* Botão Sala Privada */}
               <button 
                 onClick={(e) => handleTogglePrivateRoom(e)} 
-                disabled={!canInteract}
+                disabled={!canInteract && !isPrivateCall && userCredits < currentModel.privateCallPrice}
                 className={`p-5 rounded-full transition-all hover:scale-110 ${
-                  !canInteract 
+                  (!canInteract && !isPrivateCall && userCredits < currentModel.privateCallPrice)
                     ? 'bg-gray-600/40 border border-gray-500/30 cursor-not-allowed opacity-50' 
                     : isPrivateCall 
                     ? 'bg-gradient-to-r from-red-500/60 to-red-600/60 hover:from-red-500/80 hover:to-red-600/80 border border-red-500/30 shadow-[0_0_12px_rgba(239,68,68,0.4)] hover:shadow-[0_0_16px_rgba(239,68,68,0.5)]'
                     : 'bg-gradient-to-r from-[#F25790]/60 to-[#d93d75]/60 hover:from-[#F25790]/80 hover:to-[#d93d75]/80 border border-[#F25790]/30 shadow-[0_0_12px_rgba(242,87,144,0.4)] hover:shadow-[0_0_16px_rgba(242,87,144,0.5)]'
                 } backdrop-blur-sm`}
                 type="button"
-                title={!canInteract ? "Aguarde decisão do tempo grátis" : isPrivateCall ? "Sair do chat privado" : "Iniciar chat privado"}
+                title={
+                  (!canInteract && !isPrivateCall && userCredits < currentModel.privateCallPrice) 
+                    ? `Créditos insuficientes (${currentModel.privateCallPrice} necessários)` 
+                    : isPrivateCall 
+                    ? "Sair do chat privado" 
+                    : "Iniciar chat privado"
+                }
               >
                 {isPrivateCall ? (
                   // Cadeado aberto (quando está na sala privada)
@@ -711,16 +728,22 @@ export default function ChatVideo() {
                     
                     <button 
                       onClick={(e) => handleTogglePrivateRoom(e)} 
-                      disabled={!canInteract}
+                      disabled={!canInteract && !isPrivateCall && userCredits < currentModel.privateCallPrice}
                       className={`p-2 rounded-full transition-all hover:scale-110 active:scale-95 ${
-                        !canInteract 
+                        (!canInteract && !isPrivateCall && userCredits < currentModel.privateCallPrice)
                           ? 'bg-gray-600/40 border border-gray-500/30 cursor-not-allowed opacity-50' 
                           : isPrivateCall 
                           ? 'bg-gradient-to-r from-red-500/60 to-red-600/60 hover:from-red-500/80 hover:to-red-600/80 border border-red-500/30'
                           : 'bg-gradient-to-r from-[#F25790]/60 to-[#d93d75]/60 hover:from-[#F25790]/80 hover:to-[#d93d75]/80 border border-[#F25790]/30'
                       }`}
                       type="button"
-                      title={!canInteract ? "Aguarde decisão do tempo grátis" : isPrivateCall ? "Sair do chat privado" : "Iniciar chat privado"}
+                      title={
+                        (!canInteract && !isPrivateCall && userCredits < currentModel.privateCallPrice) 
+                          ? `Créditos insuficientes (${currentModel.privateCallPrice} necessários)` 
+                          : isPrivateCall 
+                          ? "Sair do chat privado" 
+                          : "Iniciar chat privado"
+                      }
                     >
                       {isPrivateCall ? (
                         // Cadeado aberto (quando está na sala privada)

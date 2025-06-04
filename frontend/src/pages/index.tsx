@@ -21,9 +21,34 @@ export default function Home() {
   const [userName, setUserName] = useState('');
   const [favoriteModels, setFavoriteModels] = useState<string[]>([]);
   const [isClient, setIsClient] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
   
   useEffect(() => {
     setIsClient(true);
+    
+    // Verificar login imediatamente durante a hidratação
+    if (typeof window !== 'undefined') {
+      try {
+        const userStorage = localStorage.getItem('user');
+        if (userStorage) {
+          const user = JSON.parse(userStorage);
+          if (user.isLoggedIn) {
+            setIsLoggedIn(true);
+            setUserName(user.name || '');
+            
+            // Carregar favoritos do localStorage
+            const favorites = JSON.parse(localStorage.getItem('favoriteModels') || '[]');
+            const favoriteIds = favorites.map((fav: any) => fav.id);
+            setFavoriteModels(favoriteIds);
+          }
+        }
+      } catch (error) {
+        console.error('Erro ao verificar login durante hidratação:', error);
+      }
+    }
+    
+    // Marcar como hidratado após verificar o login
+    setIsHydrated(true);
   }, []);
   
   useEffect(() => {
@@ -57,12 +82,16 @@ export default function Home() {
       }
     };
     
-    checkLogin();
-    
-    // Adiciona eventListener para mudanças no localStorage (logout em qualquer aba)
     if (isClient) {
+      // Adiciona eventListener para mudanças no localStorage (logout em qualquer aba)
       window.addEventListener('storage', checkLogin);
-      return () => window.removeEventListener('storage', checkLogin);
+      // Adiciona listener para o evento customizado de atualização de dados do usuário
+      window.addEventListener('userDataUpdated', checkLogin);
+      
+      return () => {
+        window.removeEventListener('storage', checkLogin);
+        window.removeEventListener('userDataUpdated', checkLogin);
+      };
     }
   }, [isClient]);
 
@@ -137,6 +166,41 @@ export default function Home() {
   const backgroundImage = isLoggedIn 
     ? "url('/images/intimate_abstract_neon-lit_room_designed_for_cam_girls_and_digital_content_creators_no_models_no_be_ciz4ls7h0mms3epzpkxr_1.png')" // Imagem do quarto para usuários logados
     : "url('/images/high-quality_fashion_studio_photo_of_a_fit_brazilian-inspired_model_in_a_streaming_room_setup_the_m_l1g01p6hm0p1kyxw2q42_0.png')"; // Imagem da modelo para usuários deslogados
+
+  // Renderização condicional para evitar flash durante hidratação
+  if (!isHydrated) {
+    return (
+      <>
+        <Head>
+          <title>Camera Real - Plataforma de Videochat</title>
+          <meta name="description" content="A melhor plataforma de videochat ao vivo. Converse com modelos em tempo real." />
+        </Head>
+        
+        <div className="min-h-screen bg-black text-white flex flex-col">
+          {/* Background Overlay */}
+          <div className="absolute inset-0 bg-black bg-opacity-70 z-0"></div>
+          
+          <div className="relative z-10 flex flex-col min-h-screen">
+            <Header />
+            <div className="h-10 sm:h-16 md:h-20" />
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-20 z-10 relative flex-1">
+              {/* Placeholder durante hidratação */}
+              <div className="flex justify-center lg:justify-start items-center min-h-full">
+                <div className="w-full max-w-3xl text-center lg:text-left">
+                  <div className="w-3/4 h-12 bg-gray-800 rounded animate-pulse mb-6"></div>
+                  <div className="w-2/3 h-6 bg-gray-800 rounded animate-pulse mb-4"></div>
+                  <div className="w-1/2 h-6 bg-gray-800 rounded animate-pulse mb-8"></div>
+                  <div className="w-40 h-12 bg-gray-800 rounded-full animate-pulse"></div>
+                </div>
+              </div>
+            </div>
+            
+            <Footer />
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>

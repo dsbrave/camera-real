@@ -23,26 +23,37 @@ export default function EditarPerfil() {
 
   useEffect(() => {
     // Carregar dados do usuário do localStorage
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        if (parsedUser) {
-          setUserData({
-            name: parsedUser.name || 'Usuário',
-            email: parsedUser.email || 'teste@camera.real',
-            phone: parsedUser.phone || '55 11 93366 1304',
-            photo: parsedUser.photo || '',
-            username: parsedUser.username || parsedUser.name?.toLowerCase().replace(/\s+/g, '') || 'usuario'
-          });
+    const loadUserData = () => {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        try {
+          const parsedUser = JSON.parse(storedUser);
+          if (parsedUser) {
+            setUserData({
+              name: parsedUser.name || 'Usuário',
+              email: parsedUser.email || 'teste@camera.real',
+              phone: parsedUser.phone || '55 11 93366 1304',
+              photo: parsedUser.photo || '',
+              username: parsedUser.username || parsedUser.name?.toLowerCase().replace(/\s+/g, '') || 'usuario'
+            });
+          }
+        } catch (error) {
+          console.error('Erro ao carregar dados do usuário:', error);
+          router.push('/painel-usuario');
         }
-      } catch (error) {
-        console.error('Erro ao carregar dados do usuário:', error);
-        router.push('/painel-usuario');
+      } else {
+        router.push('/login');
       }
-    } else {
-      router.push('/login');
-    }
+    };
+
+    loadUserData();
+
+    // Adiciona listener para o evento customizado de atualização de dados do usuário
+    window.addEventListener('userDataUpdated', loadUserData);
+    
+    return () => {
+      window.removeEventListener('userDataUpdated', loadUserData);
+    };
   }, [router]);
 
   useEffect(() => {
@@ -77,6 +88,9 @@ export default function EditarPerfil() {
         const parsedUser = JSON.parse(storedUser);
         const newUserData = { ...parsedUser, [editingField]: tempValue };
         localStorage.setItem('user', JSON.stringify(newUserData));
+        
+        // Disparar evento customizado para notificar outras páginas
+        window.dispatchEvent(new Event('userDataUpdated'));
       }
       
       setEditingField(null);

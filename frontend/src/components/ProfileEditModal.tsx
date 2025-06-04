@@ -69,6 +69,7 @@ export default function ProfileEditModal({ isOpen, onClose, userData, onUpdatePr
     if (editingField) {
       const updatedUser = { ...localUserData, [editingField]: tempValue };
       setLocalUserData(updatedUser);
+      console.log('Modal - Salvando campo:', editingField, 'com valor:', tempValue);
       onUpdateProfile({ [editingField]: tempValue });
       setEditingField(null);
       setTempValue('');
@@ -136,19 +137,12 @@ export default function ProfileEditModal({ isOpen, onClose, userData, onUpdatePr
     onUpdateProfile({ photo: '' });
   };
 
-  const handleOverlayClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
-
   return (
     <>
       {/* Modal Overlay - Fixed positioning with highest z-index */}
       <div 
         data-modal="profile-edit"
         className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto"
-        onClick={handleOverlayClick}
         style={{ 
           position: 'fixed',
           top: 0,
@@ -236,6 +230,49 @@ export default function ProfileEditModal({ isOpen, onClose, userData, onUpdatePr
 
             {/* Form Fields */}
             <div className="space-y-4">
+              {/* Name */}
+              <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-4">
+                {editingField === 'name' ? (
+                  <div>
+                    <input
+                      type="text"
+                      value={tempValue}
+                      onChange={(e) => setTempValue(e.target.value)}
+                      className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg mb-3 border border-gray-600 focus:border-[#F25790] focus:outline-none"
+                      placeholder="Nome completo"
+                      autoFocus
+                    />
+                    <div className="flex justify-end space-x-2">
+                      <button
+                        onClick={handleCancel}
+                        className="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg text-sm transition-colors"
+                      >
+                        Cancelar
+                      </button>
+                      <button
+                        onClick={handleSave}
+                        className="px-4 py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-lg text-sm transition-colors"
+                      >
+                        Salvar
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-gray-400 text-sm">Nome completo</p>
+                      <p className="text-white">{localUserData.name}</p>
+                    </div>
+                    <button
+                      onClick={() => handleEdit('name')}
+                      className="bg-[#F25790] hover:bg-[#d93d75] text-white text-sm px-4 py-2 rounded-lg transition-colors"
+                    >
+                      Editar
+                    </button>
+                  </div>
+                )}
+              </div>
+
               {/* Username */}
               <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-4">
                 {editingField === 'username' ? (

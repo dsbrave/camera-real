@@ -14,6 +14,7 @@ export default function Header() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
+  const [updateTrigger, setUpdateTrigger] = useState(0);
   
   // Verificar se estamos no cliente
   useEffect(() => {
@@ -27,6 +28,13 @@ export default function Header() {
   
   // Verificar se estamos na página de chat para manter logo pequena
   const isChatPage = router.pathname === '/chat-video';
+  
+  // Debug: Log quando userData muda
+  useEffect(() => {
+    if (userData) {
+      console.log('Header - userData atualizado:', userData);
+    }
+  }, [userData]);
   
   // Função para testar a mudança de cor do ícone da carteira
   const handleTestWalletColor = (amount: number) => {
@@ -79,6 +87,26 @@ export default function Header() {
 
     if (isClient) {
       checkLoginStatus();
+      
+      // Adicionar listener para mudanças no localStorage
+      const handleStorageChange = (e: StorageEvent) => {
+        if (e.key === 'user') {
+          checkLoginStatus();
+        }
+      };
+      
+      // Listener customizado para mudanças no localStorage da mesma aba
+      const handleCustomStorageChange = () => {
+        checkLoginStatus();
+      };
+      
+      window.addEventListener('storage', handleStorageChange);
+      window.addEventListener('userDataUpdated', handleCustomStorageChange);
+      
+      return () => {
+        window.removeEventListener('storage', handleStorageChange);
+        window.removeEventListener('userDataUpdated', handleCustomStorageChange);
+      };
     }
 
     // Fechar dropdown quando clicar fora dele
@@ -97,7 +125,7 @@ export default function Header() {
         document.removeEventListener('mousedown', handleClickOutside);
       }
     };
-  }, [isClient, refreshCredits]);
+  }, [isClient, refreshCredits, updateTrigger]);
 
   const handleLogout = () => {
     if (typeof window !== 'undefined') {
@@ -132,7 +160,17 @@ export default function Header() {
           const parsedUser = JSON.parse(storedUser);
           const updatedUser = { ...parsedUser, ...updatedData };
           localStorage.setItem('user', JSON.stringify(updatedUser));
+          
+          // Atualizar o estado local imediatamente
           setUserData(updatedUser);
+          
+          // Forçar re-renderização usando o trigger
+          setUpdateTrigger(prev => prev + 1);
+          
+          // Disparar evento customizado para notificar mudanças
+          window.dispatchEvent(new CustomEvent('userDataUpdated'));
+          
+          console.log('Perfil atualizado:', updatedUser); // Debug log
         }
       } catch (error) {
         console.error('Erro ao atualizar dados do usuário:', error);
@@ -141,6 +179,19 @@ export default function Header() {
   };
 
   const openEditModal = () => {
+    // Garantir que temos os dados mais recentes do localStorage
+    if (typeof window !== 'undefined') {
+      try {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          const parsedUser = JSON.parse(storedUser);
+          setUserData(parsedUser);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar dados do usuário para edição:', error);
+      }
+    }
+    
     setIsEditModalOpen(true);
     setIsDropdownOpen(false);
     setIsMobileMenuOpen(false);
@@ -234,9 +285,9 @@ export default function Header() {
                         viewBox="0 0 24 24" 
                         fill="none" 
                         xmlns="http://www.w3.org/2000/svg"
-                        className="w-4 h-4 text-white filter invert absolute top-0 left-0 group-hover:opacity-0 transition-opacity duration-200"
+                        className="w-4 h-4 text-white absolute top-0 left-0 group-hover:opacity-0 transition-opacity duration-200"
                       >
-                        <path d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z" fill="currentColor"/>
+                        <path d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z" fill="white"/>
                       </svg>
                       
                       {/* Ícone colorido no hover */}
@@ -433,13 +484,16 @@ export default function Header() {
                     className="flex items-center justify-center space-x-2 bg-gradient-to-r from-[#F25790]/20 to-purple-600/20 backdrop-blur-sm border border-[#F25790]/30 hover:border-[#F25790]/50 rounded-full px-4 py-2 mb-4 transition-all duration-200 hover:bg-[#F25790]/10"
                     onClick={closeMobileMenu}
                   >
-                    <Image
-                      src="/icons/action/account_balance_wallet.svg"
-                      alt="Créditos"
-                      width={20}
-                      height={20}
-                      className="w-5 h-5 text-white filter invert"
-                    />
+                    <svg 
+                      width="20" 
+                      height="20" 
+                      viewBox="0 0 24 24" 
+                      fill="none" 
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-5 h-5 text-white"
+                    >
+                      <path d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z" fill="white"/>
+                    </svg>
                     <span className="text-white font-medium">{userCredits}</span>
                     <span className="text-gray-300 text-sm">Créditos</span>
                   </Link>

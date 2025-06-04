@@ -38,29 +38,40 @@ export default function PainelUsuario() {
 
   // Verificar se o usuário está logado ao carregar a página
   useEffect(() => {
-    const userStorage = localStorage.getItem('user');
-    if (userStorage) {
-      try {
-        const parsedUser = JSON.parse(userStorage);
-        if (parsedUser.isLoggedIn) {
-          setUserData({
-            ...parsedUser,
-            recentChats
-          });
-          
-          // Carregar favoritos do localStorage
-          const favorites = JSON.parse(localStorage.getItem('favoriteModels') || '[]');
-          setFavoriteModels(favorites);
-        } else {
+    const loadUserData = () => {
+      const userStorage = localStorage.getItem('user');
+      if (userStorage) {
+        try {
+          const parsedUser = JSON.parse(userStorage);
+          if (parsedUser.isLoggedIn) {
+            setUserData({
+              ...parsedUser,
+              recentChats
+            });
+            
+            // Carregar favoritos do localStorage
+            const favorites = JSON.parse(localStorage.getItem('favoriteModels') || '[]');
+            setFavoriteModels(favorites);
+          } else {
+            router.push('/login');
+          }
+        } catch (error) {
+          console.error('Erro ao carregar dados do usuário:', error);
           router.push('/login');
         }
-      } catch (error) {
-        console.error('Erro ao carregar dados do usuário:', error);
+      } else {
         router.push('/login');
       }
-    } else {
-      router.push('/login');
-    }
+    };
+
+    loadUserData();
+
+    // Adiciona listener para o evento customizado de atualização de dados do usuário
+    window.addEventListener('userDataUpdated', loadUserData);
+    
+    return () => {
+      window.removeEventListener('userDataUpdated', loadUserData);
+    };
   }, [router]);
 
   // Navegar para a página de adicionar saldo
@@ -193,9 +204,9 @@ export default function PainelUsuario() {
                               viewBox="0 0 24 24" 
                               fill="none" 
                               xmlns="http://www.w3.org/2000/svg"
-                              className="w-4 h-4 text-white filter invert absolute top-0 left-0 group-hover:opacity-0 transition-opacity duration-200"
+                              className="w-4 h-4 text-white absolute top-0 left-0 group-hover:opacity-0 transition-opacity duration-200"
                             >
-                              <path d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z" fill="currentColor"/>
+                              <path d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z" fill="white"/>
                             </svg>
                             
                             {/* Ícone verde no hover */}
@@ -207,7 +218,7 @@ export default function PainelUsuario() {
                               xmlns="http://www.w3.org/2000/svg"
                               className="w-4 h-4 text-green-500 absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                             >
-                              <path d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z" fill="currentColor"/>
+                              <path d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z" fill="#10b981"/>
                             </svg>
                           </div>
                           <span className="text-white font-medium text-lg">
@@ -221,9 +232,15 @@ export default function PainelUsuario() {
                         className="w-full py-3 bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white font-bold rounded-xl transition-all duration-300 shadow-[0_0_15px_rgba(242,87,144,0.4)] hover:shadow-[0_0_25px_rgba(242,87,144,0.6)] hover:scale-105 active:scale-95 border border-[#F25790]/30"
                       >
                         <div className="flex items-center justify-center gap-2">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="10"/>
-                            <path d="M12 6v6l4 2"/>
+                          <svg 
+                            width="16" 
+                            height="16" 
+                            viewBox="0 0 24 24" 
+                            fill="none" 
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="w-4 h-4 text-white"
+                          >
+                            <path d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z" fill="white"/>
                           </svg>
                           <span>Comprar créditos</span>
                         </div>
@@ -237,13 +254,16 @@ export default function PainelUsuario() {
                   <h3 className="text-lg font-bold mb-4">Ações Rápidas</h3>
                   <div className="space-y-2">
                     <Link href="/carteira" className="flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-800 transition-all group">
-                      <Image 
-                        src="/icons/action/account_balance_wallet.svg"
-                        alt="Carteira"
-                        width={20}
-                        height={20}
-                        className="w-5 h-5 filter brightness-0 invert"
-                      />
+                      <svg 
+                        width="20" 
+                        height="20" 
+                        viewBox="0 0 24 24" 
+                        fill="none" 
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-5 h-5 text-white"
+                      >
+                        <path d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z" fill="white"/>
+                      </svg>
                       <span className="group-hover:text-[#F25790] transition-colors">Carteira</span>
                     </Link>
                     
@@ -279,13 +299,16 @@ export default function PainelUsuario() {
                   <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-[#F25790] transition-all">
                     <div className="flex items-center justify-between mb-4">
                       <div className="p-3">
-                        <Image 
-                          src="/icons/editor/monetization_on.svg"
-                          alt="Créditos"
-                          width={24}
-                          height={24}
-                          className="w-6 h-6 filter brightness-0 invert"
-                        />
+                        <svg 
+                          width="24" 
+                          height="24" 
+                          viewBox="0 0 24 24" 
+                          fill="none" 
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="w-6 h-6 text-white"
+                        >
+                          <path d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z" fill="white"/>
+                        </svg>
                       </div>
                       <span className="text-3xl font-bold text-[#F25790]">{userData.credits || 300}</span>
                     </div>
