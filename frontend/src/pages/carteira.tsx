@@ -213,7 +213,7 @@ const Carteira: React.FC = () => {
         <meta name="description" content="Gerencie seus Créditos e compras" />
       </Head>
 
-      <div className="min-h-screen text-white page-with-bg-image" style={{ background: 'linear-gradient(135deg, #1a0033 0%, #330033 50%, #220022 100%)' }}>
+      <div className="min-h-screen bg-black text-white">
         <Header />
         
         <main className="container mx-auto px-4 pt-32 pb-8 content-after-header">
