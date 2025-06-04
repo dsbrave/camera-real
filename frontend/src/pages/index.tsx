@@ -47,24 +47,8 @@ export default function Home() {
     checkLogin();
     
     // Adiciona eventListener para mudanças no localStorage (logout em qualquer aba)
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'user' || e.key === null) {
-        checkLogin();
-      }
-    };
-    
-    // Listener customizado para mudanças no localStorage na mesma aba
-    const handleCustomStorageChange = () => {
-      checkLogin();
-    };
-    
-    window.addEventListener('storage', handleStorageChange);
-    window.addEventListener('localStorageChange', handleCustomStorageChange);
-    
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('localStorageChange', handleCustomStorageChange);
-    };
+    window.addEventListener('storage', checkLogin);
+    return () => window.removeEventListener('storage', checkLogin);
   }, []);
 
   // Modelos em destaque (mesmos dados da página explorar)
@@ -113,17 +97,17 @@ export default function Home() {
         <meta name="description" content="A melhor plataforma de videochat ao vivo. Converse com modelos em tempo real." />
       </Head>
       
-      <div className="min-h-screen bg-black text-white" style={{ backgroundImage, backgroundSize: 'cover', backgroundPosition: 'center 15%', transform: 'scaleX(-1)' }}>
+      <div className="min-h-screen bg-black text-white flex flex-col" style={{ backgroundImage, backgroundSize: 'cover', backgroundPosition: 'center 15%', transform: 'scaleX(-1)' }}>
         {/* Background Overlay */}
         <div className="absolute inset-0 bg-black bg-opacity-70 z-0"></div>
         
-        <div className="relative z-10" style={{ transform: 'scaleX(-1)' }}> {/* Contra-flipa os elementos para ficarem corretos */}
+        <div className="relative z-10 flex flex-col min-h-screen" style={{ transform: 'scaleX(-1)' }}> {/* Contra-flipa os elementos para ficarem corretos */}
           <Header />
           <div className="h-10 sm:h-16 md:h-20" />
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-20 z-10 relative">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-20 z-10 relative flex-1">
             {isLoggedIn ? (
               // Layout para usuários logados - texto à esquerda, carrossel à direita
-              <div className="flex flex-col lg:flex-row lg:items-center lg:gap-8 xl:gap-12">
+              <div className="flex flex-col lg:flex-row lg:items-center lg:gap-8 xl:gap-12 min-h-full">
                 {/* Seção de texto à esquerda */}
                 <div className="flex-1 lg:max-w-xl text-center lg:text-left">
                   <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight">
@@ -278,7 +262,7 @@ export default function Home() {
               </div>
             ) : (
               // Layout para usuários não logados - centralizado
-              <div className="flex justify-center lg:justify-start">
+              <div className="flex justify-center lg:justify-start items-center min-h-full">
                 <div className="w-full max-w-3xl text-center lg:text-left">
                   <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight">
                   Videochats: explore o<br/>

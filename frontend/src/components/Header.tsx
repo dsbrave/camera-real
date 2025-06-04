@@ -54,22 +54,6 @@ export default function Header() {
     };
 
     checkLoginStatus();
-    
-    // APENAS PARA DESENVOLVIMENTO: Simular um usuário logado se não houver nenhum
-    if (!localStorage.getItem('user')) {
-      const mockUser = {
-        id: '123',
-        name: 'João',
-        email: 'joao@example.com',
-        creditos: 150,
-        photo: '',
-        isLoggedIn: true
-      };
-      localStorage.setItem('user', JSON.stringify(mockUser));
-      setIsLoggedIn(true);
-      setUserData(mockUser);
-      setUserCredits(mockUser.creditos);
-    }
 
     // Fechar dropdown quando clicar fora dele
     const handleClickOutside = (event: MouseEvent) => {
@@ -91,12 +75,7 @@ export default function Header() {
     setUserCredits(0);
     setIsDropdownOpen(false);
     setIsMobileMenuOpen(false);
-    
-    // Disparar evento customizado para notificar outras partes da aplicação
-    window.dispatchEvent(new Event('localStorageChange'));
-    
-    // Forçar reload da página para garantir que o estado seja atualizado
-    window.location.href = '/';
+    router.push('/');
   };
 
   const closeMobileMenu = () => {
