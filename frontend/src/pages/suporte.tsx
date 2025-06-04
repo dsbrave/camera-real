@@ -214,7 +214,7 @@ export default function Suporte() {
                   </svg>
                 </div>
                 <h3 className="font-semibold mb-2">E-mail</h3>
-                <p className="text-gray-400 text-sm">suporte@camerareal.com</p>
+                <p className="text-gray-400 text-sm">contato@camerareal.com</p>
               </div>
               
               <div className="rounded-xl p-4">

@@ -44,7 +44,7 @@ export default function Faq() {
     {
       id: '5',
       question: 'O que fazer se o pagamento não for aprovado?',
-      answer: 'Se seu pagamento não for aprovado, verifique se os dados informados estão corretos. Caso o problema persista, entre em contato com nosso suporte através do e-mail suporte@camerareal.com ou pelo chat de atendimento disponível no site.',
+      answer: 'Se seu pagamento não for aprovado, verifique se os dados informados estão corretos. Caso o problema persista, entre em contato com nosso suporte através do e-mail contato@camerareal.com ou pelo chat de atendimento disponível no site.',
       category: 'pagamentos'
     },
     {

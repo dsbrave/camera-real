@@ -167,7 +167,23 @@ export default function Home() {
     ? "url('/images/intimate_abstract_neon-lit_room_designed_for_cam_girls_and_digital_content_creators_no_models_no_be_ciz4ls7h0mms3epzpkxr_1.png')" // Imagem do quarto para usuários logados
     : "url('/images/high-quality_fashion_studio_photo_of_a_fit_brazilian-inspired_model_in_a_streaming_room_setup_the_m_l1g01p6hm0p1kyxw2q42_0.png')"; // Imagem da modelo para usuários deslogados
 
-  // Renderização condicional para evitar flash durante hidratação
+  // Carregamento progressivo de imagens de fundo
+  useEffect(() => {
+    if (isClient && typeof window !== 'undefined') {
+      // Pré-carregamento de imagens para transição mais suave
+      const preloadImages = [
+        '/images/high-quality_fashion_studio_photo_of_a_fit_brazilian-inspired_model_in_a_streaming_room_setup_the_m_l1g01p6hm0p1kyxw2q42_0.png',
+        '/images/intimate_abstract_neon-lit_room_designed_for_cam_girls_and_digital_content_creators_no_models_no_be_ciz4ls7h0mms3epzpkxr_1.png'
+      ];
+      
+      preloadImages.forEach(src => {
+        const img = new window.Image();
+        img.src = src;
+      });
+    }
+  }, [isClient]);
+  
+  // Renderização condicional com fade-in para o conteúdo
   if (!isHydrated) {
     return (
       <>
@@ -176,21 +192,30 @@ export default function Home() {
           <meta name="description" content="A melhor plataforma de videochat ao vivo. Converse com modelos em tempo real." />
         </Head>
         
-        <div className="min-h-screen bg-black text-white flex flex-col">
-          {/* Background Overlay */}
-          <div className="absolute inset-0 bg-black bg-opacity-70 z-0"></div>
+        <div 
+          className="min-h-screen bg-black text-white flex flex-col"
+          style={{
+            backgroundImage: "url('/images/high-quality_fashion_studio_photo_of_a_fit_brazilian-inspired_model_in_a_streaming_room_setup_the_m_l1g01p6hm0p1kyxw2q42_0.png')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            opacity: 0.3,
+            transition: 'opacity 0.5s ease-in'
+          }}
+        >
+          <div className="absolute inset-0 bg-black bg-opacity-80 z-0"></div>
           
           <div className="relative z-10 flex flex-col min-h-screen">
             <Header />
             <div className="h-10 sm:h-16 md:h-20" />
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-20 z-10 relative flex-1">
-              {/* Placeholder durante hidratação */}
-              <div className="flex justify-center lg:justify-start items-center min-h-full">
+              {/* Placeholder sutil durante hidratação */}
+              <div className="flex justify-center lg:justify-start items-center min-h-full opacity-30">
                 <div className="w-full max-w-3xl text-center lg:text-left">
-                  <div className="w-3/4 h-12 bg-gray-800 rounded animate-pulse mb-6"></div>
-                  <div className="w-2/3 h-6 bg-gray-800 rounded animate-pulse mb-4"></div>
-                  <div className="w-1/2 h-6 bg-gray-800 rounded animate-pulse mb-8"></div>
-                  <div className="w-40 h-12 bg-gray-800 rounded-full animate-pulse"></div>
+                  <div className="w-3/4 h-10 bg-gray-700/30 rounded animate-pulse mb-6"></div>
+                  <div className="w-2/3 h-5 bg-gray-700/30 rounded animate-pulse mb-4"></div>
+                  <div className="w-1/2 h-5 bg-gray-700/30 rounded animate-pulse mb-8"></div>
+                  <div className="w-36 h-10 bg-pink-700/30 rounded-full animate-pulse"></div>
                 </div>
               </div>
             </div>
