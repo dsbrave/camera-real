@@ -28,8 +28,7 @@ export default function Sobre() {
                 <div>
                   <h2 className="text-2xl font-bold mb-4 text-[#F25790]">O início de tudo</h2>
                   <p className="mb-4 text-gray-300">
-                    A Camera Real nasceu em 2021, em plena pandemia, quando três amigos empreendedores 
-                    identificaram uma oportunidade de mercado: criar uma plataforma de videochat 
+                    A Camera Real nasceu em 2021, em plena pandemia, identificando uma oportunidade de mercado: criar uma plataforma de videochat 
                     100% brasileira, com foco na qualidade e segurança tanto para modelos quanto para usuários.
                   </p>
                   <p className="mb-4 text-gray-300">
@@ -58,7 +57,7 @@ export default function Sobre() {
                 <div className="grid md:grid-cols-3 gap-8">
                   <div className="bg-black/60 p-8 rounded-xl">
                     <div className="flex items-center justify-center mb-4 mx-auto">
-                      <div className="bg-[#2a151b] p-4 rounded-full">
+                      <div className="p-4 rounded-full">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="#F25790" strokeWidth={2}>
   <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" strokeLinecap="round" strokeLinejoin="round" />
 </svg>
@@ -73,7 +72,7 @@ export default function Sobre() {
                   
                   <div className="bg-black/60 p-8 rounded-xl">
                     <div className="flex items-center justify-center mb-4 mx-auto">
-                      <div className="bg-[#2a151b] p-4 rounded-full">
+                      <div className="p-4 rounded-full">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="#F25790" strokeWidth={2}>
   <path d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" strokeLinecap="round" strokeLinejoin="round" />
 </svg>
@@ -88,7 +87,7 @@ export default function Sobre() {
                   
                   <div className="bg-black/60 p-8 rounded-xl">
                     <div className="flex items-center justify-center mb-4 mx-auto">
-                      <div className="bg-[#2a151b] p-4 rounded-full">
+                      <div className="p-4 rounded-full">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="#F25790" strokeWidth={2}>
   <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" />
 </svg>
