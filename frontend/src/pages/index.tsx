@@ -43,10 +43,28 @@ export default function Home() {
         console.error('Erro ao verificar login:', error);
       }
     };
+    
     checkLogin();
+    
     // Adiciona eventListener para mudanças no localStorage (logout em qualquer aba)
-    window.addEventListener('storage', checkLogin);
-    return () => window.removeEventListener('storage', checkLogin);
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'user' || e.key === null) {
+        checkLogin();
+      }
+    };
+    
+    // Listener customizado para mudanças no localStorage na mesma aba
+    const handleCustomStorageChange = () => {
+      checkLogin();
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('localStorageChange', handleCustomStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('localStorageChange', handleCustomStorageChange);
+    };
   }, []);
 
   // Modelos em destaque (mesmos dados da página explorar)

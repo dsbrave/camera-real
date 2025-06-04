@@ -91,7 +91,12 @@ export default function Header() {
     setUserCredits(0);
     setIsDropdownOpen(false);
     setIsMobileMenuOpen(false);
-    router.push('/');
+    
+    // Disparar evento customizado para notificar outras partes da aplicação
+    window.dispatchEvent(new Event('localStorageChange'));
+    
+    // Forçar reload da página para garantir que o estado seja atualizado
+    window.location.href = '/';
   };
 
   const closeMobileMenu = () => {
