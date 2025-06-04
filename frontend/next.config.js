@@ -12,7 +12,7 @@ const nextConfig = {
     domains: ['localhost'],
     unoptimized: true
   },
-  reactStrictMode: true,
+  reactStrictMode: false, // Desabilitar para evitar problemas de hidratação
 };
 
 module.exports = nextConfig;
