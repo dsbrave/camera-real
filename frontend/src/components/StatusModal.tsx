@@ -116,8 +116,8 @@ export default function StatusModal({
               <Link href="/politica-privacidade" className="hover:text-[#F25790] transition-colors">
                 Política de privacidade
               </Link>
-              <Link href="/sobre" className="hover:text-[#F25790] transition-colors">
-                Fale conosco
+              <Link href="/suporte" className="text-blue-400 hover:text-blue-300">
+                Suporte
               </Link>
               <Link href="/termos" className="hover:text-[#F25790] transition-colors">
                 Termos e condições

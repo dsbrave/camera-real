@@ -329,8 +329,8 @@ const Financeiro: React.FC = () => {
             <Link href="/politica-de-privacidade" className="text-sm text-gray-400 hover:text-white">
               Política de privacidade
             </Link>
-            <Link href="/fale-conosco" className="text-sm text-gray-400 hover:text-white">
-              Fale conosco
+            <Link href="/suporte" className="text-sm text-gray-400 hover:text-white">
+              Suporte
             </Link>
             <Link href="/termos-e-condicoes" className="text-sm text-gray-400 hover:text-white">
               Termos e condições

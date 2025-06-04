@@ -93,8 +93,8 @@ export default function LoginModal() {
               <Link href="/politica-privacidade" className="hover:text-[#ff4d8d]">
                 Política de privacidade
               </Link>
-              <Link href="/fale-conosco" className="hover:text-[#ff4d8d]">
-                Fale conosco
+              <Link href="/suporte" className="hover:text-[#ff4d8d]">
+                Suporte
               </Link>
               <Link href="/termos" className="hover:text-[#ff4d8d]">
                 Termos e condições

@@ -45,17 +45,22 @@ export default function Header() {
         const userStorage = localStorage.getItem('user');
         if (userStorage) {
           const user = JSON.parse(userStorage);
-          // Verificar se o objeto do usuário tem as propriedades necessárias
-          if (user && typeof user === 'object') {
-            setIsLoggedIn(true); // Se temos dados do usuário, consideramos como logado
+          // Verificar se o objeto do usuário tem as propriedades necessárias E se está logado
+          if (user && typeof user === 'object' && user.isLoggedIn === true) {
+            setIsLoggedIn(true); // Se temos dados do usuário E está logado
             setUserData(user);
             // Sincronizar créditos com o contexto global usando refreshCredits
             refreshCredits();
           } else {
-            // Dados inválidos, considerar como deslogado
+            // Dados inválidos ou usuário não está logado
             setIsLoggedIn(false);
             setUserData(null);
-            localStorage.removeItem('user'); // Limpar dados inválidos
+            if (!user.isLoggedIn) {
+              // Se o usuário existe mas não está logado, não remover os dados
+              // apenas marcar como deslogado
+            } else {
+              localStorage.removeItem('user'); // Limpar dados inválidos
+            }
           }
         } else {
           // Não há dados do usuário no localStorage
@@ -192,9 +197,17 @@ export default function Header() {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-6">
             {!isLoggedIn && (
-              <Link href="/sobre" className="hover:text-[#F25790] font-medium transition-colors">
-                Sobre
-              </Link>
+              <>
+                <Link href="/cadastro" className="hover:text-[#F25790] font-medium transition-colors">
+                  Cadastre-se
+                </Link>
+                <Link href="/seja-modelo" className="hover:text-[#F25790] font-medium transition-colors">
+                  Seja modelo
+                </Link>
+                <Link href="/sobre" className="hover:text-[#F25790] font-medium transition-colors">
+                  Sobre
+                </Link>
+              </>
             )}
             
             {isLoggedIn && (
@@ -246,19 +259,14 @@ export default function Header() {
             )}
             
             {!isLoggedIn ? (
-              <>
-                <Link href="/seja-modelo" className="hover:text-[#F25790] font-medium transition-colors">
-                  Seja modelo
+              <div className="grid grid-cols-1 justify-items-end">
+                <Link href="/login" className="btn-primary px-4 py-2 text-center text-sm whitespace-nowrap w-full">
+                  Entrar
                 </Link>
-                <div className="grid grid-cols-1 justify-items-end">
-                  <Link href="/login" className="btn-primary px-4 py-2 text-center text-sm whitespace-nowrap w-full">
-                    Entrar
-                  </Link>
-                  <div className="text-xs text-gray-400 mt-1 whitespace-nowrap">
-                    Primeira vez? <Link href="/cadastro" className="text-[#F25790] hover:underline">Cadastre-se</Link>
-                  </div>
+                <div className="text-xs text-gray-400 mt-1 whitespace-nowrap">
+                  Primeira vez? <Link href="/cadastro" className="text-[#F25790] hover:underline">Cadastre-se</Link>
                 </div>
-              </>
+              </div>
             ) : (
               <div className="relative" ref={dropdownRef}>
                 <button 
@@ -378,18 +386,15 @@ export default function Header() {
               >
                 Como Funciona
               </Link>
-              {!isLoggedIn ? (
-                <Link 
-                  href="/sobre" 
-                  className="block py-2 text-white hover:text-[#F25790] font-medium transition-colors"
-                  onClick={closeMobileMenu}
-                >
-                  Sobre
-                </Link>
-              ) : null}
-              
-              {!isLoggedIn ? (
+              {!isLoggedIn && (
                 <>
+                  <Link 
+                    href="/cadastro" 
+                    className="block py-2 text-white hover:text-[#F25790] font-medium transition-colors"
+                    onClick={closeMobileMenu}
+                  >
+                    Cadastre-se
+                  </Link>
                   <Link 
                     href="/seja-modelo" 
                     className="block py-2 text-white hover:text-[#F25790] font-medium transition-colors"
@@ -397,19 +402,29 @@ export default function Header() {
                   >
                     Seja modelo
                   </Link>
-                  <div className="pt-4 border-t border-gray-700">
-                    <Link 
-                      href="/login" 
-                      className="block w-full btn-primary px-4 py-3 text-center text-sm mb-3"
-                      onClick={closeMobileMenu}
-                    >
-                      Entrar
-                    </Link>
-                    <p className="text-xs text-gray-400 text-center">
-                      Primeira vez? <Link href="/cadastro" className="text-[#F25790] hover:underline" onClick={closeMobileMenu}>Cadastre-se</Link>
-                    </p>
-                  </div>
+                  <Link 
+                    href="/sobre" 
+                    className="block py-2 text-white hover:text-[#F25790] font-medium transition-colors"
+                    onClick={closeMobileMenu}
+                  >
+                    Sobre
+                  </Link>
                 </>
+              )}
+              
+              {!isLoggedIn ? (
+                <div className="pt-4 border-t border-gray-700">
+                  <Link 
+                    href="/login" 
+                    className="block w-full btn-primary px-4 py-3 text-center text-sm mb-3"
+                    onClick={closeMobileMenu}
+                  >
+                    Entrar
+                  </Link>
+                  <p className="text-xs text-gray-400 text-center">
+                    Primeira vez? <Link href="/cadastro" className="text-[#F25790] hover:underline" onClick={closeMobileMenu}>Cadastre-se</Link>
+                  </p>
+                </div>
               ) : (
                 <div className="pt-4 border-t border-gray-700 space-y-2">
                   {/* Saldo de Créditos como botão no Mobile */}

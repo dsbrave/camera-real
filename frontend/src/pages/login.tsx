@@ -384,7 +384,7 @@ export default function Login() {
           <div>2025 Camera Real</div>
           <div className="flex space-x-6">
             <Link href="/politica-privacidade" className="hover:text-[#F25790]">Política de privacidade</Link>
-            <Link href="/fale-conosco" className="hover:text-[#F25790]">Fale conosco</Link>
+            <Link href="/suporte" className="hover:text-[#F25790]">Suporte</Link>
             <Link href="/termos-condicoes" className="hover:text-[#F25790]">Termos e condições</Link>
           </div>
         </div>

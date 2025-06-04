@@ -179,13 +179,13 @@ export default function ChatVideo() {
   const handleNextModel = () => {
     // Se não tem tempo grátis e não está usando créditos, mostrar modal
     if (freeTimeRemaining === 0 && !isUsingCredits) {
+      console.log('handleNextModel: Abrindo modal - freeTimeRemaining:', freeTimeRemaining, 'isUsingCredits:', isUsingCredits);
       setShowFreeTrialModal(true);
       return;
     }
     
     setModelIndex((prevIndex) => (prevIndex + 1) % models.length);
-    setSessionTime(0);
-    setCreditsSpent(0);
+    // NÃO resetar sessionTime e creditsSpent - o tempo deve ser global
     setIsPrivateCall(false);
     setIsCallActive(true);
     // Reset da meta da modelo
@@ -206,13 +206,13 @@ export default function ChatVideo() {
   const handlePrevModel = () => {
     // Se não tem tempo grátis e não está usando créditos, mostrar modal
     if (freeTimeRemaining === 0 && !isUsingCredits) {
+      console.log('handlePrevModel: Abrindo modal - freeTimeRemaining:', freeTimeRemaining, 'isUsingCredits:', isUsingCredits);
       setShowFreeTrialModal(true);
       return;
     }
     
     setModelIndex((prevIndex) => (prevIndex - 1 + models.length) % models.length);
-    setSessionTime(0);
-    setCreditsSpent(0);
+    // NÃO resetar sessionTime e creditsSpent - o tempo deve ser global
     setIsPrivateCall(false);
     setIsCallActive(true);
     // Reset da meta da modelo
@@ -255,7 +255,15 @@ export default function ChatVideo() {
     }
   };
 
-  const handleTogglePrivateRoom = () => {
+  const handleTogglePrivateRoom = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    
+    // Verificação adicional para garantir que não execute quando canInteract é false
+    if (!canInteract) {
+      console.log('Ação bloqueada: canInteract é false');
+      return;
+    }
+    
     if (isPrivateCall) {
       setIsPrivateCall(false);
       setMessages(prev => [...prev, { id: Date.now(), text: `🔓 Você voltou para o chat aberto com todos os usuários.`, sender: 'system', timestamp: new Date() }]);
@@ -340,7 +348,7 @@ export default function ChatVideo() {
     setIsUsingCredits(true);
     setIsCallActive(true);
     setCanInteract(true); // Reabilitar interações
-    setSessionTime(0); // Reset timer para mostrar tempo de sessão paga
+    // NÃO resetar sessionTime - manter continuidade do tempo global
   };
 
   const currentModel = models[modelIndex];
@@ -387,11 +395,22 @@ export default function ChatVideo() {
       setFreeTimeRemaining(remaining);
       
       if (remaining === 0) {
+        console.log('updateDailyTime: Tempo grátis acabou, abrindo modal automaticamente');
         setCanInteract(false);
         setIsCallActive(false);
         setShowFreeTrialModal(true);
       }
     }
+  };
+
+  // Função para resetar tempo grátis (apenas para debug/teste)
+  const resetDailyTime = () => {
+    localStorage.removeItem('dailyBrowsingTime');
+    setFreeTimeRemaining(30);
+    setCanInteract(true);
+    setIsCallActive(true);
+    setShowFreeTrialModal(false);
+    console.log('Tempo grátis resetado para 30 segundos');
   };
 
   return (
@@ -555,35 +574,39 @@ export default function ChatVideo() {
                 />
               </button>
               
-              {/* Botão Chat Privado */}
+              {/* Botão Sala Privada */}
               <button 
-                onClick={handleTogglePrivateRoom} 
+                onClick={(e) => handleTogglePrivateRoom(e)} 
                 disabled={!canInteract}
                 className={`p-5 rounded-full transition-all hover:scale-110 ${
                   !canInteract 
                     ? 'bg-gray-600/40 border border-gray-500/30 cursor-not-allowed opacity-50' 
                     : isPrivateCall 
-                    ? 'bg-gradient-to-r from-red-500/60 to-red-600/60 hover:from-red-500/80 hover:to-red-600/80 border border-red-500/30 shadow-[0_0_12px_rgba(239,68,68,0.4)]' 
+                    ? 'bg-gradient-to-r from-red-500/60 to-red-600/60 hover:from-red-500/80 hover:to-red-600/80 border border-red-500/30 shadow-[0_0_12px_rgba(239,68,68,0.4)] hover:shadow-[0_0_16px_rgba(239,68,68,0.5)]'
                     : 'bg-gradient-to-r from-[#F25790]/60 to-[#d93d75]/60 hover:from-[#F25790]/80 hover:to-[#d93d75]/80 border border-[#F25790]/30 shadow-[0_0_12px_rgba(242,87,144,0.4)] hover:shadow-[0_0_16px_rgba(242,87,144,0.5)]'
                 } backdrop-blur-sm`}
                 type="button"
                 title={!canInteract ? "Aguarde decisão do tempo grátis" : isPrivateCall ? "Sair do chat privado" : "Iniciar chat privado"}
               >
-                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                  {isPrivateCall ? (
-                    <>
-                      <rect x="3" y="11" width="18" height="10" rx="2" ry="2"/>
-                      <path d="M7 11V7a5 5 0 0 1 8.5-3.5"/>
-                      <circle cx="12" cy="16" r="1"/>
-                    </>
-                  ) : (
-                    <>
-                      <rect x="3" y="11" width="18" height="10" rx="2" ry="2"/>
-                      <path d="M7 11V7a5 5 0 0 1 8.5-3.5"/>
-                      <circle cx="12" cy="16" r="1"/>
-                    </>
-                  )}
-                </svg>
+                {isPrivateCall ? (
+                  // Cadeado aberto (quando está na sala privada)
+                  <Image
+                    src="/icons/action/lock_open.svg"
+                    alt="Sair do chat privado"
+                    width={28}
+                    height={28}
+                    className="w-7 h-7 filter invert"
+                  />
+                ) : (
+                  // Cadeado fechado (quando está fora da sala privada)
+                  <Image
+                    src="/icons/action/lock.svg"
+                    alt="Iniciar chat privado"
+                    width={28}
+                    height={28}
+                    className="w-7 h-7 filter invert"
+                  />
+                )}
               </button>
               
               {/* Botão Presentes */}
@@ -687,7 +710,7 @@ export default function ChatVideo() {
                     </button>
                     
                     <button 
-                      onClick={handleTogglePrivateRoom} 
+                      onClick={(e) => handleTogglePrivateRoom(e)} 
                       disabled={!canInteract}
                       className={`p-2 rounded-full transition-all hover:scale-110 active:scale-95 ${
                         !canInteract 
@@ -699,21 +722,25 @@ export default function ChatVideo() {
                       type="button"
                       title={!canInteract ? "Aguarde decisão do tempo grátis" : isPrivateCall ? "Sair do chat privado" : "Iniciar chat privado"}
                     >
-                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                        {isPrivateCall ? (
-                          <>
-                            <rect x="3" y="11" width="18" height="10" rx="2" ry="2"/>
-                            <path d="M7 11V7a5 5 0 0 1 8.5-3.5"/>
-                            <circle cx="12" cy="16" r="1"/>
-                          </>
-                        ) : (
-                          <>
-                            <rect x="3" y="11" width="18" height="10" rx="2" ry="2"/>
-                            <path d="M7 11V7a5 5 0 0 1 8.5-3.5"/>
-                            <circle cx="12" cy="16" r="1"/>
-                          </>
-                        )}
-                      </svg>
+                      {isPrivateCall ? (
+                        // Cadeado aberto (quando está na sala privada)
+                        <Image
+                          src="/icons/action/lock_open.svg"
+                          alt="Sair do chat privado"
+                          width={20}
+                          height={20}
+                          className="w-5 h-5 filter invert"
+                        />
+                      ) : (
+                        // Cadeado fechado (quando está fora da sala privada)
+                        <Image
+                          src="/icons/action/lock.svg"
+                          alt="Iniciar chat privado"
+                          width={20}
+                          height={20}
+                          className="w-5 h-5 filter invert"
+                        />
+                      )}
                     </button>
                     
                     <button 
@@ -738,7 +765,7 @@ export default function ChatVideo() {
                     
                     <button
                       onClick={handleNextModel}
-                      className="p-2 bg-black/60 hover:bg-white/10 rounded-full backdrop-blur-sm transition-all hover:scale-110 border border-white/20 shadow-[0_0_10px_rgba(255,255,255,0.1)] active:scale-95"
+                      className="p-2 bg-black/60 hover:bg-white/10 rounded-full backdrop-blur-sm transition-all hover:scale-110 active:scale-95"
                       aria-label="Próxima modelo"
                       title="Próxima modelo"
                     >
@@ -845,7 +872,7 @@ export default function ChatVideo() {
 
         {/* Overlay de página inteira quando limite diário excedido */}
         {!canInteract && freeTimeRemaining === 0 && (
-          <div className="fixed inset-0 z-40 backdrop-blur-sm bg-black/80 flex items-center justify-center">
+          <div className="fixed inset-0 z-[9998] backdrop-blur-sm bg-black/80 flex items-center justify-center">
             <div className="text-center p-8 max-w-md mx-4">
               <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#F25790]/20 flex items-center justify-center">
                 <svg className="w-10 h-10 text-[#F25790]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
@@ -889,7 +916,7 @@ export default function ChatVideo() {
 
         {/* Free Trial Modal */}
         {showFreeTrialModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm">
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm">
             <div className="bg-black rounded-3xl max-w-5xl w-full mx-4 shadow-[0_0_50px_rgba(242,87,144,0.3)] border border-[#F25790]/30 overflow-hidden relative">
               {/* Efeitos neon de fundo */}
               <div className="absolute inset-0 bg-gradient-to-br from-[#F25790]/10 via-transparent to-transparent pointer-events-none"></div>
@@ -995,7 +1022,7 @@ export default function ChatVideo() {
 
       {/* Gift Modal */}
       {showGiftModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80">
           <div className="bg-[#1e0a1e] rounded-2xl p-8 max-w-md w-full shadow-lg relative">
             <button
               onClick={() => setShowGiftModal(false)}
@@ -1157,34 +1184,22 @@ export default function ChatVideo() {
               />
             </button>
 
-            <button 
-              onClick={handleTogglePrivateRoom} 
-              disabled={!canInteract}
-              className={`p-3 rounded-full transition-all hover:scale-110 active:scale-95 ${
-                !canInteract 
-                  ? 'bg-gray-600/40 border border-gray-500/30 cursor-not-allowed opacity-50' 
-                  : isPrivateCall 
-                  ? 'bg-gradient-to-r from-red-500/60 to-red-600/60 hover:from-red-500/80 hover:to-red-600/80 border border-red-500/30'
-                  : 'bg-gradient-to-r from-[#F25790]/60 to-[#d93d75]/60 hover:from-[#F25790]/80 hover:to-[#d93d75]/80 border border-[#F25790]/30'
-              }`}
-              type="button"
-              title={!canInteract ? "Aguarde decisão do tempo grátis" : isPrivateCall ? "Sair do chat privado" : "Iniciar chat privado"}
+            <button
+              onClick={(e) => handleTogglePrivateRoom(e)}
+              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors"
             >
-              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                {isPrivateCall ? (
-                  <>
-                    <rect x="3" y="11" width="18" height="10" rx="2" ry="2"/>
-                    <path d="M7 11V7a5 5 0 0 1 8.5-3.5"/>
-                    <circle cx="12" cy="16" r="1"/>
-                  </>
-                ) : (
-                  <>
-                    <rect x="3" y="11" width="18" height="10" rx="2" ry="2"/>
-                    <path d="M7 11V7a5 5 0 0 1 8.5-3.5"/>
-                    <circle cx="12" cy="16" r="1"/>
-                  </>
-                )}
-              </svg>
+              {isPrivateCall ? (
+                // Cadeado aberto (quando está na sala privada)
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M18 8H17V6C17 3.24 14.76 1 12 1C9.24 1 7 3.24 7 6H9C9 4.34 10.34 3 12 3C13.66 3 15 4.34 15 6V8H6C4.9 8 4 8.9 4 10V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V10C20 8.9 19.1 8 18 8ZM18 20H6V10H18V20ZM12 17C13.1 17 14 16.1 14 15C14 13.9 13.1 13 12 13C10.9 13 10 13.9 10 15C10 16.1 10.9 17 12 17Z" fill="white"/>
+                </svg>
+              ) : (
+                // Cadeado fechado (quando está fora da sala privada)
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M18 8H17V6C17 3.24 14.76 1 12 1C9.24 1 7 3.24 7 6V8H6C4.9 8 4 8.9 4 10V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V10C20 8.9 19.1 8 18 8ZM12 3C13.66 3 15 4.34 15 6V8H9V6C9 4.34 10.34 3 12 3ZM18 20H6V10H18V20ZM12 17C13.1 17 14 16.1 14 15C14 13.9 13.1 13 12 13C10.9 13 10 13.9 10 15C10 16.1 10.9 17 12 17Z" fill="white"/>
+                </svg>
+              )}
+              <span>{isPrivateCall ? 'Sair do Privado' : 'Entrar no Privado'}</span>
             </button>
 
             <button
