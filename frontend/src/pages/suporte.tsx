@@ -56,9 +56,18 @@ export default function Suporte() {
             {/* Header da página */}
             <div className="text-center mb-10 flex flex-col items-center">
   <div className="flex items-center justify-center mb-2">
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#F25790" strokeWidth={2} className="w-8 h-8 mr-2">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4" />
-    <circle cx="12" cy="12" r="9" stroke="#F25790" strokeWidth={2} fill="none" />
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 mr-2">
+    <g clipPath="url(#clip0_17_18133)">
+      <path d="M21 12.22C21 6.73 16.74 3 12 3C7.31 3 3 6.65 3 12.28C2.4 12.62 2 13.26 2 14V16C2 17.1 2.9 18 4 18C4.55 18 5 17.55 5 17V12.19C5 8.36 7.95 5.01 11.78 4.9C15.74 4.78 19 7.96 19 11.9V19H12C11.45 19 11 19.45 11 20C11 20.55 11.45 21 12 21H19C20.1 21 21 20.1 21 19V17.78C21.59 17.47 22 16.86 22 16.14V13.84C22 13.14 21.59 12.53 21 12.22Z" fill="#F25790"/>
+      <path d="M9 14C9.55228 14 10 13.5523 10 13C10 12.4477 9.55228 12 9 12C8.44772 12 8 12.4477 8 13C8 13.5523 8.44772 14 9 14Z" fill="#F25790"/>
+      <path d="M15 14C15.5523 14 16 13.5523 16 13C16 12.4477 15.5523 12 15 12C14.4477 12 14 12.4477 14 13C14 13.5523 14.4477 14 15 14Z" fill="#F25790"/>
+      <path d="M18 11.03C17.52 8.18 15.04 6 12.05 6C9.01997 6 5.75997 8.51 6.01997 12.45C8.48997 11.44 10.35 9.24 10.88 6.56C12.19 9.19 14.88 11 18 11.03Z" fill="#F25790"/>
+    </g>
+    <defs>
+      <clipPath id="clip0_17_18133">
+        <rect width="24" height="24" fill="white"/>
+      </clipPath>
+    </defs>
   </svg>
   <h1 className="text-3xl md:text-4xl font-bold text-white">
     Suporte <span className="text-[#F25790]">Camera Real</span>
