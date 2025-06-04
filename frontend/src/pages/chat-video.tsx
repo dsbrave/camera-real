@@ -19,7 +19,7 @@ export default function ChatVideo() {
   const [isUsingCredits, setIsUsingCredits] = useState(false);
   const router = useRouter();
   const { id } = router.query;
-  const { userCredits, spendCredits } = useUser();
+  const { userCredits, spendCredits, refreshCredits } = useUser();
   
   // Estados
   const [modelIndex, setModelIndex] = useState(0);
@@ -111,8 +111,11 @@ export default function ChatVideo() {
     // Inicializar tempo diário
     initializeDailyTime();
     
+    // Atualizar créditos do localStorage
+    refreshCredits();
+    
     return () => clearTimeout(timeout);
-  }, []);
+  }, [refreshCredits]);
 
   // Efeito para scroll automático para a última mensagem
   useEffect(() => {
@@ -139,13 +142,20 @@ export default function ChatVideo() {
             setModelEarnings(prev => prev + Math.floor(cost * 0.3));
           } else {
             setIsCallActive(false);
+            // Mostrar mensagem de créditos insuficientes
+            setMessages(prev => [...prev, { 
+              id: Date.now(), 
+              text: `⚠️ Créditos insuficientes. Sessão encerrada.`, 
+              sender: 'system', 
+              timestamp: new Date() 
+            }]);
           }
         }
       }, 1000);
     }
     
     return () => clearInterval(interval);
-  }, [isCallActive, sessionTime, modelIndex, isPrivateCall, userCredits, isUsingCredits, spendCredits]);
+  }, [isCallActive, sessionTime, modelIndex, isPrivateCall, isUsingCredits, spendCredits]);
 
   // Timer para tempo grátis diário
   useEffect(() => {
@@ -156,6 +166,15 @@ export default function ChatVideo() {
       return () => clearTimeout(timer);
     }
   }, [freeTimeRemaining, isCallActive, canInteract]);
+
+  // Atualizar créditos periodicamente para manter sincronização
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refreshCredits();
+    }, 5000); // Atualiza a cada 5 segundos
+
+    return () => clearInterval(interval);
+  }, [refreshCredits]);
 
   const handleNextModel = () => {
     // Se não tem tempo grátis e não está usando créditos, mostrar modal
@@ -241,12 +260,19 @@ export default function ChatVideo() {
       setIsPrivateCall(false);
       setMessages(prev => [...prev, { id: Date.now(), text: `🔓 Você voltou para o chat aberto com todos os usuários.`, sender: 'system', timestamp: new Date() }]);
     } else {
+      // Atualizar créditos antes de verificar
+      refreshCredits();
+      
       const currentModel = models[modelIndex];
-      if (spendCredits(currentModel.privateCallPrice)) {
-        setIsPrivateCall(true);
-        // 30% para a modelo
-        setModelEarnings(prev => prev + Math.floor(currentModel.privateCallPrice * 0.3));
-        setMessages(prev => [...prev, { id: Date.now(), text: `🔒 Sala privada iniciada com ${currentModel.name}`, sender: 'system', timestamp: new Date() }]);
+      if (userCredits >= currentModel.privateCallPrice) {
+        if (spendCredits(currentModel.privateCallPrice)) {
+          setIsPrivateCall(true);
+          // 30% para a modelo
+          setModelEarnings(prev => prev + Math.floor(currentModel.privateCallPrice * 0.3));
+          setMessages(prev => [...prev, { id: Date.now(), text: `🔒 Sala privada iniciada com ${currentModel.name}`, sender: 'system', timestamp: new Date() }]);
+        } else {
+          setMessages(prev => [...prev, { id: Date.now(), text: `⚠️ Erro ao processar pagamento da sala privada.`, sender: 'system', timestamp: new Date() }]);
+        }
       } else {
         setMessages(prev => [...prev, { id: Date.now(), text: `⚠️ Créditos insuficientes para sala privada. Necessário: ${currentModel.privateCallPrice} créditos.`, sender: 'system', timestamp: new Date() }]);
       }
@@ -270,17 +296,28 @@ export default function ChatVideo() {
   };
 
   const handleSendGift = (gift: Gift) => {
+    // Atualizar créditos antes de verificar
+    refreshCredits();
+    
     if (userCredits >= gift.price) {
-      spendCredits(gift.price);
-      // 30% para a modelo
-      setModelEarnings(prev => prev + Math.floor(gift.price * 0.3));
-      setMessages(prev => [...prev, { 
-        id: Date.now(), 
-        text: `🎁 ${userName} enviou ${gift.name} para ${currentModel.name}!`, 
-        sender: 'system', 
-        timestamp: new Date() 
-      }]);
-      setShowGiftModal(false);
+      if (spendCredits(gift.price)) {
+        // 30% para a modelo
+        setModelEarnings(prev => prev + Math.floor(gift.price * 0.3));
+        setMessages(prev => [...prev, { 
+          id: Date.now(), 
+          text: `🎁 ${userName} enviou ${gift.name} para ${currentModel.name}!`, 
+          sender: 'system', 
+          timestamp: new Date() 
+        }]);
+        setShowGiftModal(false);
+      } else {
+        setMessages(prev => [...prev, { 
+          id: Date.now(), 
+          text: `⚠️ Erro ao processar pagamento do presente.`, 
+          sender: 'system', 
+          timestamp: new Date() 
+        }]);
+      }
     } else {
       setMessages(prev => [...prev, { 
         id: Date.now(), 
@@ -534,12 +571,18 @@ export default function ChatVideo() {
               >
                 <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
                   {isPrivateCall ? (
-                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/>
+                    <>
+                      <rect x="3" y="11" width="18" height="10" rx="2" ry="2"/>
+                      <path d="M7 11V7a5 5 0 0 1 8.5-3.5"/>
+                      <circle cx="12" cy="16" r="1"/>
+                    </>
                   ) : (
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <>
+                      <rect x="3" y="11" width="18" height="10" rx="2" ry="2"/>
+                      <path d="M7 11V7a5 5 0 0 1 8.5-3.5"/>
+                      <circle cx="12" cy="16" r="1"/>
+                    </>
                   )}
-                  <circle cx="12" cy="16" r="1"/>
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                 </svg>
               </button>
               
@@ -658,14 +701,20 @@ export default function ChatVideo() {
                     >
                       <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
                         {isPrivateCall ? (
-                          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/>
+                          <>
+                            <rect x="3" y="11" width="18" height="10" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 8.5-3.5"/>
+                            <circle cx="12" cy="16" r="1"/>
+                          </>
                         ) : (
-                          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                          <>
+                            <rect x="3" y="11" width="18" height="10" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 8.5-3.5"/>
+                            <circle cx="12" cy="16" r="1"/>
+                          </>
                         )}
-                        <circle cx="12" cy="16" r="1"/>
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                    </svg>
-                  </button>
+                      </svg>
+                    </button>
                     
                     <button 
                       onClick={() => setShowGiftModal(true)} 
@@ -1123,12 +1172,18 @@ export default function ChatVideo() {
             >
               <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
                 {isPrivateCall ? (
-                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/>
+                  <>
+                    <rect x="3" y="11" width="18" height="10" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 8.5-3.5"/>
+                    <circle cx="12" cy="16" r="1"/>
+                  </>
                 ) : (
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <>
+                    <rect x="3" y="11" width="18" height="10" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 8.5-3.5"/>
+                    <circle cx="12" cy="16" r="1"/>
+                  </>
                 )}
-                <circle cx="12" cy="16" r="1"/>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
               </svg>
             </button>
 

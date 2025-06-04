@@ -10,7 +10,7 @@ export default function Header() {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState<any>(null);
-  const { userCredits, setUserCredits } = useUser();
+  const { userCredits, setUserCredits, refreshCredits } = useUser();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
@@ -49,10 +49,8 @@ export default function Header() {
           if (user && typeof user === 'object') {
             setIsLoggedIn(true); // Se temos dados do usuário, consideramos como logado
             setUserData(user);
-            // Sincronizar créditos com o contexto global
-            if (user.creditos && user.creditos !== userCredits) {
-              setUserCredits(user.creditos);
-            }
+            // Sincronizar créditos com o contexto global usando refreshCredits
+            refreshCredits();
           } else {
             // Dados inválidos, considerar como deslogado
             setIsLoggedIn(false);
@@ -94,7 +92,7 @@ export default function Header() {
         document.removeEventListener('mousedown', handleClickOutside);
       }
     };
-  }, [isClient, userCredits, setUserCredits]);
+  }, [isClient, refreshCredits]);
 
   const handleLogout = () => {
     if (typeof window !== 'undefined') {
