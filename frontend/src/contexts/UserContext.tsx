@@ -23,9 +23,17 @@ interface UserProviderProps {
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [userCredits, setUserCredits] = useState<number>(150);
+  const [isClient, setIsClient] = useState(false);
+
+  // Verificar se estamos no cliente
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Sincronizar com localStorage
   useEffect(() => {
+    if (!isClient) return;
+    
     const userStorage = localStorage.getItem('user');
     if (userStorage) {
       try {
@@ -37,10 +45,12 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         console.error('Erro ao carregar créditos do localStorage:', error);
       }
     }
-  }, []);
+  }, [isClient]);
 
   // Atualizar localStorage quando créditos mudarem
   useEffect(() => {
+    if (!isClient) return;
+    
     const userStorage = localStorage.getItem('user');
     if (userStorage) {
       try {
@@ -51,7 +61,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         console.error('Erro ao salvar créditos no localStorage:', error);
       }
     }
-  }, [userCredits]);
+  }, [userCredits, isClient]);
 
   const spendCredits = (amount: number): boolean => {
     if (userCredits >= amount) {

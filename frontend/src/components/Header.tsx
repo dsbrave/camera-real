@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { useUser } from '@/contexts/UserContext';
+import ProfileEditModal from '@/components/ProfileEditModal';
 
 // Para evitar sobreposição do conteúdo pelo header fixo, adicione <div className="header-spacer" /> logo após o <Header /> em cada página principal.
 export default function Header() {
@@ -10,6 +11,13 @@ export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState<any>(null);
   const { userCredits, setUserCredits } = useUser();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+  
+  // Verificar se estamos no cliente
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
   
   // Verificar se estamos na página de chat para manter logo pequena
   const isChatPage = router.pathname === '/chat-video';
@@ -25,6 +33,8 @@ export default function Header() {
   useEffect(() => {
     // Verificar se o usuário está logado através do localStorage
     const checkLoginStatus = () => {
+      if (!isClient) return;
+      
       try {
         const userStorage = localStorage.getItem('user');
         if (userStorage) {
@@ -52,7 +62,9 @@ export default function Header() {
         console.error('Erro ao verificar login:', error);
         setIsLoggedIn(false);
         setUserData(null);
-        localStorage.removeItem('user'); // Limpar dados inválidos em caso de erro
+        if (isClient) {
+          localStorage.removeItem('user'); // Limpar dados inválidos em caso de erro
+        }
       }
     };
 
@@ -69,7 +81,7 @@ export default function Header() {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [isClient]);
 
   const handleLogout = () => {
     localStorage.removeItem('user');
@@ -82,6 +94,27 @@ export default function Header() {
   };
 
   const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleUpdateProfile = (updatedData: any) => {
+    // Atualizar os dados do usuário no localStorage
+    try {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        const parsedUser = JSON.parse(storedUser);
+        const updatedUser = { ...parsedUser, ...updatedData };
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        setUserData(updatedUser);
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar dados do usuário:', error);
+    }
+  };
+
+  const openEditModal = () => {
+    setIsEditModalOpen(true);
+    setIsDropdownOpen(false);
     setIsMobileMenuOpen(false);
   };
 
@@ -111,6 +144,17 @@ export default function Header() {
           
           {isLoggedIn && (
             <>
+              {/* Novos links para usuários logados */}
+              <Link href="/explorar" className="hover:text-[#F25790] font-medium transition-colors">
+                Explorar
+              </Link>
+              <Link href="/favoritos" className="hover:text-[#F25790] font-medium transition-colors">
+                Favoritos
+              </Link>
+              <Link href="/suporte" className="hover:text-[#F25790] font-medium transition-colors">
+                Suporte
+              </Link>
+              
               {/* Saldo de Créditos como botão */}
               <div className="relative">
                 <Link href="/carteira" className="flex items-center space-x-2 bg-gradient-to-r from-[#F25790]/20 to-purple-600/20 backdrop-blur-sm border border-[#F25790]/30 hover:border-[#F25790]/50 rounded-full px-3 py-1.5 transition-all duration-200 hover:bg-[#F25790]/10 group">
@@ -166,7 +210,7 @@ export default function Header() {
                 className="flex items-center space-x-2"
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               >
-                <div className="w-8 h-8 rounded-full bg-[#F25790] flex items-center justify-center overflow-hidden">
+                <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center overflow-hidden">
                   {userData?.photo ? (
                     <Image 
                       src={userData.photo} 
@@ -198,9 +242,12 @@ export default function Header() {
                   <Link href="/carteira" className="block px-4 py-2 text-white hover:bg-gray-800">
                     Carteira
                   </Link>
-                  <Link href="/editar-perfil" className="block px-4 py-2 text-white hover:bg-gray-800">
+                  <button 
+                    onClick={openEditModal}
+                    className="block w-full text-left px-4 py-2 text-white hover:bg-gray-800"
+                  >
                     Editar Perfil
-                  </Link>
+                  </button>
                   <hr className="my-1 border-gray-700" />
                   <button 
                     onClick={handleLogout}
@@ -245,13 +292,29 @@ export default function Header() {
         <div className="fixed inset-0 bg-black bg-opacity-95 z-50 flex flex-col items-center justify-center p-6 lg:hidden transition-all duration-300 overflow-y-auto">
           <div className="w-full max-w-xs mx-auto">
             {isLoggedIn && (
-              <Link 
-                href="/explorar" 
-                className="block py-2 text-white hover:text-[#F25790] font-medium transition-colors break-words overflow-hidden"
-                onClick={closeMobileMenu}
-              >
-                Explorar
-              </Link>
+              <>
+                <Link 
+                  href="/explorar" 
+                  className="block py-2 text-white hover:text-[#F25790] font-medium transition-colors break-words overflow-hidden"
+                  onClick={closeMobileMenu}
+                >
+                  Explorar
+                </Link>
+                <Link 
+                  href="/favoritos" 
+                  className="block py-2 text-white hover:text-[#F25790] font-medium transition-colors"
+                  onClick={closeMobileMenu}
+                >
+                  Favoritos
+                </Link>
+                <Link 
+                  href="/suporte" 
+                  className="block py-2 text-white hover:text-[#F25790] font-medium transition-colors"
+                  onClick={closeMobileMenu}
+                >
+                  Suporte
+                </Link>
+              </>
             )}
             <Link 
               href="/videochats" 
@@ -260,15 +323,7 @@ export default function Header() {
             >
               Como Funciona
             </Link>
-            {isLoggedIn ? (
-              <Link 
-                href="/suporte" 
-                className="block py-2 text-white hover:text-[#F25790] font-medium transition-colors"
-                onClick={closeMobileMenu}
-              >
-                Suporte
-              </Link>
-            ) : (
+            {!isLoggedIn ? (
               <Link 
                 href="/sobre" 
                 className="block py-2 text-white hover:text-[#F25790] font-medium transition-colors"
@@ -276,7 +331,7 @@ export default function Header() {
               >
                 Sobre
               </Link>
-            )}
+            ) : null}
             
             {!isLoggedIn ? (
               <>
@@ -320,7 +375,7 @@ export default function Header() {
                 </Link>
                 
                 <div className="flex items-center space-x-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-[#F25790] flex items-center justify-center overflow-hidden">
+                  <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center overflow-hidden">
                     {userData?.photo ? (
                       <Image 
                         src={userData.photo} 
@@ -365,13 +420,12 @@ export default function Header() {
                 >
                   Carteira
                 </Link>
-                <Link 
-                  href="/editar-perfil" 
-                  className="block py-2 text-white hover:text-[#F25790] transition-colors"
-                  onClick={closeMobileMenu}
+                <button 
+                  onClick={openEditModal}
+                  className="block w-full text-left py-2 text-white hover:text-[#F25790] transition-colors"
                 >
                   Editar Perfil
-                </Link>
+                </button>
                 <button 
                   onClick={handleLogout}
                   className="block w-full text-left py-2 text-red-400 hover:text-red-300 transition-colors"
@@ -383,6 +437,22 @@ export default function Header() {
           </div>
         </div>
       )}
+
+      {/* Modal de Editar Perfil */}
+      <ProfileEditModal 
+        isOpen={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false);
+        }}
+        userData={{
+          name: userData?.name || 'Usuário',
+          email: userData?.email || 'teste@camera.real',
+          phone: userData?.phone || '55 11 93366 1304',
+          photo: userData?.photo || '',
+          username: userData?.username || userData?.name?.toLowerCase().replace(/\s+/g, '') || 'usuario'
+        }}
+        onUpdateProfile={handleUpdateProfile}
+      />
     </header>
   )
 }

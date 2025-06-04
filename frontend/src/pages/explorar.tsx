@@ -4,6 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import ModelProfileModal from '@/components/ModelProfileModal';
+import ModelCard from '@/components/ModelCard';
 
 interface Modelo {
   id: string;
@@ -24,6 +26,9 @@ export default function Explorar() {
   const [ordenarPor, setOrdenarPor] = useState('popularidade');
   const [apenasOnline, setApenasOnline] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [favoriteModels, setFavoriteModels] = useState<string[]>([]);
+  const [selectedModel, setSelectedModel] = useState<Modelo | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Verificar se o usuário está logado ao carregar a página
   useEffect(() => {
@@ -32,11 +37,49 @@ export default function Explorar() {
       try {
         const userData = JSON.parse(userStorage);
         setIsLoggedIn(!!userData.isLoggedIn);
+        
+        // Carregar favoritos do localStorage
+        const favorites = JSON.parse(localStorage.getItem('favoriteModels') || '[]');
+        const favoriteIds = favorites.map((fav: any) => fav.id);
+        setFavoriteModels(favoriteIds);
       } catch (error) {
         console.error('Erro ao verificar login:', error);
       }
     }
   }, []);
+
+  const handleToggleFavorite = (modelo: Modelo) => {
+    if (!isLoggedIn) {
+      alert('Faça login para adicionar favoritos');
+      return;
+    }
+
+    const favorites = JSON.parse(localStorage.getItem('favoriteModels') || '[]');
+    const isFavorite = favoriteModels.includes(modelo.id);
+    
+    if (isFavorite) {
+      // Remover dos favoritos
+      const updatedFavorites = favorites.filter((fav: any) => fav.id !== modelo.id);
+      localStorage.setItem('favoriteModels', JSON.stringify(updatedFavorites));
+      setFavoriteModels(favoriteModels.filter(id => id !== modelo.id));
+    } else {
+      // Adicionar aos favoritos
+      const favoriteModel = {
+        id: modelo.id,
+        name: modelo.nome,
+        online: modelo.online,
+        lastSeen: new Date(),
+        category: modelo.categorias[0] || 'Conversa',
+        photo: modelo.fotoPerfil,
+        rating: modelo.avaliacoes,
+        pricePerMinute: modelo.valorPorMinuto,
+        destacado: modelo.destacado || false
+      };
+      const updatedFavorites = [...favorites, favoriteModel];
+      localStorage.setItem('favoriteModels', JSON.stringify(updatedFavorites));
+      setFavoriteModels([...favoriteModels, modelo.id]);
+    }
+  };
 
   // Dados de exemplo
   const modelos: Modelo[] = [
@@ -102,7 +145,7 @@ export default function Explorar() {
     },
     {
       id: 'm7',
-      nome: 'Fernanda Lima',
+      nome: 'Bianca',
       fotoPerfil: '/images/high-resolution_studio_photo_of_a_confident_brazilian-inspired_model_wearing_an_elegant_black_lace__i7mo7j07sng27o0fv86l_2.png',
       categorias: ['conversa', 'jogos'],
       online: true,
@@ -172,6 +215,16 @@ export default function Explorar() {
   const modelosRegulares = modelosFiltrados.filter(modelo => !modelo.destacado);
   const modelosOrdenados = [...modelosDestacados, ...modelosRegulares];
 
+  const handleOpenModal = (modelo: Modelo) => {
+    setSelectedModel(modelo);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedModel(null);
+  };
+
   return (
     <>
       <Head>
@@ -220,89 +273,15 @@ export default function Explorar() {
               <div className="w-full">
                 <div className="flex overflow-x-auto scrollbar-hide gap-6 pb-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                   {modelosFiltrados.map(modelo => (
-                    <div 
-                      key={modelo.id} 
-                      className="flex-shrink-0 w-64 sm:w-72 bg-gradient-to-br from-[#F25790]/10 via-purple-500/5 to-blue-500/10 backdrop-blur-sm rounded-2xl overflow-hidden hover:from-[#F25790]/15 hover:via-purple-500/10 hover:to-blue-500/15 transition-all duration-300 hover:scale-105 hover:shadow-2xl border border-white/20 hover:border-[#F25790]/50"
-                    >
-                      <div className="relative h-64 sm:h-80 bg-gradient-to-br from-black/30 to-black/50">
-                        {/* Imagem da modelo */}
-                        {modelo.fotoPerfil && (
-                          <Image
-                            src={modelo.fotoPerfil}
-                            alt={modelo.nome}
-                            fill
-                            className="object-cover opacity-95"
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                          />
-                        )}
-                        
-                        {/* Overlay gradiente sutil */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
-                        
-                        {/* Status e Destaque */}
-                        <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-10">
-                          {modelo.destacado && (
-                            <div className="bg-gradient-to-r from-[#F25790] to-[#d93d75] text-white text-xs font-bold px-4 py-1 rounded-full shadow-lg backdrop-blur-sm flex items-center gap-1">
-                              <svg xmlns="http://www.w3.org/2000/svg" fill="#FCD34D" viewBox="0 0 24 24" className="w-4 h-4">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 17.25l-5.197 3.102 1.4-5.92-4.203-3.632 5.962-.513L12 4l2.038 6.287 5.962.513-4.203 3.632 1.4 5.92z" />
-                              </svg>
-                              DESTAQUE
-                            </div>
-                          )}
-                          <div className={`flex items-center gap-1.5 px-4 py-1 rounded-full backdrop-blur-md bg-green-500/20 border border-green-400/30`}>
-                            <div className={`w-1.5 h-1.5 rounded-full ${modelo.online ? 'bg-green-400 animate-pulse' : 'bg-red-400'}`}></div>
-                            <span className="text-xs font-medium text-green-300">
-                              {modelo.online ? 'Online' : 'Offline'}
-                            </span>
-                          </div>
-                        </div>
-                        
-                        {/* Nome e avaliação */}
-                        <div className="absolute bottom-3 left-3 right-3">
-                          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 break-words truncate max-w-[120px]">{modelo.nome}</h2>
-                          <div className="flex items-center gap-2">
-                            <div className="flex">
-                              {[...Array(5)].map((_, i) => (
-                                <svg 
-                                  key={i} 
-                                  className={`w-3.5 h-3.5 ${i < Math.floor(modelo.avaliacoes) ? 'text-yellow-400' : 'text-white/30'}`} 
-                                  fill="currentColor" 
-                                  viewBox="0 0 20 20"
-                                >
-                                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                              ))}
-                            </div>
-                            <p className="text-gray-400 text-sm break-words truncate max-w-[120px]">{modelo.idade ? `${modelo.idade} anos` : ''} {modelo.localizacao ? `• ${modelo.localizacao}` : ''}</p>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="p-4 sm:p-5 bg-gradient-to-br from-white/5 via-white/3 to-transparent backdrop-blur-sm">
-                        {/* Categorias */}
-                        <div className="flex flex-wrap gap-2 mb-4">
-                          {modelo.categorias.slice(0, 2).map((categoria, index) => (
-                            <span 
-                              key={index} 
-                              className="text-xs bg-white/10 backdrop-blur-sm border border-white/20 px-5 py-1.5 rounded-full text-white/90 font-medium break-words truncate max-w-[80px]"
-                            >
-                              {categoria.charAt(0).toUpperCase() + categoria.slice(1)}
-                            </span>
-                          ))}
-                        </div>
-                        
-                        {/* Preço e botão lado a lado */}
-                        <div className="flex items-center justify-between">
-                          <div className="text-[#F25790] font-bold text-lg drop-shadow">
-                            {modelo.valorPorMinuto.toFixed(0)} <span className="text-sm text-white/70">Créditos/min</span>
-                          </div>
-                          <Link href={`/chat-video?id=${modelo.id}`}>
-                            <button className="bg-gradient-to-r from-[#F25790] to-[#d93d75] hover:from-[#d93d75] hover:to-[#c12d65] text-white font-medium py-2 px-5 rounded-full text-sm transition-all duration-300 hover:shadow-lg hover:shadow-[#F25790]/25 backdrop-blur-sm">
-                              Conversar
-                            </button>
-                          </Link>
-                        </div>
-                      </div>
+                    <div key={modelo.id} className="flex-shrink-0">
+                      <ModelCard
+                        model={modelo}
+                        isLoggedIn={isLoggedIn}
+                        favoriteModels={favoriteModels}
+                        onToggleFavorite={handleToggleFavorite}
+                        onOpenModal={handleOpenModal}
+                        size="medium"
+                      />
                     </div>
                   ))}
                 </div>
@@ -327,6 +306,15 @@ export default function Explorar() {
         </div>
         
         <Footer />
+        
+        {/* Modal de Perfil da Modelo */}
+        {selectedModel && (
+          <ModelProfileModal 
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            model={selectedModel}
+          />
+        )}
       </div>
     </>
   );

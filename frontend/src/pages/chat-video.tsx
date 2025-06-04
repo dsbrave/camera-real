@@ -75,7 +75,7 @@ export default function ChatVideo() {
     },
     {
       id: 'm3',
-      name: 'Fernanda Lima',
+      name: 'Bianca',
       online: true,
       pricePerMinute: 4,
       privateCallPrice: 12,

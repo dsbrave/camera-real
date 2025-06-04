@@ -19,10 +19,18 @@ interface Modelo {
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
+  const [favoriteModels, setFavoriteModels] = useState<string[]>([]);
+  const [isClient, setIsClient] = useState(false);
+  
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
   
   useEffect(() => {
     // Função para verificar login
     const checkLogin = () => {
+      if (!isClient) return;
+      
       try {
         const userStorage = localStorage.getItem('user');
         if (userStorage) {
@@ -30,6 +38,11 @@ export default function Home() {
           setIsLoggedIn(!!user.isLoggedIn);
           if (user.isLoggedIn && user.name) {
             setUserName(user.name);
+            
+            // Carregar favoritos do localStorage
+            const favorites = JSON.parse(localStorage.getItem('favoriteModels') || '[]');
+            const favoriteIds = favorites.map((fav: any) => fav.id);
+            setFavoriteModels(favoriteIds);
           } else {
             setUserName('');
           }
@@ -47,9 +60,44 @@ export default function Home() {
     checkLogin();
     
     // Adiciona eventListener para mudanças no localStorage (logout em qualquer aba)
-    window.addEventListener('storage', checkLogin);
-    return () => window.removeEventListener('storage', checkLogin);
-  }, []);
+    if (isClient) {
+      window.addEventListener('storage', checkLogin);
+      return () => window.removeEventListener('storage', checkLogin);
+    }
+  }, [isClient]);
+
+  const handleToggleFavorite = (modelo: Modelo) => {
+    if (!isLoggedIn) {
+      alert('Faça login para adicionar favoritos');
+      return;
+    }
+
+    const favorites = JSON.parse(localStorage.getItem('favoriteModels') || '[]');
+    const isFavorite = favoriteModels.includes(modelo.id);
+    
+    if (isFavorite) {
+      // Remover dos favoritos
+      const updatedFavorites = favorites.filter((fav: any) => fav.id !== modelo.id);
+      localStorage.setItem('favoriteModels', JSON.stringify(updatedFavorites));
+      setFavoriteModels(favoriteModels.filter(id => id !== modelo.id));
+    } else {
+      // Adicionar aos favoritos
+      const favoriteModel = {
+        id: modelo.id,
+        name: modelo.nome,
+        online: modelo.online,
+        lastSeen: new Date(),
+        category: modelo.categorias[0] || 'Conversa',
+        photo: modelo.fotoPerfil,
+        rating: modelo.avaliacoes,
+        pricePerMinute: modelo.valorPorMinuto,
+        destacado: modelo.destacado || false
+      };
+      const updatedFavorites = [...favorites, favoriteModel];
+      localStorage.setItem('favoriteModels', JSON.stringify(updatedFavorites));
+      setFavoriteModels([...favoriteModels, modelo.id]);
+    }
+  };
 
   // Modelos em destaque (mesmos dados da página explorar)
   const modelosDestaque: Modelo[] = [
@@ -75,7 +123,7 @@ export default function Home() {
     },
     {
       id: 'm7',
-      nome: 'Fernanda Lima',
+      nome: 'Bianca',
       fotoPerfil: '/images/high-resolution_studio_photo_of_a_confident_brazilian-inspired_model_wearing_an_elegant_black_lace__i7mo7j07sng27o0fv86l_2.png',
       categorias: ['conversa', 'jogos'],
       online: true,
@@ -111,7 +159,7 @@ export default function Home() {
                 {/* Seção de texto à esquerda */}
                 <div className="flex-1 lg:max-w-xl text-center lg:text-left">
                   <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight">
-                    Olá <span className="text-[#F25790]">João</span>!<br/>
+                    Olá <span className="text-[#F25790]">{userName}</span>!<br/>
                     Seus videochats personalizados<br/>
                     te aguardam em <span className="text-[#F25790]">tempo real</span>.
                   </h1>
@@ -179,43 +227,62 @@ export default function Home() {
                             
                             {/* Status e Destaque */}
                             <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-10">
-                              <div className="bg-gradient-to-r from-[#F25790] to-[#d93d75] text-white text-xs font-bold px-4 py-1 rounded-full shadow-lg backdrop-blur-sm flex items-center gap-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="#FCD34D" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#FCD34D" className="w-4 h-4">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M12 17.25l-5.197 3.102 1.4-5.92-4.203-3.632 5.962-.513L12 4l2.038 6.287 5.962.513-4.203 3.632 1.4 5.92z" />
-</svg> 
-                                DESTAQUE
-                              </div>
-                              <div className="flex items-center gap-1.5 px-4 py-1 rounded-full backdrop-blur-md bg-green-500/20 border border-green-400/30">
-                                <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></div>
-                                <span className="text-xs font-medium text-green-300">Online</span>
+                              {modelo.destacado && (
+                                <div className="bg-gradient-to-r from-[#F25790] to-[#d93d75] text-white text-xs font-bold px-4 py-1 rounded-full shadow-lg backdrop-blur-sm flex items-center gap-1">
+                                  <svg xmlns="http://www.w3.org/2000/svg" fill="#FCD34D" viewBox="0 0 24 24" className="w-4 h-4">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 17.25l-5.197 3.102 1.4-5.92-4.203-3.632 5.962-.513L12 4l2.038 6.287 5.962.513-4.203 3.632 1.4 5.92z" />
+                                  </svg>
+                                  DESTAQUE
+                                </div>
+                              )}
+                              <div className={`flex items-center gap-1.5 px-4 py-1 rounded-full backdrop-blur-md bg-green-500/20 border border-green-400/30`}>
+                                <div className={`w-1.5 h-1.5 rounded-full ${modelo.online ? 'bg-green-400 animate-pulse' : 'bg-red-400'}`}></div>
+                                <span className="text-xs font-medium text-green-300">
+                                  {modelo.online ? 'Online' : 'Offline'}
+                                </span>
                               </div>
                             </div>
                             
-                            {/* Nome e avaliação */}
                             <div className="absolute bottom-3 left-3 right-3">
-                              <h3 className="text-lg sm:text-xl font-bold text-white mb-2 drop-shadow-lg">{modelo.nome}</h3>
-                              <div className="flex items-center gap-2">
-            <div className="flex">
-                                  {[...Array(5)].map((_, i) => (
-                                    <svg 
-                                      key={i} 
-                                      className={`w-3.5 h-3.5 ${i < Math.floor(modelo.avaliacoes) ? 'text-yellow-400' : 'text-white/30'}`} 
-                                      fill="currentColor" 
-                                      viewBox="0 0 20 20"
-                                    >
-                                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                    </svg>
-                                  ))}
+                              <div className="flex items-start justify-between mb-2">
+                                <div className="flex-1 pr-3">
+                                  <h3 className="text-lg sm:text-xl font-bold text-white mb-2 drop-shadow-lg max-w-[140px]">{modelo.nome}</h3>
+                                  <div className="flex items-center gap-2">
+                                    <div className="flex">
+                                      {[...Array(5)].map((_, i) => (
+                                        <svg 
+                                          key={i} 
+                                          className={`w-3.5 h-3.5 ${i < Math.floor(modelo.avaliacoes) ? 'text-yellow-400' : 'text-white/30'}`} 
+                                          fill="currentColor" 
+                                          viewBox="0 0 20 20"
+                                        >
+                                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                      ))}
+                                    </div>
+                                    <span className="text-sm text-white/80 font-medium drop-shadow">{modelo.avaliacoes}</span>
+                                  </div>
                                 </div>
-                                <span className="text-sm text-white/80 font-medium drop-shadow">{modelo.avaliacoes}</span>
+                                
+                                {/* Botão de Favoritar */}
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleToggleFavorite(modelo);
+                                  }}
+                                  className="p-2 rounded-full transition-all duration-200 hover:scale-110"
+                                  title={favoriteModels.includes(modelo.id) ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
+                                >
+                                  <Image
+                                    src={favoriteModels.includes(modelo.id) ? '/icons/action/favorite.svg' : '/icons/action/favorite_border.svg'}
+                                    alt="Favoritar"
+                                    width={20}
+                                    height={20}
+                                    className={`w-5 h-5 ${favoriteModels.includes(modelo.id) ? 'filter brightness-0 saturate-100' : 'filter brightness-0 invert'}`}
+                                    style={favoriteModels.includes(modelo.id) ? { filter: 'brightness(0) saturate(100%) invert(77%) sepia(86%) saturate(2476%) hue-rotate(2deg) brightness(119%) contrast(99%)' } : {}}
+                                  />
+                                </button>
                               </div>
-                            </div>
-
-                            {/* Botão Ver Perfil */}
-                            <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-all duration-300 flex items-center justify-center group-hover:backdrop-blur-sm">
-                              <button className="bg-gradient-to-r from-[#F25790] to-[#d93d75] text-white px-4 py-2 rounded-lg font-medium text-sm hover:scale-105 transition-all duration-200 shadow-lg">
-                                Ver Perfil
-                              </button>
                             </div>
                           </div>
                           
@@ -234,11 +301,11 @@ export default function Home() {
                             
                             {/* Preço e botão */}
                             <div className="flex items-center justify-between">
-                              <div className="text-[#F25790] font-bold text-base drop-shadow">
-                                {modelo.valorPorMinuto.toFixed(0)} <span className="text-xs text-white/70">Créditos/min</span>
+                              <div className="text-[#F25790] font-bold text-lg drop-shadow">
+                                {modelo.valorPorMinuto.toFixed(0)} <span className="text-sm text-white/70">Créditos/min</span>
                               </div>
                               <Link href={`/chat-video?id=${modelo.id}`}>
-                                <button className="bg-gradient-to-r from-[#F25790] to-[#d93d75] hover:from-[#d93d75] hover:to-[#c12d65] text-white font-medium py-1.5 px-4 rounded-full text-xs transition-all duration-300 hover:shadow-lg hover:shadow-[#F25790]/25 backdrop-blur-sm">
+                                <button className="bg-gradient-to-r from-[#F25790] to-[#d93d75] hover:from-[#d93d75] hover:to-[#c12d65] text-white font-medium py-2 px-4 rounded-full text-sm transition-all duration-300 hover:shadow-lg hover:shadow-[#F25790]/25 backdrop-blur-sm">
                                   Conversar
                                 </button>
                               </Link>

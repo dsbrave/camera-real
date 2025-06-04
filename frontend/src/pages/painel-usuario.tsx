@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import ModelCard from '@/components/ModelCard';
 
 export default function PainelUsuario() {
   const router = useRouter();
@@ -15,20 +16,16 @@ export default function PainelUsuario() {
     credits: 0,
     photo: '',
     favoriteModels: [],
-    recentChats: []
+    recentChats: [],
+    phone: '',
+    username: ''
   });
-
-  // Mock de dados para modelos favoritos
-  const favoriteModels = [
-    { id: 'm1', name: 'Ana Silva', online: true, lastSeen: new Date(), category: 'Conversa' },
-    { id: 'm2', name: 'Julia Santos', online: false, lastSeen: new Date(Date.now() - 8 * 60 * 60 * 1000), category: 'Dança' },
-    { id: 'm3', name: 'Marina Oliveira', online: true, lastSeen: new Date(), category: 'Fetiche' }
-  ];
+  const [favoriteModels, setFavoriteModels] = useState<any[]>([]);
 
   // Mock de dados para conversas recentes
   const recentChats = [
     { id: 'c1', modelId: 'm1', modelName: 'Ana Silva', date: new Date(Date.now() - 2 * 60 * 60 * 1000), duration: 15, cost: 35 },
-    { id: 'c2', modelId: 'm4', modelName: 'Fernanda Lima', date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), duration: 25, cost: 60 },
+    { id: 'c2', modelId: 'm4', modelName: 'Bianca', date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), duration: 25, cost: 60 },
     { id: 'c3', modelId: 'm2', modelName: 'Julia Santos', date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), duration: 10, cost: 20 }
   ];
 
@@ -48,9 +45,12 @@ export default function PainelUsuario() {
         if (parsedUser.isLoggedIn) {
           setUserData({
             ...parsedUser,
-            favoriteModels,
             recentChats
           });
+          
+          // Carregar favoritos do localStorage
+          const favorites = JSON.parse(localStorage.getItem('favoriteModels') || '[]');
+          setFavoriteModels(favorites);
         } else {
           router.push('/login');
         }
@@ -65,7 +65,7 @@ export default function PainelUsuario() {
 
   // Navegar para a página de adicionar saldo
   const handleNavigateToBuyCredits = () => {
-    router.push('/comprar-creditos');
+    router.push('/carteira');
   };
 
   const formatDate = (date: Date) => {
@@ -99,314 +99,373 @@ export default function PainelUsuario() {
     alert(`Parabéns! Você adquiriu ${selectedPackage.credits} créditos.`);
   };
 
+  const handleToggleFavorite = (model: any) => {
+    const favorites = JSON.parse(localStorage.getItem('favoriteModels') || '[]');
+    const isFavorite = favorites.some((fav: any) => fav.id === model.id);
+    
+    if (isFavorite) {
+      // Remover dos favoritos
+      const updatedFavorites = favorites.filter((fav: any) => fav.id !== model.id);
+      localStorage.setItem('favoriteModels', JSON.stringify(updatedFavorites));
+      setFavoriteModels(updatedFavorites);
+    } else {
+      // Adicionar aos favoritos (caso não esteja)
+      const favoriteModel = {
+        id: model.id,
+        name: model.nome || model.name,
+        online: model.online,
+        lastSeen: new Date(),
+        category: model.categorias?.[0] || model.category || 'Conversa',
+        photo: model.fotoPerfil || model.photo,
+        rating: model.avaliacoes || model.rating || 4.5,
+        pricePerMinute: model.valorPorMinuto || model.pricePerMinute || 0,
+        destacado: model.destacado || false
+      };
+      const updatedFavorites = [...favorites, favoriteModel];
+      localStorage.setItem('favoriteModels', JSON.stringify(updatedFavorites));
+      setFavoriteModels(updatedFavorites);
+    }
+  };
+
+  const handleOpenModal = (model: any) => {
+    // Implemente a lógica para abrir o modal com o modelo selecionado
+  };
+
+  if (!userData) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-white">Carregando...</div>
+      </div>
+    );
+  }
+
   return (
     <>
       <Head>
         <title>Painel do Usuário | Camera Real</title>
         <meta name="description" content="Gerencie sua conta e créditos na Camera Real" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
       <div className="min-h-screen bg-black text-white">
         <Header />
         
-        <main className="container mx-auto px-4 py-8 mt-4">
-          <div className="flex flex-col lg:flex-row gap-8">
-            {/* Sidebar */}
-            <div className="lg:w-1/4">
-              <div className="bg-black bg-opacity-70 border border-gray-800 rounded-xl p-6 sticky top-20">
-                <div className="flex items-center space-x-4 mb-6">
-                  <div className="relative">
-                    {userData.photo ? (
-                      <Image 
-                        src={userData.photo} 
-                        alt={userData.name} 
-                        width={60} 
-                        height={60}
-                        className="rounded-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-[60px] h-[60px] bg-gray-700 rounded-full flex items-center justify-center">
-                        <span className="text-2xl font-bold text-gray-300">{userData.name ? userData.name.charAt(0).toUpperCase() : '?'}</span>
-                      </div>
-                    )}
-                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-black"></div>
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold">{userData.name}</h2>
-                    <p className="text-gray-400 text-sm">{userData.email}</p>
-                  </div>
-                </div>
-                
-                <div className="mb-6 bg-gradient-to-r from-[#F25790] to-[#9747FF] bg-opacity-10 rounded-lg p-4 border border-[#F25790] border-opacity-20 shadow-lg">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-white">Seus créditos:</span>
-                    <span className="text-2xl font-bold text-white">{userData.credits}</span>
-                  </div>
-                  <button onClick={handleNavigateToBuyCredits} className="block w-full bg-white hover:bg-gray-100 text-[#F25790] font-bold py-2 rounded-full text-center transition-colors">
-                    Comprar créditos
-                  </button>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <Link href="/carteira" className="bg-black bg-opacity-70 border border-gray-800 rounded-lg p-4 hover:border-[#F25790] transition-all">
-                    <div className="flex items-center mb-2">
-                      <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-[#F25790]">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3" />
-                        </svg>
-                      </div>
-                      <span className="font-medium">Carteira</span>
+        <main className="px-3 sm:px-4 pt-16 sm:pt-20 pb-6 sm:pb-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+              {/* Sidebar */}
+              <aside className="w-full lg:w-80 lg:flex-shrink-0">
+                {/* User Card */}
+                <div className="bg-gray-900 rounded-xl p-4 sm:p-6 mb-6">
+                  <div className="flex flex-col items-center text-center">
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-700 flex items-center justify-center mb-4 overflow-hidden flex-shrink-0">
+                      {userData.photo ? (
+                        <Image 
+                          src={userData.photo} 
+                          alt={userData.name || 'Usuário'} 
+                          width={96} 
+                          height={96}
+                          className="w-full h-full object-cover rounded-full"
+                        />
+                      ) : (
+                        <span className="text-white text-xl sm:text-2xl font-bold">
+                          {userData.name?.charAt(0) || 'U'}
+                        </span>
+                      )}
                     </div>
-                    <p className="text-sm text-gray-400 pl-10">Gerencie seus créditos e histórico de compras</p>
-                  </Link>
-                  
-                  <Link href="/editar-perfil" className="bg-black bg-opacity-70 border border-gray-800 rounded-lg p-4 hover:border-[#F25790] transition-all">
-                    <div className="flex items-center mb-2">
-                      <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-[#F25790]">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                        </svg>
-                      </div>
-                      <span className="font-medium">Editar Perfil</span>
-                    </div>
-                    <p className="text-sm text-gray-400 pl-10">Atualize suas informações pessoais</p>
-                  </Link>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <Link href="/explorar" className="bg-black bg-opacity-70 border border-gray-800 rounded-lg p-4 hover:border-[#F25790] transition-all">
-                    <div className="flex items-center mb-2">
-                      <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-[#F25790]">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                        </svg>
-                      </div>
-                      <span className="font-medium">Explorar</span>
-                    </div>
-                    <p className="text-sm text-gray-400 pl-10">Descubra novos modelos e categorias</p>
-                  </Link>
-                  
-                  <Link href="/chat-video" className="bg-black bg-opacity-70 border border-gray-800 rounded-lg p-4 hover:border-[#F25790] transition-all">
-                    <div className="flex items-center mb-2">
-                      <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-[#F25790]">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M6 20.25h12m-7.5-3v3m3-3v3m-10.125-3h17.25c.621 0 1.125-.504 1.125-1.125V4.875c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125z" />
-                        </svg>
-                      </div>
-                      <span className="font-medium">Iniciar Chat</span>
-                    </div>
-                    <p className="text-sm text-gray-400 pl-10">Converse com modelos em tempo real</p>
-                  </Link>
-                </div>
-                
-                <div className="grid grid-cols-1 gap-4">
-                  <Link href="/configuracoes" className="bg-black bg-opacity-70 border border-gray-800 rounded-lg p-4 hover:border-[#F25790] transition-all">
-                    <div className="flex items-center mb-2">
-                      <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-[#F25790]">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                      </div>
-                      <span className="font-medium">Configurações</span>
-                    </div>
-                    <p className="text-sm text-gray-400 pl-10">Personalize sua experiência na plataforma</p>
-                  </Link>
-                </div>
-              </div>
-            </div>
-            
-            {/* Main Content */}
-            <div className="lg:w-3/4">
-              <h1 className="text-3xl font-bold mb-8">Painel do Usuário</h1>
-              
-              {/* Quick Stats */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                <div className="bg-black bg-opacity-70 border border-gray-800 rounded-xl p-6">
-                  <div className="flex items-center mb-2">
-                    <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-[#F25790]">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <h3 className="font-medium">Créditos</h3>
-                  </div>
-                  <p className="text-2xl font-bold text-[#F25790]">{userData.credits}</p>
-                  <p className="text-sm text-gray-400 mt-1">Disponíveis</p>
-                </div>
-                
-                <div className="bg-black bg-opacity-70 border border-gray-800 rounded-xl p-6">
-                  <div className="flex items-center mb-2">
-                    <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-[#F25790]">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                      </svg>
-                    </div>
-                    <h3 className="font-medium">Favoritos</h3>
-                  </div>
-                  <p className="text-2xl font-bold">{favoriteModels.length}</p>
-                  <p className="text-sm text-gray-400 mt-1">Modelos salvos</p>
-                </div>
-                
-                <div className="bg-black bg-opacity-70 border border-gray-800 rounded-xl p-6">
-                  <div className="flex items-center mb-2">
-                    <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-[#F25790]">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <h3 className="font-medium">Conversas</h3>
-                  </div>
-                  <p className="text-2xl font-bold">{recentChats.length}</p>
-                  <p className="text-sm text-gray-400 mt-1">Chats realizados</p>
-                </div>
-              </div>
-              
-              {/* Favorite Models Section */}
-              <div className="mb-12">
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-bold">Modelos Favoritos</h2>
-                  <Link href="/favoritos" className="text-[#F25790] hover:underline text-sm flex items-center">
-                    Ver todos
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-1">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                    </svg>
-                  </Link>
-                </div>
-                
-                {favoriteModels.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {favoriteModels.map(model => (
-                      <div key={model.id} className="bg-black bg-opacity-70 border border-gray-800 rounded-xl overflow-hidden hover:border-[#F25790] transition-all">
-                        <div className="relative aspect-[3/4] bg-black">
-                          <div className="absolute inset-0 bg-gradient-to-t from-[#00000090] via-transparent to-[#00000060]"></div>
-                          
-                          <div className={`absolute top-3 right-3 flex items-center ${model.online ? 'text-green-500' : 'text-gray-500'}`}>
-                            <div className={`w-3 h-3 rounded-full mr-1 ${model.online ? 'bg-green-500' : 'bg-gray-500'}`}></div>
-                            <span className="text-xs font-medium">{model.online ? 'Online' : 'Offline'}</span>
+                    <h2 className="text-lg sm:text-xl font-bold text-white mb-1">
+                      Olá, {userData.name || 'Usuário'}!
+                    </h2>
+                    <p className="text-sm text-gray-400 mb-4 break-all">
+                      {userData.email || 'teste@camera.real'}
+                    </p>
+                    
+                    {/* Credits Card */}
+                    <div className="w-full bg-gradient-to-r from-gray-800/60 to-gray-700/60 backdrop-blur-sm border border-gray-600/50 hover:border-[#F25790]/50 rounded-xl p-4 mb-4 transition-all duration-200 hover:bg-gray-700/70 group">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-white font-medium text-sm">Seus créditos:</span>
+                        <div className="flex items-center space-x-2">
+                          <div className="relative w-4 h-4">
+                            {/* Ícone branco padrão */}
+                            <svg 
+                              width="16" 
+                              height="16" 
+                              viewBox="0 0 24 24" 
+                              fill="none" 
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="w-4 h-4 text-white filter invert absolute top-0 left-0 group-hover:opacity-0 transition-opacity duration-200"
+                            >
+                              <path d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z" fill="currentColor"/>
+                            </svg>
+                            
+                            {/* Ícone verde no hover */}
+                            <svg 
+                              width="16" 
+                              height="16" 
+                              viewBox="0 0 24 24" 
+                              fill="none" 
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="w-4 h-4 text-green-500 absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                            >
+                              <path d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z" fill="currentColor"/>
+                            </svg>
                           </div>
-                          
-                          <div className="absolute bottom-0 left-0 right-0 p-4">
-                            <h3 className="text-xl font-bold text-white mb-1">{model.name}</h3>
-                            <p className="text-sm text-gray-300">{model.category}</p>
-                          </div>
+                          <span className="text-white font-medium text-lg">
+                            {userData?.credits || 300}
+                          </span>
+                          <span className="text-gray-300 text-xs">Créditos</span>
                         </div>
-                        
-                        <div className="p-4">
-                          <div className="flex justify-between items-center">
-                            <div className="text-sm text-gray-400">
-                              {model.online ? 'Agora' : `Visto ${formatDate(model.lastSeen)}`}
+                      </div>
+                      <button 
+                        onClick={() => router.push('/carteira')}
+                        className="w-full py-3 bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white font-bold rounded-xl transition-all duration-300 shadow-[0_0_15px_rgba(242,87,144,0.4)] hover:shadow-[0_0_25px_rgba(242,87,144,0.6)] hover:scale-105 active:scale-95 border border-[#F25790]/30"
+                      >
+                        <div className="flex items-center justify-center gap-2">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 6v6l4 2"/>
+                          </svg>
+                          <span>Comprar créditos</span>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Menu de Navegação */}
+                <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+                  <h3 className="text-lg font-bold mb-4">Ações Rápidas</h3>
+                  <div className="space-y-2">
+                    <Link href="/carteira" className="flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-800 transition-all group">
+                      <Image 
+                        src="/icons/action/account_balance_wallet.svg"
+                        alt="Carteira"
+                        width={20}
+                        height={20}
+                        className="w-5 h-5 filter brightness-0 invert"
+                      />
+                      <span className="group-hover:text-[#F25790] transition-colors">Carteira</span>
+                    </Link>
+                    
+                    <Link href="/explorar" className="flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-800 transition-all group">
+                      <Image 
+                        src="/icons/action/search.svg"
+                        alt="Explorar"
+                        width={20}
+                        height={20}
+                        className="w-5 h-5 filter brightness-0 invert"
+                      />
+                      <span className="group-hover:text-[#F25790] transition-colors">Explorar Modelos</span>
+                    </Link>
+                    
+                    <Link href="/chat-video" className="flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-800 transition-all group">
+                      <Image 
+                        src="/icons/audio_video/videocam.svg"
+                        alt="Iniciar Chat"
+                        width={20}
+                        height={20}
+                        className="w-5 h-5 filter brightness-0 invert"
+                      />
+                      <span className="group-hover:text-[#F25790] transition-colors">Iniciar Chat</span>
+                    </Link>
+                  </div>
+                </div>
+              </aside>
+
+              {/* Conteúdo Principal */}
+              <div className="flex-1 space-y-8">
+                {/* Cards de Estatísticas */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-[#F25790] transition-all">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="p-3">
+                        <Image 
+                          src="/icons/editor/monetization_on.svg"
+                          alt="Créditos"
+                          width={24}
+                          height={24}
+                          className="w-6 h-6 filter brightness-0 invert"
+                        />
+                      </div>
+                      <span className="text-3xl font-bold text-[#F25790]">{userData.credits || 300}</span>
+                    </div>
+                    <h3 className="font-semibold text-lg mb-1">Créditos</h3>
+                    <p className="text-gray-400 text-sm">Disponíveis</p>
+                  </div>
+                  
+                  <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-[#F25790] transition-all">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="p-3">
+                        <Image 
+                          src="/icons/action/favorite.svg"
+                          alt="Favoritos"
+                          width={24}
+                          height={24}
+                          className="w-6 h-6 filter brightness-0 invert"
+                        />
+                      </div>
+                      <span className="text-3xl font-bold text-yellow-500">{favoriteModels.length}</span>
+                    </div>
+                    <h3 className="font-semibold text-lg mb-1">Favoritos</h3>
+                    <p className="text-gray-400 text-sm">Modelos salvos</p>
+                  </div>
+                  
+                  <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-[#F25790] transition-all">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="p-3">
+                        <Image 
+                          src="/icons/communication/chat.svg"
+                          alt="Conversas"
+                          width={24}
+                          height={24}
+                          className="w-6 h-6 filter brightness-0 invert"
+                        />
+                      </div>
+                      <span className="text-3xl font-bold text-blue-500">{recentChats.length}</span>
+                    </div>
+                    <h3 className="font-semibold text-lg mb-1">Conversas</h3>
+                    <p className="text-gray-400 text-sm">Chats realizados</p>
+                  </div>
+                </div>
+
+                {/* Modelos Favoritos */}
+                <div>
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-xl font-semibold">Modelos Favoritos</h2>
+                    <Link href="/favoritos" className="text-[#F25790] hover:text-[#d93d75] text-sm font-medium transition-colors">
+                      Ver todos
+                    </Link>
+                  </div>
+                  
+                  {favoriteModels.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {favoriteModels.map(model => (
+                        <ModelCard
+                          key={model.id}
+                          model={model}
+                          isLoggedIn={true}
+                          favoriteModels={favoriteModels.map(m => m.id)}
+                          onToggleFavorite={handleToggleFavorite}
+                          onOpenModal={handleOpenModal}
+                          size="small"
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-12 text-center">
+                      <div className="p-4 w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+                        <Image 
+                          src="/icons/action/favorite_border.svg"
+                          alt="Sem favoritos"
+                          width={32}
+                          height={32}
+                          className="w-8 h-8 filter brightness-0 invert"
+                        />
+                      </div>
+                      <h3 className="text-xl font-semibold mb-2">Nenhum favorito ainda</h3>
+                      <p className="text-gray-400 mb-6">Explore nossos modelos e adicione seus favoritos</p>
+                      <Link href="/explorar" className="bg-[#F25790] hover:bg-[#d93d75] text-white font-medium py-3 px-8 rounded-xl transition-colors inline-block">
+                        Explorar Modelos
+                      </Link>
+                    </div>
+                  )}
+                </div>
+
+                {/* Conversas Recentes */}
+                <div>
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-2xl font-bold">Conversas Recentes</h2>
+                    <Link href="/historico" className="text-[#F25790] hover:text-[#d93d75] font-medium flex items-center transition-colors">
+                      Ver histórico completo
+                      <Image 
+                        src="/icons/navigation/chevron_right.svg"
+                        alt="Seta"
+                        width={16}
+                        height={16}
+                        className="w-4 h-4 ml-1 filter brightness-0 invert"
+                      />
+                    </Link>
+                  </div>
+                  
+                  {recentChats.length > 0 ? (
+                    <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
+                      {/* Mobile: Cards Layout */}
+                      <div className="block md:hidden">
+                        {recentChats.map(chat => (
+                          <div key={chat.id} className="border-b border-gray-800 last:border-b-0 p-4">
+                            <div className="flex justify-between items-start mb-2">
+                              <Link href={`/modelo/${chat.modelId}`} className="font-medium hover:text-[#F25790] transition-colors">
+                                {chat.modelName}
+                              </Link>
+                              <span className="text-[#F25790] font-semibold text-sm">{chat.cost}</span>
                             </div>
-                            <Link href={`/chat-video?id=${model.id}`}>
-                              <button className="bg-[#F25790] hover:bg-[#d93d75] text-white font-medium py-2 px-4 rounded-full text-sm transition-colors">
-                                {model.online ? 'Conversar' : 'Ver perfil'}
+                            <div className="flex justify-between items-center text-sm text-gray-400 mb-3">
+                              <span>{formatDate(chat.date)}</span>
+                              <span>{chat.duration} min</span>
+                            </div>
+                            <Link href={`/chat-video?id=${chat.modelId}`}>
+                              <button className="w-full bg-[#F25790] hover:bg-[#d93d75] text-white font-medium py-2 rounded-lg text-sm transition-colors">
+                                Conversar
                               </button>
                             </Link>
                           </div>
-                        </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="bg-black bg-opacity-70 border border-gray-800 rounded-xl p-8 text-center">
-                    <p className="text-gray-400 mb-4">Você ainda não tem modelos favoritos</p>
-                    <Link href="/explorar" className="bg-[#F25790] hover:bg-[#d93d75] text-white font-medium py-2 px-6 rounded-full text-sm transition-colors inline-block">
-                      Explorar modelos
-                    </Link>
-                  </div>
-                )}
-              </div>
-              
-              {/* Recent Chats Section */}
-              <div className="mb-12">
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-bold">Conversas Recentes</h2>
-                  <Link href="/historico" className="text-[#F25790] hover:underline text-sm flex items-center">
-                    Ver histórico completo
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-1">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                    </svg>
-                  </Link>
-                </div>
-                
-                {recentChats.length > 0 ? (
-                  <div className="bg-black bg-opacity-70 border border-gray-800 rounded-xl overflow-hidden">
-                    <div className="overflow-x-auto">
-                      <table className="w-full">
-                        <thead>
-                          <tr className="border-b border-gray-800">
-                            <th className="px-4 py-3 text-left text-sm font-medium text-gray-400">Modelo</th>
-                            <th className="px-4 py-3 text-left text-sm font-medium text-gray-400">Data</th>
-                            <th className="px-4 py-3 text-left text-sm font-medium text-gray-400">Duração</th>
-                            <th className="px-4 py-3 text-left text-sm font-medium text-gray-400">Créditos</th>
-                            <th className="px-4 py-3 text-left text-sm font-medium text-gray-400">Ação</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {recentChats.map(chat => (
-                            <tr key={chat.id} className="border-b border-gray-800 hover:bg-white hover:bg-opacity-5">
-                              <td className="px-4 py-3">
-                                <Link href={`/modelo/${chat.modelId}`} className="font-medium hover:text-[#F25790]">
-                                  {chat.modelName}
-                                </Link>
-                              </td>
-                              <td className="px-4 py-3 text-gray-400">{formatDate(chat.date)}</td>
-                              <td className="px-4 py-3">{chat.duration} min</td>
-                              <td className="px-4 py-3 text-[#F25790]">{chat.cost}</td>
-                              <td className="px-4 py-3">
-                                <Link href={`/chat-video?id=${chat.modelId}`}>
-                                  <button className="bg-[#F25790] hover:bg-[#d93d75] text-white font-medium py-1 px-3 rounded-full text-xs transition-colors">
-                                    Conversar
-                                  </button>
-                                </Link>
-                              </td>
+                      
+                      {/* Desktop: Table Layout */}
+                      <div className="hidden md:block overflow-x-auto">
+                        <table className="w-full">
+                          <thead>
+                            <tr className="border-b border-gray-800 bg-gray-800 bg-opacity-50">
+                              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Modelo</th>
+                              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Data</th>
+                              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Duração</th>
+                              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Créditos</th>
+                              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Ação</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody>
+                            {recentChats.map(chat => (
+                              <tr key={chat.id} className="border-b border-gray-800 hover:bg-gray-800 hover:bg-opacity-30 transition-colors">
+                                <td className="px-6 py-4">
+                                  <Link href={`/modelo/${chat.modelId}`} className="font-medium hover:text-[#F25790] transition-colors">
+                                    {chat.modelName}
+                                  </Link>
+                                </td>
+                                <td className="px-6 py-4 text-gray-400 text-sm">{formatDate(chat.date)}</td>
+                                <td className="px-6 py-4 text-sm">{chat.duration} min</td>
+                                <td className="px-6 py-4 text-[#F25790] font-semibold text-sm">{chat.cost}</td>
+                                <td className="px-6 py-4">
+                                  <Link href={`/chat-video?id=${chat.modelId}`}>
+                                    <button className="bg-[#F25790] hover:bg-[#d93d75] text-white font-medium py-2 px-4 rounded-lg text-sm transition-colors">
+                                      Conversar
+                                    </button>
+                                  </Link>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
-                  </div>
-                ) : (
-                  <div className="bg-black bg-opacity-70 border border-gray-800 rounded-xl p-8 text-center">
-                    <p className="text-gray-400 mb-4">Você ainda não realizou nenhuma conversa</p>
-                    <Link href="/explorar" className="bg-[#F25790] hover:bg-[#d93d75] text-white font-medium py-2 px-6 rounded-full text-sm transition-colors inline-block">
-                      Explorar modelos
-                    </Link>
-                  </div>
-                )}
-              </div>
-              
-              {/* Credit Packages Section */}
-              <div id="credit-packages" className="mb-12">
-                <h2 className="text-2xl font-bold mb-6">Adicionar saldo</h2>
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {creditPackages.map(pkg => (
-                    <div 
-                      key={pkg.id} 
-                      className={`bg-black bg-opacity-70 ${pkg.popular ? 'border-2 border-[#F25790]' : 'border border-gray-800'} rounded-xl p-6 relative ${pkg.popular ? 'transform hover:scale-105' : 'hover:border-[#F25790]'} transition-all`}
-                    >
-                      {pkg.popular && (
-                        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-[#F25790] text-white text-sm font-bold px-3 py-1 rounded-full">
-                          MAIS POPULAR
-                        </div>
-                      )}
-                      
-                      <h3 className="text-xl font-bold mb-2 mt-2">Pacote {pkg.name}</h3>
-                      <div className="text-3xl font-bold text-[#F25790] mb-2">R$ {pkg.price}</div>
-                      <p className="text-sm text-gray-400 mb-4">
-                        {pkg.credits} créditos 
-                        {pkg.discount && <span className="text-white font-bold ml-2">({pkg.discount} de desconto)</span>}
-                      </p>
-                      
-                      <button 
-                        onClick={() => handleBuyCredits(pkg.id)}
-                        className={`w-full ${pkg.popular ? 'bg-[#F25790] hover:bg-[#d93d75] text-white' : 'bg-white hover:bg-gray-200 text-black'} font-medium py-2 rounded-full transition-colors`}
-                      >
-                        Comprar Agora
-                      </button>
+                  ) : (
+                    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-12 text-center">
+                      <div className="p-4 w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+                        <Image 
+                          src="/icons/communication/chat_bubble_outline.svg"
+                          alt="Sem conversas"
+                          width={32}
+                          height={32}
+                          className="w-8 h-8 filter brightness-0 invert"
+                        />
+                      </div>
+                      <h3 className="text-xl font-semibold mb-2">Nenhuma conversa ainda</h3>
+                      <p className="text-gray-400 mb-6">Comece a conversar com nossos modelos</p>
+                      <Link href="/explorar" className="bg-[#F25790] hover:bg-[#d93d75] text-white font-medium py-3 px-8 rounded-xl transition-colors inline-block">
+                        Explorar Modelos
+                      </Link>
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
             </div>

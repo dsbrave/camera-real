@@ -1,19 +1,24 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import ProfileEditModal from '@/components/ProfileEditModal';
+import Image from 'next/image';
 
 export default function EditarPerfil() {
   const router = useRouter();
-  const [isModalOpen, setIsModalOpen] = useState(true);
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [userData, setUserData] = useState({
     name: '',
     email: '',
     phone: '',
-    photo: '/images/default-profile.jpg'
+    photo: '',
+    username: ''
+  });
+  const [editingField, setEditingField] = useState<string | null>(null);
+  const [tempValue, setTempValue] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordData, setPasswordData] = useState({
+    current: '',
+    new: '',
+    confirm: ''
   });
 
   useEffect(() => {
@@ -24,98 +29,314 @@ export default function EditarPerfil() {
         const parsedUser = JSON.parse(storedUser);
         if (parsedUser) {
           setUserData({
-            name: parsedUser.name || userData.name,
-            email: parsedUser.email || userData.email,
-            phone: parsedUser.phone || userData.phone,
-            photo: parsedUser.photo || userData.photo
+            name: parsedUser.name || 'Usuário',
+            email: parsedUser.email || 'teste@camera.real',
+            phone: parsedUser.phone || '55 11 93366 1304',
+            photo: parsedUser.photo || '',
+            username: parsedUser.username || parsedUser.name?.toLowerCase().replace(/\s+/g, '') || 'usuario'
           });
         }
       } catch (error) {
         console.error('Erro ao carregar dados do usuário:', error);
+        router.push('/painel-usuario');
       }
+    } else {
+      router.push('/login');
     }
-  }, []);
+  }, [router]);
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleClose = () => {
     router.push('/painel-usuario');
   };
 
-  const handleUpdateProfile = (updatedData: any) => {
-    // Atualizar os dados do usuário no localStorage
-    try {
+  const handleEdit = (field: string) => {
+    setEditingField(field);
+    setTempValue(userData[field as keyof typeof userData] || '');
+  };
+
+  const handleSave = () => {
+    if (editingField) {
+      const updatedUser = { ...userData, [editingField]: tempValue };
+      setUserData(updatedUser);
+      
+      // Atualizar localStorage
       const storedUser = localStorage.getItem('user');
       if (storedUser) {
         const parsedUser = JSON.parse(storedUser);
-        const updatedUser = { ...parsedUser, ...updatedData };
-        localStorage.setItem('user', JSON.stringify(updatedUser));
-        setUserData({
-          name: updatedUser.name || userData.name,
-          email: updatedUser.email || userData.email,
-          phone: updatedUser.phone || userData.phone,
-          photo: updatedUser.photo || userData.photo
-        });
-        
-        // Mostrar mensagem de sucesso
-        setShowSuccessMessage(true);
-        setIsModalOpen(false);
-        
-        // Redirecionar após 2 segundos
-        setTimeout(() => {
-          router.push('/painel-usuario');
-        }, 2000);
+        const newUserData = { ...parsedUser, [editingField]: tempValue };
+        localStorage.setItem('user', JSON.stringify(newUserData));
       }
-    } catch (error) {
-      console.error('Erro ao atualizar dados do usuário:', error);
+      
+      setEditingField(null);
+      setTempValue('');
     }
   };
 
+  const handleCancel = () => {
+    setEditingField(null);
+    setTempValue('');
+  };
+
+  const handlePasswordSave = () => {
+    if (passwordData.new !== passwordData.confirm) {
+      alert('As senhas não conferem');
+      return;
+    }
+    if (passwordData.new.length < 6) {
+      alert('A senha deve ter pelo menos 6 caracteres');
+      return;
+    }
+    
+    // Simular salvamento da senha
+    setShowPassword(false);
+    setPasswordData({ current: '', new: '', confirm: '' });
+    alert('Senha alterada com sucesso!');
+  };
+
   return (
-    <div className="min-h-screen bg-black bg-opacity-90 page-with-bg-image" style={{ background: 'linear-gradient(135deg, #1a0033 0%, #330033 50%, #220022 100%)' }}>
+    <>
       <Head>
         <title>Editar Perfil | Camera Real</title>
-        <meta name="description" content="Atualize suas informações de perfil" />
+        <meta name="description" content="Edite suas informações pessoais" />
       </Head>
-      
-      <Header />
-      
-      {/* Conteúdo principal */}
-      <main className="content-after-header container mx-auto px-4 py-8 pt-32">
-        {showSuccessMessage && (
-          <div className="bg-[#1a8a3d] text-white p-4 rounded-lg mb-8 max-w-lg mx-auto flex items-center animate-fade-in">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-            <div>
-              <h3 className="font-bold">Perfil atualizado com sucesso!</h3>
-              <p className="text-sm">Suas informações foram salvas. Redirecionando para o painel...</p>
+
+      {/* Modal Overlay */}
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+        {/* Modal Container */}
+        <div className="bg-black rounded-3xl max-w-md w-full mx-4 shadow-[0_0_30px_rgba(242,87,144,0.2)] border border-[#F25790]/20 overflow-hidden relative">
+          {/* Efeitos neon de fundo */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#F25790]/5 via-transparent to-transparent pointer-events-none"></div>
+          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F25790] to-transparent opacity-30"></div>
+          <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F25790] to-transparent opacity-20"></div>
+          
+          <div className="relative z-10 p-8">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl font-bold text-white">Editar perfil</h2>
+              <button
+                onClick={handleClose}
+                className="p-2 text-gray-400 hover:text-white transition-colors rounded-full hover:bg-white/10"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Profile Photo */}
+            <div className="flex justify-center mb-8">
+              <div className="relative">
+                <div className="w-24 h-24 rounded-full bg-gray-700 flex items-center justify-center overflow-hidden">
+                  {userData.photo ? (
+                    <Image 
+                      src={userData.photo} 
+                      alt="Foto de perfil" 
+                      width={96} 
+                      height={96}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-white text-2xl font-bold">
+                      {userData.name?.charAt(0) || 'U'}
+                    </span>
+                  )}
+                </div>
+                <button className="absolute bottom-0 right-0 bg-[#F25790] hover:bg-[#d93d75] text-white text-xs px-2 py-1 rounded-full transition-colors">
+                  Editar
+                </button>
+              </div>
+            </div>
+
+            {/* Form Fields */}
+            <div className="space-y-4">
+              {/* Username */}
+              <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-4">
+                {editingField === 'username' ? (
+                  <div>
+                    <input
+                      type="text"
+                      value={tempValue}
+                      onChange={(e) => setTempValue(e.target.value)}
+                      className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg mb-3 border border-gray-600 focus:border-[#F25790] focus:outline-none"
+                      placeholder="Nome de usuário"
+                      autoFocus
+                    />
+                    <div className="flex justify-end space-x-2">
+                      <button
+                        onClick={handleCancel}
+                        className="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg text-sm transition-colors"
+                      >
+                        Cancelar
+                      </button>
+                      <button
+                        onClick={handleSave}
+                        className="px-4 py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-lg text-sm transition-colors"
+                      >
+                        Salvar
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-gray-400 text-sm">Nome de usuário</p>
+                      <p className="text-white">@{userData.username}</p>
+                    </div>
+                    <button
+                      onClick={() => handleEdit('username')}
+                      className="bg-[#F25790] hover:bg-[#d93d75] text-white text-sm px-4 py-2 rounded-lg transition-colors"
+                    >
+                      Editar
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Email */}
+              <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-4">
+                {editingField === 'email' ? (
+                  <div>
+                    <input
+                      type="email"
+                      value={tempValue}
+                      onChange={(e) => setTempValue(e.target.value)}
+                      className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg mb-3 border border-gray-600 focus:border-[#F25790] focus:outline-none"
+                      placeholder="Email"
+                      autoFocus
+                    />
+                    <div className="flex justify-end space-x-2">
+                      <button
+                        onClick={handleCancel}
+                        className="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg text-sm transition-colors"
+                      >
+                        Cancelar
+                      </button>
+                      <button
+                        onClick={handleSave}
+                        className="px-4 py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-lg text-sm transition-colors"
+                      >
+                        Salvar
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-gray-400 text-sm">Email</p>
+                      <p className="text-white">{userData.email}</p>
+                    </div>
+                    <button
+                      onClick={() => handleEdit('email')}
+                      className="bg-[#F25790] hover:bg-[#d93d75] text-white text-sm px-4 py-2 rounded-lg transition-colors"
+                    >
+                      Editar
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Phone */}
+              <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-4">
+                {editingField === 'phone' ? (
+                  <div>
+                    <input
+                      type="tel"
+                      value={tempValue}
+                      onChange={(e) => setTempValue(e.target.value)}
+                      className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg mb-3 border border-gray-600 focus:border-[#F25790] focus:outline-none"
+                      placeholder="Telefone"
+                      autoFocus
+                    />
+                    <div className="flex justify-end space-x-2">
+                      <button
+                        onClick={handleCancel}
+                        className="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg text-sm transition-colors"
+                      >
+                        Cancelar
+                      </button>
+                      <button
+                        onClick={handleSave}
+                        className="px-4 py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-lg text-sm transition-colors"
+                      >
+                        Salvar
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-gray-400 text-sm">Telefone</p>
+                      <p className="text-white">{userData.phone}</p>
+                    </div>
+                    <button
+                      onClick={() => handleEdit('phone')}
+                      className="bg-[#F25790] hover:bg-[#d93d75] text-white text-sm px-4 py-2 rounded-lg transition-colors"
+                    >
+                      Editar
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Password */}
+              <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-4">
+                {showPassword ? (
+                  <div className="space-y-3">
+                    <input
+                      type="password"
+                      value={passwordData.current}
+                      onChange={(e) => setPasswordData({...passwordData, current: e.target.value})}
+                      className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#F25790] focus:outline-none"
+                      placeholder="Senha atual"
+                    />
+                    <input
+                      type="password"
+                      value={passwordData.new}
+                      onChange={(e) => setPasswordData({...passwordData, new: e.target.value})}
+                      className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#F25790] focus:outline-none"
+                      placeholder="Nova senha"
+                    />
+                    <input
+                      type="password"
+                      value={passwordData.confirm}
+                      onChange={(e) => setPasswordData({...passwordData, confirm: e.target.value})}
+                      className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#F25790] focus:outline-none"
+                      placeholder="Confirmar nova senha"
+                    />
+                    <div className="flex justify-end space-x-2">
+                      <button
+                        onClick={() => setShowPassword(false)}
+                        className="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg text-sm transition-colors"
+                      >
+                        Cancelar
+                      </button>
+                      <button
+                        onClick={handlePasswordSave}
+                        className="px-4 py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-lg text-sm transition-colors"
+                      >
+                        Salvar
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-gray-400 text-sm">Senha</p>
+                      <p className="text-white">••••••</p>
+                    </div>
+                    <button
+                      onClick={() => setShowPassword(true)}
+                      className="bg-[#F25790] hover:bg-[#d93d75] text-white text-sm px-4 py-2 rounded-lg transition-colors"
+                    >
+                      Editar
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        )}
-        
-        {!showSuccessMessage && !isModalOpen && (
-          <div className="text-center py-8">
-            <h1 className="text-3xl font-bold mb-4">Editar Perfil</h1>
-            <p className="text-gray-300 mb-6">Clique no botão abaixo para editar suas informações pessoais</p>
-            <button 
-              onClick={() => setIsModalOpen(true)}
-              className="bg-[#F25790] hover:bg-[#d93d75] text-white font-medium py-2 px-6 rounded-full transition-colors"
-            >
-              Editar perfil
-            </button>
-          </div>
-        )}
-      </main>
-      
-      <Footer />
-      
-      {/* Modal de edição de perfil */}
-      <ProfileEditModal 
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        userData={userData}
-        onUpdateProfile={handleUpdateProfile}
-      />
-    </div>
+        </div>
+      </div>
+    </>
   );
 }
