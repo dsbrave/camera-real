@@ -38,14 +38,23 @@ export default function ProfileEditModal({ isOpen, onClose, userData, onUpdatePr
     if (isOpen) {
       // Prevenir scroll do body quando o modal estiver aberto
       document.body.style.overflow = 'hidden';
+      document.body.style.paddingRight = '0px'; // Evitar shift de layout
+      
+      // Garantir que o modal esteja no topo da pilha de elementos
+      const modalElement = document.querySelector('[data-modal="profile-edit"]');
+      if (modalElement) {
+        (modalElement as HTMLElement).style.zIndex = '99999';
+      }
     } else {
       // Restaurar scroll do body quando o modal for fechado
       document.body.style.overflow = 'unset';
+      document.body.style.paddingRight = '';
     }
 
     // Cleanup function para garantir que o scroll seja restaurado
     return () => {
       document.body.style.overflow = 'unset';
+      document.body.style.paddingRight = '';
     };
   }, [isOpen]);
 
@@ -135,13 +144,31 @@ export default function ProfileEditModal({ isOpen, onClose, userData, onUpdatePr
 
   return (
     <>
-      {/* Modal Overlay - Fixed positioning with higher z-index */}
+      {/* Modal Overlay - Fixed positioning with highest z-index */}
       <div 
-        className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+        data-modal="profile-edit"
+        className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto"
         onClick={handleOverlayClick}
+        style={{ 
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 99999,
+          minHeight: '100vh',
+          minWidth: '100vw'
+        }}
       >
         {/* Modal Container - Centered and responsive */}
-        <div className="bg-black rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto shadow-[0_0_30px_rgba(242,87,144,0.3)] border border-[#F25790]/20 relative">
+        <div 
+          className="bg-black rounded-3xl w-full max-w-md my-8 shadow-[0_0_30px_rgba(242,87,144,0.3)] border border-[#F25790]/20 relative mx-auto"
+          onClick={(e) => e.stopPropagation()}
+          style={{
+            maxHeight: 'calc(100vh - 4rem)',
+            overflowY: 'auto'
+          }}
+        >
           {/* Efeitos neon de fundo */}
           <div className="absolute inset-0 bg-gradient-to-br from-[#F25790]/5 via-transparent to-transparent pointer-events-none"></div>
           <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F25790] to-transparent opacity-30"></div>

@@ -45,6 +45,18 @@ export default function EditarPerfil() {
     }
   }, [router]);
 
+  useEffect(() => {
+    // Prevenir scroll do body quando o modal estiver aberto
+    document.body.style.overflow = 'hidden';
+    document.body.style.paddingRight = '0px';
+
+    // Cleanup function para garantir que o scroll seja restaurado
+    return () => {
+      document.body.style.overflow = 'unset';
+      document.body.style.paddingRight = '';
+    };
+  }, []);
+
   const handleClose = () => {
     router.push('/painel-usuario');
   };
@@ -101,9 +113,27 @@ export default function EditarPerfil() {
       </Head>
 
       {/* Modal Overlay */}
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+      <div 
+        className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 99999,
+          minHeight: '100vh',
+          minWidth: '100vw'
+        }}
+      >
         {/* Modal Container */}
-        <div className="bg-black rounded-3xl max-w-md w-full mx-4 shadow-[0_0_30px_rgba(242,87,144,0.2)] border border-[#F25790]/20 overflow-hidden relative">
+        <div 
+          className="bg-black rounded-3xl max-w-md w-full mx-auto my-8 shadow-[0_0_30px_rgba(242,87,144,0.3)] border border-[#F25790]/20 relative"
+          style={{
+            maxHeight: 'calc(100vh - 4rem)',
+            overflowY: 'auto'
+          }}
+        >
           {/* Efeitos neon de fundo */}
           <div className="absolute inset-0 bg-gradient-to-br from-[#F25790]/5 via-transparent to-transparent pointer-events-none"></div>
           <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F25790] to-transparent opacity-30"></div>
