@@ -11,6 +11,9 @@ export default function Header() {
   const [userData, setUserData] = useState<any>(null);
   const { userCredits, setUserCredits } = useUser();
   
+  // Verificar se estamos na página de chat para manter logo pequena
+  const isChatPage = router.pathname === '/chat-video';
+  
   // Função para testar a mudança de cor do ícone da carteira
   const handleTestWalletColor = (amount: number) => {
     setUserCredits(amount);
@@ -83,7 +86,7 @@ export default function Header() {
   };
 
   return (
-    <header className="py-2 md:py-3 border-b border-gray-800 bg-black bg-opacity-85 backdrop-blur-sm sticky top-0 w-full z-50 shadow-lg select-none">
+    <header className="py-3 md:py-5 border-b border-gray-800 bg-black bg-opacity-85 backdrop-blur-sm sticky top-0 w-full z-50 shadow-lg select-none">
       <div className="container mx-auto px-4 flex justify-between items-center">
         {/* Logo */}
         <div className="logo overflow-hidden">
@@ -91,9 +94,9 @@ export default function Header() {
             <Image 
               src="/icons/logo.svg" 
               alt="Camera Real" 
-              width={150} 
-              height={40}
-              className="h-8 md:h-10 w-auto max-w-[150px]"
+              width={isChatPage ? 100 : 150} 
+              height={isChatPage ? 30 : 40}
+              className={isChatPage ? "h-8 md:h-10 w-auto max-w-[100px]" : "h-10 sm:h-12 md:h-14 w-auto max-w-[150px]"}
             />
           </Link>
         </div>
