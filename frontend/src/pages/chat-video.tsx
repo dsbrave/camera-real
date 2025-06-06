@@ -507,10 +507,10 @@ export default function ChatVideo() {
               {/* Botão Sala Privada */}
               <button 
                 onClick={(e) => handleTogglePrivateRoom(e)} 
-                className={`p-2 rounded-full transition-all hover:scale-110 active:scale-95 ${
+                className={`p-5 rounded-full transition-all hover:scale-110 backdrop-blur-sm ${
                   isPrivateCall 
-                    ? 'bg-gradient-to-r from-red-500/60 to-red-600/60 hover:from-red-500/80 hover:to-red-600/80 border border-red-500/30'
-                    : 'bg-gradient-to-r from-[#F25790]/60 to-[#d93d75]/60 hover:from-[#F25790]/80 hover:to-[#d93d75]/80 border border-[#F25790]/30'
+                    ? 'bg-gradient-to-r from-red-500/60 to-red-600/60 hover:from-red-500/80 hover:to-red-600/80 border border-red-500/30 shadow-[0_0_12px_rgba(239,68,68,0.4)] hover:shadow-[0_0_16px_rgba(239,68,68,0.5)]'
+                    : 'bg-gradient-to-r from-[#F25790]/60 to-[#d93d75]/60 hover:from-[#F25790]/80 hover:to-[#d93d75]/80 border border-[#F25790]/30 shadow-[0_0_12px_rgba(242,87,144,0.4)] hover:shadow-[0_0_16px_rgba(242,87,144,0.5)]'
                 }`}
                 type="button"
                 title={
@@ -842,13 +842,13 @@ export default function ChatVideo() {
         {/* Modal de Compra de Créditos */}
         {showCreditModal && (
           <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm">
-            <div className="bg-black rounded-3xl max-w-5xl w-full mx-4 shadow-[0_0_50px_rgba(242,87,144,0.3)] border border-[#F25790]/30 overflow-hidden relative">
+            <div className="bg-black rounded-3xl max-w-4xl w-full mx-4 shadow-[0_0_50px_rgba(242,87,144,0.3)] border border-[#F25790]/30 overflow-hidden relative">
               {/* Efeitos neon de fundo */}
               <div className="absolute inset-0 bg-gradient-to-br from-[#F25790]/10 via-transparent to-transparent pointer-events-none"></div>
               <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F25790] to-transparent opacity-60"></div>
               <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F25790] to-transparent opacity-40"></div>
               
-              <div className="flex flex-col md:flex-row relative z-10 min-h-[500px]">
+              <div className="flex flex-col md:flex-row relative z-10 min-h-[400px]">
                 {/* Lado esquerdo - Imagem da modelo (edge-to-edge) */}
                 <div className="md:w-1/2 relative overflow-hidden">
                   {/* Imagem de fundo que vai de ponta a ponta */}
@@ -878,34 +878,41 @@ export default function ChatVideo() {
                 </div>
                 
                 {/* Lado direito - Informações e botões */}
-                <div className="md:w-1/2 p-8 flex flex-col justify-center relative bg-gradient-to-br from-black/95 via-black/90 to-black/95">
+                <div className="md:w-1/2 p-6 flex flex-col justify-center relative bg-gradient-to-br from-black/95 via-black/90 to-black/95">
                   {/* Efeito de continuidade visual */}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/50 to-black pointer-events-none"></div>
                   
                   <div className="relative z-10">
                     {/* Título com efeito neon */}
-                    <div className="text-center mb-8">
-                      <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
+                    <div className="text-center mb-6">
+                      <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 flex items-center justify-center gap-3">
+                        <Image
+                          src="/icons/action/credit_card.svg"
+                          alt="Cartão de Crédito"
+                          width={32}
+                          height={32}
+                          className="w-8 h-8 filter invert"
+                        />
                         <span className="text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
-                          💳 Créditos Necessários
+                          Créditos Necessários
                         </span>
                       </h2>
-                      <h3 className="text-xl md:text-2xl font-bold mb-4">
+                      <h3 className="text-lg md:text-xl font-bold mb-3">
                         <span className="bg-gradient-to-r from-[#F25790] to-[#d93d75] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(242,87,144,0.5)]">
                           Continue com {currentModel.name}
                         </span>
                       </h3>
-                      <div className="w-20 h-1 bg-gradient-to-r from-[#F25790] to-[#d93d75] mx-auto rounded-full shadow-[0_0_15px_rgba(242,87,144,0.6)]"></div>
+                      <div className="w-16 h-1 bg-gradient-to-r from-[#F25790] to-[#d93d75] mx-auto rounded-full shadow-[0_0_15px_rgba(242,87,144,0.6)]"></div>
                     </div>
                     
                     {/* Descrição condensada */}
-                    <div className="text-center mb-8">
-                      <p className="text-white/90 text-lg mb-6 drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
+                    <div className="text-center mb-6">
+                      <p className="text-white/90 text-base mb-4 drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
                         Você precisa de <span className="text-[#F25790] font-bold">créditos</span> para continuar interagindo com {currentModel.name}
                       </p>
                       
                       {/* Informações organizadas em bloco único */}
-                      <div className="backdrop-blur-sm rounded-xl p-4 space-y-2 border border-[#F25790]/50 shadow-[0_0_15px_rgba(242,87,144,0.3)]">
+                      <div className="backdrop-blur-sm rounded-xl p-3 space-y-2 border border-[#F25790]/50 shadow-[0_0_15px_rgba(242,87,144,0.3)]">
                         <div className="flex items-center justify-between">
                           <span className="text-white/80 text-sm">Seus créditos:</span>
                           <span className="text-green-400 font-bold">{userCredits}</span>
@@ -919,38 +926,42 @@ export default function ChatVideo() {
                     </div>
                     
                     {/* Pacotes de créditos */}
-                    <div className="space-y-3 mb-6">
+                    <div className="space-y-3 mb-5">
                       {creditPackages.slice(0, 2).map((pkg) => (
                         <button
                           key={pkg.id}
                           onClick={() => handleBuyCredits(pkg)}
-                          className="w-full p-4 rounded-2xl border border-[#F25790]/50 bg-gradient-to-br from-[#F25790]/20 to-[#d93d75]/20 hover:from-[#F25790]/30 hover:to-[#d93d75]/30 hover:scale-105 transition-all"
+                          className="w-full p-3 rounded-2xl border border-[#F25790]/50 bg-gradient-to-br from-[#F25790]/20 to-[#d93d75]/20 hover:from-[#F25790]/30 hover:to-[#d93d75]/30 hover:scale-105 transition-all"
                         >
                           <div className="flex justify-between items-center">
                             <div className="text-left">
-                              <div className="text-white font-bold text-lg">{pkg.credits} créditos</div>
+                              <div className="text-white font-bold text-base">{pkg.credits} créditos</div>
                               {pkg.bonus > 0 && (
                                 <div className="text-green-400 text-sm">+{pkg.bonus} bônus</div>
                               )}
                             </div>
-                            <div className="text-[#F25790] font-bold text-xl">R$ {pkg.price.toFixed(2)}</div>
+                            <div className="text-[#F25790] font-bold text-lg">R$ {pkg.price.toFixed(2)}</div>
                           </div>
                         </button>
                       ))}
                     </div>
                     
                     {/* Botões de ação */}
-                    <div className="space-y-4">
-                      {/* Botão Continuar */}
+                    <div className="space-y-3">
+                      {/* Botão Comprar Créditos */}
                       <button 
                         onClick={() => handleBuyCredits(creditPackages[0])}
-                        className="w-full py-4 bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white font-bold rounded-2xl transition-all duration-300 shadow-[0_0_25px_rgba(242,87,144,0.4)] hover:shadow-[0_0_35px_rgba(242,87,144,0.6)] hover:scale-105 active:scale-95 border border-[#F25790]/30"
+                        className="w-full py-3 bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white font-bold rounded-2xl transition-all duration-300 shadow-[0_0_25px_rgba(242,87,144,0.4)] hover:shadow-[0_0_35px_rgba(242,87,144,0.6)] hover:scale-105 active:scale-95 border border-[#F25790]/30"
                       >
                         <div className="flex items-center justify-center gap-3">
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                            <path d="M8 5v14l11-7z"/>
-                          </svg>
-                          <span>Continuar</span>
+                          <Image
+                            src="/icons/action/credit_card.svg"
+                            alt="Comprar"
+                            width={20}
+                            height={20}
+                            className="w-5 h-5 filter invert"
+                          />
+                          <span>Comprar Créditos</span>
                         </div>
                       </button>
                       
@@ -968,7 +979,7 @@ export default function ChatVideo() {
                     </div>
                     
                     {/* Texto pequeno */}
-                    <p className="text-white/50 text-xs text-center mt-6 drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
+                    <p className="text-white/50 text-xs text-center mt-4 drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
                       Ao continuar, você será redirecionado para a página de pagamento
                     </p>
                   </div>
