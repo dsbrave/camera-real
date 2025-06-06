@@ -17,6 +17,7 @@ interface Gift {
 export default function ChatVideo() {
   // ... outros estados ...
   const [showGiftModal, setShowGiftModal] = useState(false);
+  const [showCreditModal, setShowCreditModal] = useState(false);
   const [isUsingCredits, setIsUsingCredits] = useState(false);
   const router = useRouter();
   const { id } = router.query;
@@ -90,6 +91,14 @@ export default function ChatVideo() {
     { name: 'Beijo', price: 15, image: '/icons/action/card_giftcard.svg' },
     { name: 'Diamante', price: 25, image: '/icons/action/card_giftcard.svg' },
     { name: 'Coroa', price: 50, image: '/icons/action/card_giftcard.svg' },
+  ];
+
+  // Pacotes de créditos
+  const creditPackages = [
+    { id: 1, credits: 50, price: 19.90, bonus: 0 },
+    { id: 2, credits: 100, price: 34.90, bonus: 10 },
+    { id: 3, credits: 250, price: 79.90, bonus: 50 },
+    { id: 4, credits: 500, price: 149.90, bonus: 100 },
   ];
 
   // Efeito para simular o carregamento do nome do usuário
@@ -266,14 +275,9 @@ export default function ChatVideo() {
           setMessages(prev => [...prev, { id: Date.now(), text: `⚠️ Erro ao processar pagamento da sala privada.`, sender: 'system', timestamp: new Date() }]);
         }
       } else {
-        // Se não tem créditos suficientes, mostrar mensagem
+        // Se não tem créditos suficientes, mostrar modal
         console.log('Usuário não tem créditos suficientes');
-        setMessages(prev => [...prev, { 
-          id: Date.now(), 
-          text: `⚠️ Créditos insuficientes para sala privada. Necessário: ${currentModel.privateCallPrice} créditos.`, 
-          sender: 'system', 
-          timestamp: new Date() 
-        }]);
+        setShowCreditModal(true);
       }
     }
     
@@ -320,13 +324,18 @@ export default function ChatVideo() {
         }]);
       }
     } else {
-      setMessages(prev => [...prev, { 
-        id: Date.now(), 
-        text: `⚠️ Créditos insuficientes para enviar ${gift.name}. Necessário: ${gift.price} créditos.`, 
-        sender: 'system', 
-        timestamp: new Date() 
-      }]);
+      // Mostrar modal de créditos em vez de mensagem
+      setShowGiftModal(false);
+      setShowCreditModal(true);
     }
+  };
+
+  const handleBuyCredits = (pkg: any) => {
+    // Simular compra de créditos
+    console.log('Comprando pacote:', pkg);
+    setShowCreditModal(false);
+    // Aqui você redirecionaria para o sistema de pagamento
+    router.push('/carteira');
   };
 
   const handleToggleMute = () => {
@@ -498,20 +507,17 @@ export default function ChatVideo() {
               {/* Botão Sala Privada */}
               <button 
                 onClick={(e) => handleTogglePrivateRoom(e)} 
-                disabled={userCredits < currentModel.privateCallPrice && !isPrivateCall}
-                className={`p-5 rounded-full transition-all hover:scale-110 ${
-                  (userCredits < currentModel.privateCallPrice && !isPrivateCall)
-                    ? 'bg-gray-600/40 border border-gray-500/30 cursor-not-allowed opacity-50' 
-                    : isPrivateCall 
-                    ? 'bg-gradient-to-r from-red-500/60 to-red-600/60 hover:from-red-500/80 hover:to-red-600/80 border border-red-500/30 shadow-[0_0_12px_rgba(239,68,68,0.4)] hover:shadow-[0_0_16px_rgba(239,68,68,0.5)]'
-                    : 'bg-gradient-to-r from-[#F25790]/60 to-[#d93d75]/60 hover:from-[#F25790]/80 hover:to-[#d93d75]/80 border border-[#F25790]/30 shadow-[0_0_12px_rgba(242,87,144,0.4)] hover:shadow-[0_0_16px_rgba(242,87,144,0.5)]'
-                } backdrop-blur-sm`}
+                className={`p-2 rounded-full transition-all hover:scale-110 active:scale-95 ${
+                  isPrivateCall 
+                    ? 'bg-gradient-to-r from-red-500/60 to-red-600/60 hover:from-red-500/80 hover:to-red-600/80 border border-red-500/30'
+                    : 'bg-gradient-to-r from-[#F25790]/60 to-[#d93d75]/60 hover:from-[#F25790]/80 hover:to-[#d93d75]/80 border border-[#F25790]/30'
+                }`}
                 type="button"
                 title={
-                  (userCredits < currentModel.privateCallPrice && !isPrivateCall) 
-                    ? `Créditos insuficientes (${currentModel.privateCallPrice} necessários)` 
-                    : isPrivateCall 
+                  isPrivateCall 
                     ? "Sair do chat privado" 
+                    : userCredits < currentModel.privateCallPrice
+                    ? `Créditos insuficientes (${currentModel.privateCallPrice} necessários)` 
                     : "Iniciar chat privado"
                 }
               >
@@ -633,20 +639,17 @@ export default function ChatVideo() {
                     
                     <button 
                       onClick={(e) => handleTogglePrivateRoom(e)} 
-                      disabled={userCredits < currentModel.privateCallPrice && !isPrivateCall}
                       className={`p-2 rounded-full transition-all hover:scale-110 active:scale-95 ${
-                        (userCredits < currentModel.privateCallPrice && !isPrivateCall)
-                          ? 'bg-gray-600/40 border border-gray-500/30 cursor-not-allowed opacity-50' 
-                          : isPrivateCall 
+                        isPrivateCall 
                           ? 'bg-gradient-to-r from-red-500/60 to-red-600/60 hover:from-red-500/80 hover:to-red-600/80 border border-red-500/30'
                           : 'bg-gradient-to-r from-[#F25790]/60 to-[#d93d75]/60 hover:from-[#F25790]/80 hover:to-[#d93d75]/80 border border-[#F25790]/30'
                       }`}
                       type="button"
                       title={
-                        (userCredits < currentModel.privateCallPrice && !isPrivateCall) 
-                          ? `Créditos insuficientes (${currentModel.privateCallPrice} necessários)` 
-                          : isPrivateCall 
+                        isPrivateCall 
                           ? "Sair do chat privado" 
+                          : userCredits < currentModel.privateCallPrice
+                          ? `Créditos insuficientes (${currentModel.privateCallPrice} necessários)` 
                           : "Iniciar chat privado"
                       }
                     >
@@ -830,6 +833,145 @@ export default function ChatVideo() {
                   >
                     Cancelar
                   </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Modal de Compra de Créditos */}
+        {showCreditModal && (
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm">
+            <div className="bg-black rounded-3xl max-w-5xl w-full mx-4 shadow-[0_0_50px_rgba(242,87,144,0.3)] border border-[#F25790]/30 overflow-hidden relative">
+              {/* Efeitos neon de fundo */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#F25790]/10 via-transparent to-transparent pointer-events-none"></div>
+              <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F25790] to-transparent opacity-60"></div>
+              <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F25790] to-transparent opacity-40"></div>
+              
+              <div className="flex flex-col md:flex-row relative z-10 min-h-[500px]">
+                {/* Lado esquerdo - Imagem da modelo (edge-to-edge) */}
+                <div className="md:w-1/2 relative overflow-hidden">
+                  {/* Imagem de fundo que vai de ponta a ponta */}
+                  <div className="absolute inset-0">
+                    <Image
+                      src={currentModel.profileImage}
+                      alt={currentModel.name}
+                      fill
+                      className="object-cover object-center"
+                    />
+                  </div>
+                  
+                  {/* Gradiente de transição para o lado direito */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-black/80 md:to-black/90"></div>
+                  
+                  {/* Gradiente inferior para melhor legibilidade */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                  
+                  {/* Overlay neon sutil */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#F25790]/20 via-transparent to-transparent mix-blend-overlay"></div>
+                  
+                  {/* Efeito de brilho neon nas bordas */}
+                  <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#F25790]/60 via-[#F25790]/80 to-transparent blur-sm"></div>
+                    <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#F25790]/40 via-[#F25790]/60 to-transparent blur-sm"></div>
+                  </div>
+                </div>
+                
+                {/* Lado direito - Informações e botões */}
+                <div className="md:w-1/2 p-8 flex flex-col justify-center relative bg-gradient-to-br from-black/95 via-black/90 to-black/95">
+                  {/* Efeito de continuidade visual */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/50 to-black pointer-events-none"></div>
+                  
+                  <div className="relative z-10">
+                    {/* Título com efeito neon */}
+                    <div className="text-center mb-8">
+                      <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
+                        <span className="text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
+                          💳 Créditos Necessários
+                        </span>
+                      </h2>
+                      <h3 className="text-xl md:text-2xl font-bold mb-4">
+                        <span className="bg-gradient-to-r from-[#F25790] to-[#d93d75] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(242,87,144,0.5)]">
+                          Continue com {currentModel.name}
+                        </span>
+                      </h3>
+                      <div className="w-20 h-1 bg-gradient-to-r from-[#F25790] to-[#d93d75] mx-auto rounded-full shadow-[0_0_15px_rgba(242,87,144,0.6)]"></div>
+                    </div>
+                    
+                    {/* Descrição condensada */}
+                    <div className="text-center mb-8">
+                      <p className="text-white/90 text-lg mb-6 drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
+                        Você precisa de <span className="text-[#F25790] font-bold">créditos</span> para continuar interagindo com {currentModel.name}
+                      </p>
+                      
+                      {/* Informações organizadas em bloco único */}
+                      <div className="backdrop-blur-sm rounded-xl p-4 space-y-2 border border-[#F25790]/50 shadow-[0_0_15px_rgba(242,87,144,0.3)]">
+                        <div className="flex items-center justify-between">
+                          <span className="text-white/80 text-sm">Seus créditos:</span>
+                          <span className="text-green-400 font-bold">{userCredits}</span>
+                        </div>
+                        
+                        <div className="flex items-center justify-between">
+                          <span className="text-white/80 text-sm">Sala privada:</span>
+                          <span className="text-[#F25790] font-bold">{currentModel.privateCallPrice} créditos</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Pacotes de créditos */}
+                    <div className="space-y-3 mb-6">
+                      {creditPackages.slice(0, 2).map((pkg) => (
+                        <button
+                          key={pkg.id}
+                          onClick={() => handleBuyCredits(pkg)}
+                          className="w-full p-4 rounded-2xl border border-[#F25790]/50 bg-gradient-to-br from-[#F25790]/20 to-[#d93d75]/20 hover:from-[#F25790]/30 hover:to-[#d93d75]/30 hover:scale-105 transition-all"
+                        >
+                          <div className="flex justify-between items-center">
+                            <div className="text-left">
+                              <div className="text-white font-bold text-lg">{pkg.credits} créditos</div>
+                              {pkg.bonus > 0 && (
+                                <div className="text-green-400 text-sm">+{pkg.bonus} bônus</div>
+                              )}
+                            </div>
+                            <div className="text-[#F25790] font-bold text-xl">R$ {pkg.price.toFixed(2)}</div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                    
+                    {/* Botões de ação */}
+                    <div className="space-y-4">
+                      {/* Botão Continuar */}
+                      <button 
+                        onClick={() => handleBuyCredits(creditPackages[0])}
+                        className="w-full py-4 bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white font-bold rounded-2xl transition-all duration-300 shadow-[0_0_25px_rgba(242,87,144,0.4)] hover:shadow-[0_0_35px_rgba(242,87,144,0.6)] hover:scale-105 active:scale-95 border border-[#F25790]/30"
+                      >
+                        <div className="flex items-center justify-center gap-3">
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                          </svg>
+                          <span>Continuar</span>
+                        </div>
+                      </button>
+                      
+                      <button
+                        onClick={() => setShowCreditModal(false)}
+                        className="w-full py-3 bg-white/10 hover:bg-white/20 text-white/80 hover:text-white font-medium rounded-xl transition-all duration-300 border border-white/20 hover:border-white/30"
+                      >
+                        <div className="flex items-center justify-center gap-2">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                            <path d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                          <span>Fechar</span>
+                        </div>
+                      </button>
+                    </div>
+                    
+                    {/* Texto pequeno */}
+                    <p className="text-white/50 text-xs text-center mt-6 drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
+                      Ao continuar, você será redirecionado para a página de pagamento
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

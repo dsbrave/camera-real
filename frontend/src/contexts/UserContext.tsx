@@ -23,7 +23,7 @@ interface UserProviderProps {
 }
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-  const [userCredits, setUserCredits] = useState<number>(150);
+  const [userCredits, setUserCredits] = useState<number>(0);
   const [isClient, setIsClient] = useState(false);
 
   // Verificar se estamos no cliente
@@ -47,7 +47,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     } catch (error) {
       console.error('Erro ao carregar créditos do localStorage:', error);
     }
-    return 150; // Valor padrão
+    return 0; // Valor padrão zerado para teste
   };
 
   // Função para salvar créditos no localStorage
