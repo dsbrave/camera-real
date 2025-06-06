@@ -459,12 +459,17 @@ export default function ChatVideo() {
                   {/* Divisor */}
                   <div className="w-px h-8 bg-gradient-to-b from-transparent via-white/30 to-transparent"></div>
 
-                  {/* Meta da Modelo com coroa */}
+                  {/* Meta da Modelo com Vector */}
                   <div className="flex items-center gap-3">
                     <div className="relative">
-                      <svg className="w-6 h-6 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M5 16L3 3l5.5 5L12 4l3.5 4L21 3l-2 13H5zm2.7-2h8.6l.9-5.4-2.1 1.4L12 8l-3.1 2L6.8 8.6L7.7 14z"/>
-                      </svg>
+                      <Image
+                        src="/icons/Vector.svg"
+                        alt="Meta"
+                        width={24}
+                        height={24}
+                        className="w-6 h-6 text-yellow-400"
+                        style={{ filter: 'brightness(0) saturate(100%) invert(85%) sepia(95%) saturate(1945%) hue-rotate(8deg) brightness(103%) contrast(101%)' }}
+                      />
                       <div className="absolute -inset-1 bg-yellow-400/20 rounded-full blur-sm"></div>
                     </div>
 
@@ -1080,9 +1085,14 @@ export default function ChatVideo() {
 
                   {/* Coroa + Meta */}
                   <div className="flex items-center gap-2">
-                    <svg className="w-3 h-3 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M5 16L3 3l5.5 5L12 4l3.5 4L21 3l-2 13H5zm2.7-2h8.6l.9-5.4-2.1 1.4L12 8l-3.1 2L6.8 8.6L7.7 14z"/>
-                    </svg>
+                    <Image
+                      src="/icons/Vector.svg"
+                      alt="Vector"
+                      width={12}
+                      height={12}
+                      className="w-3 h-3 text-yellow-400"
+                      style={{ filter: 'brightness(0) saturate(100%) invert(85%) sepia(100%) saturate(1000%) hue-rotate(15deg) brightness(100%) contrast(100%)' }}
+                    />
                     
                     <div className="w-20 h-1.5 rounded-full relative border border-yellow-400/50 shadow-[0_0_6px_rgba(251,191,36,0.3)] backdrop-blur-sm">
                       <div 
