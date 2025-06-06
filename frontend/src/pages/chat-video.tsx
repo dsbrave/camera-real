@@ -177,13 +177,15 @@ export default function ChatVideo() {
   }, [refreshCredits]);
 
   const handleNextModel = () => {
-    // Se não tem tempo grátis e não está usando créditos, mostrar modal
-    if (freeTimeRemaining === 0 && !isUsingCredits) {
-      console.log('handleNextModel: Abrindo modal - freeTimeRemaining:', freeTimeRemaining, 'isUsingCredits:', isUsingCredits);
+    // Se não tem tempo grátis e não está usando créditos E não tem créditos suficientes para sala privada, mostrar modal
+    const currentModel = models[modelIndex];
+    if (freeTimeRemaining === 0 && !isUsingCredits && userCredits < currentModel.privateCallPrice) {
+      console.log('handleNextModel: Abrindo modal - freeTimeRemaining:', freeTimeRemaining, 'isUsingCredits:', isUsingCredits, 'userCredits:', userCredits, 'privateCallPrice:', currentModel.privateCallPrice);
       setShowFreeTrialModal(true);
       return;
     }
     
+    console.log('handleNextModel: Navegando para próxima modelo - sem modal');
     setModelIndex((prevIndex) => (prevIndex + 1) % models.length);
     // NÃO resetar sessionTime e creditsSpent - o tempo deve ser global
     setIsPrivateCall(false);
@@ -204,13 +206,15 @@ export default function ChatVideo() {
   };
 
   const handlePrevModel = () => {
-    // Se não tem tempo grátis e não está usando créditos, mostrar modal
-    if (freeTimeRemaining === 0 && !isUsingCredits) {
-      console.log('handlePrevModel: Abrindo modal - freeTimeRemaining:', freeTimeRemaining, 'isUsingCredits:', isUsingCredits);
+    // Se não tem tempo grátis e não está usando créditos E não tem créditos suficientes para sala privada, mostrar modal
+    const currentModel = models[modelIndex];
+    if (freeTimeRemaining === 0 && !isUsingCredits && userCredits < currentModel.privateCallPrice) {
+      console.log('handlePrevModel: Abrindo modal - freeTimeRemaining:', freeTimeRemaining, 'isUsingCredits:', isUsingCredits, 'userCredits:', userCredits, 'privateCallPrice:', currentModel.privateCallPrice);
       setShowFreeTrialModal(true);
       return;
     }
     
+    console.log('handlePrevModel: Navegando para modelo anterior - sem modal');
     setModelIndex((prevIndex) => (prevIndex - 1 + models.length) % models.length);
     // NÃO resetar sessionTime e creditsSpent - o tempo deve ser global
     setIsPrivateCall(false);
@@ -257,27 +261,41 @@ export default function ChatVideo() {
 
   const handleTogglePrivateRoom = (e?: React.MouseEvent) => {
     e?.stopPropagation();
+    e?.preventDefault();
     
-    console.log('handleTogglePrivateRoom chamado - canInteract:', canInteract, 'freeTimeRemaining:', freeTimeRemaining, 'isUsingCredits:', isUsingCredits, 'userCredits:', userCredits);
+    console.log('=== INÍCIO handleTogglePrivateRoom ===');
+    console.log('canInteract:', canInteract);
+    console.log('freeTimeRemaining:', freeTimeRemaining);
+    console.log('isUsingCredits:', isUsingCredits);
+    console.log('userCredits:', userCredits);
+    console.log('isPrivateCall:', isPrivateCall);
+    console.log('showFreeTrialModal antes:', showFreeTrialModal);
     
     if (isPrivateCall) {
       // Se já está na sala privada, pode sair sempre
+      console.log('Saindo da sala privada');
       setIsPrivateCall(false);
       setMessages(prev => [...prev, { id: Date.now(), text: `🔓 Você voltou para o chat aberto com todos os usuários.`, sender: 'system', timestamp: new Date() }]);
     } else {
       // Para entrar na sala privada, verificar se tem créditos
+      console.log('Tentando entrar na sala privada');
       refreshCredits();
       
       const currentModel = models[modelIndex];
+      console.log('Modelo atual:', currentModel.name, 'Preço:', currentModel.privateCallPrice);
       
       // Se tem créditos suficientes, pode entrar na sala privada independente do canInteract
       if (userCredits >= currentModel.privateCallPrice) {
+        console.log('Usuário tem créditos suficientes, entrando na sala privada');
+        
         // Fechar o modal se estiver aberto
         if (showFreeTrialModal) {
+          console.log('Fechando modal que estava aberto');
           setShowFreeTrialModal(false);
         }
         
         if (spendCredits(currentModel.privateCallPrice)) {
+          console.log('Créditos gastos com sucesso, ativando sala privada');
           setIsPrivateCall(true);
           // Se não estava usando créditos, ativar agora
           if (!isUsingCredits) {
@@ -289,10 +307,12 @@ export default function ChatVideo() {
           setModelEarnings(prev => prev + Math.floor(currentModel.privateCallPrice * 0.3));
           setMessages(prev => [...prev, { id: Date.now(), text: `🔒 Sala privada iniciada com ${currentModel.name}`, sender: 'system', timestamp: new Date() }]);
         } else {
+          console.log('Erro ao gastar créditos');
           setMessages(prev => [...prev, { id: Date.now(), text: `⚠️ Erro ao processar pagamento da sala privada.`, sender: 'system', timestamp: new Date() }]);
         }
       } else {
         // Se não tem créditos suficientes, mostrar mensagem
+        console.log('Usuário não tem créditos suficientes');
         setMessages(prev => [...prev, { 
           id: Date.now(), 
           text: `⚠️ Créditos insuficientes para sala privada. Necessário: ${currentModel.privateCallPrice} créditos.`, 
@@ -301,6 +321,9 @@ export default function ChatVideo() {
         }]);
       }
     }
+    
+    console.log('showFreeTrialModal depois:', showFreeTrialModal);
+    console.log('=== FIM handleTogglePrivateRoom ===');
   };
 
   const formatTime = (seconds: number) => {
