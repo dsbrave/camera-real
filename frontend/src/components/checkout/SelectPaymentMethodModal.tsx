@@ -1,26 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
+import BaseModal from '@/components/BaseModal';
 
 interface SelectPaymentMethodModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onBack?: () => void;
+  onBack: () => void;
   selectedAmount: number;
-  onSelectMethod: (method: 'pix' | 'credit-card') => void;
-  onNext: (selectedMethod: 'pix' | 'credit-card') => void;
+  onSelectMethod: (method: string) => void;
+  onNext: (method: 'pix' | 'credit-card') => void;
 }
 
-export default function SelectPaymentMethodModal({ 
-  isOpen, 
-  onClose, 
+export default function SelectPaymentMethodModal({
+  isOpen,
+  onClose,
   onBack,
-  selectedAmount, 
-  onSelectMethod, 
-  onNext 
+  selectedAmount,
+  onSelectMethod,
+  onNext
 }: SelectPaymentMethodModalProps) {
-  const [selectedMethod, setSelectedMethod] = useState<'pix' | 'credit-card' | null>(null);
+  const [selectedMethod, setSelectedMethod] = React.useState<'pix' | 'credit-card' | ''>('');
 
-  const handleSelectMethod = (method: 'pix' | 'credit-card') => {
+  const handleMethodSelect = (method: 'pix' | 'credit-card') => {
     setSelectedMethod(method);
     onSelectMethod(method);
   };
@@ -32,124 +33,134 @@ export default function SelectPaymentMethodModal({
   };
 
   return (
-    <>
-      {isOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-purple-600 to-purple-800 rounded-2xl p-8 w-full max-w-4xl max-h-[90vh] overflow-y-auto relative">
-            {/* Botão de fechar */}
-            <button 
-              onClick={onClose}
-              className="absolute top-6 right-6 text-white hover:text-gray-300 transition-colors z-10"
-            >
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+    <BaseModal
+      isOpen={isOpen}
+      onClose={onClose}
+      modelImage="/images/realistic_photo_of_a_beautiful_curvy_cam_model_in_sexy_casual_clothing_crouching_down_seductively_t_3cztx1xhqyc4ka3r2sxm_77.png"
+      modelName="Modelo Cam"
+      title="Escolha o pagamento"
+      subtitle="Como você quer carregar sua conta?"
+    >
+      {/* Valor selecionado */}
+      <div className="text-center mb-6">
+        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#F25790]/20 to-[#d93d75]/20 border border-[#F25790]/30 rounded-2xl px-4 py-2">
+          <Image
+            src="/icons/action/credit_card.svg"
+            alt="Valor"
+            width={20}
+            height={20}
+            className="w-5 h-5 filter invert"
+          />
+          <span className="text-white font-bold text-lg">R$ {selectedAmount}</span>
+        </div>
+      </div>
 
-            <div className="flex items-center gap-8">
-              {/* Imagem à esquerda */}
-              <div className="flex-shrink-0 relative">
-                <div className="relative w-96 h-96 flex items-center justify-center">
-                  <Image 
-                    src="/images/Payment.png" 
-                    alt="Pagamento" 
-                    width={384}
-                    height={384}
-                    className="object-contain filter brightness-110 contrast-110"
-                  />
-                </div>
-              </div>
-
-              {/* Conteúdo principal */}
-              <div className="flex-1 max-w-md">
-                <h2 className="text-3xl font-bold text-white mb-2 text-center">Escolha o pagamento</h2>
-                <p className="text-white text-center mb-8 opacity-90">Como quer carregar a sua conta?</p>
-                
-                {/* Grid de métodos de pagamento */}
-                <div className="grid grid-cols-1 gap-4 mb-8">
-                  <button
-                    onClick={() => handleSelectMethod('pix')}
-                    className={`p-6 rounded-xl border-2 transition-all hover:scale-105 ${
-                      selectedMethod === 'pix' 
-                        ? 'border-white bg-white bg-opacity-20 shadow-lg' 
-                        : 'border-gray-400 border-opacity-50 hover:border-white hover:bg-white hover:bg-opacity-10'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center">
-                        <div className="bg-[#4BB8A9] bg-opacity-20 p-3 rounded-full mr-4">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-[#4BB8A9]">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <div className="text-white text-lg font-bold">PIX</div>
-                          <div className="text-white text-sm opacity-75">Transferência instantânea</div>
-                        </div>
-                      </div>
-                      <span className="bg-[#F25790] text-white text-xs px-3 py-1 rounded-full">Aprovação instantânea</span>
-                    </div>
-                  </button>
-                  
-                  <button
-                    onClick={() => handleSelectMethod('credit-card')}
-                    className={`p-6 rounded-xl border-2 transition-all hover:scale-105 ${
-                      selectedMethod === 'credit-card' 
-                        ? 'border-white bg-white bg-opacity-20 shadow-lg' 
-                        : 'border-gray-400 border-opacity-50 hover:border-white hover:bg-white hover:bg-opacity-10'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center">
-                        <div className="bg-[#6366F1] bg-opacity-20 p-3 rounded-full mr-4">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-[#6366F1]">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <div className="text-white text-lg font-bold">Cartão de crédito</div>
-                          <div className="text-white text-sm opacity-75">Visa, Mastercard, Elo</div>
-                        </div>
-                      </div>
-                      <span className="bg-[#F25790] text-white text-xs px-3 py-1 rounded-full">Aprovação instantânea</span>
-                    </div>
-                  </button>
-                </div>
-
-                {/* Valor selecionado */}
-                <div className="border-t border-white border-opacity-30 pt-4 mb-6">
-                  <div className="flex justify-between text-white">
-                    <span>Valor selecionado</span>
-                    <span className="font-bold">R$ {selectedAmount.toFixed(2).replace('.', ',')}</span>
-                  </div>
-                </div>
-                
-                {/* Botões */}
-                <div className="flex justify-between gap-4">
-                  <button
-                    onClick={onBack || onClose}
-                    className="flex-1 py-3 px-6 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-colors text-white font-medium"
-                  >
-                    Voltar
-                  </button>
-                  
-                  <button
-                    onClick={handleNext}
-                    disabled={!selectedMethod}
-                    className={`flex-1 py-3 px-6 rounded-full font-medium transition-all transform hover:scale-105 ${
-                      selectedMethod
-                        ? 'bg-[#F25790] hover:bg-[#d93d75] text-white'
-                        : 'bg-gray-500 cursor-not-allowed text-white/60'
-                    }`}
-                  >
-                    Avançar
-                  </button>
-                </div>
-              </div>
+      {/* Métodos de pagamento */}
+      <div className="space-y-4 mb-6">
+        {/* PIX */}
+        <button
+          onClick={() => handleMethodSelect('pix')}
+          className={`w-full p-4 rounded-2xl border transition-all hover:scale-105 ${
+            selectedMethod === 'pix'
+              ? 'border-[#F25790] bg-gradient-to-r from-[#F25790]/30 to-[#d93d75]/30 shadow-[0_0_15px_rgba(242,87,144,0.4)]'
+              : 'border-[#F25790]/50 bg-gradient-to-r from-[#F25790]/20 to-[#d93d75]/20 hover:from-[#F25790]/25 hover:to-[#d93d75]/25'
+          }`}
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-gradient-to-br from-[#F25790]/40 to-[#d93d75]/40 rounded-xl flex items-center justify-center">
+              <Image
+                src="/icons/communication/qr_code.svg"
+                alt="PIX"
+                width={24}
+                height={24}
+                className="w-6 h-6 filter invert"
+              />
+            </div>
+            <div className="text-left">
+              <div className="text-white font-bold text-lg">PIX</div>
+              <div className="text-white/70 text-sm">Pagamento instantâneo</div>
             </div>
           </div>
-        </div>
-      )}
-    </>
+        </button>
+
+        {/* Cartão de Crédito */}
+        <button
+          onClick={() => handleMethodSelect('credit-card')}
+          className={`w-full p-4 rounded-2xl border transition-all hover:scale-105 ${
+            selectedMethod === 'credit-card'
+              ? 'border-[#F25790] bg-gradient-to-r from-[#F25790]/30 to-[#d93d75]/30 shadow-[0_0_15px_rgba(242,87,144,0.4)]'
+              : 'border-[#F25790]/50 bg-gradient-to-r from-[#F25790]/20 to-[#d93d75]/20 hover:from-[#F25790]/25 hover:to-[#d93d75]/25'
+          }`}
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-gradient-to-br from-[#F25790]/40 to-[#d93d75]/40 rounded-xl flex items-center justify-center">
+              <Image
+                src="/icons/action/credit_card.svg"
+                alt="Cartão"
+                width={24}
+                height={24}
+                className="w-6 h-6 filter invert"
+              />
+            </div>
+            <div className="text-left">
+              <div className="text-white font-bold text-lg">Cartão de Crédito</div>
+              <div className="text-white/70 text-sm">Parcelamento disponível</div>
+            </div>
+          </div>
+        </button>
+      </div>
+
+      {/* Botões de ação */}
+      <div className="flex gap-3">
+        <button
+          onClick={onBack}
+          className="flex-1 py-3 font-bold rounded-2xl bg-white/10 hover:bg-white/20 text-white transition-all duration-300 border border-white/20"
+        >
+          <div className="flex items-center justify-center gap-2">
+            <Image
+              src="/icons/navigation/arrow_back.svg"
+              alt="Voltar"
+              width={20}
+              height={20}
+              className="w-5 h-5 filter invert"
+            />
+            <span>Voltar</span>
+          </div>
+        </button>
+        
+        <button
+          onClick={handleNext}
+          disabled={!selectedMethod}
+          className={`flex-1 py-3 font-bold rounded-2xl transition-all duration-300 shadow-[0_0_25px_rgba(242,87,144,0.4)] hover:shadow-[0_0_35px_rgba(242,87,144,0.6)] hover:scale-105 active:scale-95 border border-[#F25790]/30 ${
+            selectedMethod
+              ? 'bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white'
+              : 'bg-white/10 text-white/50 cursor-not-allowed'
+          }`}
+        >
+          <div className="flex items-center justify-center gap-2">
+            <Image
+              src="/icons/navigation/arrow_forward.svg"
+              alt="Avançar"
+              width={20}
+              height={20}
+              className="w-5 h-5 filter invert"
+            />
+            <span>Avançar</span>
+          </div>
+        </button>
+      </div>
+
+      {/* Texto de segurança */}
+      <p className="text-white/50 text-xs text-center mt-4 drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
+        <Image
+          src="/icons/action/lock.svg"
+          alt="Seguro"
+          width={12}
+          height={12}
+          className="w-3 h-3 inline mr-1 filter invert opacity-50"
+        />
+        Seus dados estão protegidos com criptografia SSL
+      </p>
+    </BaseModal>
   );
 }

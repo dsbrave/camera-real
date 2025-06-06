@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import BaseModal from '@/components/BaseModal';
 import SelectPaymentMethodModal from '@/components/checkout/SelectPaymentMethodModal';
 import PixPaymentForm from '@/components/checkout/PixPaymentForm';
 import CreditCardForm from '@/components/checkout/CreditCardForm';
@@ -20,6 +21,7 @@ const Carteira: React.FC = () => {
   const [isPixModalOpen, setIsPixModalOpen] = useState(false);
   const [isCreditCardModalOpen, setIsCreditCardModalOpen] = useState(false);
   const [selectedAmount, setSelectedAmount] = useState(100);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
   const [withdrawData, setWithdrawData] = useState({
     amount: '',
     bank: '',
@@ -185,8 +187,14 @@ const Carteira: React.FC = () => {
     alert(`Solicitação de saque de R$ ${(withdrawAmount * creditValue).toFixed(2).replace('.', ',')} enviada! O valor será processado em até 3 dias úteis.`);
   };
 
-  const handleSelectPaymentMethod = () => {
-    // setSelectedPaymentMethod(method);
+  const handleSelectPaymentMethod = (method: string) => {
+    setSelectedAmount(100);
+    setIsPaymentMethodModalOpen(false);
+    if (method === 'pix') {
+      setIsPixModalOpen(true);
+    } else if (method === 'credit-card') {
+      setIsCreditCardModalOpen(true);
+    }
   };
 
   const handlePaymentMethodNext = (selectedMethod: 'pix' | 'credit-card') => {
@@ -687,77 +695,78 @@ const Carteira: React.FC = () => {
 
       {/* Modal de Adicionar Crédito */}
       {isAddCreditsModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-gradient-to-br from-purple-600 to-purple-800 rounded-2xl p-8 w-full max-w-4xl max-h-[90vh] overflow-y-auto relative">
-            {/* Botão de fechar */}
-            <button 
-              onClick={() => setIsAddCreditsModalOpen(false)}
-              className="absolute top-6 right-6 text-white hover:text-gray-300 transition-colors z-10"
-            >
-              <Image
-                src="/icons/navigation/close.svg"
-                alt="Fechar"
-                width={32}
-                height={32}
-                className="w-8 h-8"
-                style={{ filter: 'brightness(0) saturate(100%) invert(100%)' }}
-              />
-            </button>
-
-            <div className="flex items-center gap-8">
-              {/* Imagem à esquerda */}
-              <div className="flex-shrink-0 relative">
-                <div className="relative w-96 h-96 flex items-center justify-center">
-                  <Image 
-                    src="/images/Payment.png" 
-                    alt="Adicionar crédito" 
-                    width={384}
-                    height={384}
-                    className="object-contain filter brightness-110 contrast-110"
-                  />
-                </div>
-              </div>
-
-              {/* Conteúdo principal */}
-              <div className="flex-1 max-w-md">
-                <h2 className="text-3xl font-bold text-white mb-2 text-center">Adicionar Crédito</h2>
-                <p className="text-white text-center mb-2 opacity-90">Selecione um valor para adicionar a sua conta:</p>
-                <p className="text-white text-center mb-8 opacity-75 text-sm">
-                  {selectedAmount} Crédito{selectedAmount !== 1 ? 's' : ''} = R$ {selectedAmount.toFixed(2).replace('.', ',')}
-                </p>
-                
-                {/* Grid de valores */}
-                <div className="grid grid-cols-3 gap-3 mb-8">
-                  {[10, 30, 50, 100, 150, 300].map((value) => (
-                    <button
-                      key={value}
-                      onClick={() => setSelectedAmount(value)}
-                      className={`p-4 rounded-xl border-2 transition-all hover:scale-105 ${
-                        selectedAmount === value 
-                          ? 'border-white bg-white bg-opacity-20 shadow-lg' 
-                          : 'border-gray-400 border-opacity-50 hover:border-white hover:bg-white hover:bg-opacity-10'
-                      }`}
-                    >
-                      <div className="text-white text-xs opacity-80 mb-1">Carregue</div>
-                      <div className="text-white text-lg font-bold">R$ {value}</div>
-                    </button>
-                  ))}
-                </div>
-
-                {/* Botão Avançar */}
-                <button 
-                  onClick={() => {
-                    setIsAddCreditsModalOpen(false);
-                    setIsPaymentMethodModalOpen(true);
-                  }}
-                  className="w-full bg-[#F25790] hover:bg-[#d93d75] text-white py-4 px-6 rounded-full text-lg font-semibold transition-all transform hover:scale-105 shadow-lg"
-                >
-                  Avançar
-                </button>
-              </div>
-            </div>
+        <BaseModal
+          isOpen={isAddCreditsModalOpen}
+          onClose={() => setIsAddCreditsModalOpen(false)}
+          modelImage="/images/realistic_photo_of_a_beautiful_curvy_cam_model_in_sexy_casual_clothing_in_a_pink_neon-lit_cam_studi_01vxr9sv9u5n1mi8vknf_2.png"
+          modelName="Modelo Cam"
+          title="Adicionar Créditos"
+          subtitle="Selecione um valor para adicionar à sua conta"
+        >
+          {/* Descrição */}
+          <div className="text-center mb-6">
+            <p className="text-white/90 text-base mb-4 drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
+              Escolha o valor que deseja <span className="text-[#F25790] font-bold">adicionar</span> à sua carteira
+            </p>
           </div>
-        </div>
+          
+          {/* Grid de valores */}
+          <div className="grid grid-cols-2 gap-3 mb-6">
+            {[
+              { value: 10, label: 'R$ 10' },
+              { value: 30, label: 'R$ 30' },
+              { value: 50, label: 'R$ 50' },
+              { value: 100, label: 'R$ 100' },
+              { value: 150, label: 'R$ 150' },
+              { value: 300, label: 'R$ 300' }
+            ].map((option) => (
+              <button
+                key={option.value}
+                onClick={() => setSelectedAmount(option.value)}
+                className={`p-3 rounded-2xl border border-[#F25790]/50 bg-gradient-to-br transition-all hover:scale-105 ${
+                  selectedAmount === option.value
+                    ? 'from-[#F25790]/30 to-[#d93d75]/30 border-[#F25790] shadow-[0_0_15px_rgba(242,87,144,0.4)]'
+                    : 'from-[#F25790]/20 to-[#d93d75]/20 hover:from-[#F25790]/25 hover:to-[#d93d75]/25'
+                }`}
+              >
+                <div className="text-white/80 text-sm mb-1">Carregue</div>
+                <div className="text-white font-bold text-lg">{option.label}</div>
+              </button>
+            ))}
+          </div>
+
+          {/* Botão de avançar */}
+          <div className="space-y-3">
+            <button 
+              onClick={() => {
+                setIsAddCreditsModalOpen(false);
+                setIsPaymentMethodModalOpen(true);
+              }}
+              disabled={!selectedAmount}
+              className={`w-full py-3 font-bold rounded-2xl transition-all duration-300 shadow-[0_0_25px_rgba(242,87,144,0.4)] hover:shadow-[0_0_35px_rgba(242,87,144,0.6)] hover:scale-105 active:scale-95 border border-[#F25790]/30 ${
+                selectedAmount 
+                  ? 'bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white'
+                  : 'bg-white/10 text-white/50 cursor-not-allowed'
+              }`}
+            >
+              <div className="flex items-center justify-center gap-3">
+                <Image
+                  src="/icons/action/credit_card.svg"
+                  alt="Avançar"
+                  width={20}
+                  height={20}
+                  className="w-5 h-5 filter invert"
+                />
+                <span>Avançar</span>
+              </div>
+            </button>
+          </div>
+
+          {/* Texto pequeno */}
+          <p className="text-white/50 text-xs text-center mt-4 drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
+            Ao continuar, você será redirecionado para a página de pagamento
+          </p>
+        </BaseModal>
       )}
 
       {/* Modal de Seleção de Método de Pagamento */}
