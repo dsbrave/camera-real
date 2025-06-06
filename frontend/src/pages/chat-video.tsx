@@ -10,12 +10,13 @@ interface Gift {
   name: string;
   price: number;
   image: string;
+  emoji?: string;
+  id?: string;
 }
 
 export default function ChatVideo() {
   // ... outros estados ...
   const [showGiftModal, setShowGiftModal] = useState(false);
-  const [showFreeTrialModal, setShowFreeTrialModal] = useState(false);
   const [isUsingCredits, setIsUsingCredits] = useState(false);
   const router = useRouter();
   const { id } = router.query;
@@ -25,7 +26,6 @@ export default function ChatVideo() {
   const [modelIndex, setModelIndex] = useState(0);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<any[]>([]);
-  const [freeTimeRemaining, setFreeTimeRemaining] = useState(0); // Inicia com 0, será carregado do localStorage
   const [isCallActive, setIsCallActive] = useState(true);
   const [creditsSpent, setCreditsSpent] = useState(0);
   const [userName, setUserName] = useState<string>('');
@@ -38,9 +38,6 @@ export default function ChatVideo() {
   // Estados para meta da modelo
   const [modelGoal, setModelGoal] = useState(500); // Meta de 500 créditos
   const [modelEarnings, setModelEarnings] = useState(45); // Já ganhou 45 créditos
-  
-  // Estado para controlar se o usuário pode interagir
-  const [canInteract, setCanInteract] = useState(false); // Inicia bloqueado
   
   // Refs
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -95,7 +92,7 @@ export default function ChatVideo() {
     { name: 'Coroa', price: 50, image: '/icons/action/card_giftcard.svg' },
   ];
 
-  // Efeito para simular o carregamento do nome do usuário e inicializar tempo diário
+  // Efeito para simular o carregamento do nome do usuário
   useEffect(() => {
     // Simula o carregamento do nome do usuário de uma API
     const timeout = setTimeout(() => {
@@ -107,9 +104,6 @@ export default function ChatVideo() {
         { id: Date.now() - 1000, text: 'entrou no chat', sender: 'system', timestamp: new Date(Date.now() - 1000), username: 'DiogoBR' }
       ]);
     }, 1000);
-    
-    // Inicializar tempo diário
-    initializeDailyTime();
     
     // Atualizar créditos do localStorage
     refreshCredits();
@@ -157,16 +151,6 @@ export default function ChatVideo() {
     return () => clearInterval(interval);
   }, [isCallActive, sessionTime, modelIndex, isPrivateCall, isUsingCredits, spendCredits]);
 
-  // Timer para tempo grátis diário
-  useEffect(() => {
-    if (freeTimeRemaining > 0 && isCallActive && canInteract) {
-      const timer = setTimeout(() => {
-        updateDailyTime();
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [freeTimeRemaining, isCallActive, canInteract]);
-
   // Atualizar créditos periodicamente para manter sincronização
   useEffect(() => {
     const interval = setInterval(() => {
@@ -177,17 +161,8 @@ export default function ChatVideo() {
   }, [refreshCredits]);
 
   const handleNextModel = () => {
-    // Se não tem tempo grátis e não está usando créditos E não tem créditos suficientes para sala privada, mostrar modal
-    const currentModel = models[modelIndex];
-    if (freeTimeRemaining === 0 && !isUsingCredits && userCredits < currentModel.privateCallPrice) {
-      console.log('handleNextModel: Abrindo modal - freeTimeRemaining:', freeTimeRemaining, 'isUsingCredits:', isUsingCredits, 'userCredits:', userCredits, 'privateCallPrice:', currentModel.privateCallPrice);
-      setShowFreeTrialModal(true);
-      return;
-    }
-    
-    console.log('handleNextModel: Navegando para próxima modelo - sem modal');
+    console.log('handleNextModel: Navegando para próxima modelo');
     setModelIndex((prevIndex) => (prevIndex + 1) % models.length);
-    // NÃO resetar sessionTime e creditsSpent - o tempo deve ser global
     setIsPrivateCall(false);
     setIsCallActive(true);
     // Reset da meta da modelo
@@ -206,17 +181,8 @@ export default function ChatVideo() {
   };
 
   const handlePrevModel = () => {
-    // Se não tem tempo grátis e não está usando créditos E não tem créditos suficientes para sala privada, mostrar modal
-    const currentModel = models[modelIndex];
-    if (freeTimeRemaining === 0 && !isUsingCredits && userCredits < currentModel.privateCallPrice) {
-      console.log('handlePrevModel: Abrindo modal - freeTimeRemaining:', freeTimeRemaining, 'isUsingCredits:', isUsingCredits, 'userCredits:', userCredits, 'privateCallPrice:', currentModel.privateCallPrice);
-      setShowFreeTrialModal(true);
-      return;
-    }
-    
-    console.log('handlePrevModel: Navegando para modelo anterior - sem modal');
+    console.log('handlePrevModel: Navegando para modelo anterior');
     setModelIndex((prevIndex) => (prevIndex - 1 + models.length) % models.length);
-    // NÃO resetar sessionTime e creditsSpent - o tempo deve ser global
     setIsPrivateCall(false);
     setIsCallActive(true);
     // Reset da meta da modelo
@@ -264,12 +230,8 @@ export default function ChatVideo() {
     e?.preventDefault();
     
     console.log('=== INÍCIO handleTogglePrivateRoom ===');
-    console.log('canInteract:', canInteract);
-    console.log('freeTimeRemaining:', freeTimeRemaining);
-    console.log('isUsingCredits:', isUsingCredits);
     console.log('userCredits:', userCredits);
     console.log('isPrivateCall:', isPrivateCall);
-    console.log('showFreeTrialModal antes:', showFreeTrialModal);
     
     if (isPrivateCall) {
       // Se já está na sala privada, pode sair sempre
@@ -284,24 +246,17 @@ export default function ChatVideo() {
       const currentModel = models[modelIndex];
       console.log('Modelo atual:', currentModel.name, 'Preço:', currentModel.privateCallPrice);
       
-      // Se tem créditos suficientes, pode entrar na sala privada independente do canInteract
+      // Se tem créditos suficientes, pode entrar na sala privada
       if (userCredits >= currentModel.privateCallPrice) {
         console.log('Usuário tem créditos suficientes, entrando na sala privada');
-        
-        // Fechar o modal se estiver aberto
-        if (showFreeTrialModal) {
-          console.log('Fechando modal que estava aberto');
-          setShowFreeTrialModal(false);
-        }
         
         if (spendCredits(currentModel.privateCallPrice)) {
           console.log('Créditos gastos com sucesso, ativando sala privada');
           setIsPrivateCall(true);
-          // Se não estava usando créditos, ativar agora
+          // Ativar uso de créditos se não estava ativo
           if (!isUsingCredits) {
             setIsUsingCredits(true);
             setIsCallActive(true);
-            setCanInteract(true);
           }
           // 30% para a modelo
           setModelEarnings(prev => prev + Math.floor(currentModel.privateCallPrice * 0.3));
@@ -322,7 +277,6 @@ export default function ChatVideo() {
       }
     }
     
-    console.log('showFreeTrialModal depois:', showFreeTrialModal);
     console.log('=== FIM handleTogglePrivateRoom ===');
   };
 
@@ -382,83 +336,7 @@ export default function ChatVideo() {
     }
   };
 
-  const handleContinueWithCredits = () => {
-    setShowFreeTrialModal(false);
-    setIsUsingCredits(true);
-    setIsCallActive(true);
-    setCanInteract(true); // Reabilitar interações
-    // NÃO resetar sessionTime - manter continuidade do tempo global
-  };
-
   const currentModel = models[modelIndex];
-
-  // Função para gerenciar tempo diário
-  const initializeDailyTime = () => {
-    const today = new Date().toDateString();
-    const savedData = localStorage.getItem('dailyBrowsingTime');
-    
-    if (savedData) {
-      const { date, timeUsed } = JSON.parse(savedData);
-      if (date === today) {
-        // Mesmo dia, usar tempo restante
-        const remaining = Math.max(0, 30 - timeUsed);
-        setFreeTimeRemaining(remaining);
-        setCanInteract(remaining > 0);
-        return;
-      }
-    }
-    
-    // Novo dia ou primeira vez
-    setFreeTimeRemaining(30);
-    setCanInteract(true);
-    localStorage.setItem('dailyBrowsingTime', JSON.stringify({
-      date: today,
-      timeUsed: 0
-    }));
-  };
-
-  const updateDailyTime = () => {
-    const today = new Date().toDateString();
-    const savedData = localStorage.getItem('dailyBrowsingTime');
-    
-    if (savedData) {
-      const { timeUsed } = JSON.parse(savedData);
-      const newTimeUsed = timeUsed + 1;
-      
-      localStorage.setItem('dailyBrowsingTime', JSON.stringify({
-        date: today,
-        timeUsed: newTimeUsed
-      }));
-      
-      const remaining = Math.max(0, 30 - newTimeUsed);
-      setFreeTimeRemaining(remaining);
-      
-      if (remaining === 0) {
-        console.log('updateDailyTime: Tempo grátis acabou');
-        setCanInteract(false);
-        setIsCallActive(false);
-        
-        // Só mostrar o modal se o usuário não tem créditos suficientes para continuar
-        const currentModel = models[modelIndex];
-        if (userCredits < currentModel.privateCallPrice) {
-          console.log('updateDailyTime: Abrindo modal - sem créditos suficientes');
-          setShowFreeTrialModal(true);
-        } else {
-          console.log('updateDailyTime: Usuário tem créditos suficientes, não abrindo modal');
-        }
-      }
-    }
-  };
-
-  // Função para resetar tempo grátis (apenas para debug/teste)
-  const resetDailyTime = () => {
-    localStorage.removeItem('dailyBrowsingTime');
-    setFreeTimeRemaining(30);
-    setCanInteract(true);
-    setIsCallActive(true);
-    setShowFreeTrialModal(false);
-    console.log('Tempo grátis resetado para 30 segundos');
-  };
 
   return (
     <>
@@ -535,43 +413,39 @@ export default function ChatVideo() {
           </div>
 
             {/* Progress Bars Section - Single line design */}
-            {(freeTimeRemaining > 0 || isUsingCredits || (!canInteract && freeTimeRemaining === 0)) && (
+            {(isUsingCredits || isCallActive) && (
               <div className="hidden md:flex justify-center items-center py-3 bg-gradient-to-r from-black/20 via-black/40 to-black/20 backdrop-blur-sm relative">
                 <div className="flex items-center gap-8 px-8">
                   {/* Timer only */}
                   <div className="flex items-center gap-3">
                     <div className="text-[#F25790] font-bold text-base">
-                  {freeTimeRemaining > 0 ? formatTime(freeTimeRemaining) : formatTime(sessionTime)}
+                      {formatTime(sessionTime)}
                     </div>
                     {isUsingCredits && (
                       <div className="text-xs text-white/60">
                         Créditos gastos: <span className="text-[#F25790] font-bold">{creditsSpent}</span>
                       </div>
                     )}
-              </div>
-              
+                  </div>
+                  
                   {/* Progress bar sessão + créditos */}
                   <div className="flex items-center gap-3">
                     <div className="w-48 h-2 rounded-full relative border border-[#F25790]/50 shadow-[0_0_8px_rgba(242,87,144,0.3)] backdrop-blur-sm">
-                <div 
+                      <div 
                         className="h-full rounded-full transition-all duration-1000 bg-gradient-to-r from-[#F25790] to-[#d93d75] shadow-[0_0_8px_rgba(242,87,144,0.5)]"
-                  style={{
-                    width: freeTimeRemaining > 0 
-                            ? `${((30 - freeTimeRemaining) / 30) * 100}%`
-                            : isUsingCredits
+                        style={{
+                          width: isUsingCredits
                             ? `${Math.max(10, (creditsSpent / userCredits) * 100)}%` // Mostra progresso baseado nos créditos gastos
-                      : '100%'
-                  }}
-                ></div>
-              </div>
-              
-              {(freeTimeRemaining === 0 || !canInteract) && (
-                      <div className="flex items-center gap-1">
-                        <span className="text-green-400 font-bold text-xs">{userCredits}</span>
-                        <span className="text-white/60 text-xs">créditos</span>
-                </div>
-              )}
-            </div>
+                            : '10%'
+                        }}
+                      ></div>
+                    </div>
+                    
+                    <div className="flex items-center gap-1">
+                      <span className="text-green-400 font-bold text-xs">{userCredits}</span>
+                      <span className="text-white/60 text-xs">créditos</span>
+                    </div>
+                  </div>
 
                   {/* Divisor */}
                   <div className="w-px h-8 bg-gradient-to-b from-transparent via-white/30 to-transparent"></div>
@@ -583,7 +457,7 @@ export default function ChatVideo() {
                         <path d="M5 16L3 3l5.5 5L12 4l3.5 4L21 3l-2 13H5zm2.7-2h8.6l.9-5.4-2.1 1.4L12 8l-3.1 2L6.8 8.6L7.7 14z"/>
                       </svg>
                       <div className="absolute -inset-1 bg-yellow-400/20 rounded-full blur-sm"></div>
-          </div>
+                    </div>
 
                     <div className="w-48 h-2 rounded-full relative border border-yellow-400/50 shadow-[0_0_8px_rgba(251,191,36,0.3)] backdrop-blur-sm">
                       <div 
@@ -624,9 +498,9 @@ export default function ChatVideo() {
               {/* Botão Sala Privada */}
               <button 
                 onClick={(e) => handleTogglePrivateRoom(e)} 
-                disabled={!canInteract && !isPrivateCall && userCredits < currentModel.privateCallPrice}
+                disabled={userCredits < currentModel.privateCallPrice && !isPrivateCall}
                 className={`p-5 rounded-full transition-all hover:scale-110 ${
-                  (!canInteract && !isPrivateCall && userCredits < currentModel.privateCallPrice)
+                  (userCredits < currentModel.privateCallPrice && !isPrivateCall)
                     ? 'bg-gray-600/40 border border-gray-500/30 cursor-not-allowed opacity-50' 
                     : isPrivateCall 
                     ? 'bg-gradient-to-r from-red-500/60 to-red-600/60 hover:from-red-500/80 hover:to-red-600/80 border border-red-500/30 shadow-[0_0_12px_rgba(239,68,68,0.4)] hover:shadow-[0_0_16px_rgba(239,68,68,0.5)]'
@@ -634,7 +508,7 @@ export default function ChatVideo() {
                 } backdrop-blur-sm`}
                 type="button"
                 title={
-                  (!canInteract && !isPrivateCall && userCredits < currentModel.privateCallPrice) 
+                  (userCredits < currentModel.privateCallPrice && !isPrivateCall) 
                     ? `Créditos insuficientes (${currentModel.privateCallPrice} necessários)` 
                     : isPrivateCall 
                     ? "Sair do chat privado" 
@@ -665,14 +539,9 @@ export default function ChatVideo() {
               {/* Botão Presentes */}
               <button 
                 onClick={() => setShowGiftModal(true)} 
-                disabled={!canInteract}
-                className={`p-5 rounded-full transition-all hover:scale-110 ${
-                  !canInteract 
-                    ? 'bg-gray-600/40 border border-gray-500/30 cursor-not-allowed opacity-50' 
-                    : 'bg-gradient-to-r from-yellow-500/60 to-yellow-600/60 hover:from-yellow-500/80 hover:to-yellow-600/80 border border-yellow-500/30 shadow-[0_0_12px_rgba(234,179,8,0.4)] hover:shadow-[0_0_16px_rgba(234,179,8,0.5)]'
-                } backdrop-blur-sm`}
+                className="p-5 rounded-full transition-all hover:scale-110 bg-gradient-to-r from-yellow-500/60 to-yellow-600/60 hover:from-yellow-500/80 hover:to-yellow-600/80 border border-yellow-500/30 shadow-[0_0_12px_rgba(234,179,8,0.4)] hover:shadow-[0_0_16px_rgba(234,179,8,0.5)] backdrop-blur-sm"
                 type="button"
-                title={!canInteract ? "Aguarde decisão do tempo grátis" : "Enviar presente"}
+                title="Enviar presente"
               >
                 <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
                   <polyline points="20,12 20,22 4,22 4,12"/>
@@ -764,9 +633,9 @@ export default function ChatVideo() {
                     
                     <button 
                       onClick={(e) => handleTogglePrivateRoom(e)} 
-                      disabled={!canInteract && !isPrivateCall && userCredits < currentModel.privateCallPrice}
+                      disabled={userCredits < currentModel.privateCallPrice && !isPrivateCall}
                       className={`p-2 rounded-full transition-all hover:scale-110 active:scale-95 ${
-                        (!canInteract && !isPrivateCall && userCredits < currentModel.privateCallPrice)
+                        (userCredits < currentModel.privateCallPrice && !isPrivateCall)
                           ? 'bg-gray-600/40 border border-gray-500/30 cursor-not-allowed opacity-50' 
                           : isPrivateCall 
                           ? 'bg-gradient-to-r from-red-500/60 to-red-600/60 hover:from-red-500/80 hover:to-red-600/80 border border-red-500/30'
@@ -774,7 +643,7 @@ export default function ChatVideo() {
                       }`}
                       type="button"
                       title={
-                        (!canInteract && !isPrivateCall && userCredits < currentModel.privateCallPrice) 
+                        (userCredits < currentModel.privateCallPrice && !isPrivateCall) 
                           ? `Créditos insuficientes (${currentModel.privateCallPrice} necessários)` 
                           : isPrivateCall 
                           ? "Sair do chat privado" 
@@ -804,14 +673,13 @@ export default function ChatVideo() {
                     
                     <button 
                       onClick={() => setShowGiftModal(true)} 
-                      disabled={!canInteract}
                       className={`p-2 rounded-full transition-all hover:scale-110 active:scale-95 ${
-                        !canInteract 
+                        !userCredits 
                           ? 'bg-gray-600/40 border border-gray-500/30 cursor-not-allowed opacity-50' 
                           : 'bg-gradient-to-r from-yellow-500/60 to-yellow-600/60 hover:from-yellow-500/80 hover:to-yellow-600/80 border border-yellow-500/30'
                       }`}
                       type="button"
-                      title={!canInteract ? "Aguarde decisão do tempo grátis" : "Enviar presente"}
+                      title={!userCredits ? "Aguarde decisão do tempo grátis" : "Enviar presente"}
                     >
                       <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
                         <polyline points="20,12 20,22 4,22 4,12"/>
@@ -929,186 +797,44 @@ export default function ChatVideo() {
           )}
         </div>
 
-        {/* Overlay de página inteira quando limite diário excedido */}
-        {!canInteract && freeTimeRemaining === 0 && (
-          <div className="fixed inset-0 z-[9998] backdrop-blur-sm bg-black/80 flex items-center justify-center">
-            <div className="text-center p-8 max-w-md mx-4">
-              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#F25790]/20 flex items-center justify-center">
-                <svg className="w-10 h-10 text-[#F25790]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                  <circle cx="12" cy="16" r="1"/>
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                </svg>
-              </div>
-              <h3 className="text-white font-bold text-2xl mb-4">Limite Diário Excedido</h3>
-              <p className="text-white/70 text-base mb-8">
-                Você usou seus 30 segundos diários de navegação grátis
-              </p>
-              <div className="space-y-3">
-                <button
-                  onClick={handleContinueWithCredits}
-                  className="w-full py-4 bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white font-bold rounded-2xl transition-all duration-300 shadow-[0_0_25px_rgba(242,87,144,0.4)] hover:shadow-[0_0_35px_rgba(242,87,144,0.6)] hover:scale-105 active:scale-95 border border-[#F25790]/30"
-                >
-                  <div className="flex items-center justify-center gap-3">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z"/>
-                    </svg>
-                    <span>Interagir Agora</span>
-                  </div>
-                </button>
-                <button
-                  onClick={() => router.push('/')}
-                  className="w-full py-3 bg-white/10 hover:bg-white/20 text-white/80 hover:text-white font-medium rounded-xl transition-all duration-300 border border-white/20 hover:border-white/30"
-                >
-                  <div className="flex items-center justify-center gap-2">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                      <circle cx="11" cy="11" r="8"/>
-                      <path d="m21 21-4.35-4.35"/>
-                    </svg>
-                    <span>Explorar</span>
-                  </div>
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Free Trial Modal */}
-        {showFreeTrialModal && (
-          <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm">
-            <div className="bg-black rounded-3xl max-w-5xl w-full mx-4 shadow-[0_0_50px_rgba(242,87,144,0.3)] border border-[#F25790]/30 overflow-hidden relative">
-              {/* Efeitos neon de fundo */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#F25790]/10 via-transparent to-transparent pointer-events-none"></div>
-              <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F25790] to-transparent opacity-60"></div>
-              <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F25790] to-transparent opacity-40"></div>
-              
-              <div className="flex flex-col md:flex-row relative z-10 min-h-[500px]">
-                {/* Lado esquerdo - Imagem da modelo (edge-to-edge) */}
-                <div className="md:w-1/2 relative overflow-hidden">
-                  {/* Imagem de fundo que vai de ponta a ponta */}
-                  <div className="absolute inset-0">
-    <Image
-                      src="/images/realistic_photo_of_a_beautiful_curvy_cam_model_in_sexy_casual_clothing_in_a_pink_neon-lit_cam_studi_01vxr9sv9u5n1mi8vknf_2.png"
-                      alt="Modelo"
-                      fill
-                      className="object-cover object-center"
-                    />
-                  </div>
-                  
-                  {/* Gradiente de transição para o lado direito */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-black/80 md:to-black/90"></div>
-                  
-                  {/* Gradiente inferior para melhor legibilidade */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                  
-                  {/* Overlay neon sutil */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#F25790]/20 via-transparent to-transparent mix-blend-overlay"></div>
-                  
-                  {/* Efeito de brilho neon nas bordas */}
-                  <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#F25790]/60 via-[#F25790]/80 to-transparent blur-sm"></div>
-                    <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#F25790]/40 via-[#F25790]/60 to-transparent blur-sm"></div>
-                  </div>
+        {/* Modal de Presentes */}
+        {showGiftModal && (
+          <div className="fixed inset-0 z-[9999] backdrop-blur-sm bg-black/80 flex items-center justify-center">
+            <div className="bg-gradient-to-br from-gray-900/95 to-black/95 p-8 rounded-3xl max-w-md w-full mx-4 border border-white/20 shadow-[0_0_50px_rgba(242,87,144,0.3)]">
+              <div className="text-center">
+                <h3 className="text-2xl font-bold text-white mb-6">🎁 Enviar Presente</h3>
+                
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                  {gifts.map((gift, index) => (
+                    <button
+                      key={gift.name || index}
+                      onClick={() => handleSendGift(gift)}
+                      disabled={userCredits < gift.price}
+                      className={`p-4 rounded-2xl border transition-all ${
+                        userCredits >= gift.price
+                          ? 'border-[#F25790]/50 bg-gradient-to-br from-[#F25790]/20 to-[#d93d75]/20 hover:from-[#F25790]/30 hover:to-[#d93d75]/30 hover:scale-105'
+                          : 'border-gray-600/50 bg-gray-800/50 opacity-50 cursor-not-allowed'
+                      }`}
+                    >
+                      <div className="text-2xl mb-2">{gift.emoji || '🎁'}</div>
+                      <div className="text-white font-semibold text-sm">{gift.name}</div>
+                      <div className="text-[#F25790] font-bold text-xs">{gift.price} créditos</div>
+                    </button>
+                  ))}
                 </div>
                 
-                {/* Lado direito - Informações e botões */}
-                <div className="md:w-1/2 p-8 flex flex-col justify-center relative bg-gradient-to-br from-black/95 via-black/90 to-black/95">
-                  {/* Efeito de continuidade visual */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/50 to-black pointer-events-none"></div>
-                  
-                  <div className="relative z-10">
-                    {/* Título com efeito neon */}
-                    <div className="text-center mb-8">
-                      <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
-                        <span className="text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
-                          Navegação Grátis
-                        </span>
-                      </h2>
-                      <h3 className="text-xl md:text-2xl font-bold mb-4">
-                        <span className="bg-gradient-to-r from-[#F25790] to-[#d93d75] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(242,87,144,0.5)]">
-                          Limite Diário Excedido
-                        </span>
-                      </h3>
-                      <div className="w-20 h-1 bg-gradient-to-r from-[#F25790] to-[#d93d75] mx-auto rounded-full shadow-[0_0_15px_rgba(242,87,144,0.6)]"></div>
-                    </div>
-                    
-                    {/* Descrição condensada */}
-                    <div className="text-center mb-8">
-                      <p className="text-white/90 text-lg mb-6 drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
-                        Você usou seus <span className="text-[#F25790] font-bold">30 segundos diários</span> de navegação grátis. Use créditos para continuar ou volte amanhã!
-                      </p>
-                      
-                      {/* Informações organizadas em bloco único */}
-                      <div className="backdrop-blur-sm rounded-xl p-4 space-y-2 border border-[#F25790]/50 shadow-[0_0_15px_rgba(242,87,144,0.3)]">
-                        <div className="flex items-center justify-between">
-                          <span className="text-white/80 text-sm">Continuar:</span>
-                          <span className="text-[#F25790] font-bold">{currentModel.pricePerMinute} créditos/min</span>
-                        </div>
-                        
-                        <div className="flex items-center justify-between">
-                          <span className="text-white/80 text-sm">Seus créditos:</span>
-                          <span className="text-green-400 font-bold">{userCredits}</span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Botões de ação */}
-                    <div className="space-y-4">
-                      {/* Botão Continuar */}
-  <button 
-                        onClick={handleContinueWithCredits}
-                        className="w-full py-4 bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white font-bold rounded-2xl transition-all duration-300 shadow-[0_0_25px_rgba(242,87,144,0.4)] hover:shadow-[0_0_35px_rgba(242,87,144,0.6)] hover:scale-105 active:scale-95 border border-[#F25790]/30"
-                      >
-                        <div className="flex items-center justify-center gap-3">
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                            <path d="M8 5v14l11-7z"/>
-    </svg>
-                          <span>Interagir Agora</span>
-                        </div>
-  </button>
-</div>
-                    
-                    {/* Texto pequeno */}
-                    <p className="text-white/50 text-xs text-center mt-6 drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
-                      Ao continuar, você concorda com nossos termos de uso
-                    </p>
-                  </div>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setShowGiftModal(false)}
+                    className="flex-1 py-3 bg-gray-700/50 hover:bg-gray-700/70 text-white font-semibold rounded-xl transition-all"
+                  >
+                    Cancelar
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         )}
-
-      {/* Gift Modal */}
-      {showGiftModal && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80">
-          <div className="bg-[#1e0a1e] rounded-2xl p-8 max-w-md w-full shadow-lg relative">
-            <button
-              onClick={() => setShowGiftModal(false)}
-              className="absolute top-2 right-2 text-gray-400 hover:text-white text-xl"
-              aria-label="Fechar"
-            >
-              ×
-            </button>
-            <h2 className="text-2xl font-bold mb-4 text-white">Enviar Presente</h2>
-            <div className="grid grid-cols-3 gap-4">
-              {gifts.map((gift) => (
-                <button
-                  key={gift.name}
-                  className="flex flex-col items-center p-3 bg-[#2a142a] rounded-xl hover:bg-[#F25790]/20 transition-all"
-                    onClick={() => handleSendGift(gift)}
-                  type="button"
-                >
-                  <img src={gift.image} alt={gift.name} className="w-10 h-10 mb-2" />
-                  <span className="text-white text-sm font-medium">{gift.name}</span>
-                  <span className="text-pink-400 text-xs font-bold">{gift.price} créditos</span>
-                </button>
-              ))}
-            </div>
-            <p className="text-xs text-gray-400 mt-6 text-center">Selecione um presente para enviar durante o chat!</p>
-          </div>
-        </div>
-      )}
 
         {/* Layout Mobile */}
         <div className="md:hidden flex flex-col h-screen bg-black">
@@ -1140,9 +866,9 @@ export default function ChatVideo() {
             
             <div className="flex items-center gap-3">
               <div className="text-right">
-                {(freeTimeRemaining > 0 || isUsingCredits) && (
+                {(sessionTime > 0 || isUsingCredits) && (
                   <div className="text-[#F25790] font-bold text-sm">
-                    {freeTimeRemaining > 0 ? formatTime(freeTimeRemaining) : formatTime(sessionTime)}
+                    {formatTime(sessionTime)}
                   </div>
                 )}
               </div>
@@ -1166,13 +892,13 @@ export default function ChatVideo() {
           </div>
 
           {/* Progress bar mobile - single line design */}
-          {(freeTimeRemaining > 0 || isUsingCredits) && (
+          {(sessionTime > 0 || isUsingCredits) && (
             <div className="bg-black/90 backdrop-blur-sm border-t border-white/10 p-4">
               <div className="flex items-center justify-between">
                 {/* Timer only */}
                 <div className="flex items-center gap-2">
                   <div className="text-[#F25790] font-bold text-xs">
-                    {freeTimeRemaining > 0 ? formatTime(freeTimeRemaining) : formatTime(sessionTime)}
+                    {formatTime(sessionTime)}
                   </div>
                   {isUsingCredits && (
                     <div className="text-xs text-white/60">
@@ -1188,8 +914,8 @@ export default function ChatVideo() {
                     <div 
                       className="h-full rounded-full transition-all duration-1000 bg-gradient-to-r from-[#F25790] to-[#d93d75] shadow-[0_0_6px_rgba(242,87,144,0.5)]"
                       style={{
-                        width: freeTimeRemaining > 0 
-                          ? `${((30 - freeTimeRemaining) / 30) * 100}%`
+                        width: sessionTime > 0 
+                          ? `${((30 - sessionTime) / 30) * 100}%`
                           : isUsingCredits
                           ? `${Math.max(10, (creditsSpent / userCredits) * 100)}%` // Mostra progresso baseado nos créditos gastos
                           : '100%'
@@ -1219,7 +945,7 @@ export default function ChatVideo() {
                 </div>
 
                 {/* Créditos */}
-                {freeTimeRemaining === 0 && (
+                {sessionTime === 0 && (
                   <div className="text-green-400 font-bold text-xs">
                     {userCredits}
                   </div>
