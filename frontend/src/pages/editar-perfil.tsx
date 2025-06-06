@@ -24,6 +24,18 @@ export default function EditarPerfil() {
   });
 
   useEffect(() => {
+    // Garantir que o scroll esteja sempre habilitado
+    document.body.style.overflow = 'unset';
+    document.body.style.paddingRight = '';
+    
+    return () => {
+      // Cleanup para garantir que o scroll permaneça habilitado
+      document.body.style.overflow = 'unset';
+      document.body.style.paddingRight = '';
+    };
+  }, []);
+
+  useEffect(() => {
     // Carregar dados do usuário do localStorage
     const loadUserData = () => {
       const storedData = localStorage.getItem('userData');
@@ -108,10 +120,10 @@ export default function EditarPerfil() {
       </Head>
 
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
-        <div className="flex">
+        <div className="flex min-h-screen">
           {/* Sidebar */}
-          <div className="hidden lg:flex lg:w-80 lg:flex-col lg:fixed lg:inset-y-0">
-            <div className="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto bg-gray-900/50 backdrop-blur-sm border-r border-gray-700/50">
+          <div className="hidden lg:flex lg:w-80 lg:flex-col lg:fixed lg:inset-y-0 lg:z-10">
+            <div className="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto bg-gray-900/50 backdrop-blur-sm border-r border-gray-700/50 h-full">
               <div className="flex items-center flex-shrink-0 px-4">
                 <Link href="/painel-usuario" className="flex items-center space-x-2">
                   <Image
@@ -234,8 +246,8 @@ export default function EditarPerfil() {
           </div>
 
           {/* Main Content */}
-          <div className="flex-1 lg:pl-80">
-            <div className="p-4 lg:p-8">
+          <div className="flex-1 lg:pl-80 w-full">
+            <div className="p-4 lg:p-8 min-h-screen">
               {/* Mobile Header */}
               <div className="lg:hidden mb-6">
                 <div className="flex items-center justify-between">

@@ -21,9 +21,10 @@ export default function PainelUsuario() {
     username: ''
   });
   const [favoriteModels, setFavoriteModels] = useState<any[]>([]);
+  const [recentChats, setRecentChats] = useState<any[]>([]);
 
   // Mock de dados para conversas recentes
-  const recentChats = [
+  const recentChatsMock = [
     { id: 'c1', modelId: 'm1', modelName: 'Ana Silva', date: new Date(Date.now() - 2 * 60 * 60 * 1000), duration: 15, cost: 35 },
     { id: 'c2', modelId: 'm4', modelName: 'Bianca', date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), duration: 25, cost: 60 },
     { id: 'c3', modelId: 'm2', modelName: 'Julia Santos', date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), duration: 10, cost: 20 }
@@ -46,7 +47,7 @@ export default function PainelUsuario() {
           if (parsedUser.isLoggedIn) {
             setUserData({
               ...parsedUser,
-              recentChats
+              recentChats: recentChatsMock
             });
             
             // Carregar favoritos do localStorage
@@ -73,6 +74,20 @@ export default function PainelUsuario() {
       window.removeEventListener('userDataUpdated', loadUserData);
     };
   }, [router]);
+
+  useEffect(() => {
+    // Garantir que o scroll esteja sempre habilitado
+    document.body.style.overflow = 'unset';
+    document.body.style.paddingRight = '';
+    document.documentElement.style.overflow = 'unset';
+    
+    return () => {
+      // Cleanup para garantir que o scroll permaneça habilitado
+      document.body.style.overflow = 'unset';
+      document.body.style.paddingRight = '';
+      document.documentElement.style.overflow = 'unset';
+    };
+  }, []);
 
   // Navegar para a página de adicionar saldo
   const handleNavigateToBuyCredits = () => {
@@ -163,7 +178,7 @@ export default function PainelUsuario() {
         
         <main className="px-3 sm:px-4 pt-16 sm:pt-20 pb-6 sm:pb-8">
           <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+            <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 min-h-0">
               {/* Sidebar */}
               <aside className="w-full lg:w-80 lg:flex-shrink-0">
                 {/* User Card */}
