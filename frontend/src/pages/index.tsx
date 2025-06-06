@@ -20,7 +20,7 @@ interface Modelo {
 }
 
 interface UserPreferences {
-  modelType: 'mulheres' | 'homens' | 'casais' | 'trans' | 'todos';
+  modelType: ('mulheres' | 'homens' | 'casais' | 'trans' | 'todos')[];
   priceRange: {
     min: number;
     max: number;
@@ -236,35 +236,36 @@ export default function Home() {
 
   // Filtrar modelos baseado nas preferências do usuário
   const getFilteredModels = () => {
+    // Se não estiver logado ou não tiver preferências, mostra apenas 2 modelos
     if (!userPreferences || !isLoggedIn) {
-      return modelosDestaque.slice(0, 2); // Mostrar apenas 2 modelos se não logado
+      return modelosDestaque.slice(0, 2);
     }
 
-    let filteredModels = modelosDestaque;
+    let filteredModels = [...modelosDestaque];
 
     // Filtrar por tipo de modelo
-    if (userPreferences.modelType !== 'todos') {
-      const typeMap: Record<string, string> = {
-        'mulheres': 'Mulheres',
-        'homens': 'Homens', 
-        'casais': 'Casais',
-        'trans': 'Trans'
+    if (!userPreferences.modelType.includes('todos')) {
+      const typeMap = {
+        'mulheres': 'mulher',
+        'homens': 'homem', 
+        'casais': 'casal',
+        'trans': 'trans'
       };
-      filteredModels = filteredModels.filter(modelo => modelo.tipo === typeMap[userPreferences.modelType]);
+      
+      filteredModels = filteredModels.filter(modelo => 
+        userPreferences.modelType.some(selectedType => 
+          modelo.tipo === typeMap[selectedType as keyof typeof typeMap]
+        )
+      );
     }
 
-    // Filtrar por faixa de preço do chat privado
+    // Filtrar por preço
     filteredModels = filteredModels.filter(modelo => 
-      modelo.precoPrivado >= userPreferences.priceRange.min && 
+      modelo.precoPrivado >= userPreferences.priceRange.min &&
       modelo.precoPrivado <= userPreferences.priceRange.max
     );
 
-    // Se não houver modelos que atendam aos critérios, mostrar todos
-    if (filteredModels.length === 0) {
-      filteredModels = modelosDestaque;
-    }
-
-    return filteredModels.slice(0, 2); // Sempre mostrar apenas 2 modelos
+    return filteredModels;
   };
 
   // Definir a imagem de fundo baseada no status de login
@@ -522,19 +523,26 @@ export default function Home() {
 
                   {/* Mensagem sobre preferências */}
                   {userPreferences && (
-                    <div className="mt-6 p-4 bg-gradient-to-r from-[#F25790]/10 to-purple-500/10 rounded-lg border border-[#F25790]/20">
-                      <div className="flex items-start gap-3">
-                        <svg className="w-5 h-5 text-[#F25790] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                        </svg>
-                        <div className="flex-1">
-                          <p className="text-sm text-white/80">
-                            <strong className="text-white">Modelos personalizados:</strong> Estamos mostrando modelos baseados nas suas preferências 
-                            ({userPreferences.modelType === 'todos' ? 'Todos os tipos' : userPreferences.modelType}, 
-                            {userPreferences.priceRange.min}-{userPreferences.priceRange.max} créditos/min para chat privado).
+                    <div className="mt-4 p-3 bg-blue-500/10 rounded-lg border border-blue-500/20">
+                      <div className="flex items-start gap-2">
+                        <Image
+                          src="/icons/action/settings.svg"
+                          alt="Preferências"
+                          width={16}
+                          height={16}
+                          className="filter brightness-0 saturate-100 invert(59%) sepia(98%) saturate(1946%) hue-rotate(201deg) brightness(97%) contrast(94%) mt-0.5"
+                        />
+                        <div>
+                          <p className="text-blue-300 text-xs font-medium mb-1">
+                            Modelos personalizados para você
                           </p>
-                          <p className="text-xs text-white/60 mt-1">
-                            Você pode alterar suas preferências no <Link href="/painel-usuario" className="text-[#F25790] hover:underline">Meu Painel</Link> ou ao editar seu perfil.
+                          <p className="text-gray-400 text-xs">
+                            ({userPreferences.modelType.includes('todos') ? 'Todos os tipos' : userPreferences.modelType.join(', ')}, 
+                            até {userPreferences.priceRange.max} créditos/min para chat privado).
+                            <br />
+                            <Link href="/painel-usuario" className="text-blue-400 hover:text-blue-300 underline">
+                              Alterar no Meu Painel
+                            </Link>
                           </p>
                         </div>
                       </div>
