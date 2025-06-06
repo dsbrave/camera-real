@@ -2,15 +2,17 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function EditarPerfil() {
   const router = useRouter();
   const [userData, setUserData] = useState({
     name: '',
+    username: '',
     email: '',
     phone: '',
-    photo: '',
-    username: ''
+    photo: '/default-avatar.png',
+    credits: 0
   });
   const [editingField, setEditingField] = useState<string | null>(null);
   const [tempValue, setTempValue] = useState('');
@@ -24,25 +26,23 @@ export default function EditarPerfil() {
   useEffect(() => {
     // Carregar dados do usuário do localStorage
     const loadUserData = () => {
-      const storedUser = localStorage.getItem('user');
-      if (storedUser) {
+      const storedData = localStorage.getItem('userData');
+      if (storedData) {
         try {
-          const parsedUser = JSON.parse(storedUser);
-          if (parsedUser) {
+          const data = JSON.parse(storedData);
+          if (data) {
             setUserData({
-              name: parsedUser.name || 'Usuário',
-              email: parsedUser.email || 'teste@camera.real',
-              phone: parsedUser.phone || '55 11 93366 1304',
-              photo: parsedUser.photo || '',
-              username: parsedUser.username || parsedUser.name?.toLowerCase().replace(/\s+/g, '') || 'usuario'
+              name: data.name || 'Usuário',
+              username: data.username || 'usuario',
+              email: data.email || 'usuario@email.com',
+              phone: data.phone || '(11) 99999-9999',
+              photo: data.photo || '/default-avatar.png',
+              credits: data.credits || 0
             });
           }
         } catch (error) {
           console.error('Erro ao carregar dados do usuário:', error);
-          router.push('/painel-usuario');
         }
-      } else {
-        router.push('/login');
       }
     };
 
@@ -56,45 +56,24 @@ export default function EditarPerfil() {
     };
   }, [router]);
 
-  useEffect(() => {
-    // Prevenir scroll do body quando o modal estiver aberto
-    document.body.style.overflow = 'hidden';
-    document.body.style.paddingRight = '0px';
-
-    // Cleanup function para garantir que o scroll seja restaurado
-    return () => {
-      document.body.style.overflow = 'unset';
-      document.body.style.paddingRight = '';
-    };
-  }, []);
-
-  const handleClose = () => {
-    router.push('/painel-usuario');
-  };
-
   const handleEdit = (field: string) => {
     setEditingField(field);
-    setTempValue(userData[field as keyof typeof userData] || '');
+    setTempValue(userData[field as keyof typeof userData] as string);
   };
 
   const handleSave = () => {
-    if (editingField) {
-      const updatedUser = { ...userData, [editingField]: tempValue };
-      setUserData(updatedUser);
-      
-      // Atualizar localStorage
-      const storedUser = localStorage.getItem('user');
-      if (storedUser) {
-        const parsedUser = JSON.parse(storedUser);
-        const newUserData = { ...parsedUser, [editingField]: tempValue };
-        localStorage.setItem('user', JSON.stringify(newUserData));
-        
-        // Disparar evento customizado para notificar outras páginas
-        window.dispatchEvent(new Event('userDataUpdated'));
-      }
-      
+    if (editingField && tempValue.trim()) {
+      const updatedData = {
+        ...userData,
+        [editingField]: tempValue.trim()
+      };
+      setUserData(updatedData);
+      localStorage.setItem('userData', JSON.stringify(updatedData));
       setEditingField(null);
       setTempValue('');
+      
+      // Disparar evento para atualizar outros componentes
+      window.dispatchEvent(new Event('userDataUpdated'));
     }
   };
 
@@ -122,260 +101,434 @@ export default function EditarPerfil() {
   return (
     <>
       <Head>
-        <title>Editar Perfil | Camera Real</title>
+        <title>Editar Perfil - Camera Real</title>
         <meta name="description" content="Edite suas informações pessoais" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {/* Modal Overlay */}
-      <div 
-        className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          zIndex: 99999,
-          minHeight: '100vh',
-          minWidth: '100vw'
-        }}
-      >
-        {/* Modal Container */}
-        <div 
-          className="bg-black rounded-3xl max-w-md w-full mx-auto my-8 shadow-[0_0_30px_rgba(242,87,144,0.3)] border border-[#F25790]/20 relative"
-          style={{
-            maxHeight: 'calc(100vh - 4rem)',
-            overflowY: 'auto'
-          }}
-        >
-          {/* Efeitos neon de fundo */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#F25790]/5 via-transparent to-transparent pointer-events-none"></div>
-          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F25790] to-transparent opacity-30"></div>
-          <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F25790] to-transparent opacity-20"></div>
-          
-          <div className="relative z-10 p-8">
-            {/* Header */}
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-bold text-white">Editar perfil</h2>
-              <button
-                onClick={handleClose}
-                className="p-2 text-gray-400 hover:text-white transition-colors rounded-full hover:bg-white/10"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
+        <div className="flex">
+          {/* Sidebar */}
+          <div className="hidden lg:flex lg:w-80 lg:flex-col lg:fixed lg:inset-y-0">
+            <div className="flex flex-col flex-grow pt-5 pb-4 overflow-y-auto bg-gray-900/50 backdrop-blur-sm border-r border-gray-700/50">
+              <div className="flex items-center flex-shrink-0 px-4">
+                <Link href="/painel-usuario" className="flex items-center space-x-2">
+                  <Image
+                    src="/logo.png"
+                    alt="Camera Real"
+                    width={32}
+                    height={32}
+                    className="w-8 h-8"
+                  />
+                  <span className="text-xl font-bold text-white">Camera Real</span>
+                </Link>
+              </div>
+              
+              {/* User Card */}
+              <div className="mt-8 px-4">
+                <div className="bg-gradient-to-r from-[#F25790]/20 to-purple-600/20 backdrop-blur-sm border border-gray-700/50 rounded-xl p-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="relative">
+                      <Image
+                        src={userData.photo}
+                        alt="Foto do usuário"
+                        width={48}
+                        height={48}
+                        className="w-12 h-12 rounded-full object-cover border-2 border-[#F25790]/50"
+                      />
+                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-gray-900"></div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-white truncate">{userData.name}</p>
+                      <p className="text-xs text-gray-400 truncate">@{userData.username}</p>
+                    </div>
+                  </div>
+                  <div className="mt-3 pt-3 border-t border-gray-700/50">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-400">Créditos</span>
+                      <span className="text-sm font-semibold text-[#F25790]">{userData.credits}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-            {/* Profile Photo */}
-            <div className="flex justify-center mb-8">
-              <div className="relative">
-                <div className="w-24 h-24 rounded-full bg-gray-700 flex items-center justify-center overflow-hidden">
-                  {userData.photo ? (
-                    <Image 
-                      src={userData.photo} 
-                      alt="Foto de perfil" 
-                      width={96} 
-                      height={96}
-                      className="w-full h-full object-cover"
+              {/* Navigation Menu */}
+              <nav className="mt-8 flex-1 px-4 space-y-2">
+                <Link href="/painel-usuario" className="group flex items-center px-3 py-2 text-sm font-medium text-gray-300 rounded-lg hover:bg-gray-800/50 hover:text-white transition-colors">
+                  <Image
+                    src="/icons/action/dashboard.svg"
+                    alt="Dashboard"
+                    width={20}
+                    height={20}
+                    className="mr-3 w-5 h-5"
+                    style={{ filter: 'invert(1) sepia(0) saturate(0) hue-rotate(0deg) brightness(0.7)' }}
+                  />
+                  Dashboard
+                </Link>
+                
+                <Link href="/carteira" className="group flex items-center px-3 py-2 text-sm font-medium text-gray-300 rounded-lg hover:bg-gray-800/50 hover:text-white transition-colors">
+                  <Image
+                    src="/icons/action/account_balance_wallet.svg"
+                    alt="Carteira"
+                    width={20}
+                    height={20}
+                    className="mr-3 w-5 h-5"
+                    style={{ filter: 'invert(1) sepia(0) saturate(0) hue-rotate(0deg) brightness(0.7)' }}
+                  />
+                  Carteira
+                </Link>
+                
+                <Link href="/editar-perfil" className="group flex items-center px-3 py-2 text-sm font-medium text-white bg-[#F25790]/20 rounded-lg">
+                  <Image
+                    src="/icons/action/person.svg"
+                    alt="Perfil"
+                    width={20}
+                    height={20}
+                    className="mr-3 w-5 h-5"
+                    style={{ filter: 'invert(1) sepia(1) saturate(5) hue-rotate(315deg) brightness(1.2)' }}
+                  />
+                  Editar Perfil
+                </Link>
+                
+                <Link href="/chat-video" className="group flex items-center px-3 py-2 text-sm font-medium text-gray-300 rounded-lg hover:bg-gray-800/50 hover:text-white transition-colors">
+                  <Image
+                    src="/icons/av/videocam.svg"
+                    alt="Chat"
+                    width={20}
+                    height={20}
+                    className="mr-3 w-5 h-5"
+                    style={{ filter: 'invert(1) sepia(0) saturate(0) hue-rotate(0deg) brightness(0.7)' }}
+                  />
+                  Chat & Vídeo
+                </Link>
+                
+                <Link href="/configuracoes" className="group flex items-center px-3 py-2 text-sm font-medium text-gray-300 rounded-lg hover:bg-gray-800/50 hover:text-white transition-colors">
+                  <Image
+                    src="/icons/action/settings.svg"
+                    alt="Configurações"
+                    width={20}
+                    height={20}
+                    className="mr-3 w-5 h-5"
+                    style={{ filter: 'invert(1) sepia(0) saturate(0) hue-rotate(0deg) brightness(0.7)' }}
+                  />
+                  Configurações
+                </Link>
+              </nav>
+
+              {/* Logout Button */}
+              <div className="px-4 pb-4">
+                <Link href="/" className="group flex items-center px-3 py-2 text-sm font-medium text-red-400 rounded-lg hover:bg-red-500/10 hover:text-red-300 transition-colors">
+                  <Image
+                    src="/icons/action/logout.svg"
+                    alt="Sair"
+                    width={20}
+                    height={20}
+                    className="mr-3 w-5 h-5"
+                    style={{ filter: 'invert(1) sepia(1) saturate(5) hue-rotate(0deg) brightness(0.8)' }}
+                  />
+                  Sair
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div className="flex-1 lg:pl-80">
+            <div className="p-4 lg:p-8">
+              {/* Mobile Header */}
+              <div className="lg:hidden mb-6">
+                <div className="flex items-center justify-between">
+                  <Link href="/painel-usuario" className="flex items-center space-x-2">
+                    <Image
+                      src="/logo.png"
+                      alt="Camera Real"
+                      width={32}
+                      height={32}
+                      className="w-8 h-8"
                     />
+                    <span className="text-xl font-bold text-white">Camera Real</span>
+                  </Link>
+                  <button className="p-2 rounded-lg bg-gray-800/50 border border-gray-700/50">
+                    <Image
+                      src="/icons/navigation/menu.svg"
+                      alt="Menu"
+                      width={24}
+                      height={24}
+                      className="w-6 h-6"
+                      style={{ filter: 'invert(1)' }}
+                    />
+                  </button>
+                </div>
+              </div>
+
+              {/* Header */}
+              <div className="mb-8">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h1 className="text-2xl lg:text-3xl font-bold text-white">Editar Perfil</h1>
+                    <p className="text-gray-400 mt-1">Gerencie suas informações pessoais</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Profile Photo Section */}
+              <div className="mb-8">
+                <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-6">
+                  <h2 className="text-lg font-semibold text-white mb-4">Foto do Perfil</h2>
+                  <div className="flex items-center space-x-6">
+                    <div className="relative">
+                      <Image
+                        src={userData.photo}
+                        alt="Foto do usuário"
+                        width={80}
+                        height={80}
+                        className="w-20 h-20 rounded-full object-cover border-4 border-[#F25790]/50"
+                      />
+                      <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-gray-900"></div>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-white font-medium">{userData.name}</p>
+                      <p className="text-gray-400 text-sm">@{userData.username}</p>
+                      <button className="mt-2 px-4 py-2 bg-[#F25790] hover:bg-[#d93d75] text-white text-sm rounded-lg transition-colors">
+                        Alterar Foto
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Profile Information */}
+              <div className="space-y-6">
+                <h2 className="text-lg font-semibold text-white">Informações Pessoais</h2>
+                
+                {/* Name */}
+                <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-4">
+                  {editingField === 'name' ? (
+                    <div>
+                      <input
+                        type="text"
+                        value={tempValue}
+                        onChange={(e) => setTempValue(e.target.value)}
+                        className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg mb-3 border border-gray-600 focus:border-[#F25790] focus:outline-none"
+                        placeholder="Nome completo"
+                        autoFocus
+                      />
+                      <div className="flex justify-end space-x-2">
+                        <button
+                          onClick={handleCancel}
+                          className="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg text-sm transition-colors"
+                        >
+                          Cancelar
+                        </button>
+                        <button
+                          onClick={handleSave}
+                          className="px-4 py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-lg text-sm transition-colors"
+                        >
+                          Salvar
+                        </button>
+                      </div>
+                    </div>
                   ) : (
-                    <span className="text-white text-2xl font-bold">
-                      {userData.name?.charAt(0) || 'U'}
-                    </span>
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <p className="text-gray-400 text-sm">Nome completo</p>
+                        <p className="text-white">{userData.name}</p>
+                      </div>
+                      <button
+                        onClick={() => handleEdit('name')}
+                        className="bg-[#F25790] hover:bg-[#d93d75] text-white text-sm px-4 py-2 rounded-lg transition-colors"
+                      >
+                        Editar
+                      </button>
+                    </div>
                   )}
                 </div>
-                <button className="absolute bottom-0 right-0 bg-[#F25790] hover:bg-[#d93d75] text-white text-xs px-2 py-1 rounded-full transition-colors">
-                  Editar
-                </button>
-              </div>
-            </div>
 
-            {/* Form Fields */}
-            <div className="space-y-4">
-              {/* Username */}
-              <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-4">
-                {editingField === 'username' ? (
-                  <div>
-                    <input
-                      type="text"
-                      value={tempValue}
-                      onChange={(e) => setTempValue(e.target.value)}
-                      className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg mb-3 border border-gray-600 focus:border-[#F25790] focus:outline-none"
-                      placeholder="Nome de usuário"
-                      autoFocus
-                    />
-                    <div className="flex justify-end space-x-2">
-                      <button
-                        onClick={handleCancel}
-                        className="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg text-sm transition-colors"
-                      >
-                        Cancelar
-                      </button>
-                      <button
-                        onClick={handleSave}
-                        className="px-4 py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-lg text-sm transition-colors"
-                      >
-                        Salvar
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex justify-between items-center">
+                {/* Username */}
+                <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-4">
+                  {editingField === 'username' ? (
                     <div>
-                      <p className="text-gray-400 text-sm">Nome de usuário</p>
-                      <p className="text-white">@{userData.username}</p>
+                      <input
+                        type="text"
+                        value={tempValue}
+                        onChange={(e) => setTempValue(e.target.value)}
+                        className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg mb-3 border border-gray-600 focus:border-[#F25790] focus:outline-none"
+                        placeholder="Nome de usuário"
+                        autoFocus
+                      />
+                      <div className="flex justify-end space-x-2">
+                        <button
+                          onClick={handleCancel}
+                          className="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg text-sm transition-colors"
+                        >
+                          Cancelar
+                        </button>
+                        <button
+                          onClick={handleSave}
+                          className="px-4 py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-lg text-sm transition-colors"
+                        >
+                          Salvar
+                        </button>
+                      </div>
                     </div>
-                    <button
-                      onClick={() => handleEdit('username')}
-                      className="bg-[#F25790] hover:bg-[#d93d75] text-white text-sm px-4 py-2 rounded-lg transition-colors"
-                    >
-                      Editar
-                    </button>
-                  </div>
-                )}
-              </div>
+                  ) : (
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <p className="text-gray-400 text-sm">Nome de usuário</p>
+                        <p className="text-white">@{userData.username}</p>
+                      </div>
+                      <button
+                        onClick={() => handleEdit('username')}
+                        className="bg-[#F25790] hover:bg-[#d93d75] text-white text-sm px-4 py-2 rounded-lg transition-colors"
+                      >
+                        Editar
+                      </button>
+                    </div>
+                  )}
+                </div>
 
-              {/* Email */}
-              <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-4">
-                {editingField === 'email' ? (
-                  <div>
-                    <input
-                      type="email"
-                      value={tempValue}
-                      onChange={(e) => setTempValue(e.target.value)}
-                      className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg mb-3 border border-gray-600 focus:border-[#F25790] focus:outline-none"
-                      placeholder="Email"
-                      autoFocus
-                    />
-                    <div className="flex justify-end space-x-2">
-                      <button
-                        onClick={handleCancel}
-                        className="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg text-sm transition-colors"
-                      >
-                        Cancelar
-                      </button>
-                      <button
-                        onClick={handleSave}
-                        className="px-4 py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-lg text-sm transition-colors"
-                      >
-                        Salvar
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex justify-between items-center">
+                {/* Email */}
+                <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-4">
+                  {editingField === 'email' ? (
                     <div>
-                      <p className="text-gray-400 text-sm">Email</p>
-                      <p className="text-white">{userData.email}</p>
+                      <input
+                        type="email"
+                        value={tempValue}
+                        onChange={(e) => setTempValue(e.target.value)}
+                        className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg mb-3 border border-gray-600 focus:border-[#F25790] focus:outline-none"
+                        placeholder="Email"
+                        autoFocus
+                      />
+                      <div className="flex justify-end space-x-2">
+                        <button
+                          onClick={handleCancel}
+                          className="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg text-sm transition-colors"
+                        >
+                          Cancelar
+                        </button>
+                        <button
+                          onClick={handleSave}
+                          className="px-4 py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-lg text-sm transition-colors"
+                        >
+                          Salvar
+                        </button>
+                      </div>
                     </div>
-                    <button
-                      onClick={() => handleEdit('email')}
-                      className="bg-[#F25790] hover:bg-[#d93d75] text-white text-sm px-4 py-2 rounded-lg transition-colors"
-                    >
-                      Editar
-                    </button>
-                  </div>
-                )}
-              </div>
+                  ) : (
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <p className="text-gray-400 text-sm">Email</p>
+                        <p className="text-white">{userData.email}</p>
+                      </div>
+                      <button
+                        onClick={() => handleEdit('email')}
+                        className="bg-[#F25790] hover:bg-[#d93d75] text-white text-sm px-4 py-2 rounded-lg transition-colors"
+                      >
+                        Editar
+                      </button>
+                    </div>
+                  )}
+                </div>
 
-              {/* Phone */}
-              <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-4">
-                {editingField === 'phone' ? (
-                  <div>
-                    <input
-                      type="tel"
-                      value={tempValue}
-                      onChange={(e) => setTempValue(e.target.value)}
-                      className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg mb-3 border border-gray-600 focus:border-[#F25790] focus:outline-none"
-                      placeholder="Telefone"
-                      autoFocus
-                    />
-                    <div className="flex justify-end space-x-2">
-                      <button
-                        onClick={handleCancel}
-                        className="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg text-sm transition-colors"
-                      >
-                        Cancelar
-                      </button>
-                      <button
-                        onClick={handleSave}
-                        className="px-4 py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-lg text-sm transition-colors"
-                      >
-                        Salvar
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex justify-between items-center">
+                {/* Phone */}
+                <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-4">
+                  {editingField === 'phone' ? (
                     <div>
-                      <p className="text-gray-400 text-sm">Telefone</p>
-                      <p className="text-white">{userData.phone}</p>
+                      <input
+                        type="tel"
+                        value={tempValue}
+                        onChange={(e) => setTempValue(e.target.value)}
+                        className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg mb-3 border border-gray-600 focus:border-[#F25790] focus:outline-none"
+                        placeholder="Telefone"
+                        autoFocus
+                      />
+                      <div className="flex justify-end space-x-2">
+                        <button
+                          onClick={handleCancel}
+                          className="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg text-sm transition-colors"
+                        >
+                          Cancelar
+                        </button>
+                        <button
+                          onClick={handleSave}
+                          className="px-4 py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-lg text-sm transition-colors"
+                        >
+                          Salvar
+                        </button>
+                      </div>
                     </div>
-                    <button
-                      onClick={() => handleEdit('phone')}
-                      className="bg-[#F25790] hover:bg-[#d93d75] text-white text-sm px-4 py-2 rounded-lg transition-colors"
-                    >
-                      Editar
-                    </button>
-                  </div>
-                )}
-              </div>
+                  ) : (
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <p className="text-gray-400 text-sm">Telefone</p>
+                        <p className="text-white">{userData.phone}</p>
+                      </div>
+                      <button
+                        onClick={() => handleEdit('phone')}
+                        className="bg-[#F25790] hover:bg-[#d93d75] text-white text-sm px-4 py-2 rounded-lg transition-colors"
+                      >
+                        Editar
+                      </button>
+                    </div>
+                  )}
+                </div>
 
-              {/* Password */}
-              <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-4">
-                {showPassword ? (
-                  <div className="space-y-3">
-                    <input
-                      type="password"
-                      value={passwordData.current}
-                      onChange={(e) => setPasswordData({...passwordData, current: e.target.value})}
-                      className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#F25790] focus:outline-none"
-                      placeholder="Senha atual"
-                    />
-                    <input
-                      type="password"
-                      value={passwordData.new}
-                      onChange={(e) => setPasswordData({...passwordData, new: e.target.value})}
-                      className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#F25790] focus:outline-none"
-                      placeholder="Nova senha"
-                    />
-                    <input
-                      type="password"
-                      value={passwordData.confirm}
-                      onChange={(e) => setPasswordData({...passwordData, confirm: e.target.value})}
-                      className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#F25790] focus:outline-none"
-                      placeholder="Confirmar nova senha"
-                    />
-                    <div className="flex justify-end space-x-2">
+                {/* Password */}
+                <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-4">
+                  {showPassword ? (
+                    <div className="space-y-3">
+                      <input
+                        type="password"
+                        value={passwordData.current}
+                        onChange={(e) => setPasswordData({...passwordData, current: e.target.value})}
+                        className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#F25790] focus:outline-none"
+                        placeholder="Senha atual"
+                      />
+                      <input
+                        type="password"
+                        value={passwordData.new}
+                        onChange={(e) => setPasswordData({...passwordData, new: e.target.value})}
+                        className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#F25790] focus:outline-none"
+                        placeholder="Nova senha"
+                      />
+                      <input
+                        type="password"
+                        value={passwordData.confirm}
+                        onChange={(e) => setPasswordData({...passwordData, confirm: e.target.value})}
+                        className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-[#F25790] focus:outline-none"
+                        placeholder="Confirmar nova senha"
+                      />
+                      <div className="flex justify-end space-x-2">
+                        <button
+                          onClick={() => setShowPassword(false)}
+                          className="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg text-sm transition-colors"
+                        >
+                          Cancelar
+                        </button>
+                        <button
+                          onClick={handlePasswordSave}
+                          className="px-4 py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-lg text-sm transition-colors"
+                        >
+                          Salvar
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <p className="text-gray-400 text-sm">Senha</p>
+                        <p className="text-white">••••••</p>
+                      </div>
                       <button
-                        onClick={() => setShowPassword(false)}
-                        className="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg text-sm transition-colors"
+                        onClick={() => setShowPassword(true)}
+                        className="bg-[#F25790] hover:bg-[#d93d75] text-white text-sm px-4 py-2 rounded-lg transition-colors"
                       >
-                        Cancelar
-                      </button>
-                      <button
-                        onClick={handlePasswordSave}
-                        className="px-4 py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-lg text-sm transition-colors"
-                      >
-                        Salvar
+                        Editar
                       </button>
                     </div>
-                  </div>
-                ) : (
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p className="text-gray-400 text-sm">Senha</p>
-                      <p className="text-white">••••••</p>
-                    </div>
-                    <button
-                      onClick={() => setShowPassword(true)}
-                      className="bg-[#F25790] hover:bg-[#d93d75] text-white text-sm px-4 py-2 rounded-lg transition-colors"
-                    >
-                      Editar
-                    </button>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </div>
           </div>
