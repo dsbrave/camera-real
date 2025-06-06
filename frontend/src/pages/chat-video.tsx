@@ -467,10 +467,10 @@ export default function ChatVideo() {
                         alt="Meta"
                         width={24}
                         height={24}
-                        className="w-6 h-6 text-yellow-400"
-                        style={{ filter: 'brightness(0) saturate(100%) invert(85%) sepia(95%) saturate(1945%) hue-rotate(8deg) brightness(103%) contrast(101%)' }}
+                        className="w-6 h-6"
+                        style={{ filter: 'brightness(0) saturate(100%) invert(85%) sepia(58%) saturate(350%) hue-rotate(8deg) brightness(108%) contrast(108%)' }}
                       />
-                      <div className="absolute -inset-1 bg-yellow-400/20 rounded-full blur-sm"></div>
+                      <div className="absolute -inset-1 bg-yellow-400/10 rounded-full blur-sm"></div>
                     </div>
 
                     <div className="w-48 h-2 rounded-full relative border border-yellow-400/50 shadow-[0_0_8px_rgba(251,191,36,0.3)] backdrop-blur-sm">
@@ -484,7 +484,7 @@ export default function ChatVideo() {
                     
                     <div className="flex items-center gap-1 text-yellow-400 font-bold text-xs">
                       <span>{modelEarnings}</span>
-                      <span className="text-white/60 text-xs">/ {modelGoal}</span>
+                      <span className="text-white/60 text-xs">/ {modelGoal} créditos</span>
                     </div>
                   </div>
                 </div>
@@ -1090,8 +1090,8 @@ export default function ChatVideo() {
                       alt="Vector"
                       width={12}
                       height={12}
-                      className="w-3 h-3 text-yellow-400"
-                      style={{ filter: 'brightness(0) saturate(100%) invert(85%) sepia(100%) saturate(1000%) hue-rotate(15deg) brightness(100%) contrast(100%)' }}
+                      className="w-3 h-3"
+                      style={{ filter: 'brightness(0) saturate(100%) invert(85%) sepia(58%) saturate(350%) hue-rotate(8deg) brightness(108%) contrast(108%)' }}
                     />
                     
                     <div className="w-20 h-1.5 rounded-full relative border border-yellow-400/50 shadow-[0_0_6px_rgba(251,191,36,0.3)] backdrop-blur-sm">
@@ -1104,7 +1104,7 @@ export default function ChatVideo() {
                     </div>
                     
                     <div className="text-yellow-400 font-bold text-xs">
-                      {modelEarnings}/{modelGoal}
+                      {modelEarnings}/{modelGoal} créditos
                     </div>
                   </div>
                 </div>
