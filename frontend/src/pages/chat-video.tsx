@@ -51,8 +51,10 @@ export default function ChatVideo() {
       id: 'm1',
       name: 'Cláudia Venturin',
       online: true,
-      pricePerMinute: 2,
-      privateCallPrice: 8,
+      // Chat simples sempre 1 crédito por minuto (fixo)
+      pricePerMinute: 1,
+      // Chat privado configurável pela modelo (1-5 créditos)
+      privateCallPrice: 3,
       profileImage: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_ko2t9z7547m30wzu3dsv_1.png',
       categories: ['conversa', 'dança'],
       rating: 4.8,
@@ -63,8 +65,10 @@ export default function ChatVideo() {
       id: 'm2',
       name: 'Marina Pereira',
       online: true,
-      pricePerMinute: 3,
-      privateCallPrice: 10,
+      // Chat simples sempre 1 crédito por minuto (fixo)
+      pricePerMinute: 1,
+      // Chat privado configurável pela modelo (1-5 créditos)
+      privateCallPrice: 4,
       profileImage: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_2wu5n7gdr6dsrmj98ak9_2.png',
       categories: ['conversa', 'artes'],
       rating: 4.7,
@@ -75,8 +79,10 @@ export default function ChatVideo() {
       id: 'm3',
       name: 'Bianca',
       online: true,
-      pricePerMinute: 4,
-      privateCallPrice: 12,
+      // Chat simples sempre 1 crédito por minuto (fixo)
+      pricePerMinute: 1,
+      // Chat privado configurável pela modelo (1-5 créditos)
+      privateCallPrice: 5,
       profileImage: '/images/high-resolution_studio_photo_of_a_confident_brazilian-inspired_model_wearing_an_elegant_black_lace__i7mo7j07sng27o0fv86l_2.png',
       categories: ['conversa', 'jogos'],
       rating: 4.9,

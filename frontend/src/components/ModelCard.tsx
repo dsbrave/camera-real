@@ -17,6 +17,7 @@ interface ModelCardProps {
     rating?: number;
     valorPorMinuto?: number;
     pricePerMinute?: number;
+    chatPrivadoPreco?: number;
     idade?: number;
     localizacao?: string;
   };
@@ -44,7 +45,8 @@ export default function ModelCard({
   const modelPhoto = model.fotoPerfil || model.photo || '';
   const modelCategories = model.categorias || (model.category ? [model.category] : []);
   const modelRating = model.avaliacoes || model.rating || 4.5;
-  const modelPrice = model.valorPorMinuto || model.pricePerMinute || 0;
+  const modelPrice = model.valorPorMinuto || model.pricePerMinute || 1;
+  const modelPrivatePrice = model.chatPrivadoPreco || 2;
 
   const isFavorite = favoriteModels.includes(model.id);
 
@@ -212,13 +214,18 @@ export default function ModelCard({
           ))}
         </div>
         
-        {/* Preço e botão lado a lado */}
-        <div className="flex items-center justify-between">
-          <div className={`text-[#F25790] font-bold ${currentSize.price} drop-shadow`}>
-            {modelPrice.toFixed(0)} <span className="text-sm text-white/70">Créditos/min</span>
+        {/* Preços e botão */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-gray-300">Chat simples:</span>
+            <span className="text-green-400 font-bold">1 crédito/min</span>
+          </div>
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-gray-300">Chat privado:</span>
+            <span className="text-[#F25790] font-bold">{modelPrivatePrice} créditos/min</span>
           </div>
           <Link href={`/chat-video?id=${model.id}`} onClick={(e) => e.stopPropagation()}>
-            <button className={`bg-gradient-to-r from-[#F25790] to-[#d93d75] hover:from-[#d93d75] hover:to-[#c12d65] text-white font-medium ${currentSize.button} rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-[#F25790]/25 backdrop-blur-sm`}>
+            <button className={`w-full bg-gradient-to-r from-[#F25790] to-[#d93d75] hover:from-[#d93d75] hover:to-[#c12d65] text-white font-medium ${currentSize.button} rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-[#F25790]/25 backdrop-blur-sm`}>
               Conversar
             </button>
           </Link>

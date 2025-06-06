@@ -4,6 +4,7 @@ import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import UserPreferencesModal from '@/components/UserPreferencesModal';
 
 interface Modelo {
   id: string;
@@ -14,6 +15,16 @@ interface Modelo {
   destacado: boolean;
   avaliacoes: number;
   valorPorMinuto: number;
+  tipo: 'Mulheres' | 'Homens' | 'Casais' | 'Trans';
+  precoPrivado: number;
+}
+
+interface UserPreferences {
+  modelType: 'mulheres' | 'homens' | 'casais' | 'trans' | 'todos';
+  priceRange: {
+    min: number;
+    max: number;
+  };
 }
 
 export default function Home() {
@@ -22,6 +33,9 @@ export default function Home() {
   const [favoriteModels, setFavoriteModels] = useState<string[]>([]);
   const [isClient, setIsClient] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
+  const [showPreferencesModal, setShowPreferencesModal] = useState(false);
+  const [userPreferences, setUserPreferences] = useState<UserPreferences | null>(null);
+  const [isFirstLogin, setIsFirstLogin] = useState(false);
   
   useEffect(() => {
     setIsClient(true);
@@ -35,6 +49,15 @@ export default function Home() {
           if (user.isLoggedIn) {
             setIsLoggedIn(true);
             setUserName(user.name || '');
+            
+            // Verificar se é o primeiro login (sem preferências salvas)
+            const savedPreferences = localStorage.getItem('userPreferences');
+            if (!savedPreferences) {
+              setIsFirstLogin(true);
+              setShowPreferencesModal(true);
+            } else {
+              setUserPreferences(JSON.parse(savedPreferences));
+            }
             
             // Carregar favoritos do localStorage
             const favorites = JSON.parse(localStorage.getItem('favoriteModels') || '[]');
@@ -128,7 +151,14 @@ export default function Home() {
     }
   };
 
-  // Modelos em destaque (mesmos dados da página explorar)
+  const handleSavePreferences = (preferences: UserPreferences) => {
+    setUserPreferences(preferences);
+    localStorage.setItem('userPreferences', JSON.stringify(preferences));
+    setShowPreferencesModal(false);
+    setIsFirstLogin(false);
+  };
+
+  // Modelos em destaque com novos campos
   const modelosDestaque: Modelo[] = [
     {
       id: 'm1',
@@ -138,7 +168,9 @@ export default function Home() {
       online: true,
       destacado: true,
       avaliacoes: 4.8,
-      valorPorMinuto: 2.5
+      valorPorMinuto: 1, // Chat simples sempre 1 crédito
+      tipo: 'Mulheres',
+      precoPrivado: 3 // Chat privado configurável
     },
     {
       id: 'm4',
@@ -148,7 +180,9 @@ export default function Home() {
       online: true,
       destacado: true,
       avaliacoes: 4.7,
-      valorPorMinuto: 2.2
+      valorPorMinuto: 1, // Chat simples sempre 1 crédito
+      tipo: 'Mulheres',
+      precoPrivado: 4 // Chat privado configurável
     },
     {
       id: 'm7',
@@ -158,9 +192,80 @@ export default function Home() {
       online: true,
       destacado: true,
       avaliacoes: 4.9,
-      valorPorMinuto: 3.2
+      valorPorMinuto: 1, // Chat simples sempre 1 crédito
+      tipo: 'Mulheres',
+      precoPrivado: 5 // Chat privado configurável
+    },
+    {
+      id: 'm8',
+      nome: 'Carlos Mendes',
+      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_male_model_posing_in_a_modern_streaming_setup_emphasis_on_body_1.png',
+      categorias: ['conversa', 'fitness'],
+      online: true,
+      destacado: true,
+      avaliacoes: 4.6,
+      valorPorMinuto: 1, // Chat simples sempre 1 crédito
+      tipo: 'Homens',
+      precoPrivado: 3 // Chat privado configurável
+    },
+    {
+      id: 'm9',
+      nome: 'Alex & Sam',
+      fotoPerfil: '/images/high-quality_studio_photo_of_a_couple_posing_in_a_modern_streaming_setup_1.png',
+      categorias: ['conversa', 'entretenimento'],
+      online: true,
+      destacado: true,
+      avaliacoes: 4.8,
+      valorPorMinuto: 1, // Chat simples sempre 1 crédito
+      tipo: 'Casais',
+      precoPrivado: 4 // Chat privado configurável
+    },
+    {
+      id: 'm10',
+      nome: 'Luna',
+      fotoPerfil: '/images/high-quality_studio_photo_of_a_trans_model_posing_in_a_modern_streaming_setup_1.png',
+      categorias: ['conversa', 'arte'],
+      online: true,
+      destacado: true,
+      avaliacoes: 4.7,
+      valorPorMinuto: 1, // Chat simples sempre 1 crédito
+      tipo: 'Trans',
+      precoPrivado: 4 // Chat privado configurável
     }
   ];
+
+  // Filtrar modelos baseado nas preferências do usuário
+  const getFilteredModels = () => {
+    if (!userPreferences || !isLoggedIn) {
+      return modelosDestaque.slice(0, 2); // Mostrar apenas 2 modelos se não logado
+    }
+
+    let filteredModels = modelosDestaque;
+
+    // Filtrar por tipo de modelo
+    if (userPreferences.modelType !== 'todos') {
+      const typeMap: Record<string, string> = {
+        'mulheres': 'Mulheres',
+        'homens': 'Homens', 
+        'casais': 'Casais',
+        'trans': 'Trans'
+      };
+      filteredModels = filteredModels.filter(modelo => modelo.tipo === typeMap[userPreferences.modelType]);
+    }
+
+    // Filtrar por faixa de preço do chat privado
+    filteredModels = filteredModels.filter(modelo => 
+      modelo.precoPrivado >= userPreferences.priceRange.min && 
+      modelo.precoPrivado <= userPreferences.priceRange.max
+    );
+
+    // Se não houver modelos que atendam aos critérios, mostrar todos
+    if (filteredModels.length === 0) {
+      filteredModels = modelosDestaque;
+    }
+
+    return filteredModels.slice(0, 2); // Sempre mostrar apenas 2 modelos
+  };
 
   // Definir a imagem de fundo baseada no status de login
   const backgroundImage = isLoggedIn 
@@ -294,7 +399,7 @@ export default function Home() {
                   
                   <div className="overflow-x-auto scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                     <div className="flex gap-4 pb-4 min-w-max">
-                      {modelosDestaque.slice(0, 2).map(modelo => (
+                      {getFilteredModels().map(modelo => (
                         <div 
                           key={modelo.id} 
                           className="flex-shrink-0 w-64 sm:w-72 bg-gradient-to-br from-[#F25790]/10 via-purple-500/5 to-blue-500/10 backdrop-blur-sm rounded-2xl overflow-hidden hover:from-[#F25790]/15 hover:via-purple-500/10 hover:to-blue-500/15 transition-all duration-300 hover:scale-105 hover:shadow-2xl border border-white/20 hover:border-[#F25790]/50 group"
@@ -414,6 +519,27 @@ export default function Home() {
                       Deslize para ver mais
                     </div>
                   </div>
+
+                  {/* Mensagem sobre preferências */}
+                  {userPreferences && (
+                    <div className="mt-6 p-4 bg-gradient-to-r from-[#F25790]/10 to-purple-500/10 rounded-lg border border-[#F25790]/20">
+                      <div className="flex items-start gap-3">
+                        <svg className="w-5 h-5 text-[#F25790] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                        </svg>
+                        <div className="flex-1">
+                          <p className="text-sm text-white/80">
+                            <strong className="text-white">Modelos personalizados:</strong> Estamos mostrando modelos baseados nas suas preferências 
+                            ({userPreferences.modelType === 'todos' ? 'Todos os tipos' : userPreferences.modelType}, 
+                            {userPreferences.priceRange.min}-{userPreferences.priceRange.max} créditos/min para chat privado).
+                          </p>
+                          <p className="text-xs text-white/60 mt-1">
+                            Você pode alterar suas preferências no <Link href="/painel-usuario" className="text-[#F25790] hover:underline">Meu Painel</Link> ou ao editar seu perfil.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             ) : (
@@ -443,6 +569,19 @@ export default function Home() {
           
           <Footer />
         </div>
+
+        {/* Modal de Preferências do Usuário */}
+        {showPreferencesModal && (
+          <UserPreferencesModal
+            isOpen={showPreferencesModal}
+            onClose={() => {
+              if (!isFirstLogin) {
+                setShowPreferencesModal(false);
+              }
+            }}
+            onSavePreferences={handleSavePreferences}
+          />
+        )}
       </div>
     </>
   );

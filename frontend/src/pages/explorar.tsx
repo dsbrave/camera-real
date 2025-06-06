@@ -15,7 +15,9 @@ interface Modelo {
   online: boolean;
   destacado: boolean;
   avaliacoes: number;
-  valorPorMinuto: number;
+  valorPorMinuto: number; // Chat simples sempre 1 crédito
+  chatPrivadoPreco: number; // Chat privado de 1-5 créditos
+  tipo: 'mulher' | 'homem' | 'casal' | 'trans';
   idade?: number;
   localizacao?: string;
 }
@@ -81,8 +83,8 @@ export default function Explorar() {
     }
   };
 
-  // Dados de exemplo
-  const modelos: Modelo[] = [
+  // Lista completa de modelos com novos preços
+  const todosModelos: Modelo[] = [
     {
       id: 'm1',
       nome: 'Ana Silva',
@@ -91,27 +93,33 @@ export default function Explorar() {
       online: true,
       destacado: true,
       avaliacoes: 4.8,
-      valorPorMinuto: 2.5
+      valorPorMinuto: 1,
+      chatPrivadoPreco: 2,
+      tipo: 'mulher'
     },
     {
       id: 'm2',
-      nome: 'Júlia Santos',
-      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_hgg1km82rvo2tgmhd39a_3.png',
+      nome: 'Carla Santos',
+      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_2wu5n7gdr6dsrmj98ak9_1.png',
       categorias: ['conversa', 'música'],
-      online: true,
+      online: false,
       destacado: false,
-      avaliacoes: 4.6,
-      valorPorMinuto: 2.0
+      avaliacoes: 4.5,
+      valorPorMinuto: 1,
+      chatPrivadoPreco: 2,
+      tipo: 'mulher'
     },
     {
       id: 'm3',
-      nome: 'Carla Oliveira',
-      fotoPerfil: '/images/high-quality_fashion_studio_photo_of_a_fit_brazilian-inspired_model_in_a_streaming_room_setup_the_m_xcuvvf5mb98aiguyg0ar_3.png',
-      categorias: ['dança', 'fitness'],
-      online: false,
+      nome: 'Beatriz Lima',
+      fotoPerfil: '/images/high-resolution_studio_photo_of_a_confident_brazilian-inspired_model_wearing_an_elegant_black_lace__i7mo7j07sng27o0fv86l_1.png',
+      categorias: ['conversa', 'arte'],
+      online: true,
       destacado: false,
-      avaliacoes: 4.9,
-      valorPorMinuto: 3.0
+      avaliacoes: 4.6,
+      valorPorMinuto: 1,
+      chatPrivadoPreco: 3,
+      tipo: 'mulher'
     },
     {
       id: 'm4',
@@ -121,27 +129,33 @@ export default function Explorar() {
       online: true,
       destacado: true,
       avaliacoes: 4.7,
-      valorPorMinuto: 2.2
+      valorPorMinuto: 1,
+      chatPrivadoPreco: 3,
+      tipo: 'mulher'
     },
     {
       id: 'm5',
-      nome: 'Larissa Costa',
-      fotoPerfil: '/images/high-quality_fashion_studio_photo_of_a_fit_brazilian-inspired_model_in_a_streaming_room_setup_the_m_pbqy208mxdxlbokwwd6m_1.png',
-      categorias: ['música', 'jogos'],
+      nome: 'Juliana Costa',
+      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_ko2t9z7547m30wzu3dsv_2.png',
+      categorias: ['conversa', 'fitness'],
       online: false,
       destacado: false,
-      avaliacoes: 4.5,
-      valorPorMinuto: 1.8
+      avaliacoes: 4.4,
+      valorPorMinuto: 1,
+      chatPrivadoPreco: 2,
+      tipo: 'mulher'
     },
     {
       id: 'm6',
-      nome: 'Natália Souza',
-      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_8dcmfx9cfacmkla3y56r_3.png',
-      categorias: ['fitness', 'conversa'],
+      nome: 'Fernanda Oliveira',
+      fotoPerfil: '/images/high-resolution_studio_photo_of_a_confident_brazilian-inspired_model_wearing_an_elegant_black_lace__i7mo7j07sng27o0fv86l_3.png',
+      categorias: ['conversa', 'culinária'],
       online: true,
       destacado: false,
-      avaliacoes: 4.4,
-      valorPorMinuto: 2.1
+      avaliacoes: 4.3,
+      valorPorMinuto: 1,
+      chatPrivadoPreco: 2,
+      tipo: 'mulher'
     },
     {
       id: 'm7',
@@ -151,17 +165,69 @@ export default function Explorar() {
       online: true,
       destacado: true,
       avaliacoes: 4.9,
-      valorPorMinuto: 3.2
+      valorPorMinuto: 1,
+      chatPrivadoPreco: 4,
+      tipo: 'mulher'
     },
     {
       id: 'm8',
-      nome: 'Camila Mendes',
-      fotoPerfil: '/images/high-resolution_studio_photo_of_a_confident_brazilian-inspired_model_wearing_an_elegant_black_lace__qxnhg17arbpzwvqdae8r_1.png',
-      categorias: ['artes', 'música'],
+      nome: 'Carlos Mendes',
+      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_male_model_posing_in_a_modern_streaming_setup_emphasis_on_body.png',
+      categorias: ['conversa', 'fitness'],
+      online: true,
+      destacado: true,
+      avaliacoes: 4.6,
+      valorPorMinuto: 1,
+      chatPrivadoPreco: 3,
+      tipo: 'homem'
+    },
+    {
+      id: 'm9',
+      nome: 'Alex & Sam',
+      fotoPerfil: '/images/high-quality_studio_photo_of_a_couple_posing_in_a_modern_streaming_setup.png',
+      categorias: ['conversa', 'casal'],
+      online: true,
+      destacado: true,
+      avaliacoes: 4.8,
+      valorPorMinuto: 1,
+      chatPrivadoPreco: 5,
+      tipo: 'casal'
+    },
+    {
+      id: 'm10',
+      nome: 'Taylor',
+      fotoPerfil: '/images/high-quality_studio_photo_of_a_trans_model_posing_in_a_modern_streaming_setup.png',
+      categorias: ['conversa', 'arte'],
+      online: true,
+      destacado: true,
+      avaliacoes: 4.7,
+      valorPorMinuto: 1,
+      chatPrivadoPreco: 3,
+      tipo: 'trans'
+    },
+    {
+      id: 'm11',
+      nome: 'Ricardo Silva',
+      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_male_model_posing_in_a_modern_streaming_setup_emphasis_on_body.png',
+      categorias: ['conversa', 'música'],
       online: false,
       destacado: false,
-      avaliacoes: 4.3,
-      valorPorMinuto: 1.9
+      avaliacoes: 4.2,
+      valorPorMinuto: 1,
+      chatPrivadoPreco: 2,
+      tipo: 'homem'
+    },
+    {
+      id: 'm12',
+      nome: 'João & Maria',
+      fotoPerfil: '/images/high-quality_studio_photo_of_a_couple_posing_in_a_modern_streaming_setup.png',
+      categorias: ['conversa', 'casal'],
+      online: false,
+      destacado: false,
+      avaliacoes: 4.5,
+      valorPorMinuto: 1,
+      chatPrivadoPreco: 4,
+      tipo: 'casal'
     }
   ];
 
@@ -174,7 +240,7 @@ export default function Explorar() {
   ];
 
   // Filtrar e ordenar modelos
-  const modelosFiltrados = modelos
+  const modelosFiltrados = todosModelos
     .filter(modelo => {
       // Filtro de pesquisa por nome
       const pesquisaMatch = modelo.nome.toLowerCase().includes(pesquisa.toLowerCase());
