@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -29,6 +30,12 @@ const Carteira: React.FC = () => {
     name: ''
   });
   const [creditos, setCreditos] = useState(150); // Mudança de chatCoins para creditos
+  const [userData, setUserData] = useState({
+    name: '',
+    email: '',
+    photo: '',
+    credits: 150
+  });
   const [transacoes, setTransacoes] = useState([
     { data: '22/05/2025', tipo: 'Adição de créditos', valor: '200 Créditos', saldoFinal: '150 Créditos' },
     { data: '20/05/2025', tipo: 'Chat privado com Julia', valor: '100 Créditos-', saldoFinal: '50 Créditos' },
@@ -47,8 +54,14 @@ const Carteira: React.FC = () => {
     const userStorage = localStorage.getItem('user');
     if (userStorage) {
       try {
-        const userData = JSON.parse(userStorage);
-        setCreditos(userData.creditos || 150); // Usar Créditos em vez de chatCoins
+        const parsedUserData = JSON.parse(userStorage);
+        setCreditos(parsedUserData.creditos || 150); // Usar Créditos em vez de chatCoins
+        setUserData({
+          name: parsedUserData.name || '',
+          email: parsedUserData.email || '',
+          photo: parsedUserData.photo || '',
+          credits: parsedUserData.creditos || 150
+        });
       } catch (error) {
         console.error('Erro ao verificar login:', error);
         router.push('/login');
@@ -211,248 +224,448 @@ const Carteira: React.FC = () => {
       <Head>
         <title>Carteira | Camera Real</title>
         <meta name="description" content="Gerencie seus Créditos e compras" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
       <div className="min-h-screen bg-black text-white">
         <Header />
         
-        <main className="container mx-auto px-4 pt-32 pb-8 content-after-header">
-          {/* Banner de sucesso */}
-          {showSucessoBanner && (
-            <div className="mb-6 bg-[#1a8a3d] rounded-lg p-4 flex items-center shadow-lg animate-fade-in">
-              <div className="mr-4">
-                <Image
-                  src="/icons/action/check_circle.svg"
-                  alt="Sucesso"
-                  width={32}
-                  height={32}
-                  className="w-8 h-8"
-                  style={{ filter: 'brightness(0) saturate(100%) invert(100%)' }}
-                />
-              </div>
-              <div>
-                <p className="text-white font-bold">Pagamento realizado com sucesso!</p>
-                <p className="text-white text-sm">Seus Créditos foram adicionados à sua conta.</p>
-              </div>
-            </div>
-          )}
-          
-          <h1 className="text-4xl font-bold mb-8">Minha Carteira</h1>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            {/* Card de Saldo */}
-            <div className="bg-black bg-opacity-80 border border-gray-800 rounded-lg p-6 col-span-1">
-              <h2 className="text-xl font-medium mb-2">Seu saldo atual</h2>
-              <p className="text-4xl font-bold mb-2 text-[#F25790]">{creditos} Créditos</p>
-              <p className="text-lg text-gray-300 mb-2">≈ R$ {totalValueInReais.toFixed(2).replace('.', ',')}</p>
-              <p className="text-sm text-gray-400 mb-4">1 Crédito = R$ 1,00</p>
-              <div className="space-y-2">
-                <button 
-                  onClick={() => setIsAddCreditsModalOpen(true)}
-                  className="w-full flex items-center justify-center px-4 py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-full transition-colors"
-                >
-                  <Image 
-                    src="/icons/content/add.svg"
-                    alt="Adicionar"
-                    width={20}
-                    height={20}
-                    className="w-5 h-5 mr-2"
+        <main className="px-3 sm:px-4 pt-16 sm:pt-20 pb-6 sm:pb-8">
+          <div className="max-w-7xl mx-auto">
+            {/* Banner de sucesso */}
+            {showSucessoBanner && (
+              <div className="mb-6 bg-[#1a8a3d] rounded-lg p-4 flex items-center shadow-lg animate-fade-in">
+                <div className="mr-4">
+                  <Image
+                    src="/icons/action/check_circle.svg"
+                    alt="Sucesso"
+                    width={32}
+                    height={32}
+                    className="w-8 h-8"
                     style={{ filter: 'brightness(0) saturate(100%) invert(100%)' }}
                   />
-                  Adicionar Crédito
-                </button>
-                <button 
-                  onClick={() => setIsWithdrawModalOpen(true)}
-                  className="w-full flex items-center justify-center px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-full transition-colors"
-                >
-                  <Image 
-                    src="/icons/action/account_balance.svg"
-                    alt="Sacar"
-                    width={20}
-                    height={20}
-                    className="w-5 h-5 mr-2"
-                    style={{ filter: 'brightness(0) saturate(100%) invert(100%)' }}
-                  />
-                  Sacar para conta
-                </button>
-              </div>
-            </div>
-
-            {/* Card de Benefícios */}
-            <div className="bg-black bg-opacity-80 border border-gray-800 rounded-lg p-6 col-span-2">
-              <h2 className="text-xl font-medium mb-4">Benefícios da carteira</h2>
-              <div className="space-y-4">
-                <div className="flex items-start">
-                  <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
-                    <Image
-                      src="/icons/action/lock.svg"
-                      alt="Chat privado"
-                      width={24}
-                      height={24}
-                      className="w-6 h-6"
-                      style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)' }}
-                    />
-                  </div>
-                  <div>
-                    <h3 className="font-medium">Chat privado com modelos</h3>
-                    <p className="text-sm text-gray-400">Converse diretamente com os modelos em um ambiente privado.</p>
-                  </div>
                 </div>
-                
-                <div className="flex items-start">
-                  <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
-                    <Image
-                      src="/icons/audio_video/videocam.svg"
-                      alt="Shows exclusivos"
-                      width={24}
-                      height={24}
-                      className="w-6 h-6"
-                      style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)' }}
-                    />
-                  </div>
-                  <div>
-                    <h3 className="font-medium">Acesso a shows exclusivos</h3>
-                    <p className="text-sm text-gray-400">Assista a apresentações únicas de nossos modelos.</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
-                    <Image
-                      src="/icons/action/card_giftcard.svg"
-                      alt="Presentes virtuais"
-                      width={24}
-                      height={24}
-                      className="w-6 h-6"
-                      style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)' }}
-                    />
-                  </div>
-                  <div>
-                    <h3 className="font-medium">Presentes virtuais</h3>
-                    <p className="text-sm text-gray-400">Envie presentes para demonstrar seu carinho pelos modelos.</p>
-                  </div>
+                <div>
+                  <p className="text-white font-bold">Pagamento realizado com sucesso!</p>
+                  <p className="text-white text-sm">Seus Créditos foram adicionados à sua conta.</p>
                 </div>
               </div>
-            </div>
-          </div>
+            )}
 
-          {/* Histórico de Transações */}
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold mb-4">Histórico de transações</h2>
-            <div className="bg-black bg-opacity-80 border border-gray-800 rounded-lg overflow-hidden">
-              <table className="w-full text-left">
-                <thead className="bg-gray-900">
-                  <tr>
-                    <th className="py-3 px-4">Data</th>
-                    <th className="py-3 px-4">Descrição</th>
-                    <th className="py-3 px-4">Valor</th>
-                    <th className="py-3 px-4">Saldo</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {transacoes.map((transacao, index) => (
-                    <tr key={index} className="border-t border-gray-800">
-                      <td className="py-3 px-4">{transacao.data}</td>
-                      <td className="py-3 px-4">{transacao.tipo}</td>
-                      <td className="py-3 px-4" style={{ color: transacao.valor.includes('-') ? '#ff6b6b' : '#4cd964' }}>
-                        {transacao.valor}
-                      </td>
-                      <td className="py-3 px-4">{transacao.saldoFinal}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+            <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+              {/* Sidebar */}
+              <aside className="w-full lg:w-80 lg:flex-shrink-0">
+                {/* User Card */}
+                <div className="bg-gray-900 rounded-xl p-4 sm:p-6 mb-6">
+                  <div className="flex flex-col items-center text-center">
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-700 flex items-center justify-center mb-4 overflow-hidden flex-shrink-0">
+                      {userData.photo ? (
+                        <Image 
+                          src={userData.photo} 
+                          alt={userData.name || 'Usuário'} 
+                          width={96} 
+                          height={96}
+                          className="w-full h-full object-cover rounded-full"
+                        />
+                      ) : (
+                        <span className="text-white text-xl sm:text-2xl font-bold">
+                          {userData.name?.charAt(0) || 'U'}
+                        </span>
+                      )}
+                    </div>
+                    <h2 className="text-lg sm:text-xl font-bold text-white mb-1">
+                      Olá, {userData.name || 'Usuário'}!
+                    </h2>
+                    <p className="text-sm text-gray-400 mb-4 break-all">
+                      {userData.email || 'teste@camera.real'}
+                    </p>
+                    
+                    {/* Credits Card */}
+                    <div className="w-full bg-gradient-to-r from-gray-800/60 to-gray-700/60 backdrop-blur-sm border border-gray-600/50 hover:border-[#F25790]/50 rounded-xl p-4 mb-4 transition-all duration-200 hover:bg-gray-700/70 group">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-white font-medium text-sm">Seus créditos:</span>
+                        <div className="flex items-center space-x-2">
+                          <div className="relative w-4 h-4">
+                            <svg 
+                              width="16" 
+                              height="16" 
+                              viewBox="0 0 24 24" 
+                              fill="none" 
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="w-4 h-4 text-white absolute top-0 left-0 group-hover:opacity-0 transition-opacity duration-200"
+                            >
+                              <path d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z" fill="white"/>
+                            </svg>
+                            
+                            <svg 
+                              width="16" 
+                              height="16" 
+                              viewBox="0 0 24 24" 
+                              fill="none" 
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="w-4 h-4 text-green-500 absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                            >
+                              <path d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z" fill="#10b981"/>
+                            </svg>
+                          </div>
+                          <span className="text-white font-medium text-lg">
+                            {creditos}
+                          </span>
+                          <span className="text-gray-300 text-xs">Créditos</span>
+                        </div>
+                      </div>
+                      <p className="text-xs text-gray-400 mb-3">≈ R$ {totalValueInReais.toFixed(2).replace('.', ',')}</p>
+                      <div className="space-y-2">
+                        <button 
+                          onClick={() => setIsAddCreditsModalOpen(true)}
+                          className="w-full py-3 bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white font-bold rounded-xl transition-all duration-300 shadow-[0_0_15px_rgba(242,87,144,0.4)] hover:shadow-[0_0_25px_rgba(242,87,144,0.6)] hover:scale-105 active:scale-95 border border-[#F25790]/30"
+                        >
+                          <div className="flex items-center justify-center gap-2">
+                            <Image 
+                              src="/icons/content/add.svg"
+                              alt="Adicionar"
+                              width={16}
+                              height={16}
+                              className="w-4 h-4"
+                              style={{ filter: 'brightness(0) saturate(100%) invert(100%)' }}
+                            />
+                            <span>Adicionar Crédito</span>
+                          </div>
+                        </button>
+                        <button 
+                          onClick={() => setIsWithdrawModalOpen(true)}
+                          className="w-full flex items-center justify-center px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-xl transition-colors text-sm"
+                        >
+                          <Image 
+                            src="/icons/action/account_balance.svg"
+                            alt="Sacar"
+                            width={16}
+                            height={16}
+                            className="w-4 h-4 mr-2"
+                            style={{ filter: 'brightness(0) saturate(100%) invert(100%)' }}
+                          />
+                          Sacar para conta
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-          {/* Pacotes de Crédito */}
-          <h2 className="text-2xl font-bold mb-6">Comprar Créditos</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            {/* Pacote Básico */}
-            <div className="bg-black bg-opacity-80 border border-gray-800 rounded-lg p-6 hover:shadow-xl transition-shadow">
-              <div className="mb-4">
-                <span className="inline-block px-3 py-1 text-xs bg-[#F25790] text-white rounded-full">Básico</span>
-              </div>
-              <p className="text-3xl font-bold mb-2">R$ 29</p>
-              <p className="text-sm text-gray-300 mb-4">40 créditos</p>
-              <ul className="space-y-2 mb-6">
-                <li className="flex items-center">
-                  <Image 
-                    src="/icons/action/check_circle.svg"
-                    alt="Check"
-                    width={20}
-                    height={20}
-                    className="w-5 h-5 mr-2"
-                    style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)' }}
-                  />
-                  <span className="text-sm">Aproximadamente 40 minutos</span>
-                </li>
-              </ul>
-              <button 
-                onClick={() => handleAddCredits(40)}
-                className="w-full py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-full transition-colors"
-              >
-                Comprar R$ 29
-              </button>
-            </div>
+                {/* Menu de Navegação */}
+                <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+                  <h3 className="text-lg font-bold mb-4">Ações Rápidas</h3>
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-3 p-3 rounded-xl bg-gray-800 border border-[#F25790]">
+                      <svg 
+                        width="20" 
+                        height="20" 
+                        viewBox="0 0 24 24" 
+                        fill="none" 
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-5 h-5 text-[#F25790]"
+                      >
+                        <path d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z" fill="#F25790"/>
+                      </svg>
+                      <span className="text-[#F25790] font-medium">Carteira</span>
+                    </div>
+                    
+                    <Link href="/painel-usuario" className="flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-800 transition-all group">
+                      <Image 
+                        src="/icons/action/dashboard.svg"
+                        alt="Painel"
+                        width={20}
+                        height={20}
+                        className="w-5 h-5 filter brightness-0 invert"
+                      />
+                      <span className="group-hover:text-[#F25790] transition-colors">Painel</span>
+                    </Link>
+                    
+                    <Link href="/explorar" className="flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-800 transition-all group">
+                      <Image 
+                        src="/icons/action/search.svg"
+                        alt="Explorar"
+                        width={20}
+                        height={20}
+                        className="w-5 h-5 filter brightness-0 invert"
+                      />
+                      <span className="group-hover:text-[#F25790] transition-colors">Explorar Modelos</span>
+                    </Link>
+                    
+                    <Link href="/chat-video" className="flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-800 transition-all group">
+                      <Image 
+                        src="/icons/audio_video/videocam.svg"
+                        alt="Iniciar Chat"
+                        width={20}
+                        height={20}
+                        className="w-5 h-5 filter brightness-0 invert"
+                      />
+                      <span className="group-hover:text-[#F25790] transition-colors">Iniciar Chat</span>
+                    </Link>
+                  </div>
+                </div>
+              </aside>
 
-            {/* Pacote Popular */}
-            <div className="bg-black bg-opacity-80 border-2 border-[#F25790] rounded-lg p-6 hover:shadow-xl transition-shadow relative">
-              <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-[#F25790] text-white text-xs px-4 py-1 rounded-full">
-                MAIS VENDIDO!
-              </div>
-              <div className="mb-4">
-                <span className="inline-block px-3 py-1 text-xs bg-[#F25790] text-white rounded-full">Popular</span>
-              </div>
-              <p className="text-3xl font-bold mb-2">R$ 79</p>
-              <p className="text-sm text-gray-300 mb-4">100 créditos + 10 bônus</p>
-              <ul className="space-y-2 mb-6">
-                <li className="flex items-center">
-                  <Image 
-                    src="/icons/action/check_circle.svg"
-                    alt="Check"
-                    width={20}
-                    height={20}
-                    className="w-5 h-5 mr-2"
-                    style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)' }}
-                  />
-                  <span className="text-sm">Aproximadamente 110 minutos</span>
-                </li>
-              </ul>
-              <button 
-                onClick={() => handleAddCredits(110)}
-                className="w-full py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-full transition-colors"
-              >
-                Comprar R$ 79
-              </button>
-            </div>
+              {/* Conteúdo Principal */}
+              <div className="flex-1 space-y-8">
+                {/* Cards de Estatísticas */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-[#F25790] transition-all">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="p-3">
+                        <svg 
+                          width="24" 
+                          height="24" 
+                          viewBox="0 0 24 24" 
+                          fill="none" 
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="w-6 h-6 text-white"
+                        >
+                          <path d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z" fill="white"/>
+                        </svg>
+                      </div>
+                      <span className="text-3xl font-bold text-[#F25790]">{creditos}</span>
+                    </div>
+                    <h3 className="font-semibold text-lg mb-1">Créditos</h3>
+                    <p className="text-gray-400 text-sm">Saldo atual</p>
+                  </div>
+                  
+                  <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-[#F25790] transition-all">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="p-3">
+                        <Image 
+                          src="/icons/action/trending_up.svg"
+                          alt="Valor em Reais"
+                          width={24}
+                          height={24}
+                          className="w-6 h-6 filter brightness-0 invert"
+                        />
+                      </div>
+                      <span className="text-3xl font-bold text-green-500">R$ {totalValueInReais.toFixed(0)}</span>
+                    </div>
+                    <h3 className="font-semibold text-lg mb-1">Valor Total</h3>
+                    <p className="text-gray-400 text-sm">Em reais</p>
+                  </div>
+                  
+                  <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-[#F25790] transition-all">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="p-3">
+                        <Image 
+                          src="/icons/action/history.svg"
+                          alt="Transações"
+                          width={24}
+                          height={24}
+                          className="w-6 h-6 filter brightness-0 invert"
+                        />
+                      </div>
+                      <span className="text-3xl font-bold text-blue-500">{transacoes.length}</span>
+                    </div>
+                    <h3 className="font-semibold text-lg mb-1">Transações</h3>
+                    <p className="text-gray-400 text-sm">Histórico</p>
+                  </div>
+                </div>
 
-            {/* Pacote Master */}
-            <div className="bg-black bg-opacity-80 border border-gray-800 rounded-lg p-6 hover:shadow-xl transition-shadow">
-              <div className="mb-4">
-                <span className="inline-block px-3 py-1 text-xs bg-[#F25790] text-white rounded-full">Master</span>
+                {/* Benefícios da Carteira */}
+                <div>
+                  <h2 className="text-2xl font-bold mb-6">Benefícios da carteira</h2>
+                  <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+                    <div className="space-y-4">
+                      <div className="flex items-start">
+                        <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
+                          <Image
+                            src="/icons/action/lock.svg"
+                            alt="Chat privado"
+                            width={24}
+                            height={24}
+                            className="w-6 h-6"
+                            style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)' }}
+                          />
+                        </div>
+                        <div>
+                          <h3 className="font-medium">Chat privado com modelos</h3>
+                          <p className="text-sm text-gray-400">Converse diretamente com os modelos em um ambiente privado.</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start">
+                        <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
+                          <Image
+                            src="/icons/audio_video/videocam.svg"
+                            alt="Shows exclusivos"
+                            width={24}
+                            height={24}
+                            className="w-6 h-6"
+                            style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)' }}
+                          />
+                        </div>
+                        <div>
+                          <h3 className="font-medium">Acesso a shows exclusivos</h3>
+                          <p className="text-sm text-gray-400">Assista a apresentações únicas de nossos modelos.</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start">
+                        <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
+                          <Image
+                            src="/icons/action/card_giftcard.svg"
+                            alt="Presentes virtuais"
+                            width={24}
+                            height={24}
+                            className="w-6 h-6"
+                            style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)' }}
+                          />
+                        </div>
+                        <div>
+                          <h3 className="font-medium">Presentes virtuais</h3>
+                          <p className="text-sm text-gray-400">Envie presentes para demonstrar seu carinho pelos modelos.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Pacotes de Crédito */}
+                <div>
+                  <h2 className="text-2xl font-bold mb-6">Comprar Créditos</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {/* Pacote Básico */}
+                    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-[#F25790] hover:shadow-xl transition-all">
+                      <div className="mb-4">
+                        <span className="inline-block px-3 py-1 text-xs bg-[#F25790] text-white rounded-full">Básico</span>
+                      </div>
+                      <p className="text-3xl font-bold mb-2">R$ 29</p>
+                      <p className="text-sm text-gray-300 mb-4">40 créditos</p>
+                      <ul className="space-y-2 mb-6">
+                        <li className="flex items-center">
+                          <Image 
+                            src="/icons/action/check_circle.svg"
+                            alt="Check"
+                            width={20}
+                            height={20}
+                            className="w-5 h-5 mr-2"
+                            style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)' }}
+                          />
+                          <span className="text-sm">Aproximadamente 40 minutos</span>
+                        </li>
+                      </ul>
+                      <button 
+                        onClick={() => handleAddCredits(40)}
+                        className="w-full py-3 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-xl transition-colors font-medium"
+                      >
+                        Comprar R$ 29
+                      </button>
+                    </div>
+
+                    {/* Pacote Popular */}
+                    <div className="bg-gray-900 border-2 border-[#F25790] rounded-2xl p-6 hover:shadow-xl transition-all relative">
+                      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-[#F25790] text-white text-xs px-4 py-1 rounded-full">
+                        MAIS VENDIDO!
+                      </div>
+                      <div className="mb-4">
+                        <span className="inline-block px-3 py-1 text-xs bg-[#F25790] text-white rounded-full">Popular</span>
+                      </div>
+                      <p className="text-3xl font-bold mb-2">R$ 79</p>
+                      <p className="text-sm text-gray-300 mb-4">100 créditos + 10 bônus</p>
+                      <ul className="space-y-2 mb-6">
+                        <li className="flex items-center">
+                          <Image 
+                            src="/icons/action/check_circle.svg"
+                            alt="Check"
+                            width={20}
+                            height={20}
+                            className="w-5 h-5 mr-2"
+                            style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)' }}
+                          />
+                          <span className="text-sm">Aproximadamente 110 minutos</span>
+                        </li>
+                      </ul>
+                      <button 
+                        onClick={() => handleAddCredits(110)}
+                        className="w-full py-3 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-xl transition-colors font-medium"
+                      >
+                        Comprar R$ 79
+                      </button>
+                    </div>
+
+                    {/* Pacote Master */}
+                    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-[#F25790] hover:shadow-xl transition-all">
+                      <div className="mb-4">
+                        <span className="inline-block px-3 py-1 text-xs bg-[#F25790] text-white rounded-full">Master</span>
+                      </div>
+                      <p className="text-3xl font-bold mb-2">R$ 199</p>
+                      <p className="text-sm text-gray-300 mb-4">300 créditos + 50 bônus</p>
+                      <ul className="space-y-2 mb-6">
+                        <li className="flex items-center">
+                          <Image 
+                            src="/icons/action/check_circle.svg"
+                            alt="Check"
+                            width={20}
+                            height={20}
+                            className="w-5 h-5 mr-2"
+                            style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)' }}
+                          />
+                          <span className="text-sm">Aproximadamente 350 minutos</span>
+                        </li>
+                      </ul>
+                      <button 
+                        onClick={() => handleAddCredits(350)}
+                        className="w-full py-3 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-xl transition-colors font-medium"
+                      >
+                        Comprar R$ 199
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Histórico de Transações */}
+                <div>
+                  <h2 className="text-2xl font-bold mb-6">Histórico de transações</h2>
+                  <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
+                    {/* Mobile: Cards Layout */}
+                    <div className="block md:hidden">
+                      {transacoes.map((transacao, index) => (
+                        <div key={index} className="border-b border-gray-800 last:border-b-0 p-4">
+                          <div className="flex justify-between items-start mb-2">
+                            <span className="font-medium">{transacao.tipo}</span>
+                            <span className={`font-semibold text-sm ${transacao.valor.includes('-') ? 'text-red-400' : 'text-green-400'}`}>
+                              {transacao.valor}
+                            </span>
+                          </div>
+                          <div className="flex justify-between items-center text-sm text-gray-400">
+                            <span>{transacao.data}</span>
+                            <span>Saldo: {transacao.saldoFinal}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    {/* Desktop: Table Layout */}
+                    <div className="hidden md:block overflow-x-auto">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="border-b border-gray-800 bg-gray-800 bg-opacity-50">
+                            <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Data</th>
+                            <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Descrição</th>
+                            <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Valor</th>
+                            <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Saldo</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {transacoes.map((transacao, index) => (
+                            <tr key={index} className="border-b border-gray-800 hover:bg-gray-800 hover:bg-opacity-30 transition-colors">
+                              <td className="px-6 py-4 text-gray-400 text-sm">{transacao.data}</td>
+                              <td className="px-6 py-4 font-medium">{transacao.tipo}</td>
+                              <td className="px-6 py-4 text-sm" style={{ color: transacao.valor.includes('-') ? '#ff6b6b' : '#4cd964' }}>
+                                {transacao.valor}
+                              </td>
+                              <td className="px-6 py-4 text-sm">{transacao.saldoFinal}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <p className="text-3xl font-bold mb-2">R$ 199</p>
-              <p className="text-sm text-gray-300 mb-4">300 créditos + 50 bônus</p>
-              <ul className="space-y-2 mb-6">
-                <li className="flex items-center">
-                  <Image 
-                    src="/icons/action/check_circle.svg"
-                    alt="Check"
-                    width={20}
-                    height={20}
-                    className="w-5 h-5 mr-2"
-                    style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)' }}
-                  />
-                  <span className="text-sm">Aproximadamente 350 minutos</span>
-                </li>
-              </ul>
-              <button 
-                onClick={() => handleAddCredits(350)}
-                className="w-full py-2 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-full transition-colors"
-              >
-                Comprar R$ 199
-              </button>
             </div>
           </div>
         </main>
