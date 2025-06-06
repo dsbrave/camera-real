@@ -43,13 +43,13 @@ export default function PainelUsuario() {
   // Verificar se o usuário está logado ao carregar a página
   useEffect(() => {
     const loadUserData = () => {
-      const userStorage = localStorage.getItem('user');
-      if (userStorage) {
-        try {
-          const parsedUser = JSON.parse(userStorage);
-          if (parsedUser.isLoggedIn) {
-            setUserData({
-              ...parsedUser,
+    const userStorage = localStorage.getItem('user');
+    if (userStorage) {
+      try {
+        const parsedUser = JSON.parse(userStorage);
+        if (parsedUser.isLoggedIn) {
+          setUserData({
+            ...parsedUser,
               recentChats: recentChatsMock
             });
             
@@ -62,16 +62,16 @@ export default function PainelUsuario() {
             if (preferences) {
               setUserPreferences(JSON.parse(preferences));
             }
-          } else {
-            router.push('/login');
-          }
-        } catch (error) {
-          console.error('Erro ao carregar dados do usuário:', error);
+        } else {
           router.push('/login');
         }
-      } else {
+      } catch (error) {
+        console.error('Erro ao carregar dados do usuário:', error);
         router.push('/login');
       }
+    } else {
+      router.push('/login');
+    }
     };
 
     loadUserData();
@@ -195,15 +195,15 @@ export default function PainelUsuario() {
         <main className="px-3 sm:px-4 pt-16 sm:pt-20 pb-6 sm:pb-8">
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 min-h-0">
-              {/* Sidebar */}
+            {/* Sidebar */}
               <aside className="w-full lg:w-80 lg:flex-shrink-0">
                 {/* User Card */}
                 <div className="bg-gray-900 rounded-xl p-4 sm:p-6 mb-6">
                   <div className="flex flex-col items-center text-center">
                     <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-700 flex items-center justify-center mb-4 overflow-hidden flex-shrink-0">
-                      {userData.photo ? (
-                        <Image 
-                          src={userData.photo} 
+                    {userData.photo ? (
+                      <Image 
+                        src={userData.photo} 
                           alt={userData.name || 'Usuário'} 
                           width={96} 
                           height={96}
@@ -279,7 +279,7 @@ export default function PainelUsuario() {
                     </div>
                   </div>
                 </div>
-
+                
                 {/* Menu de Navegação */}
                 <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
                   <h3 className="text-lg font-bold mb-4">Ações Rápidas</h3>
@@ -299,16 +299,16 @@ export default function PainelUsuario() {
                     </Link>
                     
                     <Link href="/explorar" className="flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-800 transition-all group">
-                      <Image 
-                        src="/icons/action/search.svg"
-                        alt="Explorar"
-                        width={20}
-                        height={20}
+                        <Image 
+                          src="/icons/action/search.svg"
+                          alt="Explorar"
+                          width={20}
+                          height={20}
                         className="w-5 h-5 filter brightness-0 invert"
-                      />
+                        />
                       <span className="group-hover:text-[#F25790] transition-colors">Explorar Modelos</span>
-                    </Link>
-                    
+                  </Link>
+                  
                     <button 
                       onClick={() => setShowPreferencesModal(true)}
                       className="w-full flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-800 transition-all group text-left"
@@ -329,16 +329,16 @@ export default function PainelUsuario() {
                     </button>
                     
                     <Link href="/chat-video" className="flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-800 transition-all group">
-                      <Image 
-                        src="/icons/audio_video/videocam.svg"
-                        alt="Iniciar Chat"
-                        width={20}
-                        height={20}
+                        <Image 
+                          src="/icons/audio_video/videocam.svg"
+                          alt="Iniciar Chat"
+                          width={20}
+                          height={20}
                         className="w-5 h-5 filter brightness-0 invert"
-                      />
+                        />
                       <span className="group-hover:text-[#F25790] transition-colors">Iniciar Chat</span>
                     </Link>
-                  </div>
+                    </div>
                 </div>
               </aside>
 
@@ -364,55 +364,55 @@ export default function PainelUsuario() {
                     </div>
                     <h3 className="font-semibold text-lg mb-1">Créditos</h3>
                     <p className="text-gray-400 text-sm">Disponíveis</p>
-                  </div>
-                  
+                </div>
+                
                   <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-[#F25790] transition-all">
                     <div className="flex items-center justify-between mb-4">
                       <div className="p-3">
-                        <Image 
-                          src="/icons/action/favorite.svg"
-                          alt="Favoritos"
-                          width={24}
-                          height={24}
+                      <Image 
+                        src="/icons/action/favorite.svg"
+                        alt="Favoritos"
+                        width={24}
+                        height={24}
                           className="w-6 h-6 filter brightness-0 invert"
-                        />
+                      />
                       </div>
                       <span className="text-3xl font-bold text-yellow-500">{favoriteModels.length}</span>
                     </div>
                     <h3 className="font-semibold text-lg mb-1">Favoritos</h3>
                     <p className="text-gray-400 text-sm">Modelos salvos</p>
-                  </div>
-                  
+                </div>
+                
                   <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-[#F25790] transition-all">
                     <div className="flex items-center justify-between mb-4">
                       <div className="p-3">
-                        <Image 
-                          src="/icons/communication/chat.svg"
-                          alt="Conversas"
-                          width={24}
-                          height={24}
+                      <Image 
+                        src="/icons/communication/chat.svg"
+                        alt="Conversas"
+                        width={24}
+                        height={24}
                           className="w-6 h-6 filter brightness-0 invert"
-                        />
+                      />
                       </div>
                       <span className="text-3xl font-bold text-blue-500">{recentChats.length}</span>
                     </div>
                     <h3 className="font-semibold text-lg mb-1">Conversas</h3>
                     <p className="text-gray-400 text-sm">Chats realizados</p>
-                  </div>
                 </div>
-
+              </div>
+              
                 {/* Modelos Favoritos */}
                 <div>
                   <div className="flex items-center justify-between mb-6">
                     <h2 className="text-xl font-semibold">Modelos Favoritos</h2>
                     <Link href="/favoritos" className="text-[#F25790] hover:text-[#d93d75] text-sm font-medium transition-colors">
-                      Ver todos
-                    </Link>
-                  </div>
-                  
-                  {favoriteModels.length > 0 ? (
+                    Ver todos
+                  </Link>
+                </div>
+                
+                {favoriteModels.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {favoriteModels.map(model => (
+                    {favoriteModels.map(model => (
                         <ModelCard
                           key={model.id}
                           model={model}
@@ -422,45 +422,45 @@ export default function PainelUsuario() {
                           onOpenModal={handleOpenModal}
                           size="small"
                         />
-                      ))}
-                    </div>
-                  ) : (
+                    ))}
+                  </div>
+                ) : (
                     <div className="bg-gray-900 border border-gray-800 rounded-2xl p-12 text-center">
                       <div className="p-4 w-20 h-20 mx-auto mb-4 flex items-center justify-center">
-                        <Image 
-                          src="/icons/action/favorite_border.svg"
-                          alt="Sem favoritos"
+                      <Image 
+                        src="/icons/action/favorite_border.svg"
+                        alt="Sem favoritos"
                           width={32}
                           height={32}
                           className="w-8 h-8 filter brightness-0 invert"
-                        />
-                      </div>
+                      />
+                    </div>
                       <h3 className="text-xl font-semibold mb-2">Nenhum favorito ainda</h3>
                       <p className="text-gray-400 mb-6">Explore nossos modelos e adicione seus favoritos</p>
                       <Link href="/explorar" className="bg-[#F25790] hover:bg-[#d93d75] text-white font-medium py-3 px-8 rounded-xl transition-colors inline-block">
                         Explorar Modelos
-                      </Link>
-                    </div>
-                  )}
-                </div>
-
-                {/* Conversas Recentes */}
-                <div>
-                  <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-bold">Conversas Recentes</h2>
-                    <Link href="/historico" className="text-[#F25790] hover:text-[#d93d75] font-medium flex items-center transition-colors">
-                      Ver histórico completo
-                      <Image 
-                        src="/icons/navigation/chevron_right.svg"
-                        alt="Seta"
-                        width={16}
-                        height={16}
-                        className="w-4 h-4 ml-1 filter brightness-0 invert"
-                      />
                     </Link>
                   </div>
-                  
-                  {recentChats.length > 0 ? (
+                )}
+              </div>
+              
+                {/* Conversas Recentes */}
+                <div>
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-bold">Conversas Recentes</h2>
+                    <Link href="/historico" className="text-[#F25790] hover:text-[#d93d75] font-medium flex items-center transition-colors">
+                    Ver histórico completo
+                    <Image 
+                      src="/icons/navigation/chevron_right.svg"
+                      alt="Seta"
+                      width={16}
+                      height={16}
+                        className="w-4 h-4 ml-1 filter brightness-0 invert"
+                    />
+                  </Link>
+                </div>
+                
+                {recentChats.length > 0 ? (
                     <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
                       {/* Mobile: Cards Layout */}
                       <div className="block md:hidden">
@@ -487,46 +487,46 @@ export default function PainelUsuario() {
                       
                       {/* Desktop: Table Layout */}
                       <div className="hidden md:block overflow-x-auto">
-                        <table className="w-full">
-                          <thead>
+                      <table className="w-full">
+                        <thead>
                             <tr className="border-b border-gray-800 bg-gray-800 bg-opacity-50">
                               <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Modelo</th>
                               <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Data</th>
                               <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Duração</th>
                               <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Créditos</th>
                               <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Ação</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {recentChats.map(chat => (
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {recentChats.map(chat => (
                               <tr key={chat.id} className="border-b border-gray-800 hover:bg-gray-800 hover:bg-opacity-30 transition-colors">
-                                <td className="px-6 py-4">
+                              <td className="px-6 py-4">
                                   <Link href={`/modelo/${chat.modelId}`} className="font-medium hover:text-[#F25790] transition-colors">
-                                    {chat.modelName}
-                                  </Link>
-                                </td>
+                                  {chat.modelName}
+                                </Link>
+                              </td>
                                 <td className="px-6 py-4 text-gray-400 text-sm">{formatDate(chat.date)}</td>
                                 <td className="px-6 py-4 text-sm">{chat.duration} min</td>
                                 <td className="px-6 py-4 text-[#F25790] font-semibold text-sm">{chat.cost}</td>
-                                <td className="px-6 py-4">
-                                  <Link href={`/chat-video?id=${chat.modelId}`}>
+                              <td className="px-6 py-4">
+                                <Link href={`/chat-video?id=${chat.modelId}`}>
                                     <button className="bg-[#F25790] hover:bg-[#d93d75] text-white font-medium py-2 px-4 rounded-lg text-sm transition-colors">
-                                      Conversar
-                                    </button>
-                                  </Link>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
+                                    Conversar
+                                  </button>
+                                </Link>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
-                  ) : (
+                  </div>
+                ) : (
                     <div className="bg-gray-900 border border-gray-800 rounded-2xl p-12 text-center">
                       <div className="p-4 w-20 h-20 mx-auto mb-4 flex items-center justify-center">
-                        <Image 
-                          src="/icons/communication/chat_bubble_outline.svg"
-                          alt="Sem conversas"
+                      <Image 
+                        src="/icons/communication/chat_bubble_outline.svg"
+                        alt="Sem conversas"
                           width={32}
                           height={32}
                           className="w-8 h-8 filter brightness-0 invert"

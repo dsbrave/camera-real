@@ -143,14 +143,14 @@ export default function ModelCard({
         {/* Status e Destaque */}
         <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-10">
           {model.destacado && (
-            <div className="bg-gradient-to-r from-[#F25790] to-[#d93d75] text-white text-xs font-bold px-4 py-1 rounded-full shadow-lg backdrop-blur-sm flex items-center gap-1">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="#FCD34D" viewBox="0 0 24 24" className="w-4 h-4">
+            <div className="bg-gradient-to-r from-[#F25790] to-[#d93d75] text-white text-xs font-bold px-2.5 py-0.5 rounded-full shadow-lg backdrop-blur-sm flex items-center gap-1">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="#FCD34D" viewBox="0 0 24 24" className="w-3 h-3">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 17.25l-5.197 3.102 1.4-5.92-4.203-3.632 5.962-.513L12 4l2.038 6.287 5.962.513-4.203 3.632 1.4 5.92z" />
               </svg>
               DESTAQUE
             </div>
           )}
-          <div className={`flex items-center gap-1.5 px-4 py-1 rounded-full backdrop-blur-md bg-green-500/20 border border-green-400/30 ${model.destacado ? '' : 'ml-auto'}`}>
+          <div className={`flex items-center gap-1 px-2.5 py-0.5 rounded-full backdrop-blur-md bg-green-500/20 border border-green-400/30 ${model.destacado ? '' : 'ml-auto'}`}>
             <div className={`w-1.5 h-1.5 rounded-full ${model.online ? 'bg-green-400 animate-pulse' : 'bg-red-400'}`}></div>
             <span className="text-xs font-medium text-green-300">
               {model.online ? 'Online' : 'Offline'}
@@ -216,16 +216,16 @@ export default function ModelCard({
         
         {/* Preços e botão */}
         <div className="space-y-2">
-          <div className="flex items-center justify-between text-sm">
+          <div className={`flex items-center justify-between ${size === 'small' ? 'text-xs' : 'text-sm'}`}>
             <span className="text-gray-300">Chat simples:</span>
             <span className="text-green-400 font-bold">1 crédito/min</span>
           </div>
-          <div className="flex items-center justify-between text-sm">
+          <div className={`flex items-center justify-between ${size === 'small' ? 'text-xs' : 'text-sm'}`}>
             <span className="text-gray-300">Chat privado:</span>
             <span className="text-[#F25790] font-bold">{modelPrivatePrice} créditos/min</span>
           </div>
           <Link href={`/chat-video?id=${model.id}`} onClick={(e) => e.stopPropagation()}>
-            <button className={`w-full bg-gradient-to-r from-[#F25790] to-[#d93d75] hover:from-[#d93d75] hover:to-[#c12d65] text-white font-medium ${currentSize.button} rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-[#F25790]/25 backdrop-blur-sm`}>
+            <button className={`w-full bg-gradient-to-r from-[#F25790] to-[#d93d75] hover:from-[#d93d75] hover:to-[#c12d65] text-white font-medium ${currentSize.button} rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-[#F25790]/25 backdrop-blur-sm mt-6`}>
               Conversar
             </button>
           </Link>

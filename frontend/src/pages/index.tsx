@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import UserPreferencesModal from '@/components/UserPreferencesModal';
+import ModelCard from '@/components/ModelCard';
 
 interface Modelo {
   id: string;
@@ -175,7 +176,7 @@ export default function Home() {
     {
       id: 'm4',
       nome: 'Marina Pereira',
-      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_2wu5n7gdr6dsrmj98ak9_2.png',
+      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_jdasqbio3vvca5k92ebh_2.png',
       categorias: ['conversa', 'artes'],
       online: true,
       destacado: true,
@@ -199,7 +200,7 @@ export default function Home() {
     {
       id: 'm8',
       nome: 'Carlos Mendes',
-      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_male_model_posing_in_a_modern_streaming_setup_emphasis_on_body_1.png',
+      fotoPerfil: '/images/realistic_photo_of_a_brazilian_latino_man_with_everyday_natural_looks__regular_including_body_diver_ecf9z2bp6ac4zulo1fmw_3.png',
       categorias: ['conversa', 'fitness'],
       online: true,
       destacado: true,
@@ -211,7 +212,7 @@ export default function Home() {
     {
       id: 'm9',
       nome: 'Alex & Sam',
-      fotoPerfil: '/images/high-quality_studio_photo_of_a_couple_posing_in_a_modern_streaming_setup_1.png',
+      fotoPerfil: '/images/realistic_photo_of_a_brazilian_latino_couple_with_everyday_natural_looks__regular_beauty_real-life__b3uv0efkhgp35404n7ab_0.png',
       categorias: ['conversa', 'entretenimento'],
       online: true,
       destacado: true,
@@ -223,7 +224,7 @@ export default function Home() {
     {
       id: 'm10',
       nome: 'Luna',
-      fotoPerfil: '/images/high-quality_studio_photo_of_a_trans_model_posing_in_a_modern_streaming_setup_1.png',
+      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_zg1iy2w7g4x4j2pm3925_0.png',
       categorias: ['conversa', 'arte'],
       online: true,
       destacado: true,
@@ -231,6 +232,18 @@ export default function Home() {
       valorPorMinuto: 1, // Chat simples sempre 1 crédito
       tipo: 'Trans',
       precoPrivado: 4 // Chat privado configurável
+    },
+    {
+      id: 't1',
+      nome: 'Valentina',
+      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_r68jd84c1uv21o2ehzgj_3.png',
+      categorias: ['conversa', 'dança'],
+      online: true,
+      destacado: true,
+      avaliacoes: 4.5,
+      valorPorMinuto: 1, // Chat simples sempre 1 crédito
+      tipo: 'Trans',
+      precoPrivado: 3 // Chat privado configurável
     }
   ];
 
@@ -246,10 +259,10 @@ export default function Home() {
     // Filtrar por tipo de modelo
     if (!userPreferences.modelType.includes('todos')) {
       const typeMap = {
-        'mulheres': 'mulher',
-        'homens': 'homem', 
-        'casais': 'casal',
-        'trans': 'trans'
+        'mulheres': 'Mulheres',
+        'homens': 'Homens', 
+        'casais': 'Casais',
+        'trans': 'Trans'
       };
       
       filteredModels = filteredModels.filter(modelo => 
@@ -401,111 +414,24 @@ export default function Home() {
                   <div className="overflow-x-auto scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                     <div className="flex gap-4 pb-4 min-w-max">
                       {getFilteredModels().map(modelo => (
-                        <div 
-                          key={modelo.id} 
-                          className="flex-shrink-0 w-64 sm:w-72 bg-gradient-to-br from-[#F25790]/10 via-purple-500/5 to-blue-500/10 backdrop-blur-sm rounded-2xl overflow-hidden hover:from-[#F25790]/15 hover:via-purple-500/10 hover:to-blue-500/15 transition-all duration-300 hover:scale-105 hover:shadow-2xl border border-white/20 hover:border-[#F25790]/50 group"
-                        >
-                          <div className="relative h-64 sm:h-72 bg-gradient-to-br from-black/30 to-black/50">
-                            {/* Imagem da modelo */}
-                            {modelo.fotoPerfil && (
-                              <Image
-                                src={modelo.fotoPerfil}
-                                alt={modelo.nome}
-                                fill
-                                className="object-cover opacity-95"
-                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                              />
-                            )}
-                            
-                            {/* Overlay gradiente sutil */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
-                            
-                            {/* Status e Destaque */}
-                            <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-10">
-                              {modelo.destacado && (
-                                <div className="bg-gradient-to-r from-[#F25790] to-[#d93d75] text-white text-xs font-bold px-4 py-1 rounded-full shadow-lg backdrop-blur-sm flex items-center gap-1">
-                                  <svg xmlns="http://www.w3.org/2000/svg" fill="#FCD34D" viewBox="0 0 24 24" className="w-4 h-4">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 17.25l-5.197 3.102 1.4-5.92-4.203-3.632 5.962-.513L12 4l2.038 6.287 5.962.513-4.203 3.632 1.4 5.92z" />
-                                  </svg>
-                                  DESTAQUE
-                                </div>
-                              )}
-                              <div className={`flex items-center gap-1.5 px-4 py-1 rounded-full backdrop-blur-md bg-green-500/20 border border-green-400/30`}>
-                                <div className={`w-1.5 h-1.5 rounded-full ${modelo.online ? 'bg-green-400 animate-pulse' : 'bg-red-400'}`}></div>
-                                <span className="text-xs font-medium text-green-300">
-                                  {modelo.online ? 'Online' : 'Offline'}
-                                </span>
-                              </div>
-                            </div>
-                            
-                            <div className="absolute bottom-3 left-3 right-3">
-                              <div className="flex items-start justify-between mb-2">
-                                <div className="flex-1 pr-3">
-                                  <h3 className="text-lg sm:text-xl font-bold text-white mb-2 drop-shadow-lg max-w-[140px]">{modelo.nome}</h3>
-                                  <div className="flex items-center gap-2">
-                                    <div className="flex">
-                                      {[...Array(5)].map((_, i) => (
-                                        <svg 
-                                          key={i} 
-                                          className={`w-3.5 h-3.5 ${i < Math.floor(modelo.avaliacoes) ? 'text-yellow-400' : 'text-white/30'}`} 
-                                          fill="currentColor" 
-                                          viewBox="0 0 20 20"
-                                        >
-                                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                        </svg>
-                                      ))}
-                                    </div>
-                                    <span className="text-sm text-white/80 font-medium drop-shadow">{modelo.avaliacoes}</span>
-                                  </div>
-                                </div>
-                                
-                                {/* Botão de Favoritar */}
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleToggleFavorite(modelo);
-                                  }}
-                                  className="p-2 rounded-full transition-all duration-200 hover:scale-110"
-                                  title={favoriteModels.includes(modelo.id) ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
-                                >
-                                  <Image
-                                    src={favoriteModels.includes(modelo.id) ? '/icons/action/favorite.svg' : '/icons/action/favorite_border.svg'}
-                                    alt="Favoritar"
-                                    width={20}
-                                    height={20}
-                                    className={`w-5 h-5 ${favoriteModels.includes(modelo.id) ? 'filter brightness-0 saturate-100' : 'filter brightness-0 invert'}`}
-                                    style={favoriteModels.includes(modelo.id) ? { filter: 'brightness(0) saturate(100%) invert(77%) sepia(86%) saturate(2476%) hue-rotate(2deg) brightness(119%) contrast(99%)' } : {}}
-                                  />
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                          
-                          <div className="p-3 sm:p-4 bg-gradient-to-br from-white/5 via-white/3 to-transparent backdrop-blur-sm">
-                            {/* Categorias */}
-                            <div className="flex flex-wrap gap-1.5 mb-3">
-                              {modelo.categorias.slice(0, 2).map((categoria, index) => (
-                                <span 
-                                  key={index} 
-                                  className="text-xs bg-white/10 backdrop-blur-sm border border-white/20 px-2 py-0.5 rounded-full text-white/90 font-medium"
-                                >
-                                  {categoria.charAt(0).toUpperCase() + categoria.slice(1)}
-                                </span>
-                              ))}
-                            </div>
-                            
-                            {/* Preço e botão */}
-                            <div className="flex items-center justify-between">
-                              <div className="text-[#F25790] font-bold text-lg drop-shadow">
-                                {modelo.valorPorMinuto.toFixed(0)} <span className="text-sm text-white/70">Créditos/min</span>
-                              </div>
-                              <Link href={`/chat-video?id=${modelo.id}`}>
-                                <button className="bg-gradient-to-r from-[#F25790] to-[#d93d75] hover:from-[#d93d75] hover:to-[#c12d65] text-white font-medium py-2 px-4 rounded-full text-sm transition-all duration-300 hover:shadow-lg hover:shadow-[#F25790]/25 backdrop-blur-sm">
-                                  Conversar
-                                </button>
-                              </Link>
-                            </div>
-                          </div>
+                        <div key={modelo.id} className="flex-shrink-0">
+                          <ModelCard
+                            model={{
+                              id: modelo.id,
+                              nome: modelo.nome,
+                              fotoPerfil: modelo.fotoPerfil,
+                              categorias: modelo.categorias,
+                              online: modelo.online,
+                              destacado: modelo.destacado,
+                              avaliacoes: modelo.avaliacoes,
+                              valorPorMinuto: modelo.valorPorMinuto,
+                              chatPrivadoPreco: modelo.precoPrivado
+                            }}
+                            isLoggedIn={isLoggedIn}
+                            favoriteModels={favoriteModels}
+                            onToggleFavorite={handleToggleFavorite}
+                            size="small"
+                          />
                         </div>
                       ))}
                     </div>
@@ -520,34 +446,6 @@ export default function Home() {
                       Deslize para ver mais
                     </div>
                   </div>
-
-                  {/* Mensagem sobre preferências */}
-                  {userPreferences && (
-                    <div className="mt-4 p-3 bg-blue-500/10 rounded-lg border border-blue-500/20">
-                      <div className="flex items-start gap-2">
-                        <Image
-                          src="/icons/action/settings.svg"
-                          alt="Preferências"
-                          width={16}
-                          height={16}
-                          className="filter brightness-0 saturate-100 invert(59%) sepia(98%) saturate(1946%) hue-rotate(201deg) brightness(97%) contrast(94%) mt-0.5"
-                        />
-                        <div>
-                          <p className="text-blue-300 text-xs font-medium mb-1">
-                            Modelos personalizados para você
-                          </p>
-                          <p className="text-gray-400 text-xs">
-                            ({userPreferences.modelType.includes('todos') ? 'Todos os tipos' : userPreferences.modelType.join(', ')}, 
-                            até {userPreferences.priceRange.max} créditos/min para chat privado).
-                            <br />
-                            <Link href="/painel-usuario" className="text-blue-400 hover:text-blue-300 underline">
-                              Alterar no Meu Painel
-                            </Link>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </div>
               </div>
             ) : (

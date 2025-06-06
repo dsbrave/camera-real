@@ -100,7 +100,7 @@ export default function Explorar() {
     {
       id: 'm2',
       nome: 'Carla Santos',
-      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_2wu5n7gdr6dsrmj98ak9_1.png',
+      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_2wu5n7gdr6dsrmj98ak9_2.png',
       categorias: ['conversa', 'música'],
       online: false,
       destacado: false,
@@ -112,7 +112,7 @@ export default function Explorar() {
     {
       id: 'm3',
       nome: 'Beatriz Lima',
-      fotoPerfil: '/images/high-resolution_studio_photo_of_a_confident_brazilian-inspired_model_wearing_an_elegant_black_lace__i7mo7j07sng27o0fv86l_1.png',
+      fotoPerfil: '/images/high-resolution_studio_photo_of_a_confident_brazilian-inspired_model_wearing_an_elegant_black_lace__i7mo7j07sng27o0fv86l_2.png',
       categorias: ['conversa', 'arte'],
       online: true,
       destacado: false,
@@ -136,7 +136,7 @@ export default function Explorar() {
     {
       id: 'm5',
       nome: 'Juliana Costa',
-      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_ko2t9z7547m30wzu3dsv_2.png',
+      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_jdasqbio3vvca5k92ebh_2.png',
       categorias: ['conversa', 'fitness'],
       online: false,
       destacado: false,
@@ -172,7 +172,7 @@ export default function Explorar() {
     {
       id: 'm8',
       nome: 'Carlos Mendes',
-      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_male_model_posing_in_a_modern_streaming_setup_emphasis_on_body.png',
+      fotoPerfil: '/images/realistic_photo_of_a_brazilian_latino_man_with_everyday_natural_looks__regular_including_body_diver_ecf9z2bp6ac4zulo1fmw_3.png',
       categorias: ['conversa', 'fitness'],
       online: true,
       destacado: true,
@@ -184,7 +184,7 @@ export default function Explorar() {
     {
       id: 'm9',
       nome: 'Alex & Sam',
-      fotoPerfil: '/images/high-quality_studio_photo_of_a_couple_posing_in_a_modern_streaming_setup.png',
+      fotoPerfil: '/images/realistic_photo_of_a_brazilian_latino_couple_with_everyday_natural_looks__regular_beauty_real-life__b3uv0efkhgp35404n7ab_0.png',
       categorias: ['conversa', 'casal'],
       online: true,
       destacado: true,
@@ -196,7 +196,7 @@ export default function Explorar() {
     {
       id: 'm10',
       nome: 'Taylor',
-      fotoPerfil: '/images/high-quality_studio_photo_of_a_trans_model_posing_in_a_modern_streaming_setup.png',
+      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_zg1iy2w7g4x4j2pm3925_0.png',
       categorias: ['conversa', 'arte'],
       online: true,
       destacado: true,
@@ -208,7 +208,7 @@ export default function Explorar() {
     {
       id: 'm11',
       nome: 'Ricardo Silva',
-      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_male_model_posing_in_a_modern_streaming_setup_emphasis_on_body.png',
+      fotoPerfil: '/images/realistic_photo_of_a_brazilian_latino_man_with_everyday_natural_looks__regular_including_body_diver_ahdu5rvu1ocli3txwuq6_1.png',
       categorias: ['conversa', 'música'],
       online: false,
       destacado: false,
@@ -220,7 +220,7 @@ export default function Explorar() {
     {
       id: 'm12',
       nome: 'João & Maria',
-      fotoPerfil: '/images/high-quality_studio_photo_of_a_couple_posing_in_a_modern_streaming_setup.png',
+      fotoPerfil: '/images/realistic_photo_of_a_brazilian_latino_couple_with_everyday_natural_looks__regular_beauty_real-life__cd6lq4r3sp44ox2d43bc_3.png',
       categorias: ['conversa', 'casal'],
       online: false,
       destacado: false,
@@ -228,6 +228,102 @@ export default function Explorar() {
       valorPorMinuto: 1,
       chatPrivadoPreco: 4,
       tipo: 'casal'
+    },
+    {
+      id: 'm13',
+      nome: 'Bruno Santos',
+      fotoPerfil: '/images/realistic_photo_of_a_brazilian_latino_man_with_everyday_natural_looks__regular_including_body_diver_bk3xzapp8bfl1f6z0o1a_0.png',
+      categorias: ['conversa', 'esportes'],
+      online: true,
+      destacado: false,
+      avaliacoes: 4.3,
+      valorPorMinuto: 1,
+      chatPrivadoPreco: 3,
+      tipo: 'homem'
+    },
+    {
+      id: 'm14',
+      nome: 'Diego & Ana',
+      fotoPerfil: '/images/realistic_photo_of_a_brazilian_latino_couple_with_everyday_natural_looks__regular_beauty_real-life__wi4ecukg5q3clcziptks_0.png',
+      categorias: ['conversa', 'entretenimento'],
+      online: true,
+      destacado: false,
+      avaliacoes: 4.4,
+      valorPorMinuto: 1,
+      chatPrivadoPreco: 4,
+      tipo: 'casal'
+    },
+    {
+      id: 'm15',
+      nome: 'Gabriel Costa',
+      fotoPerfil: '/images/realistic_photo_of_a_brazilian_latino_man_with_everyday_natural_looks__regular_including_body_diver_57c32r6blmkzgrl282d1_1.png',
+      categorias: ['conversa', 'arte'],
+      online: false,
+      destacado: false,
+      avaliacoes: 4.1,
+      valorPorMinuto: 1,
+      chatPrivadoPreco: 2,
+      tipo: 'homem'
+    },
+    {
+      id: 'm16',
+      nome: 'Lucas & Sofia',
+      fotoPerfil: '/images/realistic_photo_of_a_brazilian_latino_couple_with_everyday_natural_looks__regular_beauty_real-life__tuqx4h29gu7wo0b1fr92_3.png',
+      categorias: ['conversa', 'música'],
+      online: true,
+      destacado: false,
+      avaliacoes: 4.6,
+      valorPorMinuto: 1,
+      chatPrivadoPreco: 3,
+      tipo: 'casal'
+    },
+    {
+      id: 't1',
+      nome: 'Valentina',
+      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_r68jd84c1uv21o2ehzgj_3.png',
+      categorias: ['conversa', 'dança'],
+      online: true,
+      destacado: false,
+      avaliacoes: 4.5,
+      valorPorMinuto: 1,
+      chatPrivadoPreco: 3,
+      tipo: 'trans'
+    },
+    {
+      id: 't2',
+      nome: 'Sophia',
+      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_jdasqbio3vvca5k92ebh_2.png',
+      categorias: ['conversa', 'música'],
+      online: false,
+      destacado: false,
+      avaliacoes: 4.3,
+      valorPorMinuto: 1,
+      chatPrivadoPreco: 2,
+      tipo: 'trans'
+    },
+    {
+      id: 't3',
+      nome: 'Isabella',
+      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_hgg1km82rvo2tgmhd39a_3.png',
+      categorias: ['conversa', 'arte'],
+      online: true,
+      destacado: false,
+      avaliacoes: 4.6,
+      valorPorMinuto: 1,
+      chatPrivadoPreco: 4,
+      tipo: 'trans'
+    },
+    {
+      id: 't4',
+      nome: 'Camila',
+      fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_bwiwj44iuhfpxz2tlzha_1.png',
+      categorias: ['conversa', 'fitness'],
+      online: true,
+      destacado: false,
+      avaliacoes: 4.4,
+      valorPorMinuto: 1,
+      chatPrivadoPreco: 3,
+      tipo: 'trans'
     }
   ];
 
@@ -250,13 +346,13 @@ export default function Explorar() {
       if (filtroCategoria === 'destaque') {
         categoriaMatch = modelo.destacado;
       } else if (filtroCategoria === 'mulheres') {
-        categoriaMatch = modelo.categorias.includes('mulher') || modelo.categorias.includes('conversa');
+        categoriaMatch = modelo.tipo === 'mulher';
       } else if (filtroCategoria === 'homens') {
-        categoriaMatch = modelo.categorias.includes('homem');
+        categoriaMatch = modelo.tipo === 'homem';
       } else if (filtroCategoria === 'casais') {
-        categoriaMatch = modelo.categorias.includes('casal');
+        categoriaMatch = modelo.tipo === 'casal';
       } else if (filtroCategoria === 'trans') {
-        categoriaMatch = modelo.categorias.includes('trans');
+        categoriaMatch = modelo.tipo === 'trans';
       }
       
       // Filtro de status online

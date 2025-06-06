@@ -40,22 +40,22 @@ export default function EditarPerfil() {
     const loadUserData = () => {
       const storedData = localStorage.getItem('userData');
       if (storedData) {
-        try {
+      try {
           const data = JSON.parse(storedData);
           if (data) {
-            setUserData({
+          setUserData({
               name: data.name || 'Usuário',
               username: data.username || 'usuario',
               email: data.email || 'usuario@email.com',
               phone: data.phone || '(11) 99999-9999',
               photo: data.photo || '/default-avatar.png',
               credits: data.credits || 0
-            });
-          }
-        } catch (error) {
-          console.error('Erro ao carregar dados do usuário:', error);
+          });
         }
+      } catch (error) {
+        console.error('Erro ao carregar dados do usuário:', error);
       }
+    }
     };
 
     loadUserData();
@@ -118,7 +118,7 @@ export default function EditarPerfil() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
+      
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
         <div className="flex min-h-screen">
           {/* Sidebar */}
@@ -396,8 +396,8 @@ export default function EditarPerfil() {
                       >
                         Editar
                       </button>
-                    </div>
-                  )}
+          </div>
+        )}
                 </div>
 
                 {/* Email */}
@@ -433,14 +433,14 @@ export default function EditarPerfil() {
                         <p className="text-gray-400 text-sm">Email</p>
                         <p className="text-white">{userData.email}</p>
                       </div>
-                      <button
+            <button 
                         onClick={() => handleEdit('email')}
                         className="bg-[#F25790] hover:bg-[#d93d75] text-white text-sm px-4 py-2 rounded-lg transition-colors"
-                      >
+            >
                         Editar
-                      </button>
-                    </div>
-                  )}
+            </button>
+          </div>
+        )}
                 </div>
 
                 {/* Phone */}
@@ -545,7 +545,7 @@ export default function EditarPerfil() {
             </div>
           </div>
         </div>
-      </div>
+    </div>
     </>
   );
 }
