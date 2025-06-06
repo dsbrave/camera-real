@@ -272,6 +272,11 @@ export default function ChatVideo() {
       
       // Se tem créditos suficientes, pode entrar na sala privada independente do canInteract
       if (userCredits >= currentModel.privateCallPrice) {
+        // Fechar o modal se estiver aberto
+        if (showFreeTrialModal) {
+          setShowFreeTrialModal(false);
+        }
+        
         if (spendCredits(currentModel.privateCallPrice)) {
           setIsPrivateCall(true);
           // Se não estava usando créditos, ativar agora
@@ -406,10 +411,18 @@ export default function ChatVideo() {
       setFreeTimeRemaining(remaining);
       
       if (remaining === 0) {
-        console.log('updateDailyTime: Tempo grátis acabou, abrindo modal automaticamente');
+        console.log('updateDailyTime: Tempo grátis acabou');
         setCanInteract(false);
         setIsCallActive(false);
-        setShowFreeTrialModal(true);
+        
+        // Só mostrar o modal se o usuário não tem créditos suficientes para continuar
+        const currentModel = models[modelIndex];
+        if (userCredits < currentModel.privateCallPrice) {
+          console.log('updateDailyTime: Abrindo modal - sem créditos suficientes');
+          setShowFreeTrialModal(true);
+        } else {
+          console.log('updateDailyTime: Usuário tem créditos suficientes, não abrindo modal');
+        }
       }
     }
   };
