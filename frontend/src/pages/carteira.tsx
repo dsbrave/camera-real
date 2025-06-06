@@ -470,15 +470,17 @@ const Carteira: React.FC = () => {
                   <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
                     <div className="space-y-4">
                       <div className="flex items-start">
-                        <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
-                          <Image
-                            src="/icons/action/lock.svg"
-                            alt="Chat privado"
-                            width={24}
-                            height={24}
-                            className="w-6 h-6"
-                            style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)' }}
-                          />
+                        <div className="p-2 mr-3">
+                          <svg 
+                            width="24" 
+                            height="24" 
+                            viewBox="0 0 24 24" 
+                            fill="none" 
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="w-6 h-6 text-[#F25790]"
+                          >
+                            <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1z" fill="#F25790"/>
+                          </svg>
                         </div>
                         <div>
                           <h3 className="font-medium">Chat privado com modelos</h3>
@@ -487,15 +489,17 @@ const Carteira: React.FC = () => {
                       </div>
                       
                       <div className="flex items-start">
-                        <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
-                          <Image
-                            src="/icons/audio_video/videocam.svg"
-                            alt="Shows exclusivos"
-                            width={24}
-                            height={24}
-                            className="w-6 h-6"
-                            style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)' }}
-                          />
+                        <div className="p-2 mr-3">
+                          <svg 
+                            width="24" 
+                            height="24" 
+                            viewBox="0 0 24 24" 
+                            fill="none" 
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="w-6 h-6 text-[#F25790]"
+                          >
+                            <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4zM14 13h-3v3H9v-3H6v-2h3V8h2v3h3v2z" fill="#F25790"/>
+                          </svg>
                         </div>
                         <div>
                           <h3 className="font-medium">Acesso a shows exclusivos</h3>
@@ -504,15 +508,17 @@ const Carteira: React.FC = () => {
                       </div>
                       
                       <div className="flex items-start">
-                        <div className="bg-[#F25790] bg-opacity-20 p-2 rounded-full mr-3">
-                          <Image
-                            src="/icons/action/card_giftcard.svg"
-                            alt="Presentes virtuais"
-                            width={24}
-                            height={24}
-                            className="w-6 h-6"
-                            style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)' }}
-                          />
+                        <div className="p-2 mr-3">
+                          <svg 
+                            width="24" 
+                            height="24" 
+                            viewBox="0 0 24 24" 
+                            fill="none" 
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="w-6 h-6 text-[#F25790]"
+                          >
+                            <path d="M20 6h-2.18c.11-.31.18-.65.18-1a2.996 2.996 0 0 0-5.5-1.65l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1z" fill="#F25790"/>
+                          </svg>
                         </div>
                         <div>
                           <h3 className="font-medium">Presentes virtuais</h3>
@@ -536,14 +542,16 @@ const Carteira: React.FC = () => {
                       <p className="text-sm text-gray-300 mb-4">40 créditos</p>
                       <ul className="space-y-2 mb-6">
                         <li className="flex items-center">
-                          <Image 
-                            src="/icons/action/check_circle.svg"
-                            alt="Check"
-                            width={20}
-                            height={20}
+                          <svg 
+                            width="20" 
+                            height="20" 
+                            viewBox="0 0 24 24" 
+                            fill="none" 
+                            xmlns="http://www.w3.org/2000/svg"
                             className="w-5 h-5 mr-2"
-                            style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)' }}
-                          />
+                          >
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#F25790"/>
+                          </svg>
                           <span className="text-sm">Aproximadamente 40 minutos</span>
                         </li>
                       </ul>
@@ -567,14 +575,16 @@ const Carteira: React.FC = () => {
                       <p className="text-sm text-gray-300 mb-4">100 créditos + 10 bônus</p>
                       <ul className="space-y-2 mb-6">
                         <li className="flex items-center">
-                          <Image 
-                            src="/icons/action/check_circle.svg"
-                            alt="Check"
-                            width={20}
-                            height={20}
+                          <svg 
+                            width="20" 
+                            height="20" 
+                            viewBox="0 0 24 24" 
+                            fill="none" 
+                            xmlns="http://www.w3.org/2000/svg"
                             className="w-5 h-5 mr-2"
-                            style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)' }}
-                          />
+                          >
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#F25790"/>
+                          </svg>
                           <span className="text-sm">Aproximadamente 110 minutos</span>
                         </li>
                       </ul>
@@ -595,14 +605,16 @@ const Carteira: React.FC = () => {
                       <p className="text-sm text-gray-300 mb-4">300 créditos + 50 bônus</p>
                       <ul className="space-y-2 mb-6">
                         <li className="flex items-center">
-                          <Image 
-                            src="/icons/action/check_circle.svg"
-                            alt="Check"
-                            width={20}
-                            height={20}
+                          <svg 
+                            width="20" 
+                            height="20" 
+                            viewBox="0 0 24 24" 
+                            fill="none" 
+                            xmlns="http://www.w3.org/2000/svg"
                             className="w-5 h-5 mr-2"
-                            style={{ filter: 'brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%)' }}
-                          />
+                          >
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#F25790"/>
+                          </svg>
                           <span className="text-sm">Aproximadamente 350 minutos</span>
                         </li>
                       </ul>
