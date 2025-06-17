@@ -196,6 +196,7 @@ const Perfil: React.FC = () => {
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
         profileData={profileData}
+        onSave={(data: any) => { console.log('Perfil salvo:', data); }}
       />
     <Footer />
     </div>

@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { useUser } from '@/contexts/UserContext';
-import ProfileEditModal from '@/components/ProfileEditModal';
+import EditarPerfilModal from '../components/EditarPerfilModal';
 
 // Para evitar sobreposição do conteúdo pelo header fixo, adicione <div className="header-spacer" /> logo após o <Header /> em cada página principal.
 export default function Header() {
@@ -158,18 +158,12 @@ export default function Header() {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
           const parsedUser = JSON.parse(storedUser);
+          // Atualizar também a foto e garantir que a inicial aparece se não houver foto
           const updatedUser = { ...parsedUser, ...updatedData };
           localStorage.setItem('user', JSON.stringify(updatedUser));
-          
-          // Atualizar o estado local imediatamente
           setUserData(updatedUser);
-          
-          // Forçar re-renderização usando o trigger
           setUpdateTrigger(prev => prev + 1);
-          
-          // Disparar evento customizado para notificar mudanças
           window.dispatchEvent(new CustomEvent('userDataUpdated'));
-          
           console.log('Perfil atualizado:', updatedUser); // Debug log
         }
       } catch (error) {
@@ -570,11 +564,16 @@ export default function Header() {
 
       {/* Profile Edit Modal */}
       {isEditModalOpen && userData && (
-        <ProfileEditModal
+        <EditarPerfilModal
           isOpen={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
-          userData={userData}
-          onUpdateProfile={handleUpdateProfile}
+          profileData={{
+            username: userData.username || '',
+            email: userData.email || '',
+            phone: userData.phone || '',
+            profilePic: userData.photo || '',
+          }}
+          onSave={handleUpdateProfile}
         />
       )}
     </>
