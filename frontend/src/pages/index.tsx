@@ -353,11 +353,11 @@ export default function Home() {
         <meta name="description" content="A melhor plataforma de videochat ao vivo. Converse com modelos em tempo real." />
       </Head>
       
-      <div className="min-h-screen bg-black text-white flex flex-col" style={{ backgroundImage, backgroundSize: 'cover', backgroundPosition: 'center 15%', transform: 'scaleX(-1)' }}>
-        {/* Background Overlay */}
-        <div className="absolute inset-0 bg-black bg-opacity-70 z-0"></div>
+      <div className="min-h-screen w-full bg-black text-white flex flex-col overflow-hidden" style={{ backgroundImage, backgroundSize: 'cover', backgroundPosition: 'center 15%' }}>
+        {/* Background Overlay com gradiente aprimorado */}
+        <div className="absolute inset-0 z-0 bg-gradient-to-b from-black/80 via-black/70 to-[#200310]/80 backdrop-blur-[2px]"></div>
         
-        <div className="relative z-10 flex flex-col min-h-screen" style={{ transform: 'scaleX(-1)' }}> {/* Contra-flipa os elementos para ficarem corretos */}
+        <div className="relative z-10 flex flex-col min-h-screen">
           <Header />
           <div className="h-10 sm:h-16 md:h-20" />
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-20 z-10 relative flex-1">
