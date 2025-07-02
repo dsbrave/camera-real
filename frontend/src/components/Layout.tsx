@@ -57,7 +57,7 @@ export default function Layout({
       <div className="min-h-screen flex flex-col bg-black text-white relative">
         {/* Loading overlay durante navegação */}
         {isNavigating && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999] flex items-center justify-center">
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[99999] flex items-center justify-center">
             <div className="text-white text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#F25790] mx-auto mb-2"></div>
               <p className="text-sm">Carregando...</p>

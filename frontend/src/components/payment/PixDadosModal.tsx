@@ -35,8 +35,8 @@ const PixDadosModal: React.FC<PixDadosModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-      <div className="bg-[#b162c9] rounded-lg max-w-xl w-full p-8 relative">
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[99999]">
+      <div className="bg-[#b162c9] rounded-lg max-w-md w-full p-4 relative">
         {/* Close button */}
         <button
           onClick={onClose}
@@ -47,23 +47,23 @@ const PixDadosModal: React.FC<PixDadosModalProps> = ({
           </svg>
         </button>
 
-        <div className="flex flex-col md:flex-row items-center">
+        <div className="flex flex-col items-center">
           {/* Left side - Illustration */}
-          <div className="md:w-1/3 mb-6 md:mb-0">
-            <div className="relative h-48 w-48">
+          <div className="mb-3">
+            <div className="relative h-20 w-20">
               <Image 
-                src="/images/Wavy Buddies - Payment 1.png" 
-                alt="Ilustração de pagamento - Wavy Buddies" 
+                src="/images/realistic_photo_of_a_brazilian_latino_couple_with_everyday_natural_looks__regular_lesbian_real-life_lq4u513chjx1rlabljif_1.png" 
+                alt="Casal brasileiro - Dados PIX" 
                 width={320} 
                 height={320}
-                className="object-contain mx-auto"
+                className="object-cover rounded-lg mx-auto"
               />
             </div>
           </div>
 
           {/* Right side - Content */}
-          <div className="md:w-2/3 md:pl-8">
-            <h2 className="text-2xl font-bold text-white mb-6 text-center md:text-left">Pagamento via PIX</h2>
+          <div className="w-full">
+            <h2 className="text-xl font-bold text-white mb-3 text-center">Pagamento via PIX</h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <input 

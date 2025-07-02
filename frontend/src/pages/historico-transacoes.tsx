@@ -28,7 +28,7 @@ export default function HistoricoTransacoes() {
       id: '55B13-8B2C1-D45-654',
       date: '20/07/2024 15:30:22',
       type: 'saida',
-      description: 'Videochat com Ana Silva',
+      description: 'Videochat com Luna Silva',
       value: 50.00,
       status: 'concluido'
     },

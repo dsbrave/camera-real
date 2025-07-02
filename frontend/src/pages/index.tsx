@@ -163,7 +163,7 @@ export default function Home() {
   const modelosDestaque: Modelo[] = [
     {
       id: 'm1',
-      nome: 'Ana Silva',
+      nome: 'Luna Silva',
       fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_ko2t9z7547m30wzu3dsv_1.png',
       categorias: ['conversa', 'dança'],
       online: true,
@@ -175,7 +175,7 @@ export default function Home() {
     },
     {
       id: 'm4',
-      nome: 'Marina Pereira',
+      nome: 'Sophia Reis',
       fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_jdasqbio3vvca5k92ebh_2.png',
       categorias: ['conversa', 'artes'],
       online: true,
@@ -187,7 +187,7 @@ export default function Home() {
     },
     {
       id: 'm7',
-      nome: 'Bianca',
+      nome: 'Mia Oliveira',
       fotoPerfil: '/images/high-resolution_studio_photo_of_a_confident_brazilian-inspired_model_wearing_an_elegant_black_lace__i7mo7j07sng27o0fv86l_2.png',
       categorias: ['conversa', 'jogos'],
       online: true,

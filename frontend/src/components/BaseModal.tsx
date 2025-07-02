@@ -14,7 +14,7 @@ interface BaseModalProps {
 export default function BaseModal({ 
   isOpen, 
   onClose, 
-  modelImage = "/images/realistic_photo_of_a_beautiful_curvy_cam_model_in_sexy_casual_clothing_crouching_down_seductively_t_02y5lhog5fhudntrltmb_72.png",
+  modelImage = "/images/realistic_photo_of_a_brazilian_latino_couple_with_everyday_natural_looks__regular_real-life_couple__g9ob4ri5atk6c4shyur9_3.png",
   modelName = "Modelo",
   title,
   subtitle,
@@ -23,7 +23,7 @@ export default function BaseModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/90 backdrop-blur-sm">
       <div className="bg-black rounded-3xl max-w-4xl w-full mx-4 shadow-[0_0_50px_rgba(242,87,144,0.3)] border border-[#F25790]/30 overflow-hidden relative">
         {/* Efeitos neon de fundo */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#F25790]/10 via-transparent to-transparent pointer-events-none"></div>
@@ -33,7 +33,7 @@ export default function BaseModal({
         {/* Botão de fechar */}
         <button 
           onClick={onClose}
-          className="absolute top-6 right-6 text-white hover:text-gray-300 transition-colors z-20"
+          className="absolute top-6 right-6 text-white hover:text-gray-300 transition-colors z-[99999]"
         >
           <Image
             src="/icons/navigation/close.svg"
@@ -45,7 +45,7 @@ export default function BaseModal({
           />
         </button>
         
-        <div className="flex flex-col md:flex-row relative z-10 min-h-[400px]">
+        <div className="flex flex-col md:flex-row relative z-10 min-h-[300px]">
           {/* Lado esquerdo - Imagem da modelo (edge-to-edge) */}
           <div className="md:w-1/2 relative overflow-hidden">
             {/* Imagem de fundo que vai de ponta a ponta */}
@@ -75,13 +75,13 @@ export default function BaseModal({
           </div>
           
           {/* Lado direito - Conteúdo */}
-          <div className="md:w-1/2 p-6 flex flex-col justify-center relative bg-gradient-to-br from-black/95 via-black/90 to-black/95">
+          <div className="md:w-1/2 p-4 flex flex-col justify-center relative bg-gradient-to-br from-black/95 via-black/90 to-black/95">
             {/* Efeito de continuidade visual */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/50 to-black pointer-events-none"></div>
             
             <div className="relative z-10">
               {/* Título com efeito neon */}
-              <div className="text-center mb-6">
+              <div className="text-center mb-4">
                 <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
                   <span className="text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
                     {title}

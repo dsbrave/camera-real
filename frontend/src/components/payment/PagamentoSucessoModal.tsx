@@ -29,15 +29,15 @@ const PagamentoSucessoModal: React.FC<PagamentoSucessoModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[99999]">
       <div className="bg-[#F25790] rounded-lg max-w-md w-full p-8 relative text-center">
         <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 w-32 h-32">
           <Image 
-            src="/images/Shiny Happy - Rock n Rollin 1.png" 
-            alt="Compra concluída com sucesso" 
+            src="/images/realistic_photo_of_a_brazilian_latino_couple_with_everyday_natural_looks__regular_real-life_people__g0v6am9iamjk8trwz703_7.png" 
+            alt="Casal brasileiro - Pagamento confirmado" 
             width={320} 
             height={320}
-            className="mx-auto mb-6"
+            className="object-cover rounded-lg mx-auto mb-6"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
               target.onerror = null;

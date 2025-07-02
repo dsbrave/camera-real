@@ -9,6 +9,7 @@ import BaseModal from '@/components/BaseModal';
 import SelectPaymentMethodModal from '@/components/checkout/SelectPaymentMethodModal';
 import PixPaymentForm from '@/components/checkout/PixPaymentForm';
 import CreditCardForm from '@/components/checkout/CreditCardForm';
+import SimpleModal from '../components/SimpleModal';
 // import CheckoutController from '@/components/checkout/CheckoutController';
 
 const Carteira: React.FC = () => {
@@ -693,82 +694,6 @@ const Carteira: React.FC = () => {
         <Footer />
       </div>
 
-      {/* Modal de Adicionar Crédito */}
-      {isAddCreditsModalOpen && (
-        <BaseModal
-          isOpen={isAddCreditsModalOpen}
-          onClose={() => setIsAddCreditsModalOpen(false)}
-          modelImage="/images/realistic_photo_of_a_beautiful_curvy_cam_model_in_sexy_casual_clothing_in_a_pink_neon-lit_cam_studi_01vxr9sv9u5n1mi8vknf_2.png"
-          modelName="Modelo Cam"
-          title="Adicionar Créditos"
-          subtitle="Selecione um valor para adicionar à sua conta"
-        >
-          {/* Descrição */}
-          <div className="text-center mb-6">
-            <p className="text-white/90 text-base mb-4 drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
-              Escolha o valor que deseja <span className="text-[#F25790] font-bold">adicionar</span> à sua carteira
-            </p>
-          </div>
-          
-          {/* Grid de valores */}
-          <div className="grid grid-cols-2 gap-3 mb-6">
-            {[
-              { value: 10, label: 'R$ 10' },
-              { value: 30, label: 'R$ 30' },
-              { value: 50, label: 'R$ 50' },
-              { value: 100, label: 'R$ 100' },
-              { value: 150, label: 'R$ 150' },
-              { value: 300, label: 'R$ 300' }
-            ].map((option) => (
-              <button
-                key={option.value}
-                onClick={() => setSelectedAmount(option.value)}
-                className={`p-3 rounded-2xl border border-[#F25790]/50 bg-gradient-to-br transition-all hover:scale-105 ${
-                  selectedAmount === option.value
-                    ? 'from-[#F25790]/30 to-[#d93d75]/30 border-[#F25790] shadow-[0_0_15px_rgba(242,87,144,0.4)]'
-                    : 'from-[#F25790]/20 to-[#d93d75]/20 hover:from-[#F25790]/25 hover:to-[#d93d75]/25'
-                }`}
-              >
-                <div className="text-white/80 text-sm mb-1">Carregue</div>
-                <div className="text-white font-bold text-lg">{option.label}</div>
-              </button>
-            ))}
-          </div>
-
-          {/* Botão de avançar */}
-          <div className="space-y-3">
-            <button 
-              onClick={() => {
-                setIsAddCreditsModalOpen(false);
-                setIsPaymentMethodModalOpen(true);
-              }}
-              disabled={!selectedAmount}
-              className={`w-full py-3 font-bold rounded-2xl transition-all duration-300 shadow-[0_0_25px_rgba(242,87,144,0.4)] hover:shadow-[0_0_35px_rgba(242,87,144,0.6)] hover:scale-105 active:scale-95 border border-[#F25790]/30 ${
-                selectedAmount 
-                  ? 'bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white'
-                  : 'bg-white/10 text-white/50 cursor-not-allowed'
-              }`}
-            >
-              <div className="flex items-center justify-center gap-3">
-                <Image
-                  src="/icons/action/credit_card.svg"
-                  alt="Avançar"
-                  width={20}
-                  height={20}
-                  className="w-5 h-5 filter invert"
-                />
-                <span>Avançar</span>
-              </div>
-            </button>
-          </div>
-
-          {/* Texto pequeno */}
-          <p className="text-white/50 text-xs text-center mt-4 drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
-            Ao continuar, você será redirecionado para a página de pagamento
-          </p>
-        </BaseModal>
-      )}
-
       {/* Modal de Seleção de Método de Pagamento */}
       <SelectPaymentMethodModal
         isOpen={isPaymentMethodModalOpen}
@@ -942,6 +867,80 @@ const Carteira: React.FC = () => {
             </form>
           </div>
         </div>
+      )}
+
+      {/* Novo Modal de Adicionar Crédito */}
+      {isAddCreditsModalOpen && (
+        <BaseModal
+          isOpen={isAddCreditsModalOpen}
+          onClose={() => setIsAddCreditsModalOpen(false)}
+          modelImage="/images/realistic_photo_of_a_beautiful_curvy_cam_model_in_sexy_casual_clothing_in_a_pink_neon-lit_cam_studi_01vxr9sv9u5n1mi8vknf_2.png"
+          modelName="Modelo Cam"
+          title="Adicionar Créditos"
+          subtitle="Selecione um valor para adicionar à sua conta"
+        >
+          <div className="mb-8 text-center">
+            <p className="text-white/90 text-base mb-4">Escolha o valor que deseja <span className="text-[#F25790] font-bold">adicionar</span> à sua carteira</p>
+            <div className="grid grid-cols-2 gap-4 mb-6 w-full max-w-xs mx-auto">
+              {[
+                { value: 10, label: 'R$ 10' },
+                { value: 30, label: 'R$ 30' },
+                { value: 50, label: 'R$ 50' },
+                { value: 100, label: 'R$ 100' },
+                { value: 150, label: 'R$ 150' },
+                { value: 300, label: 'R$ 300' }
+              ].map((option) => (
+                <button
+                  key={option.value}
+                  onClick={() => setSelectedAmount(option.value)}
+                  className={`p-4 rounded-2xl border border-[#F25790]/50 bg-gradient-to-br transition-all hover:scale-105 w-full text-center text-lg font-semibold ${
+                    selectedAmount === option.value
+                      ? 'from-[#F25790]/30 to-[#d93d75]/30 border-[#F25790] shadow-[0_0_15px_rgba(242,87,144,0.4)]'
+                      : 'from-[#F25790]/20 to-[#d93d75]/20 hover:from-[#F25790]/25 hover:to-[#d93d75]/25'
+                  }`}
+                >
+                  <div className="text-white/80 text-base mb-1">Carregue</div>
+                  <div className="text-white font-bold text-xl">{option.label}</div>
+                </button>
+              ))}
+            </div>
+            <div className="w-full max-w-xs mx-auto">
+              <button
+                onClick={() => {
+                  setIsAddCreditsModalOpen(false);
+                  setIsPaymentMethodModalOpen(true);
+                }}
+                disabled={!selectedAmount}
+                className={`w-full py-4 font-bold rounded-2xl transition-all duration-300 shadow-[0_0_25px_rgba(242,87,144,0.4)] hover:shadow-[0_0_35px_rgba(242,87,144,0.6)] hover:scale-105 active:scale-95 border border-[#F25790]/30 mt-2 text-lg ${
+                selectedAmount 
+                  ? 'bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white'
+                  : 'bg-white/10 text-white/50 cursor-not-allowed'
+              }`}
+            >
+              <div className="flex items-center justify-center gap-3">
+                <Image
+                  src="/icons/action/credit_card.svg"
+                  alt="Avançar"
+                  width={24}
+                  height={24}
+                  className="w-6 h-6 filter invert"
+                />
+                <span>Avançar</span>
+              </div>
+            </button>
+            </div>
+            <p className="text-white/50 text-xs text-center mt-6 drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
+              <Image
+                src="/icons/action/lock.svg"
+                alt="Seguro"
+                width={12}
+                height={12}
+                className="w-3 h-3 inline mr-1 filter invert opacity-50"
+              />
+              Seus dados estão protegidos com criptografia SSL
+            </p>
+          </div>
+        </BaseModal>
       )}
 
       {/* Fluxo de Checkout */}

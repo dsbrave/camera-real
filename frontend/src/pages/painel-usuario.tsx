@@ -28,9 +28,9 @@ export default function PainelUsuario() {
 
   // Mock de dados para conversas recentes
   const recentChatsMock = [
-    { id: 'c1', modelId: 'm1', modelName: 'Ana Silva', date: new Date(Date.now() - 2 * 60 * 60 * 1000), duration: 15, cost: 35 },
-    { id: 'c2', modelId: 'm4', modelName: 'Bianca', date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), duration: 25, cost: 60 },
-    { id: 'c3', modelId: 'm2', modelName: 'Julia Santos', date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), duration: 10, cost: 20 }
+    { id: 'c1', modelId: 'm1', modelName: 'Luna Silva', date: new Date(Date.now() - 2 * 60 * 60 * 1000), duration: 15, cost: 35 },
+    { id: 'c2', modelId: 'm4', modelName: 'Mia Oliveira', date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), duration: 25, cost: 60 },
+    { id: 'c3', modelId: 'm2', modelName: 'Scarlett Moraes', date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), duration: 10, cost: 20 }
   ];
 
   // Mock de dados para pacotes de créditos

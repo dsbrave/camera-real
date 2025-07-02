@@ -24,12 +24,12 @@ const MetodoPagamentoModal: React.FC<MetodoPagamentoModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[99999]">
       <div className="bg-[#b162c9] rounded-lg max-w-xl w-full p-8 relative">
         {/* Imagem ilustrativa */}
         <div className="absolute right-8 top-8 w-32 h-32 opacity-70">
           <Image 
-            src="/images/Wavy Buddies - Payment 1.png" 
+            src="/images/realistic_photo_of_a_brazilian_latino_couple_with_everyday_natural_looks__regular_lesbian_real-life_ywl5rbewnur5zwcu1br6_0.png" 
             alt="Pagamento" 
             width={128} 
             height={128} 

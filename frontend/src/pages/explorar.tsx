@@ -87,7 +87,7 @@ export default function Explorar() {
   const todosModelos: Modelo[] = [
     {
       id: 'm1',
-      nome: 'Ana Silva',
+      nome: 'Luna Silva',
       fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_ko2t9z7547m30wzu3dsv_1.png',
       categorias: ['conversa', 'dança'],
       online: true,
@@ -99,7 +99,7 @@ export default function Explorar() {
     },
     {
       id: 'm2',
-      nome: 'Carla Santos',
+      nome: 'Scarlett Moraes',
       fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_2wu5n7gdr6dsrmj98ak9_2.png',
       categorias: ['conversa', 'música'],
       online: false,
@@ -111,7 +111,7 @@ export default function Explorar() {
     },
     {
       id: 'm3',
-      nome: 'Beatriz Lima',
+      nome: 'Valentina Costa',
       fotoPerfil: '/images/high-resolution_studio_photo_of_a_confident_brazilian-inspired_model_wearing_an_elegant_black_lace__i7mo7j07sng27o0fv86l_2.png',
       categorias: ['conversa', 'arte'],
       online: true,
@@ -123,7 +123,7 @@ export default function Explorar() {
     },
     {
       id: 'm4',
-      nome: 'Marina Pereira',
+      nome: 'Sophia Reis',
       fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_2wu5n7gdr6dsrmj98ak9_2.png',
       categorias: ['conversa', 'artes'],
       online: true,
@@ -135,7 +135,7 @@ export default function Explorar() {
     },
     {
       id: 'm5',
-      nome: 'Juliana Costa',
+      nome: 'Isabella Santos',
       fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_jdasqbio3vvca5k92ebh_2.png',
       categorias: ['conversa', 'fitness'],
       online: false,
@@ -147,7 +147,7 @@ export default function Explorar() {
     },
     {
       id: 'm6',
-      nome: 'Fernanda Oliveira',
+      nome: 'Lara Ferreira',
       fotoPerfil: '/images/high-resolution_studio_photo_of_a_confident_brazilian-inspired_model_wearing_an_elegant_black_lace__i7mo7j07sng27o0fv86l_3.png',
       categorias: ['conversa', 'culinária'],
       online: true,
@@ -159,7 +159,7 @@ export default function Explorar() {
     },
     {
       id: 'm7',
-      nome: 'Bianca',
+      nome: 'Mia Oliveira',
       fotoPerfil: '/images/high-resolution_studio_photo_of_a_confident_brazilian-inspired_model_wearing_an_elegant_black_lace__i7mo7j07sng27o0fv86l_2.png',
       categorias: ['conversa', 'jogos'],
       online: true,
@@ -171,7 +171,7 @@ export default function Explorar() {
     },
     {
       id: 'm8',
-      nome: 'Carlos Mendes',
+      nome: 'Diego Fire',
       fotoPerfil: '/images/realistic_photo_of_a_brazilian_latino_man_with_everyday_natural_looks__regular_including_body_diver_ecf9z2bp6ac4zulo1fmw_3.png',
       categorias: ['conversa', 'fitness'],
       online: true,
@@ -183,7 +183,7 @@ export default function Explorar() {
     },
     {
       id: 'm9',
-      nome: 'Alex & Sam',
+      nome: 'Luna & Diego',
       fotoPerfil: '/images/realistic_photo_of_a_brazilian_latino_couple_with_everyday_natural_looks__regular_beauty_real-life__b3uv0efkhgp35404n7ab_0.png',
       categorias: ['conversa', 'casal'],
       online: true,
@@ -195,7 +195,7 @@ export default function Explorar() {
     },
     {
       id: 'm10',
-      nome: 'Taylor',
+      nome: 'Jade Almeida',
       fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_zg1iy2w7g4x4j2pm3925_0.png',
       categorias: ['conversa', 'arte'],
       online: true,
@@ -207,7 +207,7 @@ export default function Explorar() {
     },
     {
       id: 'm11',
-      nome: 'Ricardo Silva',
+      nome: 'Lucas Steel',
       fotoPerfil: '/images/realistic_photo_of_a_brazilian_latino_man_with_everyday_natural_looks__regular_including_body_diver_ahdu5rvu1ocli3txwuq6_1.png',
       categorias: ['conversa', 'música'],
       online: false,
@@ -219,7 +219,7 @@ export default function Explorar() {
     },
     {
       id: 'm12',
-      nome: 'João & Maria',
+      nome: 'Bella & Rafael',
       fotoPerfil: '/images/realistic_photo_of_a_brazilian_latino_couple_with_everyday_natural_looks__regular_beauty_real-life__cd6lq4r3sp44ox2d43bc_3.png',
       categorias: ['conversa', 'casal'],
       online: false,
@@ -231,7 +231,7 @@ export default function Explorar() {
     },
     {
       id: 'm13',
-      nome: 'Bruno Santos',
+      nome: 'Rafael King',
       fotoPerfil: '/images/realistic_photo_of_a_brazilian_latino_man_with_everyday_natural_looks__regular_including_body_diver_bk3xzapp8bfl1f6z0o1a_0.png',
       categorias: ['conversa', 'esportes'],
       online: true,
@@ -243,7 +243,7 @@ export default function Explorar() {
     },
     {
       id: 'm14',
-      nome: 'Diego & Ana',
+      nome: 'Mia & Lucas',
       fotoPerfil: '/images/realistic_photo_of_a_brazilian_latino_couple_with_everyday_natural_looks__regular_beauty_real-life__wi4ecukg5q3clcziptks_0.png',
       categorias: ['conversa', 'entretenimento'],
       online: true,
@@ -255,7 +255,7 @@ export default function Explorar() {
     },
     {
       id: 'm15',
-      nome: 'Gabriel Costa',
+      nome: 'Bruno Wolf',
       fotoPerfil: '/images/realistic_photo_of_a_brazilian_latino_man_with_everyday_natural_looks__regular_including_body_diver_57c32r6blmkzgrl282d1_1.png',
       categorias: ['conversa', 'arte'],
       online: false,
@@ -267,7 +267,7 @@ export default function Explorar() {
     },
     {
       id: 'm16',
-      nome: 'Lucas & Sofia',
+      nome: 'Jade & Bruno',
       fotoPerfil: '/images/realistic_photo_of_a_brazilian_latino_couple_with_everyday_natural_looks__regular_beauty_real-life__tuqx4h29gu7wo0b1fr92_3.png',
       categorias: ['conversa', 'música'],
       online: true,
@@ -279,7 +279,7 @@ export default function Explorar() {
     },
     {
       id: 't1',
-      nome: 'Valentina',
+      nome: 'Kiara Lima',
       fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_r68jd84c1uv21o2ehzgj_3.png',
       categorias: ['conversa', 'dança'],
       online: true,
@@ -291,7 +291,7 @@ export default function Explorar() {
     },
     {
       id: 't2',
-      nome: 'Sophia',
+      nome: 'Bella Martins',
       fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_jdasqbio3vvca5k92ebh_2.png',
       categorias: ['conversa', 'música'],
       online: false,
@@ -303,7 +303,7 @@ export default function Explorar() {
     },
     {
       id: 't3',
-      nome: 'Isabella',
+      nome: 'Yasmin Rocha',
       fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_hgg1km82rvo2tgmhd39a_3.png',
       categorias: ['conversa', 'arte'],
       online: true,
@@ -315,7 +315,7 @@ export default function Explorar() {
     },
     {
       id: 't4',
-      nome: 'Camila',
+      nome: 'Camila Fox',
       fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_bwiwj44iuhfpxz2tlzha_1.png',
       categorias: ['conversa', 'fitness'],
       online: true,

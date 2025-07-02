@@ -28,7 +28,7 @@ export default function Notificacoes() {
       id: '002',
       type: 'videochat',
       title: 'Modelo online',
-      message: 'Ana Silva está online agora! Aproveite para iniciar um videochat.',
+      message: 'Luna Silva está online agora! Aproveite para iniciar um videochat.',
       date: '24/07/2024 18:30:22',
       read: false
     },

@@ -194,11 +194,11 @@ export default function Header() {
   // Renderização condicional para evitar flash durante hidratação
   if (!isHydrated) {
     return (
-      <header className="py-3 md:py-5 border-b border-gray-800 bg-black bg-opacity-85 backdrop-blur-sm sticky top-0 w-full z-50 shadow-lg select-none">
+      <header className="py-3 md:py-5 border-b border-gray-800 bg-black bg-opacity-85 backdrop-blur-sm sticky top-0 w-full z-[10000] shadow-lg ">
         <div className="container mx-auto px-4 flex justify-between items-center">
           {/* Logo */}
-          <div className="logo overflow-hidden">
-            <Link href="/">
+          <div className="logo overflow-hidden relative z-[10001]">
+            <Link href="/" className="block cursor-pointer">
               <Image 
                 src="/icons/logo.svg" 
                 alt="Camera Real" 
@@ -224,11 +224,11 @@ export default function Header() {
 
   return (
     <>
-      <header className="py-3 md:py-5 border-b border-gray-800 bg-black bg-opacity-85 backdrop-blur-sm sticky top-0 w-full z-50 shadow-lg select-none">
+      <header className="py-3 md:py-5 border-b border-gray-800 bg-black bg-opacity-85 backdrop-blur-sm sticky top-0 w-full z-[10000] shadow-lg ">
         <div className="container mx-auto px-4 flex justify-between items-center">
           {/* Logo */}
-          <div className="logo overflow-hidden">
-            <Link href="/">
+          <div className="logo overflow-hidden relative z-[10001]">
+            <Link href="/" className="block cursor-pointer">
               <Image 
                 src="/icons/logo.svg" 
                 alt="Camera Real" 

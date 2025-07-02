@@ -36,7 +36,7 @@ export default function SelectPaymentMethodModal({
     <BaseModal
       isOpen={isOpen}
       onClose={onClose}
-      modelImage="/images/realistic_photo_of_a_beautiful_curvy_cam_model_in_sexy_casual_clothing_crouching_down_seductively_t_3cztx1xhqyc4ka3r2sxm_77.png"
+      modelImage="/images/realistic_photo_of_a_brazilian_latino_couple_with_everyday_natural_looks__regular_lesbian_real-life_lq4u513chjx1rlabljif_1.png"
       modelName="Modelo Cam"
       title="Escolha o pagamento"
       subtitle="Como você quer carregar sua conta?"

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 
 interface UserContextType {
   userCredits: number;
@@ -111,10 +111,16 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     });
   };
 
-  const refreshCredits = () => {
+  const refreshCredits = useCallback(() => {
     const credits = loadCreditsFromStorage();
-    setUserCredits(credits);
-  };
+    // Só atualiza se os créditos realmente mudaram
+    setUserCredits(prev => {
+      if (prev !== credits) {
+        return credits;
+      }
+      return prev;
+    });
+  }, [isClient]);
 
   return (
     <UserContext.Provider value={{

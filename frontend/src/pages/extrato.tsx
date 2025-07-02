@@ -100,7 +100,7 @@ const Extrato: React.FC = () => {
     },
     { 
       data: '20/09/2024', 
-      tipo: 'Chat privado com Bianca', 
+      tipo: 'Chat privado com Mia Oliveira', 
       valor: 'R$ 20,00-', 
       saldoFinal: 'R$ 300,00' 
     },

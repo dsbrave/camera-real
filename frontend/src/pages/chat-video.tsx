@@ -5,12 +5,15 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Header from '@/components/Header';
 import { useUser } from '@/contexts/UserContext';
+import EditarPerfilModal from '../components/EditarPerfilModal';
+import SimpleModal from '../components/SimpleModal';
 
 interface Gift {
   name: string;
   price: number;
   image: string;
   emoji?: string;
+  icon?: string;
   id?: string;
 }
 
@@ -63,7 +66,7 @@ export default function ChatVideo() {
     },
     {
       id: 'm2',
-      name: 'Marina Pereira',
+      name: 'Sophia Reis',
       online: true,
       // Chat simples sempre 1 crédito por minuto (fixo)
       pricePerMinute: 1,
@@ -77,7 +80,7 @@ export default function ChatVideo() {
     },
     {
       id: 'm3',
-      name: 'Bianca',
+      name: 'Mia Oliveira',
       online: true,
       // Chat simples sempre 1 crédito por minuto (fixo)
       pricePerMinute: 1,
@@ -92,11 +95,11 @@ export default function ChatVideo() {
   ];
 
   const gifts: Gift[] = [
-    { name: 'Rosa', price: 5, image: '/icons/action/card_giftcard.svg' },
-    { name: 'Coração', price: 10, image: '/icons/action/card_giftcard.svg' },
-    { name: 'Beijo', price: 15, image: '/icons/action/card_giftcard.svg' },
-    { name: 'Diamante', price: 25, image: '/icons/action/card_giftcard.svg' },
-    { name: 'Coroa', price: 50, image: '/icons/action/card_giftcard.svg' },
+    { name: 'Rosa', price: 5, image: '/icons/action/card_giftcard.svg', icon: '/icons/action/favorite.svg' },
+    { name: 'Coração', price: 10, image: '/icons/action/card_giftcard.svg', icon: '/icons/action/favorite_border.svg' },
+    { name: 'Beijo', price: 15, image: '/icons/action/card_giftcard.svg', icon: '/icons/action/face.svg' },
+    { name: 'Diamante', price: 25, image: '/icons/action/card_giftcard.svg', icon: '/icons/action/grade.svg' },
+    { name: 'Coroa', price: 50, image: '/icons/action/card_giftcard.svg', icon: '/icons/action/stars.svg' },
   ];
 
   // Pacotes de créditos
@@ -170,7 +173,7 @@ export default function ChatVideo() {
   useEffect(() => {
     const interval = setInterval(() => {
       refreshCredits();
-    }, 5000); // Atualiza a cada 5 segundos
+    }, 60000); // Atualiza a cada 1 minuto
 
     return () => clearInterval(interval);
   }, [refreshCredits]);
@@ -352,6 +355,32 @@ export default function ChatVideo() {
   };
 
   const currentModel = models[modelIndex];
+
+  const [showFreeMinuteModal, setShowFreeMinuteModal] = useState(false);
+  const [freeMinuteUsed, setFreeMinuteUsed] = useState(false);
+
+  // Timer para 1 minuto grátis
+  useEffect(() => {
+    if (!freeMinuteUsed && sessionTime >= 60) {
+      setShowFreeMinuteModal(true);
+      setFreeMinuteUsed(true);
+      setIsUsingCredits(false); // Pausa cobrança até usuário decidir
+    }
+  }, [sessionTime, freeMinuteUsed]);
+
+  // Função para continuar cobrando créditos após o minuto grátis
+  const handleContinuePaidChat = () => {
+    setShowFreeMinuteModal(false);
+    setIsUsingCredits(true);
+    setIsCallActive(true);
+  };
+
+  // Função para sair do chat após o minuto grátis
+  const handleLeaveChat = () => {
+    setShowFreeMinuteModal(false);
+    setIsCallActive(false);
+    setMessages(prev => [...prev, { id: Date.now(), text: `Você saiu do chat.`, sender: 'system', timestamp: new Date() }]);
+  };
 
   return (
     <>
@@ -808,57 +837,18 @@ export default function ChatVideo() {
           )}
         </div>
 
-        {/* Modal de Presentes */}
+        {/* Modal de Presentes - Novo Design */}
         {showGiftModal && (
-          <div className="fixed inset-0 z-[9999] backdrop-blur-sm bg-black/80 flex items-center justify-center">
-            <div className="bg-gradient-to-br from-gray-900/95 to-black/95 p-8 rounded-3xl max-w-md w-full mx-4 border border-white/20 shadow-[0_0_50px_rgba(242,87,144,0.3)]">
-              <div className="text-center">
-                <h3 className="text-2xl font-bold text-white mb-6">🎁 Enviar Presente</h3>
-                
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  {gifts.map((gift, index) => (
-                    <button
-                      key={gift.name || index}
-                      onClick={() => handleSendGift(gift)}
-                      disabled={userCredits < gift.price}
-                      className={`p-4 rounded-2xl border transition-all ${
-                        userCredits >= gift.price
-                          ? 'border-[#F25790]/50 bg-gradient-to-br from-[#F25790]/20 to-[#d93d75]/20 hover:from-[#F25790]/30 hover:to-[#d93d75]/30 hover:scale-105'
-                          : 'border-gray-600/50 bg-gray-800/50 opacity-50 cursor-not-allowed'
-                      }`}
-                    >
-                      <div className="text-2xl mb-2">{gift.emoji || '🎁'}</div>
-                      <div className="text-white font-semibold text-sm">{gift.name}</div>
-                      <div className="text-[#F25790] font-bold text-xs">{gift.price} créditos</div>
-                    </button>
-                  ))}
-                </div>
-                
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => setShowGiftModal(false)}
-                    className="flex-1 py-3 bg-gray-700/50 hover:bg-gray-700/70 text-white font-semibold rounded-xl transition-all"
-                  >
-                    Cancelar
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Modal de Compra de Créditos */}
-        {showCreditModal && (
-          <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm">
-            <div className="bg-black rounded-3xl max-w-4xl w-full mx-4 shadow-[0_0_50px_rgba(242,87,144,0.3)] border border-[#F25790]/30 overflow-hidden relative">
+          <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/90 backdrop-blur-sm">
+            <div className="bg-black rounded-3xl max-w-md w-full mx-4 shadow-[0_0_50px_rgba(242,87,144,0.3)] border border-[#F25790]/30 overflow-hidden relative">
               {/* Efeitos neon de fundo */}
               <div className="absolute inset-0 bg-gradient-to-br from-[#F25790]/10 via-transparent to-transparent pointer-events-none"></div>
               <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F25790] to-transparent opacity-60"></div>
               <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F25790] to-transparent opacity-40"></div>
               
-              <div className="flex flex-col md:flex-row relative z-10 min-h-[400px]">
+              <div className="flex flex-col md:flex-row relative z-10 min-h-[300px]">
                 {/* Lado esquerdo - Imagem da modelo (edge-to-edge) */}
-                <div className="md:w-1/2 relative overflow-hidden">
+                <div className="md:w-1/2 relative overflow-hidden hidden">
                   {/* Imagem de fundo que vai de ponta a ponta */}
                   <div className="absolute inset-0">
                     <Image
@@ -886,7 +876,137 @@ export default function ChatVideo() {
                 </div>
                 
                 {/* Lado direito - Informações e botões */}
-                <div className="md:w-1/2 p-6 flex flex-col justify-center relative bg-gradient-to-br from-black/95 via-black/90 to-black/95">
+                <div className="w-full p-4 flex flex-col justify-center relative bg-gradient-to-br from-black/95 via-black/90 to-black/95">
+                  {/* Efeito de continuidade visual */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/50 to-black pointer-events-none"></div>
+                  
+                  <div className="relative z-10">
+                    {/* Título com efeito neon */}
+                    <div className="text-center mb-6">
+                      <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 flex items-center justify-center gap-3">
+                        <Image
+                          src="/icons/action/card_giftcard.svg"
+                          alt="Presente"
+                          width={32}
+                          height={32}
+                          className="w-8 h-8 filter invert"
+                        />
+                        <span className="text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
+                          Enviar Presente
+                        </span>
+                      </h2>
+                      <h3 className="text-lg md:text-xl font-bold mb-3">
+                        <span className="bg-gradient-to-r from-[#F25790] to-[#d93d75] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(242,87,144,0.5)]">
+                          Envie um Presente Especial
+                        </span>
+                      </h3>
+                      <div className="w-16 h-1 bg-gradient-to-r from-[#F25790] to-[#d93d75] mx-auto rounded-full shadow-[0_0_15px_rgba(242,87,144,0.6)]"></div>
+                    </div>
+                    
+                    {/* Descrição condensada */}
+                    <div className="text-center mb-6">
+                      <p className="text-white/90 text-base mb-4 drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
+                        Demonstre seu carinho enviando <span className="text-[#F25790] font-bold">presentes especiais</span> para sua modelo favorita
+                      </p>
+                      
+                      {/* Informações organizadas em bloco único */}
+                      <div className="backdrop-blur-sm rounded-xl p-3 space-y-2 border border-[#F25790]/50 shadow-[0_0_15px_rgba(242,87,144,0.3)]">
+                        <div className="flex items-center justify-between">
+                          <span className="text-white/80 text-sm">Seus créditos:</span>
+                          <span className="text-green-400 font-bold">{userCredits}</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Grid de presentes */}
+                    <div className="grid grid-cols-2 gap-3 mb-5">
+                      {gifts.map((gift, index) => (
+                        <button
+                          key={gift.name || index}
+                          onClick={() => handleSendGift(gift)}
+                          disabled={userCredits < gift.price}
+                          className={`p-3 rounded-2xl border transition-all ${
+                            userCredits >= gift.price
+                              ? 'border-[#F25790]/50 bg-gradient-to-br from-[#F25790]/20 to-[#d93d75]/20 hover:from-[#F25790]/30 hover:to-[#d93d75]/30 hover:scale-105'
+                              : 'border-gray-600/50 bg-gray-800/50 opacity-50 cursor-not-allowed'
+                          }`}
+                        >
+                          <div className="flex flex-col items-center">
+                            <Image
+                              src={gift.icon || '/icons/action/card_giftcard.svg'}
+                              alt={gift.name}
+                              width={24}
+                              height={24}
+                              className="w-6 h-6 mb-2 filter invert"
+                            />
+                            <div className="text-white font-semibold text-xs mb-1">{gift.name}</div>
+                            <div className="text-[#F25790] font-bold text-xs">{gift.price} créditos</div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                    
+                    {/* Botões de ação */}
+                    <div className="space-y-3">
+                      <button
+                        onClick={() => setShowGiftModal(false)}
+                        className="w-full py-4 font-bold rounded-2xl transition-all duration-300 shadow-[0_0_25px_rgba(242,87,144,0.4)] hover:shadow-[0_0_35px_rgba(242,87,144,0.6)] hover:scale-105 active:scale-95 border border-[#F25790]/30 mt-2 text-lg bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white"
+                      >
+                        <div className="flex items-center justify-center gap-3">
+                          <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                            <path d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                          <span>Fechar</span>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Modal de Compra de Créditos */}
+        {showCreditModal && (
+          <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/90 backdrop-blur-sm">
+            <div className="bg-black rounded-3xl max-w-md w-full mx-4 shadow-[0_0_50px_rgba(242,87,144,0.3)] border border-[#F25790]/30 overflow-hidden relative">
+              {/* Efeitos neon de fundo */}
+              <div className="absolute inset-0 bg-gradient-to-br from-[#F25790]/10 via-transparent to-transparent pointer-events-none"></div>
+              <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F25790] to-transparent opacity-60"></div>
+              <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F25790] to-transparent opacity-40"></div>
+              
+              <div className="flex flex-col md:flex-row relative z-10 min-h-[300px]">
+                {/* Lado esquerdo - Imagem da modelo (edge-to-edge) */}
+                <div className="md:w-1/2 relative overflow-hidden hidden">
+                  {/* Imagem de fundo que vai de ponta a ponta */}
+                  <div className="absolute inset-0">
+                    <Image
+                      src={currentModel.profileImage}
+                      alt={currentModel.name}
+                      fill
+                      className="object-cover object-center"
+                    />
+                  </div>
+                  
+                  {/* Gradiente de transição para o lado direito */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-black/80 md:to-black/90"></div>
+                  
+                  {/* Gradiente inferior para melhor legibilidade */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                  
+                  {/* Overlay neon sutil */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#F25790]/20 via-transparent to-transparent mix-blend-overlay"></div>
+                  
+                  {/* Efeito de brilho neon nas bordas */}
+                  <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#F25790]/60 via-[#F25790]/80 to-transparent blur-sm"></div>
+                    <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#F25790]/40 via-[#F25790]/60 to-transparent blur-sm"></div>
+                  </div>
+                </div>
+                
+                {/* Lado direito - Informações e botões */}
+                <div className="w-full p-4 flex flex-col justify-center relative bg-gradient-to-br from-black/95 via-black/90 to-black/95">
                   {/* Efeito de continuidade visual */}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/50 to-black pointer-events-none"></div>
                   
@@ -1001,6 +1121,31 @@ export default function ChatVideo() {
             </div>
           </div>
         )}
+
+        {/* Modal de aviso após 1 minuto grátis */}
+        <SimpleModal
+          isOpen={showFreeMinuteModal}
+          onClose={handleLeaveChat}
+        >
+          <div className="text-center px-4 pb-4">
+            <h2 className="text-2xl font-bold mb-4 text-white">Seu minuto grátis acabou!</h2>
+            <p className="mb-6 text-gray-300">Deseja continuar navegando no chat? Agora será cobrado <span className="text-[#F25790] font-bold">1 crédito por minuto</span>.</p>
+            <div className="flex gap-4 justify-center">
+              <button
+                onClick={handleContinuePaidChat}
+                className="bg-gradient-to-r from-[#F25790] to-[#d93d75] text-white font-bold py-2 px-6 rounded-xl hover:scale-105 transition-all"
+              >
+                Continuar
+              </button>
+              <button
+                onClick={handleLeaveChat}
+                className="bg-gray-700 text-white font-bold py-2 px-6 rounded-xl hover:bg-gray-600 transition-all"
+              >
+                Sair
+              </button>
+            </div>
+          </div>
+        </SimpleModal>
 
         {/* Layout Mobile */}
         <div className="md:hidden flex flex-col h-screen bg-black">

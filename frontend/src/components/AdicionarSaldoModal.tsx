@@ -37,21 +37,21 @@ const AdicionarSaldoModal: React.FC<AdicionarSaldoModalProps> = ({
   ];
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-      <div className="bg-[#b162c9] rounded-lg max-w-xl w-full p-8 relative">
-        {/* Close button */}
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl shadow-2xl border border-gray-700 w-full max-w-xl relative max-h-[90vh] overflow-y-auto p-8">
+        {/* Botão de fechar */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-white hover:text-gray-200"
+          className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
 
         <div className="flex flex-col md:flex-row items-center">
           {/* Left side - Illustration */}
-          <div className="md:w-1/3 mb-6 md:mb-0">
+          <div className="md:w-1/3 mb-6 md:mb-0 flex justify-center">
             <div className="relative h-48 w-48">
               <Image 
                 src="/images/credit-illustration.svg" 
@@ -80,12 +80,12 @@ const AdicionarSaldoModal: React.FC<AdicionarSaldoModalProps> = ({
                 <button
                   key={option.value}
                   onClick={() => handleSelectAmount(option.value)}
-                  className={`
-                    rounded-lg py-3 px-4 text-center transition-all
-                    ${selectedAmount === option.value 
-                      ? 'bg-white text-[#b162c9] font-bold' 
-                      : 'bg-[#8d41a8]/50 text-white hover:bg-[#8d41a8]'}
-                  `}
+                  className={
+                    `rounded-lg py-3 px-4 text-center transition-all ` +
+                    (selectedAmount === option.value 
+                      ? 'bg-white text-[#F25790] font-bold border-2 border-[#F25790]' 
+                      : 'bg-[#8d41a8]/50 text-white hover:bg-[#8d41a8] border border-transparent')
+                  }
                 >
                   <div className="text-base font-medium">Carregue</div>
                   <div className={`text-xl ${selectedAmount === option.value ? 'font-bold' : 'font-semibold'}`}>
@@ -95,25 +95,13 @@ const AdicionarSaldoModal: React.FC<AdicionarSaldoModalProps> = ({
               ))}
             </div>
 
-            {/* Action buttons */}
-            <div className="flex justify-between">
-              <button
-                onClick={onClose}
-                className="px-6 py-2 rounded-full bg-[#8d41a8]/50 text-white hover:bg-[#8d41a8]"
-              >
-                Voltar
-              </button>
-              <button
-                onClick={handleAdvance}
-                disabled={!selectedAmount}
-                className={`
-                  px-8 py-2 rounded-full 
-                  ${selectedAmount ? 'bg-camera-pink text-white hover:bg-pink-600' : 'bg-gray-400 text-gray-100 cursor-not-allowed'}
-                `}
-              >
-                Avançar
-              </button>
-            </div>
+            <button
+              onClick={handleAdvance}
+              disabled={!selectedAmount}
+              className="w-full py-3 bg-gradient-to-r from-[#F25790] to-[#d93d75] text-white font-bold rounded-xl transition-all duration-300 shadow-[0_0_15px_rgba(242,87,144,0.4)] hover:shadow-[0_0_25px_rgba(242,87,144,0.6)] hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Avançar
+            </button>
           </div>
         </div>
       </div>

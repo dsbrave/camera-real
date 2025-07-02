@@ -38,8 +38,8 @@ const CartaoCreditoModal: React.FC<CartaoCreditoModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-      <div className="bg-[#b162c9] rounded-lg max-w-xl w-full p-8 relative">
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[99999]">
+      <div className="bg-[#b162c9] rounded-lg max-w-md w-full p-4 relative">
         {/* Close button */}
         <button
           onClick={onClose}
@@ -50,25 +50,25 @@ const CartaoCreditoModal: React.FC<CartaoCreditoModalProps> = ({
           </svg>
         </button>
 
-        <div className="flex flex-col md:flex-row items-center">
+        <div className="flex flex-col items-center">
           {/* Left side - Illustration */}
-          <div className="md:w-1/3 mb-6 md:mb-0">
-            <div className="relative h-48 w-48">
+          <div className="mb-3">
+            <div className="relative h-20 w-20">
               <Image 
-                src="/images/Wavy Buddies - Payment 1.png" 
-                alt="Ilustração de pagamento - Wavy Buddies" 
+                src="/images/realistic_photo_of_a_brazilian_latino_couple_with_everyday_natural_looks__regular_real-life_couple__g9ob4ri5atk6c4shyur9_3.png" 
+                alt="Casal brasileiro - Pagamento com cartão" 
                 width={320} 
                 height={320}
-                className="object-contain mx-auto"
+                className="object-cover rounded-lg mx-auto"
               />
             </div>
           </div>
 
           {/* Right side - Content */}
-          <div className="md:w-2/3 md:pl-8">
-            <h2 className="text-2xl font-bold text-white mb-6 text-center md:text-left">Cartão de Crédito</h2>
+          <div className="w-full">
+            <h2 className="text-xl font-bold text-white mb-3 text-center">Cartão de Crédito</h2>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3">
               <div className="relative">
                 <input 
                   type="text" 
@@ -76,7 +76,7 @@ const CartaoCreditoModal: React.FC<CartaoCreditoModalProps> = ({
                   value={cardData.numero}
                   onChange={handleChange}
                   placeholder="Número do cartão"
-                  className="w-full bg-white rounded-md p-3 pl-10 text-gray-800 focus:outline-none focus:ring-2 focus:ring-camera-pink"
+                  className="w-full bg-white rounded-md p-2 pl-8 text-gray-800 focus:outline-none focus:ring-2 focus:ring-camera-pink"
                   required
                 />
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center">
@@ -95,7 +95,7 @@ const CartaoCreditoModal: React.FC<CartaoCreditoModalProps> = ({
                     value={cardData.validade}
                     onChange={handleChange}
                     placeholder="Validade (MM/YY)"
-                    className="w-full bg-white rounded-md p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-camera-pink"
+                    className="w-full bg-white rounded-md p-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-camera-pink"
                     required
                   />
                 </div>
@@ -106,7 +106,7 @@ const CartaoCreditoModal: React.FC<CartaoCreditoModalProps> = ({
                     value={cardData.cvv}
                     onChange={handleChange}
                     placeholder="Código de segurança"
-                    className="w-full bg-white rounded-md p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-camera-pink"
+                    className="w-full bg-white rounded-md p-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-camera-pink"
                     required
                   />
                   <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
@@ -123,7 +123,7 @@ const CartaoCreditoModal: React.FC<CartaoCreditoModalProps> = ({
                 value={cardData.nome}
                 onChange={handleChange}
                 placeholder="Nome no cartão"
-                className="w-full bg-white rounded-md p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-camera-pink"
+                className="w-full bg-white rounded-md p-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-camera-pink"
                 required
               />
               
@@ -133,7 +133,7 @@ const CartaoCreditoModal: React.FC<CartaoCreditoModalProps> = ({
                 value={cardData.cpf}
                 onChange={handleChange}
                 placeholder="CPF"
-                className="w-full bg-white rounded-md p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-camera-pink"
+                className="w-full bg-white rounded-md p-2 text-gray-800 focus:outline-none focus:ring-2 focus:ring-camera-pink"
                 required
               />
               
@@ -154,14 +154,14 @@ const CartaoCreditoModal: React.FC<CartaoCreditoModalProps> = ({
                 Em sua fatura você verá o nome CAM*R
               </div>
               
-              <div className="border-t border-white/20 pt-4 flex justify-between items-center">
+              <div className="border-t border-white/20 pt-3 flex justify-between items-center">
                 <div>
                   <p className="text-white/70 text-sm">Valor selecionado</p>
-                  <p className="text-white text-2xl font-bold">R$ {valorSelecionado.toFixed(2).replace('.', ',')}</p>
+                  <p className="text-white text-xl font-bold">R$ {valorSelecionado.toFixed(2).replace('.', ',')}</p>
                 </div>
                 <button 
                   type="submit"
-                  className="bg-camera-pink text-white px-6 py-2 rounded-full hover:bg-pink-600 transition-colors"
+                  className="bg-camera-pink text-white px-4 py-2 rounded-full hover:bg-pink-600 transition-colors"
                 >
                   Avançar
                 </button>

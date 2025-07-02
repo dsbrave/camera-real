@@ -53,7 +53,7 @@ const AgeVerification: React.FC<AgeVerificationProps> = ({ onVerify }) => {
     <>
       <div className="fixed inset-0 bg-black flex items-center justify-center z-50 overflow-hidden" style={{ backgroundImage: "url('/images/Group 26.png')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundBlendMode: 'darken' }}>
         {/* Logo no canto superior esquerdo */}
-        <div className="fixed top-6 left-6 z-20">
+        <div className="fixed top-6 left-6 z-[99999]">
           <div>
             <Image 
               src="/icons/logo.svg" 
