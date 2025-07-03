@@ -880,29 +880,33 @@ const Carteira: React.FC = () => {
           subtitle="Selecione um valor para adicionar à sua conta"
         >
           <div className="mb-8 text-center">
-            <p className="text-white/90 text-base mb-4">Escolha o valor que deseja <span className="text-[#F25790] font-bold">adicionar</span> à sua carteira</p>
-            <div className="grid grid-cols-2 gap-4 mb-6 w-full max-w-xs mx-auto">
-              {[
-                { value: 10, label: 'R$ 10' },
-                { value: 30, label: 'R$ 30' },
-                { value: 50, label: 'R$ 50' },
-                { value: 100, label: 'R$ 100' },
-                { value: 150, label: 'R$ 150' },
-                { value: 300, label: 'R$ 300' }
-              ].map((option) => (
+            <p className="text-white/80 text-sm mb-3 font-normal">Escolha o valor que deseja <span className="text-[#F25790] font-semibold">adicionar</span> à sua carteira</p>
+            <div className="grid grid-cols-2 gap-3 mb-4 w-full max-w-xs mx-auto">
+              {[10, 30, 50, 100, 150, 300].map((value) => (
                 <button
-                  key={option.value}
-                  onClick={() => setSelectedAmount(option.value)}
-                  className={`p-4 rounded-2xl border border-[#F25790]/50 bg-gradient-to-br transition-all hover:scale-105 w-full text-center text-lg font-semibold ${
-                    selectedAmount === option.value
-                      ? 'from-[#F25790]/30 to-[#d93d75]/30 border-[#F25790] shadow-[0_0_15px_rgba(242,87,144,0.4)]'
-                      : 'from-[#F25790]/20 to-[#d93d75]/20 hover:from-[#F25790]/25 hover:to-[#d93d75]/25'
+                  key={value}
+                  onClick={() => setSelectedAmount(value)}
+                  className={`p-3 rounded-xl border border-[#F25790]/40 bg-gradient-to-br transition-all hover:scale-105 w-full text-center text-base font-medium ${
+                    selectedAmount === value
+                      ? 'from-[#F25790]/30 to-[#d93d75]/30 border-[#F25790] shadow-[0_0_10px_rgba(242,87,144,0.3)]'
+                      : 'from-[#F25790]/15 to-[#d93d75]/15 hover:from-[#F25790]/20 hover:to-[#d93d75]/20'
                   }`}
                 >
-                  <div className="text-white/80 text-base mb-1">Carregue</div>
-                  <div className="text-white font-bold text-xl">{option.label}</div>
+                  <div className="text-white/70 text-xs mb-0.5">Carregue</div>
+                  <div className="text-white font-semibold text-lg">R$ {value}</div>
                 </button>
               ))}
+            </div>
+            {/* Input para valor personalizado */}
+            <div className="w-full max-w-xs mx-auto mb-4">
+              <input
+                type="number"
+                min={1}
+                placeholder="Outro valor (mín. R$ 1)"
+                value={selectedAmount && ![10,30,50,100,150,300].includes(selectedAmount) ? selectedAmount : ''}
+                onChange={e => setSelectedAmount(Number(e.target.value))}
+                className="w-full px-3 py-2 rounded-xl border border-[#F25790]/30 bg-black/30 text-white text-base placeholder:text-white/40 focus:outline-none focus:border-[#F25790] transition-all text-center"
+              />
             </div>
             <div className="w-full max-w-xs mx-auto">
               <button
@@ -910,26 +914,26 @@ const Carteira: React.FC = () => {
                   setIsAddCreditsModalOpen(false);
                   setIsPaymentMethodModalOpen(true);
                 }}
-                disabled={!selectedAmount}
-                className={`w-full py-4 font-bold rounded-2xl transition-all duration-300 shadow-[0_0_25px_rgba(242,87,144,0.4)] hover:shadow-[0_0_35px_rgba(242,87,144,0.6)] hover:scale-105 active:scale-95 border border-[#F25790]/30 mt-2 text-lg ${
-                selectedAmount 
-                  ? 'bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white'
-                  : 'bg-white/10 text-white/50 cursor-not-allowed'
-              }`}
-            >
-              <div className="flex items-center justify-center gap-3">
-                <Image
-                  src="/icons/action/credit_card.svg"
-                  alt="Avançar"
-                  width={24}
-                  height={24}
-                  className="w-6 h-6 filter invert"
-                />
-                <span>Avançar</span>
-              </div>
-            </button>
+                disabled={!selectedAmount || selectedAmount < 1}
+                className={`w-full py-3 font-semibold rounded-xl transition-all duration-300 shadow-[0_0_15px_rgba(242,87,144,0.3)] hover:shadow-[0_0_25px_rgba(242,87,144,0.5)] hover:scale-105 active:scale-95 border border-[#F25790]/20 mt-1 text-base ${
+                  selectedAmount && selectedAmount >= 1
+                    ? 'bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white'
+                    : 'bg-white/10 text-white/50 cursor-not-allowed'
+                }`}
+              >
+                <div className="flex items-center justify-center gap-2">
+                  <Image
+                    src="/icons/action/credit_card.svg"
+                    alt="Avançar"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5 filter invert"
+                  />
+                  <span>Avançar</span>
+                </div>
+              </button>
             </div>
-            <p className="text-white/50 text-xs text-center mt-6 drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
+            <p className="text-white/40 text-xs text-center mt-4 drop-shadow-[0_0_10px_rgba(0,0,0,0.7)] font-light">
               <Image
                 src="/icons/action/lock.svg"
                 alt="Seguro"

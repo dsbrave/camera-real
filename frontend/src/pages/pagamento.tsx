@@ -15,7 +15,7 @@ const Pagamento: React.FC = () => {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState<'select-amount' | 'select-method' | 'credit-card' | 'pix-data' | 'pix-qrcode' | 'complete'>('select-amount');
   const [valorSelecionado, setValorSelecionado] = useState<number>(0);
-  const [userName, setUserName] = useState<string>('Cláudia Soso Venturin');
+  const [userName, setUserName] = useState<string>('JadeLove');
 
   // Modals open states
   const [isAddCreditsModalOpen, setIsAddCreditsModalOpen] = useState(true);

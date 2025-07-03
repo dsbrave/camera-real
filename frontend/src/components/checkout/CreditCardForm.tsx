@@ -183,181 +183,183 @@ export default function CreditCardForm({
       title="Cartão de Crédito"
       subtitle="Preencha os dados do seu cartão"
     >
-      {/* Valor selecionado */}
-      <div className="text-center mb-6">
-        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#F25790]/20 to-[#d93d75]/20 border border-[#F25790]/30 rounded-2xl px-4 py-2">
-          <Image
-            src="/icons/action/credit_card.svg"
-            alt="Valor"
-            width={20}
-            height={20}
-            className="w-5 h-5 filter invert"
-          />
-          <span className="text-white font-bold text-lg">R$ {selectedAmount}</span>
-        </div>
-      </div>
-
-      {/* Formulário */}
-      <div className="space-y-4 mb-6">
-        {/* Número do cartão */}
-        <div>
-          <label className="block text-white/80 text-sm font-medium mb-2">
-            Número do cartão *
-          </label>
-          <input
-            type="text"
-            value={cardData.number}
-            onChange={(e) => handleInputChange('number', e.target.value)}
-            placeholder="0000 0000 0000 0000"
-            maxLength={19}
-            className={`w-full bg-white/10 border rounded-2xl px-4 py-3 text-white placeholder-white/50 transition-all ${
-              errors.number ? 'border-red-500' : 'border-white/20 focus:border-[#F25790]'
-            }`}
-          />
-          {errors.number && <p className="text-red-400 text-xs mt-1">{errors.number}</p>}
-        </div>
-
-        {/* Data de expiração e CVV */}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-white/80 text-sm font-medium mb-2">
-              Expiração *
-            </label>
-            <input
-              type="text"
-              value={cardData.expiry}
-              onChange={(e) => handleInputChange('expiry', e.target.value)}
-              placeholder="MM/AA"
-              maxLength={5}
-              className={`w-full bg-white/10 border rounded-2xl px-4 py-3 text-white placeholder-white/50 transition-all ${
-                errors.expiry ? 'border-red-500' : 'border-white/20 focus:border-[#F25790]'
-              }`}
-            />
-            {errors.expiry && <p className="text-red-400 text-xs mt-1">{errors.expiry}</p>}
-          </div>
-
-          <div>
-            <label className="block text-white/80 text-sm font-medium mb-2">
-              CVV *
-            </label>
-            <input
-              type="text"
-              value={cardData.cvv}
-              onChange={(e) => handleInputChange('cvv', e.target.value)}
-              placeholder="000"
-              maxLength={4}
-              className={`w-full bg-white/10 border rounded-2xl px-4 py-3 text-white placeholder-white/50 transition-all ${
-                errors.cvv ? 'border-red-500' : 'border-white/20 focus:border-[#F25790]'
-              }`}
-            />
-            {errors.cvv && <p className="text-red-400 text-xs mt-1">{errors.cvv}</p>}
-          </div>
-        </div>
-
-        {/* Nome do titular */}
-        <div>
-          <label className="block text-white/80 text-sm font-medium mb-2">
-            Nome do titular *
-          </label>
-          <input
-            type="text"
-            value={cardData.name}
-            onChange={(e) => handleInputChange('name', e.target.value)}
-            placeholder="NOME COMO ESTÁ NO CARTÃO"
-            className={`w-full bg-white/10 border rounded-2xl px-4 py-3 text-white placeholder-white/50 transition-all ${
-              errors.name ? 'border-red-500' : 'border-white/20 focus:border-[#F25790]'
-            }`}
-          />
-          {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
-        </div>
-
-        {/* CPF */}
-        <div>
-          <label className="block text-white/80 text-sm font-medium mb-2">
-            CPF *
-          </label>
-          <input
-            type="text"
-            value={cardData.cpf}
-            onChange={(e) => handleInputChange('cpf', e.target.value)}
-            placeholder="000.000.000-00"
-            maxLength={14}
-            className={`w-full bg-white/10 border rounded-2xl px-4 py-3 text-white placeholder-white/50 transition-all ${
-              errors.cpf ? 'border-red-500' : 'border-white/20 focus:border-[#F25790]'
-            }`}
-          />
-          {errors.cpf && <p className="text-red-400 text-xs mt-1">{errors.cpf}</p>}
-        </div>
-
-        {/* Parcelamento */}
-        <div>
-          <label className="block text-white/80 text-sm font-medium mb-2">
-            Parcelamento
-          </label>
-          <select
-            value={cardData.installments}
-            onChange={(e) => setCardData(prev => ({ ...prev, installments: parseInt(e.target.value) }))}
-            className="w-full bg-white/10 border border-white/20 rounded-2xl px-4 py-3 text-white focus:border-[#F25790] transition-all"
-          >
-            {installmentOptions.map(option => (
-              <option key={option.value} value={option.value} className="bg-gray-800">
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      {/* Botões de ação */}
-      <div className="flex gap-3 mb-4">
-        <button
-          onClick={onBack}
-          className="flex-1 py-3 font-bold rounded-2xl bg-white/10 hover:bg-white/20 text-white transition-all duration-300 border border-white/20"
-        >
-          <div className="flex items-center justify-center gap-2">
-            <Image
-              src="/icons/navigation/arrow_back.svg"
-              alt="Voltar"
-              width={20}
-              height={20}
-              className="w-5 h-5 filter invert"
-            />
-            <span>Voltar</span>
-          </div>
-        </button>
-        
-        <button
-          onClick={handleSubmit}
-          className="flex-1 py-3 font-bold rounded-2xl bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white transition-all duration-300 shadow-[0_0_25px_rgba(242,87,144,0.4)] hover:shadow-[0_0_35px_rgba(242,87,144,0.6)] hover:scale-105 active:scale-95"
-        >
-          <div className="flex items-center justify-center gap-2">
+      <div className="max-h-[90vh] overflow-y-auto p-0 md:p-6 min-h-[320px]">
+        {/* Valor selecionado */}
+        <div className="text-center mb-2">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#F25790]/20 to-[#d93d75]/20 border border-[#F25790]/30 rounded-2xl px-4 py-2">
             <Image
               src="/icons/action/credit_card.svg"
-              alt="Pagar"
+              alt="Valor"
               width={20}
               height={20}
               className="w-5 h-5 filter invert"
             />
-            <span>Finalizar Pagamento</span>
+            <span className="text-white font-bold text-lg">R$ {selectedAmount}</span>
           </div>
-        </button>
-      </div>
+        </div>
 
-      {/* Informações adicionais */}
-      <div className="text-center">
-        <p className="text-white/50 text-xs mb-2">
-          <Image
-            src="/icons/action/lock.svg"
-            alt="Seguro"
-            width={12}
-            height={12}
-            className="w-3 h-3 inline mr-1 filter invert opacity-50"
-          />
-          Transação segura e criptografada
-        </p>
-        <p className="text-white/40 text-xs">
-          O nome que aparecerá na fatura é "CAMERA REAL LTDA"
-        </p>
+        {/* Formulário */}
+        <div className="space-y-3 mb-2">
+          {/* Número do cartão */}
+          <div>
+            <label className="block text-white/80 text-sm font-medium mb-1">
+              Número do cartão *
+            </label>
+            <input
+              type="text"
+              value={cardData.number}
+              onChange={(e) => handleInputChange('number', e.target.value)}
+              placeholder="0000 0000 0000 0000"
+              maxLength={19}
+              className={`w-full bg-white/10 border rounded-xl px-3 py-2 text-sm text-white placeholder-white/50 transition-all ${
+                errors.number ? 'border-red-500' : 'border-white/20 focus:border-[#F25790]'
+              }`}
+            />
+            {errors.number && <p className="text-red-400 text-xs mt-1">{errors.number}</p>}
+          </div>
+
+          {/* Data de expiração e CVV */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-white/80 text-sm font-medium mb-1">
+                Expiração *
+              </label>
+              <input
+                type="text"
+                value={cardData.expiry}
+                onChange={(e) => handleInputChange('expiry', e.target.value)}
+                placeholder="MM/AA"
+                maxLength={5}
+                className={`w-full bg-white/10 border rounded-xl px-3 py-2 text-sm text-white placeholder-white/50 transition-all ${
+                  errors.expiry ? 'border-red-500' : 'border-white/20 focus:border-[#F25790]'
+                }`}
+              />
+              {errors.expiry && <p className="text-red-400 text-xs mt-1">{errors.expiry}</p>}
+            </div>
+
+            <div>
+              <label className="block text-white/80 text-sm font-medium mb-1">
+                CVV *
+              </label>
+              <input
+                type="text"
+                value={cardData.cvv}
+                onChange={(e) => handleInputChange('cvv', e.target.value)}
+                placeholder="000"
+                maxLength={4}
+                className={`w-full bg-white/10 border rounded-xl px-3 py-2 text-sm text-white placeholder-white/50 transition-all ${
+                  errors.cvv ? 'border-red-500' : 'border-white/20 focus:border-[#F25790]'
+                }`}
+              />
+              {errors.cvv && <p className="text-red-400 text-xs mt-1">{errors.cvv}</p>}
+            </div>
+          </div>
+
+          {/* Nome do titular */}
+          <div>
+            <label className="block text-white/80 text-sm font-medium mb-1">
+              Nome do titular *
+            </label>
+            <input
+              type="text"
+              value={cardData.name}
+              onChange={(e) => handleInputChange('name', e.target.value)}
+              placeholder="NOME COMO ESTÁ NO CARTÃO"
+              className={`w-full bg-white/10 border rounded-xl px-3 py-2 text-sm text-white placeholder-white/50 transition-all ${
+                errors.name ? 'border-red-500' : 'border-white/20 focus:border-[#F25790]'
+              }`}
+            />
+            {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
+          </div>
+
+          {/* CPF */}
+          <div>
+            <label className="block text-white/80 text-sm font-medium mb-1">
+              CPF *
+            </label>
+            <input
+              type="text"
+              value={cardData.cpf}
+              onChange={(e) => handleInputChange('cpf', e.target.value)}
+              placeholder="000.000.000-00"
+              maxLength={14}
+              className={`w-full bg-white/10 border rounded-xl px-3 py-2 text-sm text-white placeholder-white/50 transition-all ${
+                errors.cpf ? 'border-red-500' : 'border-white/20 focus:border-[#F25790]'
+              }`}
+            />
+            {errors.cpf && <p className="text-red-400 text-xs mt-1">{errors.cpf}</p>}
+          </div>
+
+          {/* Parcelamento */}
+          <div>
+            <label className="block text-white/80 text-sm font-medium mb-1">
+              Parcelamento
+            </label>
+            <select
+              value={cardData.installments}
+              onChange={(e) => setCardData(prev => ({ ...prev, installments: parseInt(e.target.value) }))}
+              className="w-full bg-white/10 border border-white/20 rounded-xl px-3 py-2 pr-10 text-sm text-white focus:border-[#F25790] transition-all"
+            >
+              {installmentOptions.map(option => (
+                <option key={option.value} value={option.value} className="bg-gray-800">
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {/* Botões de ação */}
+        <div className="flex gap-3 mb-4">
+          <button
+            onClick={onBack}
+            className="flex-1 py-1.5 px-3 font-semibold rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm transition-all duration-300 border border-white/20"
+          >
+            <div className="flex items-center justify-center gap-1">
+              <Image
+                src="/icons/navigation/arrow_back.svg"
+                alt="Voltar"
+                width={18}
+                height={18}
+                className="w-4 h-4 filter invert"
+              />
+              <span>Voltar</span>
+            </div>
+          </button>
+          
+          <button
+            onClick={handleSubmit}
+            className="flex-1 py-1.5 px-3 font-semibold rounded-lg bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white text-sm transition-all duration-300 shadow-[0_0_25px_rgba(242,87,144,0.4)] hover:shadow-[0_0_35px_rgba(242,87,144,0.6)] hover:scale-105 active:scale-95 border border-[#F25790]/20"
+          >
+            <div className="flex items-center justify-center gap-0">
+              <Image
+                src="/icons/action/credit_card.svg"
+                alt="Pagar"
+                width={22}
+                height={22}
+                className="w-5 h-5 filter invert"
+              />
+              <span>Finalizar Pagamento</span>
+            </div>
+          </button>
+        </div>
+
+        {/* Informações adicionais */}
+        <div className="text-center">
+          <p className="text-white/50 text-xs mb-2">
+            <Image
+              src="/icons/action/lock.svg"
+              alt="Seguro"
+              width={12}
+              height={12}
+              className="w-3 h-3 inline mr-1 filter invert opacity-50"
+            />
+            Transação segura e criptografada
+          </p>
+          <p className="text-white/40 text-xs">
+            O nome que aparecerá na fatura é "CAMERA REAL LTDA"
+          </p>
+        </div>
       </div>
     </BaseModal>
   );

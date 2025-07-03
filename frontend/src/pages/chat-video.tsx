@@ -52,11 +52,9 @@ export default function ChatVideo() {
   const models = [
     {
       id: 'm1',
-      name: 'Cláudia Venturin',
+      name: 'MelFire',
       online: true,
-      // Chat simples sempre 1 crédito por minuto (fixo)
       pricePerMinute: 1,
-      // Chat privado configurável pela modelo (1-5 créditos)
       privateCallPrice: 3,
       profileImage: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_ko2t9z7547m30wzu3dsv_1.png',
       categories: ['conversa', 'dança'],
@@ -66,11 +64,9 @@ export default function ChatVideo() {
     },
     {
       id: 'm2',
-      name: 'Sophia Reis',
+      name: 'BellaHot',
       online: true,
-      // Chat simples sempre 1 crédito por minuto (fixo)
       pricePerMinute: 1,
-      // Chat privado configurável pela modelo (1-5 créditos)
       privateCallPrice: 4,
       profileImage: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_2wu5n7gdr6dsrmj98ak9_2.png',
       categories: ['conversa', 'artes'],
@@ -80,11 +76,9 @@ export default function ChatVideo() {
     },
     {
       id: 'm3',
-      name: 'Mia Oliveira',
+      name: 'JuicyLuna',
       online: true,
-      // Chat simples sempre 1 crédito por minuto (fixo)
       pricePerMinute: 1,
-      // Chat privado configurável pela modelo (1-5 créditos)
       privateCallPrice: 5,
       profileImage: '/images/high-resolution_studio_photo_of_a_confident_brazilian-inspired_model_wearing_an_elegant_black_lace__i7mo7j07sng27o0fv86l_2.png',
       categories: ['conversa', 'jogos'],
@@ -920,17 +914,17 @@ export default function ChatVideo() {
                     
                     {/* Grid de presentes */}
                     <div className="grid grid-cols-2 gap-3 mb-5">
-                      {gifts.map((gift, index) => (
-                        <button
-                          key={gift.name || index}
-                          onClick={() => handleSendGift(gift)}
-                          disabled={userCredits < gift.price}
+                  {gifts.map((gift, index) => (
+                    <button
+                      key={gift.name || index}
+                      onClick={() => handleSendGift(gift)}
+                      disabled={userCredits < gift.price}
                           className={`p-3 rounded-2xl border transition-all ${
-                            userCredits >= gift.price
-                              ? 'border-[#F25790]/50 bg-gradient-to-br from-[#F25790]/20 to-[#d93d75]/20 hover:from-[#F25790]/30 hover:to-[#d93d75]/30 hover:scale-105'
-                              : 'border-gray-600/50 bg-gray-800/50 opacity-50 cursor-not-allowed'
-                          }`}
-                        >
+                        userCredits >= gift.price
+                          ? 'border-[#F25790]/50 bg-gradient-to-br from-[#F25790]/20 to-[#d93d75]/20 hover:from-[#F25790]/30 hover:to-[#d93d75]/30 hover:scale-105'
+                          : 'border-gray-600/50 bg-gray-800/50 opacity-50 cursor-not-allowed'
+                      }`}
+                    >
                           <div className="flex flex-col items-center">
                             <Image
                               src={gift.icon || '/icons/action/card_giftcard.svg'}
@@ -940,16 +934,16 @@ export default function ChatVideo() {
                               className="w-6 h-6 mb-2 filter invert"
                             />
                             <div className="text-white font-semibold text-xs mb-1">{gift.name}</div>
-                            <div className="text-[#F25790] font-bold text-xs">{gift.price} créditos</div>
+                      <div className="text-[#F25790] font-bold text-xs">{gift.price} créditos</div>
                           </div>
-                        </button>
-                      ))}
-                    </div>
-                    
+                    </button>
+                  ))}
+                </div>
+                
                     {/* Botões de ação */}
                     <div className="space-y-3">
-                      <button
-                        onClick={() => setShowGiftModal(false)}
+                  <button
+                    onClick={() => setShowGiftModal(false)}
                         className="w-full py-4 font-bold rounded-2xl transition-all duration-300 shadow-[0_0_25px_rgba(242,87,144,0.4)] hover:shadow-[0_0_35px_rgba(242,87,144,0.6)] hover:scale-105 active:scale-95 border border-[#F25790]/30 mt-2 text-lg bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white"
                       >
                         <div className="flex items-center justify-center gap-3">
@@ -958,7 +952,7 @@ export default function ChatVideo() {
                           </svg>
                           <span>Fechar</span>
                         </div>
-                      </button>
+                  </button>
                     </div>
                   </div>
                 </div>

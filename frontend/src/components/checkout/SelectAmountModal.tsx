@@ -55,11 +55,7 @@ export default function SelectAmountModal({ isOpen, onClose, onSelectAmount, onN
               <button
                 key={amount.value}
                 onClick={() => handleSelectAmount(amount.value)}
-                className={`py-3 px-4 rounded-lg border-2 font-medium text-sm transition-all flex flex-col items-center ${
-                  selectedAmount === amount.value
-                    ? 'border-white bg-white bg-opacity-20 text-white'
-                    : 'border-white border-opacity-30 hover:border-opacity-50 text-white/80 hover:text-white hover:bg-white hover:bg-opacity-10'
-                }`}
+                className={`w-full py-1.5 px-3 rounded-lg border text-sm font-semibold transition-all hover:scale-105 shadow-[0_0_10px_rgba(242,87,144,0.3)] border-[#F25790]/30 bg-gradient-to-r from-[#F25790]/15 to-[#d93d75]/15 hover:from-[#F25790]/20 hover:to-[#d93d75]/20 text-white mb-2 ${selectedAmount === amount.value ? 'border-[#F25790] bg-gradient-to-r from-[#F25790]/30 to-[#d93d75]/30' : ''}`}
               >
                 <span className="text-xs mb-1">Carregue</span>
                 <span className="text-lg font-bold">R$ {amount.label}</span>
@@ -77,11 +73,7 @@ export default function SelectAmountModal({ isOpen, onClose, onSelectAmount, onN
             <button
               onClick={handleNext}
               disabled={selectedAmount === null}
-              className={`py-2 px-8 rounded-full font-medium transition-colors ${
-                selectedAmount !== null
-                  ? 'bg-[#F25790] hover:bg-[#e44a81] text-white'
-                  : 'bg-gray-500 cursor-not-allowed text-white/60'
-              }`}
+              className={`w-full py-1.5 px-3 font-semibold rounded-lg transition-all duration-300 shadow-[0_0_15px_rgba(242,87,144,0.3)] hover:shadow-[0_0_25px_rgba(242,87,144,0.5)] hover:scale-105 active:scale-95 border border-[#F25790]/20 text-sm ${selectedAmount !== null ? 'bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white' : 'bg-white/10 text-white/50 cursor-not-allowed'}`}
             >
               Avançar
             </button>

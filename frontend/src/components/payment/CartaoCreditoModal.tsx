@@ -43,7 +43,7 @@ const CartaoCreditoModal: React.FC<CartaoCreditoModalProps> = ({
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-white hover:text-gray-200"
+          className="absolute top-4 right-4 text-white hover:text-gray-200 bg-black/40 rounded-full p-1.5"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -161,7 +161,7 @@ const CartaoCreditoModal: React.FC<CartaoCreditoModalProps> = ({
                 </div>
                 <button 
                   type="submit"
-                  className="bg-camera-pink text-white px-4 py-2 rounded-full hover:bg-pink-600 transition-colors"
+                  className="bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 text-white px-4 py-1.5 rounded-lg font-semibold text-sm shadow-[0_0_10px_rgba(242,87,144,0.3)] hover:from-[#F25790]/60 hover:to-[#d93d75]/60 transition-all"
                 >
                   Avançar
                 </button>
@@ -172,7 +172,7 @@ const CartaoCreditoModal: React.FC<CartaoCreditoModalProps> = ({
 
         <button
           onClick={onBack}
-          className="absolute bottom-8 left-8 px-6 py-2 rounded-full bg-[#8d41a8]/50 text-white hover:bg-[#8d41a8]"
+          className="absolute bottom-8 left-8 px-4 py-1.5 rounded-lg bg-white/10 text-white hover:bg-white/20 font-semibold text-sm"
         >
           Voltar
         </button>

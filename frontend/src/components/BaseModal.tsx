@@ -14,7 +14,7 @@ interface BaseModalProps {
 export default function BaseModal({ 
   isOpen, 
   onClose, 
-  modelImage = "/images/realistic_photo_of_a_brazilian_latino_couple_with_everyday_natural_looks__regular_real-life_couple__g9ob4ri5atk6c4shyur9_3.png",
+  modelImage = "/images/realistic_photo_of_a_beautiful_curvy_cam_model_in_sexy_casual_clothing_in_a_pink_neon-lit_cam_studi_01vxr9sv9u5n1mi8vknf_2.png",
   modelName = "Modelo",
   title,
   subtitle,
@@ -45,7 +45,7 @@ export default function BaseModal({
           />
         </button>
         
-        <div className="flex flex-col md:flex-row relative z-10 min-h-[300px]">
+        <div className="flex flex-col md:flex-row relative z-10 min-h-[220px]">
           {/* Lado esquerdo - Imagem da modelo (edge-to-edge) */}
           <div className="md:w-1/2 relative overflow-hidden">
             {/* Imagem de fundo que vai de ponta a ponta */}
@@ -75,7 +75,7 @@ export default function BaseModal({
           </div>
           
           {/* Lado direito - Conteúdo */}
-          <div className="md:w-1/2 p-4 flex flex-col justify-center relative bg-gradient-to-br from-black/95 via-black/90 to-black/95">
+          <div className="md:w-1/2 p-4 py-6 flex flex-col justify-start relative bg-gradient-to-br from-black/95 via-black/90 to-black/95 max-h-[90vh] overflow-y-auto">
             {/* Efeito de continuidade visual */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/50 to-black pointer-events-none"></div>
             

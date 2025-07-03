@@ -163,51 +163,51 @@ export default function Home() {
   const modelosDestaque: Modelo[] = [
     {
       id: 'm1',
-      nome: 'Luna Silva',
+      nome: 'SweetNaty',
       fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_ko2t9z7547m30wzu3dsv_1.png',
       categorias: ['conversa', 'dança'],
       online: true,
       destacado: true,
       avaliacoes: 4.8,
-      valorPorMinuto: 1, // Chat simples sempre 1 crédito
+      valorPorMinuto: 1,
       tipo: 'Mulheres',
-      precoPrivado: 3 // Chat privado configurável
+      precoPrivado: 3
     },
     {
       id: 'm4',
-      nome: 'Sophia Reis',
+      nome: 'GabiDreams',
       fotoPerfil: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_jdasqbio3vvca5k92ebh_2.png',
       categorias: ['conversa', 'artes'],
       online: true,
       destacado: true,
       avaliacoes: 4.7,
-      valorPorMinuto: 1, // Chat simples sempre 1 crédito
+      valorPorMinuto: 1,
       tipo: 'Mulheres',
-      precoPrivado: 4 // Chat privado configurável
+      precoPrivado: 4
     },
     {
       id: 'm7',
-      nome: 'Mia Oliveira',
+      nome: 'IsaPink',
       fotoPerfil: '/images/high-resolution_studio_photo_of_a_confident_brazilian-inspired_model_wearing_an_elegant_black_lace__i7mo7j07sng27o0fv86l_2.png',
       categorias: ['conversa', 'jogos'],
       online: true,
       destacado: true,
       avaliacoes: 4.9,
-      valorPorMinuto: 1, // Chat simples sempre 1 crédito
+      valorPorMinuto: 1,
       tipo: 'Mulheres',
-      precoPrivado: 5 // Chat privado configurável
+      precoPrivado: 5
     },
     {
       id: 'm8',
-      nome: 'Carlos Mendes',
+      nome: 'CarolSexy',
       fotoPerfil: '/images/realistic_photo_of_a_brazilian_latino_man_with_everyday_natural_looks__regular_including_body_diver_ecf9z2bp6ac4zulo1fmw_3.png',
       categorias: ['conversa', 'fitness'],
       online: true,
       destacado: true,
       avaliacoes: 4.6,
-      valorPorMinuto: 1, // Chat simples sempre 1 crédito
+      valorPorMinuto: 1,
       tipo: 'Homens',
-      precoPrivado: 3 // Chat privado configurável
+      precoPrivado: 3
     },
     {
       id: 'm9',
