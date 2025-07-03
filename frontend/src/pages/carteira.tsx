@@ -52,6 +52,37 @@ const Carteira: React.FC = () => {
   const creditValue = 1.00;
   const totalValueInReais = creditos * creditValue;
   
+  // Pacotes de Crédito (com 20 bônus em cada)
+  const creditPackages = [
+    {
+      label: 'Básico',
+      price: 29,
+      credits: 40,
+      bonus: 20,
+      total: 60,
+      minutes: 60,
+      highlight: false
+    },
+    {
+      label: 'Popular',
+      price: 79,
+      credits: 100,
+      bonus: 20,
+      total: 120,
+      minutes: 120,
+      highlight: true
+    },
+    {
+      label: 'Master',
+      price: 199,
+      credits: 300,
+      bonus: 20,
+      total: 320,
+      minutes: 320,
+      highlight: false
+    }
+  ];
+  
   useEffect(() => {
     // Verifica se o usuário está logado
     const userStorage = localStorage.getItem('user');
@@ -542,98 +573,44 @@ const Carteira: React.FC = () => {
                 <div>
                   <h2 className="text-2xl font-bold mb-6">Comprar Créditos</h2>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {/* Pacote Básico */}
-                    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-[#F25790] hover:shadow-xl transition-all">
-                      <div className="mb-4">
-                        <span className="inline-block px-3 py-1 text-xs bg-[#F25790] text-white rounded-full">Básico</span>
-                      </div>
-                      <p className="text-3xl font-bold mb-2">R$ 29</p>
-                      <p className="text-sm text-gray-300 mb-4">40 créditos</p>
-                      <ul className="space-y-2 mb-6">
-                        <li className="flex items-center">
-                          <svg 
-                            width="20" 
-                            height="20" 
-                            viewBox="0 0 24 24" 
-                            fill="none" 
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="w-5 h-5 mr-2"
-                          >
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#F25790"/>
-                          </svg>
-                          <span className="text-sm">Aproximadamente 40 minutos</span>
-                        </li>
-                      </ul>
-                      <button 
-                        onClick={() => handleAddCredits(40)}
-                        className="w-full py-3 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-xl transition-colors font-medium"
+                    {creditPackages.map((pkg, idx) => (
+                      <div
+                        key={pkg.label}
+                        className={`bg-gray-900 border ${pkg.highlight ? 'border-2 border-[#F25790]' : 'border-gray-800'} rounded-2xl p-6 hover:border-[#F25790] hover:shadow-xl transition-all relative`}
                       >
-                        Comprar R$ 29
-                      </button>
-                    </div>
-
-                    {/* Pacote Popular */}
-                    <div className="bg-gray-900 border-2 border-[#F25790] rounded-2xl p-6 hover:shadow-xl transition-all relative">
-                      <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-[#F25790] text-white text-xs px-4 py-1 rounded-full">
-                        MAIS VENDIDO!
+                        {pkg.highlight && (
+                          <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-[#F25790] text-white text-xs px-4 py-1 rounded-full">
+                            MAIS VENDIDO!
+                          </div>
+                        )}
+                        <div className="mb-4">
+                          <span className="inline-block px-3 py-1 text-xs bg-[#F25790] text-white rounded-full">{pkg.label}</span>
+                        </div>
+                        <p className="text-3xl font-bold mb-2">R$ {pkg.price}</p>
+                        <p className="text-sm text-gray-300 mb-4">{pkg.credits} créditos <span className="text-green-400 font-bold">+ {pkg.bonus} bônus</span></p>
+                        <ul className="space-y-2 mb-6">
+                          <li className="flex items-center">
+                            <svg 
+                              width="20" 
+                              height="20" 
+                              viewBox="0 0 24 24" 
+                              fill="none" 
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="w-5 h-5 mr-2"
+                            >
+                              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#F25790"/>
+                            </svg>
+                            <span className="text-sm">Aproximadamente {pkg.minutes} minutos</span>
+                          </li>
+                        </ul>
+                        <button 
+                          onClick={() => handleAddCredits(pkg.total)}
+                          className="w-full py-3 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-xl transition-colors font-medium"
+                        >
+                          Comprar R$ {pkg.price}
+                        </button>
                       </div>
-                      <div className="mb-4">
-                        <span className="inline-block px-3 py-1 text-xs bg-[#F25790] text-white rounded-full">Popular</span>
-                      </div>
-                      <p className="text-3xl font-bold mb-2">R$ 79</p>
-                      <p className="text-sm text-gray-300 mb-4">100 créditos + 10 bônus</p>
-                      <ul className="space-y-2 mb-6">
-                        <li className="flex items-center">
-                          <svg 
-                            width="20" 
-                            height="20" 
-                            viewBox="0 0 24 24" 
-                            fill="none" 
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="w-5 h-5 mr-2"
-                          >
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#F25790"/>
-                          </svg>
-                          <span className="text-sm">Aproximadamente 110 minutos</span>
-                        </li>
-                      </ul>
-                      <button 
-                        onClick={() => handleAddCredits(110)}
-                        className="w-full py-3 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-xl transition-colors font-medium"
-                      >
-                        Comprar R$ 79
-                      </button>
-                    </div>
-
-                    {/* Pacote Master */}
-                    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-[#F25790] hover:shadow-xl transition-all">
-                      <div className="mb-4">
-                        <span className="inline-block px-3 py-1 text-xs bg-[#F25790] text-white rounded-full">Master</span>
-                      </div>
-                      <p className="text-3xl font-bold mb-2">R$ 199</p>
-                      <p className="text-sm text-gray-300 mb-4">300 créditos + 50 bônus</p>
-                      <ul className="space-y-2 mb-6">
-                        <li className="flex items-center">
-                          <svg 
-                            width="20" 
-                            height="20" 
-                            viewBox="0 0 24 24" 
-                            fill="none" 
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="w-5 h-5 mr-2"
-                          >
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#F25790"/>
-                          </svg>
-                          <span className="text-sm">Aproximadamente 350 minutos</span>
-                        </li>
-                      </ul>
-                      <button 
-                        onClick={() => handleAddCredits(350)}
-                        className="w-full py-3 bg-[#F25790] hover:bg-[#d93d75] text-white rounded-xl transition-colors font-medium"
-                      >
-                        Comprar R$ 199
-                      </button>
-                    </div>
+                    ))}
                   </div>
                 </div>
 

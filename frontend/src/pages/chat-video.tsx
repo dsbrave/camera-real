@@ -833,129 +833,74 @@ export default function ChatVideo() {
 
         {/* Modal de Presentes - Novo Design */}
         {showGiftModal && (
-          <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/90 backdrop-blur-sm">
-            <div className="bg-black rounded-3xl max-w-md w-full mx-4 shadow-[0_0_50px_rgba(242,87,144,0.3)] border border-[#F25790]/30 overflow-hidden relative">
-              {/* Efeitos neon de fundo */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#F25790]/10 via-transparent to-transparent pointer-events-none"></div>
-              <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F25790] to-transparent opacity-60"></div>
-              <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#F25790] to-transparent opacity-40"></div>
-              
-              <div className="flex flex-col md:flex-row relative z-10 min-h-[300px]">
-                {/* Lado esquerdo - Imagem da modelo (edge-to-edge) */}
-                <div className="md:w-1/2 relative overflow-hidden hidden">
-                  {/* Imagem de fundo que vai de ponta a ponta */}
-                  <div className="absolute inset-0">
-                    <Image
-                      src={currentModel.profileImage}
-                      alt={currentModel.name}
-                      fill
-                      className="object-cover object-center"
-                    />
-                  </div>
-                  
-                  {/* Gradiente de transição para o lado direito */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-black/80 md:to-black/90"></div>
-                  
-                  {/* Gradiente inferior para melhor legibilidade */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                  
-                  {/* Overlay neon sutil */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#F25790]/20 via-transparent to-transparent mix-blend-overlay"></div>
-                  
-                  {/* Efeito de brilho neon nas bordas */}
-                  <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#F25790]/60 via-[#F25790]/80 to-transparent blur-sm"></div>
-                    <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-[#F25790]/40 via-[#F25790]/60 to-transparent blur-sm"></div>
-                  </div>
+          <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 backdrop-blur-sm">
+            <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl shadow-2xl border border-gray-700 w-full max-w-md relative max-h-[90vh] overflow-y-auto p-8 transition-all duration-300">
+              {/* Botão de fechar */}
+              <button
+                onClick={() => setShowGiftModal(false)}
+                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10"
+                aria-label="Fechar"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+              <div className="flex flex-col items-center">
+                {/* Título */}
+                <h2 className="text-2xl font-bold text-white mb-2 text-center">Enviar Presente</h2>
+                <h3 className="text-lg font-semibold mb-4 text-[#F25790] text-center">Envie um Presente Especial</h3>
+                <div className="w-16 h-1 bg-gradient-to-r from-[#F25790] to-[#d93d75] mx-auto rounded-full shadow-[0_0_15px_rgba(242,87,144,0.6)] mb-4"></div>
+                <p className="text-white/80 mb-6 text-center">Demonstre seu carinho enviando <span className="text-[#F25790] font-bold">presentes especiais</span> para sua modelo favorita</p>
+                <div className="w-full bg-black/30 rounded-xl p-3 mb-6 flex items-center justify-between border border-gray-700">
+                  <span className="text-white/80 text-sm">Seus créditos:</span>
+                  <span className="text-green-400 font-bold">{userCredits}</span>
                 </div>
-                
-                {/* Lado direito - Informações e botões */}
-                <div className="w-full p-4 flex flex-col justify-center relative bg-gradient-to-br from-black/95 via-black/90 to-black/95">
-                  {/* Efeito de continuidade visual */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/50 to-black pointer-events-none"></div>
-                  
-                  <div className="relative z-10">
-                    {/* Título com efeito neon */}
-                    <div className="text-center mb-6">
-                      <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 flex items-center justify-center gap-3">
-                        <Image
-                          src="/icons/action/card_giftcard.svg"
-                          alt="Presente"
-                          width={32}
-                          height={32}
-                          className="w-8 h-8 filter invert"
-                        />
-                        <span className="text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
-                          Enviar Presente
-                        </span>
-                      </h2>
-                      <h3 className="text-lg md:text-xl font-bold mb-3">
-                        <span className="bg-gradient-to-r from-[#F25790] to-[#d93d75] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(242,87,144,0.5)]">
-                          Envie um Presente Especial
-                        </span>
-                      </h3>
-                      <div className="w-16 h-1 bg-gradient-to-r from-[#F25790] to-[#d93d75] mx-auto rounded-full shadow-[0_0_15px_rgba(242,87,144,0.6)]"></div>
-                    </div>
-                    
-                    {/* Descrição condensada */}
-                    <div className="text-center mb-6">
-                      <p className="text-white/90 text-base mb-4 drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
-                        Demonstre seu carinho enviando <span className="text-[#F25790] font-bold">presentes especiais</span> para sua modelo favorita
-                      </p>
-                      
-                      {/* Informações organizadas em bloco único */}
-                      <div className="backdrop-blur-sm rounded-xl p-3 space-y-2 border border-[#F25790]/50 shadow-[0_0_15px_rgba(242,87,144,0.3)]">
-                        <div className="flex items-center justify-between">
-                          <span className="text-white/80 text-sm">Seus créditos:</span>
-                          <span className="text-green-400 font-bold">{userCredits}</span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Grid de presentes */}
-                    <div className="grid grid-cols-2 gap-3 mb-5">
+                {/* Grid de presentes */}
+                <div className="grid grid-cols-2 gap-4 mb-6 w-full">
                   {gifts.map((gift, index) => (
                     <button
                       key={gift.name || index}
                       onClick={() => handleSendGift(gift)}
                       disabled={userCredits < gift.price}
-                          className={`p-3 rounded-2xl border transition-all ${
-                        userCredits >= gift.price
-                          ? 'border-[#F25790]/50 bg-gradient-to-br from-[#F25790]/20 to-[#d93d75]/20 hover:from-[#F25790]/30 hover:to-[#d93d75]/30 hover:scale-105'
-                          : 'border-gray-600/50 bg-gray-800/50 opacity-50 cursor-not-allowed'
-                      }`}
+                      className={`flex flex-col items-center justify-center p-4 rounded-xl border transition-all duration-200 shadow-sm text-center space-y-1 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#F25790]/40 focus:border-[#F25790] \
+                        ${userCredits >= gift.price
+                          ? 'border-[#F25790]/30 bg-gradient-to-br from-[#F25790]/10 to-[#d93d75]/10 hover:from-[#F25790]/20 hover:to-[#d93d75]/20 hover:scale-105 text-white'
+                          : 'border-gray-700 bg-gray-800/60 opacity-60 cursor-not-allowed text-gray-400'}`}
                     >
-                          <div className="flex flex-col items-center">
-                            <Image
-                              src={gift.icon || '/icons/action/card_giftcard.svg'}
-                              alt={gift.name}
-                              width={24}
-                              height={24}
-                              className="w-6 h-6 mb-2 filter invert"
-                            />
-                            <div className="text-white font-semibold text-xs mb-1">{gift.name}</div>
-                      <div className="text-[#F25790] font-bold text-xs">{gift.price} créditos</div>
-                          </div>
+                      {gift.name === 'Coroa' ? (
+                        <Image
+                          src="/icons/Vector.svg"
+                          alt="Coroa"
+                          width={28}
+                          height={28}
+                          className="w-7 h-7 mb-1"
+                        />
+                      ) : (
+                        <Image
+                          src={'/icons/action/card_giftcard.svg'}
+                          alt={gift.name}
+                          width={28}
+                          height={28}
+                          className="w-7 h-7 mb-1 filter invert"
+                        />
+                      )}
+                      <span>{gift.name}</span>
+                      <span className="text-[#F25790] font-bold text-xs">{gift.price} créditos</span>
                     </button>
                   ))}
                 </div>
-                
-                    {/* Botões de ação */}
-                    <div className="space-y-3">
-                  <button
-                    onClick={() => setShowGiftModal(false)}
-                        className="w-full py-4 font-bold rounded-2xl transition-all duration-300 shadow-[0_0_25px_rgba(242,87,144,0.4)] hover:shadow-[0_0_35px_rgba(242,87,144,0.6)] hover:scale-105 active:scale-95 border border-[#F25790]/30 mt-2 text-lg bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white"
-                      >
-                        <div className="flex items-center justify-center gap-3">
-                          <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                            <path d="M6 18L18 6M6 6l12 12" />
-                          </svg>
-                          <span>Fechar</span>
-                        </div>
-                  </button>
-                    </div>
+                {/* Botão Fechar */}
+                <button
+                  onClick={() => setShowGiftModal(false)}
+                  className="w-full py-3 font-bold rounded-xl transition-all duration-300 shadow-none border border-gray-700 mt-2 text-base bg-white/10 hover:bg-white/20 text-white/90 hover:text-white"
+                >
+                  <div className="flex items-center justify-center gap-2">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                      <path d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    <span>Fechar</span>
                   </div>
-                </div>
+                </button>
               </div>
             </div>
           </div>
