@@ -338,15 +338,6 @@ export default function Header() {
 
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-48 py-2 bg-gray-900 rounded-lg shadow-xl z-50">
-                    {userData?.isModel ? (
-                      <Link href="/painel-modelo" className="block px-4 py-2 text-white hover:bg-gray-800">
-                        Painel de Modelo
-                      </Link>
-                    ) : (
-                      <Link href="/painel-usuario" className="block px-4 py-2 text-white hover:bg-gray-800">
-                        Meu Painel
-                      </Link>
-                    )}
                     <Link href="/carteira" className="block px-4 py-2 text-white hover:bg-gray-800">
                       Carteira
                     </Link>
@@ -513,24 +504,6 @@ export default function Header() {
                       <p className="text-gray-400 text-sm break-words max-w-[160px] truncate">{userData?.email}</p>
                     </div>
                   </div>
-                  
-                  {userData?.isModel ? (
-                    <Link 
-                      href="/painel-modelo" 
-                      className="block py-2 text-white hover:text-[#F25790] transition-colors"
-                      onClick={closeMobileMenu}
-                    >
-                      Painel de Modelo
-                    </Link>
-                  ) : (
-                    <Link 
-                      href="/painel-usuario" 
-                      className="block py-2 text-white hover:text-[#F25790] transition-colors"
-                      onClick={closeMobileMenu}
-                    >
-                      Meu Painel
-                    </Link>
-                  )}
                   
                   <Link 
                     href="/carteira" 

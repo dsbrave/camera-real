@@ -67,18 +67,6 @@ export default function Login() {
         
         // Redirecionar para a página principal após o login
         router.push('/');
-      } else if (formData.email === 'modelo@camera.real' && formData.password === 'modelo123') {
-        // Armazenar dados do modelo no localStorage
-        localStorage.setItem('user', JSON.stringify({
-          name: 'Modelo Teste',
-          email: formData.email,
-          isLoggedIn: true,
-          isModel: true,
-          credits: 1500
-        }));
-        
-        // Redirecionar para o dashboard do modelo
-        router.push('/painel-modelo');
       } else {
         setError('E-mail ou senha inválidos.');
         setLoading(false);
@@ -299,7 +287,6 @@ export default function Login() {
               <div className="mt-4 sm:mt-6 text-center text-xs text-gray-400">
                 <p>Para fins de demonstração, use:</p>
                 <p className="mt-1">Usuário: teste@camera.real / Senha: senha123</p>
-                <p className="mt-1">Modelo: modelo@camera.real / Senha: modelo123</p>
               </div>
             </div>
           </div>
