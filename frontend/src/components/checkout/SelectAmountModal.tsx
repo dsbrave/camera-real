@@ -55,25 +55,25 @@ export default function SelectAmountModal({ isOpen, onClose, onSelectAmount, onN
               <button
                 key={amount.value}
                 onClick={() => handleSelectAmount(amount.value)}
-                className={`w-full py-1.5 px-3 rounded-lg border text-sm font-semibold transition-all hover:scale-105 shadow-[0_0_10px_rgba(242,87,144,0.3)] border-[#F25790]/30 bg-gradient-to-r from-[#F25790]/15 to-[#d93d75]/15 hover:from-[#F25790]/20 hover:to-[#d93d75]/20 text-white mb-2 ${selectedAmount === amount.value ? 'border-[#F25790] bg-gradient-to-r from-[#F25790]/30 to-[#d93d75]/30' : ''}`}
+                className={`w-full py-2 px-4 rounded-xl border text-sm font-bold transition-all hover:scale-105 shadow-[0_0_10px_rgba(242,87,144,0.3)] border-[#F25790]/30 bg-gradient-to-r from-[#F25790]/15 to-[#d93d75]/15 hover:from-[#F25790]/20 hover:to-[#d93d75]/20 text-white mb-2 ${selectedAmount === amount.value ? 'border-[#F25790] bg-gradient-to-r from-[#F25790]/30 to-[#d93d75]/30' : ''}`}
               >
                 <span className="text-xs mb-1">Carregue</span>
-                <span className="text-lg font-bold">R$ {amount.label}</span>
+                <span className="text-base font-bold">R$ {amount.label}</span>
               </button>
             ))}
           </div>
           
-          <div className="flex justify-between items-center">
+          <div className="flex gap-3 items-center">
             <button
               onClick={onClose}
-              className="py-2 px-6 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition-colors text-white font-medium"
+              className="flex-1 py-2 px-4 rounded-xl bg-white/10 hover:bg-white/20 transition-colors text-white font-semibold text-sm border border-white/20"
             >
               Voltar
             </button>
             <button
               onClick={handleNext}
               disabled={selectedAmount === null}
-              className={`w-full py-1.5 px-3 font-semibold rounded-lg transition-all duration-300 shadow-[0_0_15px_rgba(242,87,144,0.3)] hover:shadow-[0_0_25px_rgba(242,87,144,0.5)] hover:scale-105 active:scale-95 border border-[#F25790]/20 text-sm ${selectedAmount !== null ? 'bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white' : 'bg-white/10 text-white/50 cursor-not-allowed'}`}
+              className={`flex-1 py-2 px-4 font-semibold rounded-xl transition-all duration-300 shadow-[0_0_15px_rgba(242,87,144,0.3)] hover:shadow-[0_0_25px_rgba(242,87,144,0.5)] hover:scale-105 active:scale-95 border border-[#F25790]/20 text-sm ${selectedAmount !== null ? 'bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white' : 'bg-white/10 text-white/50 cursor-not-allowed'}`}
             >
               Avançar
             </button>

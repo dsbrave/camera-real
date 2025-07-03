@@ -122,7 +122,7 @@ export default function PixPaymentForm({
             <p className="text-white/70 mb-2 text-sm">O código PIX expirou. Tente novamente.</p>
             <button
               onClick={onBack}
-              className="w-full py-1.5 bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white font-medium rounded-lg transition-all duration-300 text-sm"
+              className="w-full py-2 bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white font-semibold rounded-xl transition-all duration-300 text-sm"
             >
               Tentar Novamente
             </button>
@@ -189,7 +189,7 @@ export default function PixPaymentForm({
                 </div>
                 <button
                   onClick={copyPixCode}
-                  className={`px-3 py-1 rounded-lg font-medium transition-all text-sm ${
+                  className={`px-4 py-2 rounded-xl font-semibold transition-all text-sm ${
                     copyStatus
                       ? 'bg-green-500 text-white'
                       : 'bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white'
@@ -220,7 +220,7 @@ export default function PixPaymentForm({
               
               <button
                 onClick={confirmPayment}
-                className="flex-1 py-1.5 px-2 font-medium rounded-lg bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white transition-all duration-300 shadow-[0_0_10px_rgba(242,87,144,0.3)] hover:shadow-[0_0_15px_rgba(242,87,144,0.5)] hover:scale-105 active:scale-95 border border-[#F25790]/20 text-sm"
+                className="flex-1 py-2 px-4 font-semibold rounded-xl bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white transition-all duration-300 shadow-[0_0_15px_rgba(242,87,144,0.3)] hover:shadow-[0_0_25px_rgba(242,87,144,0.5)] hover:scale-105 active:scale-95 border border-[#F25790]/20 text-sm"
               >
                 Já finalizei a transferência
               </button>

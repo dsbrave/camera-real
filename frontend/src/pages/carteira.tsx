@@ -863,14 +863,15 @@ const Carteira: React.FC = () => {
                 <button
                   key={value}
                   onClick={() => setSelectedAmount(value)}
-                  className={`p-3 rounded-xl border border-[#F25790]/40 bg-gradient-to-br transition-all hover:scale-105 w-full text-center text-base font-medium ${
-                    selectedAmount === value
-                      ? 'from-[#F25790]/30 to-[#d93d75]/30 border-[#F25790] shadow-[0_0_10px_rgba(242,87,144,0.3)]'
-                      : 'from-[#F25790]/15 to-[#d93d75]/15 hover:from-[#F25790]/20 hover:to-[#d93d75]/20'
-                  }`}
+                  className={`py-5 px-2 rounded-2xl border border-[#F25790]/40 bg-gradient-to-br transition-all hover:scale-105 w-full text-center text-lg font-bold shadow-md tracking-wide select-none
+                    ${selectedAmount === value
+                      ? 'from-[#F25790]/30 to-[#d93d75]/30 border-[#F25790] shadow-[0_0_20px_rgba(242,87,144,0.4)] scale-105'
+                      : 'from-[#F25790]/15 to-[#d93d75]/15 hover:from-[#F25790]/20 hover:to-[#d93d75]/20'}
+                  `}
+                  style={{ minHeight: '70px', fontSize: '1.25rem', letterSpacing: '0.02em' }}
                 >
-                  <div className="text-white/70 text-xs mb-0.5">Carregue</div>
-                  <div className="text-white font-semibold text-lg">R$ {value}</div>
+                  <div className="text-white/70 text-xs mb-1">Carregue</div>
+                  <div className="text-white font-extrabold text-2xl">R$ {value}</div>
                 </button>
               ))}
             </div>

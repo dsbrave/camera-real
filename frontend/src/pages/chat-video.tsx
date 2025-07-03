@@ -106,21 +106,27 @@ export default function ChatVideo() {
 
   // Efeito para simular o carregamento do nome do usuário
   useEffect(() => {
-    // Simula o carregamento do nome do usuário de uma API
-    const timeout = setTimeout(() => {
-      setUserName('DiogoBR');
-      // Adicionar mensagem de entrada do usuário no chat inicial
-      setMessages([
-        { id: Date.now() - 3000, text: 'Oi pessoal! Como vocês estão?', sender: 'other_user', timestamp: new Date(Date.now() - 3000), username: 'João_SP' },
-        { id: Date.now() - 2000, text: 'Oi João! Estamos bem! 😊', sender: 'model', timestamp: new Date(Date.now() - 2000) },
-        { id: Date.now() - 1000, text: 'entrou no chat', sender: 'system', timestamp: new Date(Date.now() - 1000), username: 'DiogoBR' }
-      ]);
-    }, 1000);
-    
+    // Buscar nome do usuário do localStorage
+    let nome = 'Usuário';
+    if (typeof window !== 'undefined') {
+      const userStorage = localStorage.getItem('user');
+      if (userStorage) {
+        try {
+          const user = JSON.parse(userStorage);
+          if (user && user.name) nome = user.name;
+        } catch {}
+      }
+    }
+    setUserName(nome);
+    // Adicionar mensagem de entrada do usuário no chat inicial
+    setMessages([
+      { id: Date.now() - 3000, text: 'Oi pessoal! Como vocês estão?', sender: 'other_user', timestamp: new Date(Date.now() - 3000), username: 'João_SP' },
+      { id: Date.now() - 2000, text: 'Oi João! Estamos bem! 😊', sender: 'model', timestamp: new Date(Date.now() - 2000) },
+      { id: Date.now() - 1000, text: 'entrou no chat', sender: 'system', timestamp: new Date(Date.now() - 1000), username: nome }
+    ]);
     // Atualizar créditos do localStorage
     refreshCredits();
-    
-    return () => clearTimeout(timeout);
+    return () => {};
   }, [refreshCredits]);
 
   // Efeito para scroll automático para a última mensagem

@@ -106,7 +106,7 @@ const PixDadosModal: React.FC<PixDadosModalProps> = ({
                 </div>
                 <button 
                   type="submit"
-                  className="bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 text-white px-4 py-1.5 rounded-lg font-semibold text-sm shadow-[0_0_10px_rgba(242,87,144,0.3)] hover:from-[#F25790]/60 hover:to-[#d93d75]/60 transition-all"
+                  className="bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 text-white px-4 py-2 rounded-xl font-semibold text-sm shadow-[0_0_10px_rgba(242,87,144,0.3)] hover:from-[#F25790]/60 hover:to-[#d93d75]/60 transition-all"
                 >
                   Avançar
                 </button>
@@ -117,7 +117,7 @@ const PixDadosModal: React.FC<PixDadosModalProps> = ({
 
         <button
           onClick={onBack}
-          className="absolute bottom-8 left-8 px-4 py-1.5 rounded-lg bg-white/10 text-white hover:bg-white/20 font-semibold text-sm"
+          className="absolute bottom-8 left-8 px-4 py-2 rounded-xl bg-white/10 text-white hover:bg-white/20 font-semibold text-sm"
         >
           Voltar
         </button>

@@ -313,7 +313,7 @@ export default function CreditCardForm({
         <div className="flex gap-3 mb-4">
           <button
             onClick={onBack}
-            className="flex-1 py-1.5 px-3 font-semibold rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm transition-all duration-300 border border-white/20"
+            className="flex-1 py-2 px-4 font-semibold rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm transition-all duration-300 border border-white/20"
           >
             <div className="flex items-center justify-center gap-1">
               <Image
@@ -329,7 +329,7 @@ export default function CreditCardForm({
           
           <button
             onClick={handleSubmit}
-            className="flex-1 py-1.5 px-3 font-semibold rounded-lg bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white text-sm transition-all duration-300 shadow-[0_0_25px_rgba(242,87,144,0.4)] hover:shadow-[0_0_35px_rgba(242,87,144,0.6)] hover:scale-105 active:scale-95 border border-[#F25790]/20"
+            className="flex-1 py-2 px-4 font-semibold rounded-xl bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white text-sm transition-all duration-300 shadow-[0_0_25px_rgba(242,87,144,0.4)] hover:shadow-[0_0_35px_rgba(242,87,144,0.6)] hover:scale-105 active:scale-95 border border-[#F25790]/20"
           >
             <div className="flex items-center justify-center gap-0">
               <Image
