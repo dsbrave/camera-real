@@ -56,11 +56,11 @@ export default function SelectPaymentMethodModal({
           </div>
         </div>
         {/* Métodos de pagamento */}
-        <div className="space-y-2 mb-3">
+        <div className="space-y-4 mb-6">
           {/* PIX */}
           <button
             onClick={() => handleMethodSelect('pix')}
-            className={`w-full py-2 px-4 rounded-xl border text-sm font-bold transition-all hover:scale-105 shadow-[0_0_18px_rgba(242,87,144,0.3)] border-[#F25790]/30 bg-gradient-to-r from-[#F25790]/15 to-[#d93d75]/15 hover:from-[#F25790]/20 hover:to-[#d93d75]/20 text-white mb-2 flex items-center gap-3 select-none
+            className={`w-full py-2 px-4 rounded-xl border text-sm font-bold transition-all hover:scale-105 shadow-[0_0_18px_rgba(242,87,144,0.3)] border-[#F25790]/30 bg-gradient-to-r from-[#F25790]/15 to-[#d93d75]/15 hover:from-[#F25790]/20 hover:to-[#d93d75]/20 text-white flex items-center gap-3 select-none
               ${selectedMethod === 'pix' ? 'border-[#F25790] bg-gradient-to-r from-[#F25790]/30 to-[#d93d75]/30 scale-105' : ''}`}
             style={{ minHeight: '44px', fontSize: '0.97rem', letterSpacing: '0.01em' }}
           >
@@ -82,7 +82,7 @@ export default function SelectPaymentMethodModal({
           {/* Cartão de Crédito */}
           <button
             onClick={() => handleMethodSelect('credit-card')}
-            className={`w-full py-2 px-4 rounded-xl border text-sm font-bold transition-all hover:scale-105 shadow-[0_0_18px_rgba(242,87,144,0.3)] border-[#F25790]/30 bg-gradient-to-r from-[#F25790]/15 to-[#d93d75]/15 hover:from-[#F25790]/20 hover:to-[#d93d75]/20 text-white mb-2 flex items-center gap-3 select-none
+            className={`w-full py-2 px-4 rounded-xl border text-sm font-bold transition-all hover:scale-105 shadow-[0_0_18px_rgba(242,87,144,0.3)] border-[#F25790]/30 bg-gradient-to-r from-[#F25790]/15 to-[#d93d75]/15 hover:from-[#F25790]/20 hover:to-[#d93d75]/20 text-white flex items-center gap-3 select-none
               ${selectedMethod === 'credit-card' ? 'border-[#F25790] bg-gradient-to-r from-[#F25790]/30 to-[#d93d75]/30 scale-105' : ''}`}
             style={{ minHeight: '44px', fontSize: '0.97rem', letterSpacing: '0.01em' }}
           >
@@ -102,38 +102,33 @@ export default function SelectPaymentMethodModal({
           </button>
         </div>
         {/* Botões de ação */}
-        <div className="flex gap-3">
+        <div className="flex gap-4 mt-4">
           <button
             onClick={onBack}
-            className="flex-1 py-2 px-4 font-semibold rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm transition-all duration-300 border border-white/20"
+            className="flex-1 py-2 px-4 font-semibold rounded-xl bg-gradient-to-r from-[#F25790]/20 to-[#d93d75]/20 hover:from-[#F25790]/30 hover:to-[#d93d75]/30 text-white text-sm transition-all duration-300 border border-[#F25790]/20 shadow-[0_0_10px_rgba(242,87,144,0.2)] hover:shadow-[0_0_18px_rgba(242,87,144,0.3)] flex items-center justify-center gap-1"
           >
-            <div className="flex items-center justify-center gap-1">
-              <Image
-                src="/icons/navigation/arrow_back.svg"
-                alt="Voltar"
-                width={16}
-                height={16}
-                className="w-4 h-4 filter invert"
-              />
-              <span>Voltar</span>
-            </div>
+            <Image
+              src="/icons/navigation/arrow_back.svg"
+              alt="Voltar"
+              width={16}
+              height={16}
+              className="w-4 h-4 filter invert"
+            />
+            <span>Voltar</span>
           </button>
-          
           <button
             onClick={handleNext}
             disabled={!selectedMethod}
-            className={`flex-1 py-2 px-4 font-semibold rounded-xl transition-all duration-300 shadow-[0_0_15px_rgba(242,87,144,0.3)] hover:shadow-[0_0_25px_rgba(242,87,144,0.5)] hover:scale-105 active:scale-95 border border-[#F25790]/20 text-sm ${selectedMethod ? 'bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white' : 'bg-white/10 text-white/50 cursor-not-allowed'}`}
+            className={`flex-1 py-2 px-4 font-semibold rounded-xl transition-all duration-300 shadow-[0_0_15px_rgba(242,87,144,0.3)] hover:shadow-[0_0_25px_rgba(242,87,144,0.5)] hover:scale-105 active:scale-95 border border-[#F25790]/20 text-sm flex items-center justify-center gap-1 ${selectedMethod ? 'bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white' : 'bg-white/10 text-white/50 cursor-not-allowed'}`}
           >
-            <div className="flex items-center justify-center gap-1">
-              <Image
-                src="/icons/navigation/arrow_forward.svg"
-                alt="Avançar"
-                width={16}
-                height={16}
-                className="w-4 h-4 filter invert"
-              />
-              <span>Avançar</span>
-            </div>
+            <Image
+              src="/icons/navigation/arrow_forward.svg"
+              alt="Avançar"
+              width={16}
+              height={16}
+              className="w-4 h-4 filter invert"
+            />
+            <span>Avançar</span>
           </button>
         </div>
         {/* Texto de segurança */}

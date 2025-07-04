@@ -89,11 +89,11 @@ export default function ChatVideo() {
   ];
 
   const gifts: Gift[] = [
-    { name: 'Rosa', price: 5, image: '/icons/action/card_giftcard.svg', icon: '/icons/action/favorite.svg' },
-    { name: 'Coração', price: 10, image: '/icons/action/card_giftcard.svg', icon: '/icons/action/favorite_border.svg' },
-    { name: 'Beijo', price: 15, image: '/icons/action/card_giftcard.svg', icon: '/icons/action/face.svg' },
-    { name: 'Diamante', price: 25, image: '/icons/action/card_giftcard.svg', icon: '/icons/action/grade.svg' },
-    { name: 'Coroa', price: 50, image: '/icons/action/card_giftcard.svg', icon: '/icons/action/stars.svg' },
+    { name: 'Rosa', price: 5, image: '/icons/maps/local_florist.svg' },
+    { name: 'Pizza', price: 10, image: '/icons/maps/local_pizza.svg' },
+    { name: 'Fogo', price: 15, image: '/icons/social/whatshot.svg' },
+    { name: 'Drink', price: 25, image: '/icons/maps/wine_bar.svg' },
+    { name: 'Coroa', price: 50, image: '/icons/Vector.svg' },
   ];
 
   // Pacotes de créditos
@@ -381,6 +381,8 @@ export default function ChatVideo() {
     setIsCallActive(false);
     setMessages(prev => [...prev, { id: Date.now(), text: `Você saiu do chat.`, sender: 'system', timestamp: new Date() }]);
   };
+
+  const [customGiftValue, setCustomGiftValue] = useState(0);
 
   return (
     <>
@@ -873,27 +875,37 @@ export default function ChatVideo() {
                           ? 'border-[#F25790]/30 bg-gradient-to-br from-[#F25790]/10 to-[#d93d75]/10 hover:from-[#F25790]/20 hover:to-[#d93d75]/20 hover:scale-105 text-white'
                           : 'border-gray-700 bg-gray-800/60 opacity-60 cursor-not-allowed text-gray-400'}`}
                     >
-                      {gift.name === 'Coroa' ? (
-                        <Image
-                          src="/icons/Vector.svg"
-                          alt="Coroa"
-                          width={28}
-                          height={28}
-                          className="w-7 h-7 mb-1"
-                        />
-                      ) : (
-                        <Image
-                          src={'/icons/action/card_giftcard.svg'}
-                          alt={gift.name}
-                          width={28}
-                          height={28}
-                          className="w-7 h-7 mb-1 filter invert"
-                        />
-                      )}
+                      <Image
+                        src={gift.image}
+                        alt={gift.name}
+                        width={40}
+                        height={40}
+                        className="w-10 h-10 mb-1 filter invert"
+                      />
                       <span>{gift.name}</span>
                       <span className="text-[#F25790] font-bold text-xs">{gift.price} créditos</span>
                     </button>
                   ))}
+                  {/* Card especial para valor customizado */}
+                  <div className="flex flex-col items-center justify-center p-4 rounded-xl border border-[#F25790]/30 bg-gradient-to-br from-[#F25790]/10 to-[#d93d75]/10 text-white space-y-2">
+                    <Image src="/icons/action/grade.svg" alt="Especial" width={40} height={40} className="w-10 h-10 mb-1 filter invert" />
+                    <span>Especial</span>
+                    <input
+                      type="number"
+                      min={1}
+                      placeholder="Valor (créditos)"
+                      className="w-20 text-center rounded bg-black/40 border border-[#F25790]/30 text-white py-1 px-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#F25790]/40"
+                      value={customGiftValue}
+                      onChange={e => setCustomGiftValue(Number(e.target.value))}
+                    />
+                    <button
+                      onClick={() => handleSendGift({ name: 'Especial', price: customGiftValue, image: '/icons/action/grade.svg' })}
+                      disabled={!customGiftValue || userCredits < customGiftValue}
+                      className={`mt-1 px-3 py-1 rounded bg-[#F25790] text-white text-xs font-bold transition-all ${(!customGiftValue || userCredits < customGiftValue) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#d93d75]'}`}
+                    >
+                      Enviar
+                    </button>
+                  </div>
                 </div>
                 {/* Botão Fechar */}
                 <button

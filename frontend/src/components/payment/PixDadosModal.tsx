@@ -117,7 +117,7 @@ const PixDadosModal: React.FC<PixDadosModalProps> = ({
 
         <button
           onClick={onBack}
-          className="absolute bottom-8 left-8 px-4 py-2 rounded-xl bg-white/10 text-white hover:bg-white/20 font-semibold text-sm"
+          className="absolute bottom-8 left-8 px-4 py-2 rounded-xl bg-gradient-to-r from-[#F25790]/20 to-[#d93d75]/20 hover:from-[#F25790]/30 hover:to-[#d93d75]/30 text-white font-semibold text-sm shadow-[0_0_10px_rgba(242,87,144,0.2)] hover:shadow-[0_0_18px_rgba(242,87,144,0.3)]"
         >
           Voltar
         </button>
