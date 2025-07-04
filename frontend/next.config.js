@@ -12,7 +12,17 @@ const nextConfig = {
     domains: ['localhost'],
     unoptimized: true
   },
-  reactStrictMode: false, // Desabilitar para evitar problemas de hidratação
+  reactStrictMode: true,
+  swcMinify: true,
+  experimental: {
+    appDir: true,
+  },
+  env: {
+    CUSTOM_KEY: process.env.CUSTOM_KEY,
+  },
+  server: {
+    port: 3001,
+  },
 };
 
 module.exports = nextConfig;

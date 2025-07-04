@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import Image from 'next/image';
+import React, { useState } from "react";
+import Image from "next/image";
 
 interface EditarPerfilModalProps {
   isOpen: boolean;
@@ -24,8 +24,8 @@ const EditarPerfilModal: React.FC<EditarPerfilModalProps> = ({
     email: profileData.email,
     phone: profileData.phone,
     profilePic: profileData.profilePic,
-    password: '',
-    confirmPassword: '',
+    password: "",
+    confirmPassword: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +36,7 @@ const EditarPerfilModal: React.FC<EditarPerfilModalProps> = ({
   const handleSave = () => {
     // Validação simples
     if (formData.password && formData.password !== formData.confirmPassword) {
-      alert('As senhas não coincidem!');
+      alert("As senhas não coincidem!");
       return;
     }
     onSave(formData);
@@ -46,15 +46,25 @@ const EditarPerfilModal: React.FC<EditarPerfilModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[11000] p-4">
       <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl shadow-2xl border border-gray-700 w-full max-w-md relative max-h-[90vh] overflow-y-auto">
         {/* Botão de fechar */}
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         </button>
 
@@ -80,7 +90,7 @@ const EditarPerfilModal: React.FC<EditarPerfilModalProps> = ({
                   />
                 ) : (
                   <span className="text-white text-4xl font-bold">
-                    {formData.username?.charAt(0).toUpperCase() || 'U'}
+                    {formData.username?.charAt(0).toUpperCase() || "U"}
                   </span>
                 )}
               </div>
@@ -93,7 +103,9 @@ const EditarPerfilModal: React.FC<EditarPerfilModalProps> = ({
 
           {/* Campos de edição */}
           <div className="mb-4">
-            <label className="block text-gray-300 text-sm mb-1">Nome de usuário</label>
+            <label className="block text-gray-300 text-sm mb-1">
+              Nome de usuário
+            </label>
             <input
               type="text"
               name="username"
@@ -126,7 +138,9 @@ const EditarPerfilModal: React.FC<EditarPerfilModalProps> = ({
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-300 text-sm mb-1">Nova senha</label>
+            <label className="block text-gray-300 text-sm mb-1">
+              Nova senha
+            </label>
             <input
               type="password"
               name="password"
@@ -137,7 +151,9 @@ const EditarPerfilModal: React.FC<EditarPerfilModalProps> = ({
             />
           </div>
           <div className="mb-6">
-            <label className="block text-gray-300 text-sm mb-1">Confirmar nova senha</label>
+            <label className="block text-gray-300 text-sm mb-1">
+              Confirmar nova senha
+            </label>
             <input
               type="password"
               name="confirmPassword"
@@ -163,4 +179,4 @@ const EditarPerfilModal: React.FC<EditarPerfilModalProps> = ({
   );
 };
 
-export default EditarPerfilModal; 
+export default EditarPerfilModal;
