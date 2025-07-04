@@ -341,6 +341,9 @@ export default function Header() {
                     <Link href="/carteira" className="block px-4 py-2 text-white hover:bg-gray-800">
                       Carteira
                     </Link>
+                    <Link href={userData?.isModel ? "/painel-modelo" : "/painel-usuario"} className="block px-4 py-2 text-white hover:bg-gray-800">
+                      {userData?.isModel ? "Painel da Modelo" : "Meu Painel"}
+                    </Link>
                     <button 
                       onClick={openEditModal}
                       className="block w-full text-left px-4 py-2 text-white hover:bg-gray-800"
@@ -394,7 +397,7 @@ export default function Header() {
                 <>
                   <Link 
                     href="/explorar" 
-                    className="block py-2 text-white hover:text-[#F25790] font-medium transition-colors break-words overflow-hidden"
+                    className="block py-2 text-white hover:text-[#F25790] font-medium transition-colors"
                     onClick={closeMobileMenu}
                   >
                     Explorar
