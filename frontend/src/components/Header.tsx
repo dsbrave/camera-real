@@ -15,6 +15,7 @@ export default function Header() {
   const [isClient, setIsClient] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
   const [updateTrigger, setUpdateTrigger] = useState(0);
+  const [isModel, setIsModel] = useState(false);
   
   // Verificar se estamos no cliente
   useEffect(() => {
@@ -59,6 +60,7 @@ export default function Header() {
             setUserData(user);
             // Sincronizar créditos com o contexto global usando refreshCredits
             refreshCredits();
+            setIsModel(!!user.isModel);
           } else {
             // Dados inválidos ou usuário não está logado
             setIsLoggedIn(false);
@@ -300,6 +302,11 @@ export default function Header() {
                     <span className="text-gray-300 text-xs">Créditos</span>
                   </Link>
                 </div>
+                {isModel && (
+                  <Link href="/painel-modelo" className="bg-[#F25790] hover:bg-[#d93d75] text-white font-medium px-5 py-2 rounded-full transition-colors duration-200 text-sm">
+                    Entrar ao Vivo
+                  </Link>
+                )}
               </>
             )}
             

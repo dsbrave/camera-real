@@ -6,6 +6,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import UserPreferencesModal from '@/components/UserPreferencesModal';
 import ModelCard from '@/components/ModelCard';
+import PainelModelo from './painel-modelo';
 
 interface Modelo {
   id: string;
@@ -37,6 +38,7 @@ export default function Home() {
   const [showPreferencesModal, setShowPreferencesModal] = useState(false);
   const [userPreferences, setUserPreferences] = useState<UserPreferences | null>(null);
   const [isFirstLogin, setIsFirstLogin] = useState(false);
+  const [isModel, setIsModel] = useState(false);
   
   useEffect(() => {
     setIsClient(true);
@@ -50,6 +52,7 @@ export default function Home() {
           if (user.isLoggedIn) {
             setIsLoggedIn(true);
             setUserName(user.name || '');
+            setIsModel(!!user.isModel);
             
             // Verificar se é o primeiro login (sem preferências salvas)
             const savedPreferences = localStorage.getItem('userPreferences');
@@ -87,6 +90,7 @@ export default function Home() {
           setIsLoggedIn(!!user.isLoggedIn);
           if (user.isLoggedIn && user.name) {
             setUserName(user.name);
+            setIsModel(!!user.isModel);
             
             // Carregar favoritos do localStorage
             const favorites = JSON.parse(localStorage.getItem('favoriteModels') || '[]');
@@ -302,6 +306,26 @@ export default function Home() {
     }
   }, [isClient]);
   
+  // MOCKS para painel de modelo
+  const saldoDisponivel = 1200.50;
+  const ganhosHoje = 150.00;
+  const ganhosMes = 3200.00;
+  const minutosHoje = 87;
+  const sessoesHoje = 6;
+  const rankingDia = 8;
+  const metaMinutos = 120;
+  const faltamParaMeta = metaMinutos - minutosHoje;
+  const feedbacks = [
+    { nome: 'Cliente123', comentario: 'Adorei a transmissão, muito simpática!', nota: 5 },
+    { nome: 'VIP2024', comentario: 'Ótima energia, voltarei mais vezes!', nota: 5 },
+    { nome: 'Anônimo', comentario: 'Atendimento excelente!', nota: 4 }
+  ];
+  const notificacoes = [
+    { tipo: 'info', texto: 'Nova campanha: Bônus de 10% para quem ficar mais de 2h online hoje!' },
+    { tipo: 'alerta', texto: 'Complete seu perfil para liberar saques.' },
+    { tipo: 'sucesso', texto: 'Seu documento foi aprovado! Parabéns.' }
+  ];
+  
   // Renderização condicional com fade-in para o conteúdo
   if (!isHydrated) {
     return (
@@ -339,6 +363,141 @@ export default function Home() {
               </div>
             </div>
             
+            <Footer />
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  // Home especial para modelo logada, mantendo layout e estilos
+  if (isLoggedIn && isModel) {
+    // MOCKS para agenda e feedbacks
+    const compromissos = [
+      { data: '05/07', hora: '20h', tipo: 'Show ao vivo' },
+      { data: '07/07', hora: '18h', tipo: 'Live especial' }
+    ];
+    const feedbacks = [
+      { usuario: 'ClienteTeste', foto: '/images/avatar1.png', texto: 'Linda transmissão, adorei!', nota: 5, perfil: '/perfil/cliente-teste' },
+      { usuario: 'VIP2024', foto: '/images/avatar2.png', texto: 'Muito simpática e divertida!', nota: 5, perfil: '/perfil/vip2024' }
+    ];
+    return (
+      <>
+        <Head>
+          <title>Bem-vinda, {userName} | Camera Real</title>
+          <meta name="description" content="Página inicial da modelo - Camera Real" />
+        </Head>
+        <div className="min-h-screen w-full bg-black text-white flex flex-col overflow-hidden" style={{ backgroundImage, backgroundSize: 'cover', backgroundPosition: 'center 15%' }}>
+          <div className="fixed inset-0 z-0 bg-gradient-to-b from-black/80 via-black/70 to-[#200310]/80 backdrop-blur-[2px]"></div>
+          <div className="relative z-10 flex flex-col min-h-screen">
+            <Header />
+            <div className="h-10 sm:h-16 md:h-20" />
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-20 z-10 relative flex-1">
+              <div className="flex flex-col lg:flex-row lg:items-start lg:gap-8 xl:gap-12 min-h-full">
+                {/* Esquerda: Foto, saudação e botões */}
+                <div className="flex-1 lg:max-w-xl text-center lg:text-left flex flex-col items-center lg:items-start">
+                  {/* Foto de perfil */}
+                  <div className="mb-6">
+                    <div className="w-28 h-28 rounded-full bg-gray-700 overflow-hidden border-4 border-[#F25790] flex items-center justify-center">
+                      {userName && isModel && (typeof window !== 'undefined') ? (
+                        <img
+                          src={JSON.parse(localStorage.getItem('user') || '{}').fotoPerfil || '/images/avatar-default.png'}
+                          alt="Foto de perfil"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <img src="/images/avatar-default.png" alt="Avatar" className="w-full h-full object-cover" />
+                      )}
+                    </div>
+                  </div>
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 sm:mb-8 leading-tight">
+                    Bem-vinda, <span className="text-[#F25790]">{userName}</span>!<br/>
+                    Pronta para arrasar hoje?
+                  </h1>
+                  <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-8 sm:mb-10 leading-relaxed">
+                    Acompanhe suas metas, fique online e aumente seus ganhos.<br className="hidden sm:block"/>
+                    Aproveite as campanhas e dicas para se destacar ainda mais!
+                  </p>
+                  <div className="mb-8 lg:mb-0 w-full flex flex-col sm:flex-row gap-4 items-center lg:items-start justify-center lg:justify-start">
+                    <button className="bg-[#F25790] hover:bg-[#d93d75] text-white font-medium py-3 sm:py-4 px-8 sm:px-10 rounded-full inline-block text-center transition-colors duration-200 text-sm sm:text-base">
+                      Entrar ao Vivo
+                    </button>
+                    <Link href="/extrato" className="btn-secondary px-6 py-3 text-center">
+                      Ver Extrato
+                    </Link>
+                    <button className="btn-secondary px-6 py-3 text-center">
+                      Solicitar Saque
+                    </button>
+                  </div>
+                </div>
+                {/* Direita: Agenda, Feedbacks, Metas/Dicas/Campanhas */}
+                <div className="flex-1 lg:max-w-xl flex flex-col gap-6 mt-10 lg:mt-0">
+                  {/* Bloco Agenda */}
+                  <div className="bg-gray-900/80 rounded-2xl p-6 shadow-lg mb-2">
+                    <h2 className="text-lg font-bold mb-4 text-[#F25790] flex items-center gap-2">
+                      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" className="inline-block"><path d="M8 7V3M16 7V3M3 11h18M5 5h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z" stroke="#F25790" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      Agenda
+                    </h2>
+                    {/* Mini calendário mock */}
+                    <div className="flex gap-4 items-center mb-4">
+                      <div className="bg-gray-800 rounded-lg p-3 text-center text-sm text-gray-300">
+                        <div className="font-bold text-lg text-[#F25790]">JUL</div>
+                        <div className="flex gap-1 mt-2">
+                          <span className="bg-[#F25790] text-white rounded px-2">5</span>
+                          <span className="bg-gray-700 text-gray-200 rounded px-2">7</span>
+                          <span className="bg-gray-700 text-gray-200 rounded px-2">12</span>
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        {compromissos.map((c, i) => (
+                          <div key={i} className="flex items-center gap-2 mb-1 text-sm text-gray-200">
+                            <span className="text-[#F25790] font-semibold">{c.data}</span>
+                            <span>{c.tipo}</span>
+                            <span className="text-gray-400">{c.hora}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <button className="btn-secondary px-4 py-2 text-sm mt-2">Ver Agenda Completa</button>
+                  </div>
+                  {/* Bloco Feedbacks */}
+                  <div className="bg-gray-900/80 rounded-2xl p-6 shadow-lg mb-2">
+                    <h2 className="text-lg font-bold mb-4 text-[#F25790] flex items-center gap-2">
+                      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" className="inline-block"><path d="M17 8h2a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2v-8a2 2 0 012-2h2M12 15v.01M12 11v2m0 4a9 9 0 100-18 9 9 0 000 18z" stroke="#F25790" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      Feedbacks Recentes
+                    </h2>
+                    <div className="flex flex-col gap-3">
+                      {feedbacks.map((f, i) => (
+                        <div key={i} className="flex items-center gap-3 bg-gray-800/60 rounded-lg p-3">
+                          <img src={f.foto} alt={f.usuario} className="w-10 h-10 rounded-full object-cover border-2 border-[#F25790]" />
+                          <div className="flex-1">
+                            <Link href={f.perfil} className="text-[#F25790] font-semibold hover:underline">{f.usuario}</Link>
+                            <div className="text-gray-200 text-sm">{f.texto}</div>
+                          </div>
+                          <span className="text-yellow-400 font-bold">★ {f.nota}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <button className="btn-secondary px-4 py-2 text-sm mt-4">Ver Todos os Feedbacks</button>
+                  </div>
+                  {/* Bloco Metas/Dicas/Campanhas */}
+                  <div className="bg-gray-900/80 rounded-2xl p-6 shadow-lg">
+                    <div className="mb-3">
+                      <h3 className="text-[#F25790] font-bold mb-1">Meta diária</h3>
+                      <p className="text-white text-base">Faltam <span className="text-green-400">20 min</span> para bater sua meta e ganhar bônus!</p>
+                    </div>
+                    <div className="mb-3">
+                      <h3 className="text-[#F25790] font-bold mb-1">Dica do dia</h3>
+                      <p className="text-gray-200 text-base">Perfis com foto e descrição completa recebem até <span className="text-[#F25790] font-semibold">30% mais chamadas</span>.</p>
+                    </div>
+                    <div>
+                      <h3 className="text-[#F25790] font-bold mb-1">Campanha ativa</h3>
+                      <p className="text-gray-200 text-base">Bônus de <span className="text-green-400 font-semibold">10%</span> para quem ficar mais de 2h online hoje!</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <Footer />
           </div>
         </div>

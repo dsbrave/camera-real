@@ -55,22 +55,32 @@ export default function Login() {
     
     // Simulação de login bem-sucedido
     setTimeout(() => {
-      // Verificar se é usuário de teste (para demonstração)
+      // Login de demonstração para usuário comum
       if (formData.email === 'teste@camera.real' && formData.password === 'senha123') {
-        // Armazenar dados do usuário no localStorage
         localStorage.setItem('user', JSON.stringify({
           name: 'João',
           email: formData.email,
           isLoggedIn: true,
+          isModel: false,
           credits: 300
         }));
-        
-        // Redirecionar para a página principal após o login
         router.push('/');
-      } else {
-        setError('E-mail ou senha inválidos.');
-        setLoading(false);
+        return;
       }
+      // Login de demonstração para modelo
+      if (formData.email === 'modelo@camera.real' && formData.password === 'senha123') {
+        localStorage.setItem('user', JSON.stringify({
+          name: 'JadeLove',
+          email: formData.email,
+          isLoggedIn: true,
+          isModel: true,
+          credits: 0
+        }));
+        router.push('/');
+        return;
+      }
+      setError('E-mail ou senha inválidos.');
+      setLoading(false);
     }, 1000);
   };
   
@@ -287,6 +297,7 @@ export default function Login() {
               <div className="mt-4 sm:mt-6 text-center text-xs text-gray-400">
                 <p>Para fins de demonstração, use:</p>
                 <p className="mt-1">Usuário: teste@camera.real / Senha: senha123</p>
+                <p className="mt-1">Modelo: modelo@camera.real / Senha: senha123</p>
               </div>
             </div>
           </div>
