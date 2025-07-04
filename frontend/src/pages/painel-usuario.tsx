@@ -16,12 +16,13 @@ export default function PainelUsuario() {
     name: "",
     email: "",
     isLoggedIn: false,
-    credits: 0,
+    credits: 200000,
     photo: "",
     favoriteModels: [],
     recentChats: [],
     phone: "",
     username: "",
+    isModel: false
   });
   const [favoriteModels, setFavoriteModels] = useState<any[]>([]);
   const [recentChats, setRecentChats] = useState<any[]>([]);
@@ -294,23 +295,23 @@ export default function PainelUsuario() {
                               />
                             </svg>
 
-                            {/* Ícone verde no hover */}
+                            {/* Ícone rosa no hover */}
                             <svg
                               width="16"
                               height="16"
                               viewBox="0 0 24 24"
                               fill="none"
                               xmlns="http://www.w3.org/2000/svg"
-                              className="w-4 h-4 text-green-500 absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                              className="w-4 h-4 text-[#F25790] absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                             >
                               <path
                                 d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z"
-                                fill="#10b981"
+                                fill="#F25790"
                               />
                             </svg>
                           </div>
                           <span className="text-white font-medium text-lg">
-                            {userData?.credits || 300}
+                            {userData?.credits || 200000}
                           </span>
                           <span className="text-gray-300 text-xs">
                             Créditos
@@ -449,7 +450,7 @@ export default function PainelUsuario() {
                         </svg>
                       </div>
                       <span className="text-3xl font-bold text-[#F25790]">
-                        {userData.credits || 300}
+                        {userData.credits || 200000}
                       </span>
                     </div>
                     <h3 className="font-semibold text-lg mb-1">Créditos</h3>

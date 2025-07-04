@@ -12,7 +12,7 @@ export default function EditarPerfil() {
     email: '',
     phone: '',
     photo: '/default-avatar.png',
-    credits: 0
+    credits: 200000
   });
   const [editingField, setEditingField] = useState<string | null>(null);
   const [tempValue, setTempValue] = useState('');
@@ -44,12 +44,12 @@ export default function EditarPerfil() {
           const data = JSON.parse(storedData);
           if (data) {
           setUserData({
-              name: data.name || 'Usuário',
+              name: data.name || '',
               username: data.username || 'usuario',
-              email: data.email || 'usuario@email.com',
+              email: data.email || '',
               phone: data.phone || '(11) 99999-9999',
               photo: data.photo || '/default-avatar.png',
-              credits: data.credits || 0
+              credits: data.credits || 200000
           });
         }
       } catch (error) {
@@ -396,8 +396,8 @@ export default function EditarPerfil() {
                       >
                         Editar
                       </button>
-          </div>
-        )}
+                    </div>
+                  )}
                 </div>
 
                 {/* Email */}
@@ -433,14 +433,14 @@ export default function EditarPerfil() {
                         <p className="text-gray-400 text-sm">Email</p>
                         <p className="text-white">{userData.email}</p>
                       </div>
-            <button 
+                      <button
                         onClick={() => handleEdit('email')}
                         className="bg-[#F25790] hover:bg-[#d93d75] text-white text-sm px-4 py-2 rounded-lg transition-colors"
-            >
+                      >
                         Editar
-            </button>
-          </div>
-        )}
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* Phone */}

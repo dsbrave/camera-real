@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 interface ModelCardProps {
   model: {
@@ -40,6 +41,7 @@ export default function ModelCard({
   onRemoveFavorite,
   size = 'medium'
 }: ModelCardProps) {
+  const router = useRouter();
   // Normalizar dados do modelo para compatibilidade
   const modelName = model.nome || model.name || '';
   const modelPhoto = model.fotoPerfil || model.photo || '';
@@ -51,22 +53,7 @@ export default function ModelCard({
   const isFavorite = favoriteModels.includes(model.id);
 
   const handleCardClick = () => {
-    if (onOpenModal) {
-      // Converter para formato esperado pelo modal
-      const normalizedModel = {
-        id: model.id,
-        nome: modelName,
-        fotoPerfil: modelPhoto,
-        categorias: modelCategories,
-        online: model.online,
-        destacado: model.destacado || false,
-        avaliacoes: modelRating,
-        valorPorMinuto: modelPrice,
-        idade: model.idade,
-        localizacao: model.localizacao
-      };
-      onOpenModal(normalizedModel);
-    }
+    router.push(`/chat-video?id=${model.id}`);
   };
 
   const handleToggleFavorite = (e: React.MouseEvent) => {

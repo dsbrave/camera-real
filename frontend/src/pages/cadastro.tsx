@@ -67,14 +67,19 @@ export default function Cadastro() {
       }
       
       // Armazenar dados do usuário no localStorage para simular autenticação
-      localStorage.setItem('user', JSON.stringify({
+      const userData = {
+        id: Date.now().toString(),
         name: formData.username,
         email: formData.email,
+        phone: '',
+        photo: '',
         isLoggedIn: true,
-        isModel: false,
-        credits: 100, // Créditos iniciais de boas-vindas
-        createdAt: new Date().toISOString()
-      }));
+        creditos: 200000,
+        credits: 200000, // Créditos iniciais de boas-vindas
+        isModel: false
+      };
+      
+      localStorage.setItem('user', JSON.stringify(userData));
       
       setIsSubmitting(false);
       setShowSuccessModal(true);

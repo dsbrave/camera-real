@@ -176,7 +176,7 @@ export default function Home() {
   const modelosDestaque: Modelo[] = [
     {
       id: "m1",
-      nome: "SweetNaty",
+      nome: "Luna Silva",
       fotoPerfil:
         "/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_ko2t9z7547m30wzu3dsv_1.png",
       categorias: ["conversa", "dança"],
@@ -185,24 +185,11 @@ export default function Home() {
       avaliacoes: 4.8,
       valorPorMinuto: 1,
       tipo: "Mulheres",
-      precoPrivado: 3,
-    },
-    {
-      id: "m4",
-      nome: "GabiDreams",
-      fotoPerfil:
-        "/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_jdasqbio3vvca5k92ebh_2.png",
-      categorias: ["conversa", "artes"],
-      online: true,
-      destacado: true,
-      avaliacoes: 4.7,
-      valorPorMinuto: 1,
-      tipo: "Mulheres",
-      precoPrivado: 4,
+      precoPrivado: 2,
     },
     {
       id: "m7",
-      nome: "IsaPink",
+      nome: "Mia Oliveira",
       fotoPerfil:
         "/images/high-resolution_studio_photo_of_a_confident_brazilian-inspired_model_wearing_an_elegant_black_lace__i7mo7j07sng27o0fv86l_2.png",
       categorias: ["conversa", "jogos"],
@@ -211,11 +198,11 @@ export default function Home() {
       avaliacoes: 4.9,
       valorPorMinuto: 1,
       tipo: "Mulheres",
-      precoPrivado: 5,
+      precoPrivado: 4,
     },
     {
       id: "m8",
-      nome: "CarolSexy",
+      nome: "Diego Fire",
       fotoPerfil:
         "/images/realistic_photo_of_a_brazilian_latino_man_with_everyday_natural_looks__regular_including_body_diver_ecf9z2bp6ac4zulo1fmw_3.png",
       categorias: ["conversa", "fitness"],
@@ -228,42 +215,42 @@ export default function Home() {
     },
     {
       id: "m9",
-      nome: "Alex & Sam",
+      nome: "Luna & Diego",
       fotoPerfil:
         "/images/realistic_photo_of_a_brazilian_latino_couple_with_everyday_natural_looks__regular_beauty_real-life__b3uv0efkhgp35404n7ab_0.png",
-      categorias: ["conversa", "entretenimento"],
+      categorias: ["conversa", "casal"],
       online: true,
       destacado: true,
       avaliacoes: 4.8,
-      valorPorMinuto: 1, // Chat simples sempre 1 crédito
+      valorPorMinuto: 1,
       tipo: "Casais",
-      precoPrivado: 4, // Chat privado configurável
+      precoPrivado: 5,
     },
     {
       id: "m10",
-      nome: "Luna",
+      nome: "Jade Almeida",
       fotoPerfil:
         "/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_zg1iy2w7g4x4j2pm3925_0.png",
       categorias: ["conversa", "arte"],
       online: true,
       destacado: true,
       avaliacoes: 4.7,
-      valorPorMinuto: 1, // Chat simples sempre 1 crédito
-      tipo: "Trans",
-      precoPrivado: 4, // Chat privado configurável
+      valorPorMinuto: 1,
+      tipo: "Mulheres",
+      precoPrivado: 3,
     },
     {
       id: "t1",
-      nome: "Valentina",
+      nome: "Kiara Lima",
       fotoPerfil:
         "/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_r68jd84c1uv21o2ehzgj_3.png",
       categorias: ["conversa", "dança"],
       online: true,
       destacado: true,
       avaliacoes: 4.5,
-      valorPorMinuto: 1, // Chat simples sempre 1 crédito
+      valorPorMinuto: 1,
       tipo: "Trans",
-      precoPrivado: 3, // Chat privado configurável
+      precoPrivado: 3,
     },
   ];
 

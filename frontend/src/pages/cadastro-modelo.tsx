@@ -72,16 +72,20 @@ export default function CadastroModelo() {
       setIsSubmitting(false);
       setShowSuccessModal(true);
       // Salvar usuário modelo no localStorage
+      const modelData = {
+        id: Date.now().toString(),
+        name: formData.nomeCompleto,
+        email: formData.email,
+        phone: '',
+        photo: '',
+        isLoggedIn: true,
+        creditos: 200000,
+        credits: 200000,
+        isModel: true
+      };
       localStorage.setItem(
         "user",
-        JSON.stringify({
-          name: formData.nomeCompleto,
-          email: formData.email,
-          isLoggedIn: true,
-          isModel: true,
-          credits: 0,
-          createdAt: new Date().toISOString(),
-        }),
+        JSON.stringify(modelData),
       );
       setTimeout(() => {
         router.push("/painel-modelo");

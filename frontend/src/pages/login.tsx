@@ -61,15 +61,19 @@ export default function Login() {
         formData.email === "teste@camera.real" &&
         formData.password === "senha123"
       ) {
+        const userData = {
+          id: '1',
+          name: 'João Silva',
+          email: formData.email,
+          photo: '',
+          isLoggedIn: true,
+          creditos: 200000,
+          credits: 200000,
+          isModel: false
+        };
         localStorage.setItem(
           "user",
-          JSON.stringify({
-            name: "João",
-            email: formData.email,
-            isLoggedIn: true,
-            isModel: false,
-            credits: 300,
-          }),
+          JSON.stringify(userData),
         );
         router.push("/");
         return;
@@ -79,15 +83,19 @@ export default function Login() {
         formData.email === "modelo@camera.real" &&
         formData.password === "senha123"
       ) {
+        const modelData = {
+          id: '2',
+          name: 'Ana Modelo',
+          email: formData.email,
+          photo: '',
+          isLoggedIn: true,
+          creditos: 200000,
+          credits: 200000,
+          isModel: true
+        };
         localStorage.setItem(
           "user",
-          JSON.stringify({
-            name: "JadeLove",
-            email: formData.email,
-            isLoggedIn: true,
-            isModel: true,
-            credits: 0,
-          }),
+          JSON.stringify(modelData),
         );
         router.push("/");
         return;

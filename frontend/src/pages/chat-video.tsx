@@ -15,6 +15,7 @@ interface Gift {
   emoji?: string;
   icon?: string;
   id?: string;
+  color?: string;
 }
 
 export default function ChatVideo() {
@@ -48,14 +49,14 @@ export default function ChatVideo() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatRef = useRef<HTMLDivElement>(null);
   
-  // Modelos disponíveis (simulação)
+  // Modelos disponíveis (todos os modelos do sistema)
   const models = [
     {
       id: 'm1',
-      name: 'MelFire',
+      name: 'Luna Silva',
       online: true,
       pricePerMinute: 1,
-      privateCallPrice: 3,
+      privateCallPrice: 2,
       profileImage: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_ko2t9z7547m30wzu3dsv_1.png',
       categories: ['conversa', 'dança'],
       rating: 4.8,
@@ -64,27 +65,231 @@ export default function ChatVideo() {
     },
     {
       id: 'm2',
-      name: 'BellaHot',
-      online: true,
+      name: 'Scarlett Moraes',
+      online: false,
       pricePerMinute: 1,
-      privateCallPrice: 4,
+      privateCallPrice: 2,
       profileImage: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_2wu5n7gdr6dsrmj98ak9_2.png',
-      categories: ['conversa', 'artes'],
-      rating: 4.7,
-      age: 26,
+      categories: ['conversa', 'música'],
+      rating: 4.5,
+      age: 22,
       location: 'Rio de Janeiro'
     },
     {
       id: 'm3',
-      name: 'JuicyLuna',
+      name: 'Valentina Costa',
       online: true,
       pricePerMinute: 1,
-      privateCallPrice: 5,
+      privateCallPrice: 3,
+      profileImage: '/images/high-resolution_studio_photo_of_a_confident_brazilian-inspired_model_wearing_an_elegant_black_lace__i7mo7j07sng27o0fv86l_2.png',
+      categories: ['conversa', 'arte'],
+      rating: 4.6,
+      age: 26,
+      location: 'Brasília'
+    },
+    {
+      id: 'm4',
+      name: 'Sophia Reis',
+      online: true,
+      pricePerMinute: 1,
+      privateCallPrice: 3,
+      profileImage: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_2wu5n7gdr6dsrmj98ak9_2.png',
+      categories: ['conversa', 'artes'],
+      rating: 4.7,
+      age: 25,
+      location: 'Salvador'
+    },
+    {
+      id: 'm5',
+      name: 'Isabella Santos',
+      online: false,
+      pricePerMinute: 1,
+      privateCallPrice: 2,
+      profileImage: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_jdasqbio3vvca5k92ebh_2.png',
+      categories: ['conversa', 'fitness'],
+      rating: 4.4,
+      age: 23,
+      location: 'Belo Horizonte'
+    },
+    {
+      id: 'm6',
+      name: 'Lara Ferreira',
+      online: true,
+      pricePerMinute: 1,
+      privateCallPrice: 2,
+      profileImage: '/images/high-resolution_studio_photo_of_a_confident_brazilian-inspired_model_wearing_an_elegant_black_lace__i7mo7j07sng27o0fv86l_3.png',
+      categories: ['conversa', 'culinária'],
+      rating: 4.3,
+      age: 27,
+      location: 'Fortaleza'
+    },
+    {
+      id: 'm7',
+      name: 'Mia Oliveira',
+      online: true,
+      pricePerMinute: 1,
+      privateCallPrice: 4,
       profileImage: '/images/high-resolution_studio_photo_of_a_confident_brazilian-inspired_model_wearing_an_elegant_black_lace__i7mo7j07sng27o0fv86l_2.png',
       categories: ['conversa', 'jogos'],
       rating: 4.9,
+      age: 21,
+      location: 'Curitiba'
+    },
+    {
+      id: 'm8',
+      name: 'Diego Fire',
+      online: true,
+      pricePerMinute: 1,
+      privateCallPrice: 3,
+      profileImage: '/images/realistic_photo_of_a_brazilian_latino_man_with_everyday_natural_looks__regular_including_body_diver_ecf9z2bp6ac4zulo1fmw_3.png',
+      categories: ['conversa', 'fitness'],
+      rating: 4.6,
       age: 28,
-      location: 'Brasília'
+      location: 'Porto Alegre'
+    },
+    {
+      id: 'm9',
+      name: 'Luna & Diego',
+      online: true,
+      pricePerMinute: 1,
+      privateCallPrice: 5,
+      profileImage: '/images/realistic_photo_of_a_brazilian_latino_couple_with_everyday_natural_looks__regular_beauty_real-life__b3uv0efkhgp35404n7ab_0.png',
+      categories: ['conversa', 'casal'],
+      rating: 4.8,
+      age: 25,
+      location: 'Recife'
+    },
+    {
+      id: 'm10',
+      name: 'Jade Almeida',
+      online: true,
+      pricePerMinute: 1,
+      privateCallPrice: 3,
+      profileImage: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_zg1iy2w7g4x4j2pm3925_0.png',
+      categories: ['conversa', 'arte'],
+      rating: 4.7,
+      age: 24,
+      location: 'Manaus'
+    },
+    {
+      id: 'm11',
+      name: 'Lucas Steel',
+      online: false,
+      pricePerMinute: 1,
+      privateCallPrice: 2,
+      profileImage: '/images/realistic_photo_of_a_brazilian_latino_man_with_everyday_natural_looks__regular_including_body_diver_ahdu5rvu1ocli3txwuq6_1.png',
+      categories: ['conversa', 'música'],
+      rating: 4.2,
+      age: 26,
+      location: 'Goiânia'
+    },
+    {
+      id: 'm12',
+      name: 'Bella & Rafael',
+      online: false,
+      pricePerMinute: 1,
+      privateCallPrice: 4,
+      profileImage: '/images/realistic_photo_of_a_brazilian_latino_couple_with_everyday_natural_looks__regular_beauty_real-life__cd6lq4r3sp44ox2d43bc_3.png',
+      categories: ['conversa', 'casal'],
+      rating: 4.5,
+      age: 27,
+      location: 'Florianópolis'
+    },
+    {
+      id: 'm13',
+      name: 'Rafael King',
+      online: true,
+      pricePerMinute: 1,
+      privateCallPrice: 3,
+      profileImage: '/images/realistic_photo_of_a_brazilian_latino_man_with_everyday_natural_looks__regular_including_body_diver_bk3xzapp8bfl1f6z0o1a_0.png',
+      categories: ['conversa', 'esportes'],
+      rating: 4.3,
+      age: 29,
+      location: 'Natal'
+    },
+    {
+      id: 'm14',
+      name: 'Mia & Lucas',
+      online: true,
+      pricePerMinute: 1,
+      privateCallPrice: 4,
+      profileImage: '/images/realistic_photo_of_a_brazilian_latino_couple_with_everyday_natural_looks__regular_beauty_real-life__wi4ecukg5q3clcziptks_0.png',
+      categories: ['conversa', 'entretenimento'],
+      rating: 4.4,
+      age: 24,
+      location: 'João Pessoa'
+    },
+    {
+      id: 'm15',
+      name: 'Bruno Wolf',
+      online: false,
+      pricePerMinute: 1,
+      privateCallPrice: 2,
+      profileImage: '/images/realistic_photo_of_a_brazilian_latino_man_with_everyday_natural_looks__regular_including_body_diver_57c32r6blmkzgrl282d1_1.png',
+      categories: ['conversa', 'arte'],
+      rating: 4.1,
+      age: 30,
+      location: 'Vitória'
+    },
+    {
+      id: 'm16',
+      name: 'Jade & Bruno',
+      online: true,
+      pricePerMinute: 1,
+      privateCallPrice: 3,
+      profileImage: '/images/realistic_photo_of_a_brazilian_latino_couple_with_everyday_natural_looks__regular_beauty_real-life__tuqx4h29gu7wo0b1fr92_3.png',
+      categories: ['conversa', 'música'],
+      rating: 4.6,
+      age: 26,
+      location: 'Campo Grande'
+    },
+    {
+      id: 't1',
+      name: 'Kiara Lima',
+      online: true,
+      pricePerMinute: 1,
+      privateCallPrice: 3,
+      profileImage: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_r68jd84c1uv21o2ehzgj_3.png',
+      categories: ['conversa', 'dança'],
+      rating: 4.5,
+      age: 23,
+      location: 'Belém'
+    },
+    {
+      id: 't2',
+      name: 'Bella Martins',
+      online: false,
+      pricePerMinute: 1,
+      privateCallPrice: 2,
+      profileImage: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_jdasqbio3vvca5k92ebh_2.png',
+      categories: ['conversa', 'música'],
+      rating: 4.3,
+      age: 25,
+      location: 'Maceió'
+    },
+    {
+      id: 't3',
+      name: 'Yasmin Rocha',
+      online: true,
+      pricePerMinute: 1,
+      privateCallPrice: 4,
+      profileImage: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_hgg1km82rvo2tgmhd39a_3.png',
+      categories: ['conversa', 'arte'],
+      rating: 4.6,
+      age: 22,
+      location: 'Teresina'
+    },
+    {
+      id: 't4',
+      name: 'Camila Fox',
+      online: true,
+      pricePerMinute: 1,
+      privateCallPrice: 3,
+      profileImage: '/images/high-quality_studio_photo_of_a_fit_female_model_posing_in_a_modern_streaming_setup_emphasis_on_body_bwiwj44iuhfpxz2tlzha_1.png',
+      categories: ['conversa', 'fitness'],
+      rating: 4.4,
+      age: 27,
+      location: 'Cuiabá'
     }
   ];
 
@@ -93,7 +298,7 @@ export default function ChatVideo() {
     { name: 'Pizza', price: 10, image: '/icons/maps/local_pizza.svg' },
     { name: 'Fogo', price: 15, image: '/icons/social/whatshot.svg' },
     { name: 'Drink', price: 25, image: '/icons/maps/wine_bar.svg' },
-    { name: 'Coroa', price: 50, image: '/icons/Vector.svg' },
+    { name: 'Coroa', price: 50, image: '/icons/Vector.svg', color: '#F25790' }, // coroa rosa neon
   ];
 
   // Pacotes de créditos
@@ -178,6 +383,17 @@ export default function ChatVideo() {
     return () => clearInterval(interval);
   }, [refreshCredits]);
 
+  // useEffect para sincronizar modelIndex com o id da URL
+  useEffect(() => {
+    if (id && typeof id === 'string') {
+      const idx = models.findIndex((m) => m.id === id);
+      if (idx !== -1) {
+        setModelIndex(idx);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
   const handleNextModel = () => {
     console.log('handleNextModel: Navegando para próxima modelo');
     setModelIndex((prevIndex) => (prevIndex + 1) % models.length);
@@ -255,7 +471,7 @@ export default function ChatVideo() {
       // Se já está na sala privada, pode sair sempre
       console.log('Saindo da sala privada');
       setIsPrivateCall(false);
-      setMessages(prev => [...prev, { id: Date.now(), text: `🔓 Você voltou para o chat aberto com todos os usuários.`, sender: 'system', timestamp: new Date() }]);
+      setMessages(prev => [...prev, { id: Date.now(), text: `Você voltou para o chat aberto com todos os usuários.`, sender: 'system', privateRoom: false, timestamp: new Date() }]);
     } else {
       // Para entrar na sala privada, verificar se tem créditos
       console.log('Tentando entrar na sala privada');
@@ -278,7 +494,7 @@ export default function ChatVideo() {
           }
           // 30% para a modelo
           setModelEarnings(prev => prev + Math.floor(currentModel.privateCallPrice * 0.3));
-          setMessages(prev => [...prev, { id: Date.now(), text: `🔒 Sala privada iniciada com ${currentModel.name}`, sender: 'system', timestamp: new Date() }]);
+          setMessages(prev => [...prev, { id: Date.now(), text: `Sala privada iniciada com ${currentModel.name}`, sender: 'system', privateRoom: true, timestamp: new Date() }]);
         } else {
           console.log('Erro ao gastar créditos');
           setMessages(prev => [...prev, { id: Date.now(), text: `⚠️ Erro ao processar pagamento da sala privada.`, sender: 'system', timestamp: new Date() }]);
@@ -309,21 +525,74 @@ export default function ChatVideo() {
     }]);
   };
 
+  const [customGiftValue, setCustomGiftValue] = useState(0);
+  const [giftAnimations, setGiftAnimations] = useState<Array<{
+    id: number;
+    gift: Gift;
+    timestamp: number;
+  }>>([]);
+
+  // Novo estado para fila de presentes
+  const [giftQueue, setGiftQueue] = useState<Array<{
+    id: number;
+    gift: Gift;
+    username: string;
+    credits: number;
+  }>>([]);
+  const [currentGift, setCurrentGift] = useState<null | {
+    id: number;
+    gift: Gift;
+    username: string;
+    credits: number;
+  }>(null);
+
+  // Modificar triggerGiftLineAnimation para também disparar o efeito central
+  const triggerGiftLineAnimation = (gift: Gift) => {
+    const animationId = Date.now();
+    const giftObj = {
+      id: animationId,
+      gift,
+      username: userName,
+      credits: gift.price,
+    };
+    setGiftQueue(prev => [...prev, giftObj]);
+    setCurrentGift(giftObj);
+    setTimeout(() => setCurrentGift(null), 2200); // efeito central dura 2.2s
+  };
+
+  // Efeito para mostrar um presente da fila por vez
+  useEffect(() => {
+    if (!currentGift && giftQueue.length > 0) {
+      setCurrentGift(giftQueue[0]);
+      // Remove da fila após exibir
+      setTimeout(() => {
+        setGiftQueue(prev => prev.slice(1));
+        setCurrentGift(null);
+      }, 3200); // tempo de exibição + animação
+    }
+  }, [giftQueue, currentGift]);
+
+  // Substituir triggerGiftAnimation por triggerGiftLineAnimation no handleSendGift
   const handleSendGift = (gift: Gift) => {
-    // Atualizar créditos antes de verificar
     refreshCredits();
-    
     if (userCredits >= gift.price) {
       if (spendCredits(gift.price)) {
-        // 30% para a modelo
         setModelEarnings(prev => prev + Math.floor(gift.price * 0.3));
-        setMessages(prev => [...prev, { 
+        setMessages(prev => [
+          ...prev,
+          {
           id: Date.now(), 
-          text: `🎁 ${userName} enviou ${gift.name} para ${currentModel.name}!`, 
+            type: 'gift',
+            gift,
           sender: 'system', 
-          timestamp: new Date() 
-        }]);
+            username: userName,
+            to: currentModel.name,
+            timestamp: new Date(),
+          },
+        ]);
         setShowGiftModal(false);
+        // triggerGiftAnimation(gift); // Remover
+        triggerGiftLineAnimation(gift); // Novo
       } else {
         setMessages(prev => [...prev, { 
           id: Date.now(), 
@@ -333,7 +602,6 @@ export default function ChatVideo() {
         }]);
       }
     } else {
-      // Mostrar modal de créditos em vez de mensagem
       setShowGiftModal(false);
       setShowCreditModal(true);
     }
@@ -381,8 +649,6 @@ export default function ChatVideo() {
     setIsCallActive(false);
     setMessages(prev => [...prev, { id: Date.now(), text: `Você saiu do chat.`, sender: 'system', timestamp: new Date() }]);
   };
-
-  const [customGiftValue, setCustomGiftValue] = useState(0);
 
   return (
     <>
@@ -480,15 +746,15 @@ export default function ChatVideo() {
                       <div 
                         className="h-full rounded-full transition-all duration-1000 bg-gradient-to-r from-[#F25790] to-[#d93d75] shadow-[0_0_8px_rgba(242,87,144,0.5)]"
                         style={{
-                          width: isUsingCredits
-                            ? `${Math.max(10, (creditsSpent / userCredits) * 100)}%` // Mostra progresso baseado nos créditos gastos
-                            : '10%'
+                          width: isUsingCredits && userCredits > 0 && creditsSpent > 0
+                            ? `${Math.min(100, Math.max(0, (creditsSpent / (creditsSpent + userCredits)) * 100))}%`
+                            : '0%'
                         }}
                       ></div>
                     </div>
                     
                     <div className="flex items-center gap-1">
-                      <span className="text-green-400 font-bold text-xs">{userCredits}</span>
+                      <span className="text-[#F25790] font-bold text-xs">{userCredits}</span>
                       <span className="text-white/60 text-xs">créditos</span>
                     </div>
                   </div>
@@ -759,14 +1025,34 @@ export default function ChatVideo() {
                     </div>
                   </div>
                 )}
-                {messages.map((msg) => (
+                {messages.map((msg) => {
+                  // Return antecipado para mensagens de sala privada - só o banner colorido
+                  if (msg.sender === 'system' && (msg.privateRoom === true || msg.privateRoom === false)) {
+                    return (
+                      <div key={msg.id} className="flex justify-end">
+                        <div className={`flex items-center gap-2 px-4 py-2 rounded-2xl border shadow-[0_0_8px_rgba(242,87,144,0.15)] mb-1 w-fit
+                          ${msg.privateRoom === true
+                            ? 'bg-gradient-to-r from-[#F25790]/30 to-[#d93d75]/30 border-[#F25790]/30'
+                            : 'bg-gradient-to-r from-red-500/30 to-red-600/30 border-red-500/30'}
+                        `}>
+                          <Image src={msg.privateRoom ? "/icons/action/lock_open.svg" : "/icons/action/lock.svg"} alt="Privado" width={20} height={20} className="w-5 h-5 filter invert" />
+                          <span className="text-sm align-middle font-semibold">{msg.text}</span>
+                        </div>
+                      </div>
+                    );
+                  }
+
+                  // Renderização normal para outras mensagens
+                  return (
                   <div
                     key={msg.id}
                     className={`flex ${msg.sender === 'user' ? 'justify-end' : msg.sender === 'system' ? 'justify-end' : 'justify-start'}`}
                   >
                     <div
                       className={`max-w-[85%] rounded-2xl px-3 py-2 relative ${
-                        msg.sender === 'user' 
+                          msg.type === 'gift'
+                            ? 'bg-gradient-to-r from-yellow-500/30 to-yellow-600/30 border border-yellow-500/40 shadow-[0_0_12px_rgba(234,179,8,0.2)] text-white'
+                            : msg.sender === 'user' 
                           ? 'bg-gradient-to-r from-[#F25790]/60 to-[#d93d75]/60 text-white shadow-[0_0_8px_rgba(242,87,144,0.2)] border border-[#F25790]/30' 
                           : msg.sender === 'system'
                           ? 'bg-gradient-to-r from-gray-700/40 to-gray-600/40 text-gray-300 text-xs border border-gray-500/30 shadow-[0_0_8px_rgba(128,128,128,0.1)]'
@@ -775,16 +1061,22 @@ export default function ChatVideo() {
                           : 'bg-gradient-to-r from-gray-800/80 to-gray-700/80 text-white border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]'
                       }`}
                     >
-                      {msg.sender === 'other_user' && (
+                        {msg.type === 'gift' ? (
+                          <div className="flex items-center gap-2">
+                            <Image src={msg.gift.image} alt={msg.gift.name} width={24} height={24} className="w-6 h-6 filter invert" />
+                            <span className="text-sm font-medium text-yellow-300">{msg.username} enviou {msg.gift.name}</span>
+                            <span className="text-xs text-yellow-200 font-bold">+{msg.gift.price}</span>
+                          </div>
+                        ) : msg.sender === 'other_user' ? (
                         <p className="text-xs text-gray-300 mb-1 font-medium">{msg.username}</p>
-                      )}
-                      {msg.sender === 'system' && (
+                        ) : null}
+                        {msg.type !== 'gift' && msg.sender === 'system' && (
                         <p className="relative z-10 text-xs">
                           <span className="text-[#F25790] font-medium">{msg.username}</span>
                           <span className="text-gray-300"> {msg.text}</span>
                         </p>
                       )}
-                      {msg.sender !== 'system' && (
+                        {msg.type !== 'gift' && msg.sender !== 'system' && (
                         <p className="relative z-10 text-sm">{msg.text}</p>
                       )}
                       {msg.timestamp && (
@@ -792,9 +1084,10 @@ export default function ChatVideo() {
                           {msg.timestamp.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
                         </p>
                       )}
-                      {/* Efeito de brilho interno */}
                       <div className={`absolute inset-0 rounded-2xl ${
-                        msg.sender === 'user' 
+                          msg.type === 'gift'
+                            ? 'bg-gradient-to-r from-yellow-400/10 to-transparent'
+                            : msg.sender === 'user' 
                           ? 'bg-gradient-to-r from-white/10 to-transparent' 
                           : msg.sender === 'system'
                           ? 'bg-gradient-to-r from-white/5 to-transparent'
@@ -804,7 +1097,8 @@ export default function ChatVideo() {
                       } pointer-events-none`}></div>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
                 <div ref={messagesEndRef} />
               </div>
               
@@ -861,7 +1155,7 @@ export default function ChatVideo() {
                 <p className="text-white/80 mb-6 text-center">Demonstre seu carinho enviando <span className="text-[#F25790] font-bold">presentes especiais</span> para sua modelo favorita</p>
                 <div className="w-full bg-black/30 rounded-xl p-3 mb-6 flex items-center justify-between border border-gray-700">
                   <span className="text-white/80 text-sm">Seus créditos:</span>
-                  <span className="text-green-400 font-bold">{userCredits}</span>
+                  <span className="text-[#F25790] font-bold">{userCredits}</span>
                 </div>
                 {/* Grid de presentes */}
                 <div className="grid grid-cols-2 gap-4 mb-6 w-full">
@@ -875,12 +1169,13 @@ export default function ChatVideo() {
                           ? 'border-[#F25790]/30 bg-gradient-to-br from-[#F25790]/10 to-[#d93d75]/10 hover:from-[#F25790]/20 hover:to-[#d93d75]/20 hover:scale-105 text-white'
                           : 'border-gray-700 bg-gray-800/60 opacity-60 cursor-not-allowed text-gray-400'}`}
                     >
-                      <Image
+                        <Image
                         src={gift.image}
-                        alt={gift.name}
+                          alt={gift.name}
                         width={40}
                         height={40}
-                        className="w-10 h-10 mb-1 filter invert"
+                        className={`w-10 h-10 mb-1 filter invert ${gift.name === 'Coroa' ? 'drop-shadow-[0_0_6px_#F25790]' : ''}`}
+                        style={gift.name === 'Coroa' ? { filter: 'invert(62%) sepia(99%) saturate(1200%) hue-rotate(312deg) brightness(104%) contrast(101%) drop-shadow(0 0 6px #F25790)' } : {}}
                       />
                       <span>{gift.name}</span>
                       <span className="text-[#F25790] font-bold text-xs">{gift.price} créditos</span>
@@ -1000,7 +1295,7 @@ export default function ChatVideo() {
                       <div className="backdrop-blur-sm rounded-xl p-3 space-y-2 border border-[#F25790]/50 shadow-[0_0_15px_rgba(242,87,144,0.3)]">
                         <div className="flex items-center justify-between">
                           <span className="text-white/80 text-sm">Seus créditos:</span>
-                          <span className="text-green-400 font-bold">{userCredits}</span>
+                          <span className="text-[#F25790] font-bold">{userCredits}</span>
                         </div>
                         
                         <div className="flex items-center justify-between">
@@ -1027,7 +1322,7 @@ export default function ChatVideo() {
                             <div className="text-left">
                               <div className="text-white font-bold text-base">{pkg.credits} créditos</div>
                               {pkg.bonus > 0 && (
-                                <div className="text-green-400 text-sm">+{pkg.bonus} bônus</div>
+                                <div className="text-[#F25790] text-sm">+{pkg.bonus} bônus</div>
                               )}
                             </div>
                             <div className="text-[#F25790] font-bold text-lg">R$ {pkg.price.toFixed(2)}</div>
@@ -1298,6 +1593,112 @@ export default function ChatVideo() {
           )}
         </div>
       </div>
+      
+      {/* Animações de Presentes - SOBRE TUDO */}
+      {giftAnimations.map((animation) => (
+        <div key={animation.id} className="fixed inset-0 pointer-events-none z-[100000]">
+          {[...Array(6)].map((_, index) => {
+            const randomX = Math.random() * 80 + 10;
+            const randomY = Math.random() * 70 + 10;
+            const randomDelay = Math.random() * 0.8;
+            const randomDuration = 2.2 + Math.random() * 1.2;
+            return (
+              <div
+                key={`${animation.id}-${index}`}
+                className="absolute animate-giftNeonFloat"
+                style={{
+                  left: `${randomX}%`,
+                  top: `${randomY}%`,
+                  animationDelay: `${randomDelay}s`,
+                  animationDuration: `${randomDuration}s`,
+                }}
+              >
+                <Image
+                  src={animation.gift.image}
+                  alt={animation.gift.name}
+                  width={40}
+                  height={40}
+                  className={`w-10 h-10 filter invert drop-shadow-[0_0_12px_#F25790] ${animation.gift.name === 'Coroa' ? 'drop-shadow-[0_0_16px_#F25790]' : ''}`}
+                  style={animation.gift.name === 'Coroa' ? { filter: 'invert(62%) sepia(99%) saturate(1200%) hue-rotate(312deg) brightness(104%) contrast(101%) drop-shadow(0 0 16px #F25790)' } : {}}
+                />
+              </div>
+            );
+          })}
+        </div>
+      ))}
+      
+      <style>{`
+        @keyframes giftNeonFloat {
+          0% {
+            opacity: 0;
+            transform: translateY(20px) scale(0.8);
+            filter: blur(2px) brightness(1.2);
+          }
+          10% {
+            opacity: 1;
+            transform: translateY(0px) scale(1.1);
+            filter: blur(0px) brightness(1.4);
+          }
+          80% {
+            opacity: 1;
+            transform: translateY(-20px) scale(1);
+            filter: blur(0px) brightness(1.2);
+          }
+          100% {
+            opacity: 0;
+            transform: translateY(-40px) scale(0.8);
+            filter: blur(2px) brightness(1);
+          }
+        }
+        .animate-giftNeonFloat {
+          animation: giftNeonFloat 2.8s cubic-bezier(.4,1.2,.6,1) both;
+        }
+      `}</style>
+      
+      {/* Linha de presentes estilo TikTok/Live */}
+      {currentGift && (
+        <div className="fixed left-0 bottom-24 w-full flex justify-start items-end pointer-events-none z-[9999]">
+          <div className="ml-6 animate-giftLineInOut bg-black/80 backdrop-blur-md rounded-2xl px-6 py-3 border border-[#F25790]/40 shadow-[0_0_20px_rgba(242,87,144,0.3)] flex items-center gap-4 min-w-[220px] max-w-xs">
+            <Image
+              src={currentGift.gift.image}
+              alt={currentGift.gift.name}
+              width={40}
+              height={40}
+              className={`w-10 h-10 filter invert drop-shadow-lg ${currentGift.gift.name === 'Coroa' ? 'drop-shadow-[0_0_8px_#F25790]' : ''}`}
+              style={currentGift.gift.name === 'Coroa' ? { filter: 'invert(62%) sepia(99%) saturate(1200%) hue-rotate(312deg) brightness(104%) contrast(101%) drop-shadow(0 0 8px #F25790)' } : { filter: 'invert(1) drop-shadow(0 0 8px #F25790)' }}
+            />
+            <div>
+              <p className="text-white font-bold text-base leading-tight">
+                {currentGift.username} <span className="text-[#F25790] font-bold">enviou</span>
+              </p>
+              <p className="text-[#F25790] font-bold text-sm leading-tight">{currentGift.gift.name} <span className="text-yellow-300">+{currentGift.credits}</span></p>
+            </div>
+          </div>
+          <style>{`
+            @keyframes giftLineInOut {
+              0% {
+                opacity: 0;
+                transform: translateX(-120%) scale(0.95);
+              }
+              10% {
+                opacity: 1;
+                transform: translateX(0) scale(1.05);
+              }
+              80% {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+              }
+              100% {
+                opacity: 0;
+                transform: translateX(120%) scale(0.95);
+              }
+            }
+            .animate-giftLineInOut {
+              animation: giftLineInOut 3.2s cubic-bezier(.4,1.2,.6,1) both;
+            }
+          `}</style>
+        </div>
+      )}
     </>
   );
 }

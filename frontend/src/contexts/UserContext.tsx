@@ -23,7 +23,7 @@ interface UserProviderProps {
 }
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-  const [userCredits, setUserCredits] = useState<number>(0);
+  const [userCredits, setUserCredits] = useState<number>(200000);
   const [isClient, setIsClient] = useState(false);
 
   // Verificar se estamos no cliente
@@ -47,7 +47,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     } catch (error) {
       console.error('Erro ao carregar créditos do localStorage:', error);
     }
-    return 0; // Valor padrão zerado para teste
+    return 200000; // Valor padrão de 200.000 créditos para teste
   };
 
   // Função para salvar créditos no localStorage
@@ -78,7 +78,10 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   useEffect(() => {
     if (isClient) {
       const credits = loadCreditsFromStorage();
-      setUserCredits(credits);
+      // FORÇAR 200.000 créditos para todos os usuários durante teste
+      console.log('Forçando 200.000 créditos para teste');
+      setUserCredits(200000);
+      saveCreditsToStorage(200000);
     }
   }, [isClient]);
 
@@ -112,14 +115,10 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   };
 
   const refreshCredits = useCallback(() => {
-    const credits = loadCreditsFromStorage();
-    // Só atualiza se os créditos realmente mudaram
-    setUserCredits(prev => {
-      if (prev !== credits) {
-        return credits;
-      }
-      return prev;
-    });
+    // FORÇAR 200.000 créditos durante teste
+    console.log('RefreshCredits: Forçando 200.000 créditos');
+    setUserCredits(200000);
+    saveCreditsToStorage(200000);
   }, [isClient]);
 
   return (

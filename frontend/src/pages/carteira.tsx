@@ -32,12 +32,12 @@ const Carteira: React.FC = () => {
     cpf: '',
     name: ''
   });
-  const [creditos, setCreditos] = useState(150); // Mudança de chatCoins para creditos
+  const [creditos, setCreditos] = useState(200000); // Mudança de chatCoins para creditos
   const [userData, setUserData] = useState({
     name: '',
     email: '',
     photo: '',
-    credits: 150
+    credits: 200000
   });
   const [transacoes, setTransacoes] = useState([
     { data: '22/05/2025', tipo: 'Adição de créditos', valor: '200 Créditos', saldoFinal: '150 Créditos' },
@@ -89,12 +89,12 @@ const Carteira: React.FC = () => {
     if (userStorage) {
       try {
         const parsedUserData = JSON.parse(userStorage);
-        setCreditos(parsedUserData.creditos || 150); // Usar Créditos em vez de chatCoins
+        setCreditos(parsedUserData.creditos || 200000); // Usar Créditos em vez de chatCoins
         setUserData({
           name: parsedUserData.name || '',
           email: parsedUserData.email || '',
           photo: parsedUserData.photo || '',
-          credits: parsedUserData.creditos || 150
+          credits: parsedUserData.creditos || 200000
         });
       } catch (error) {
         console.error('Erro ao verificar login:', error);
@@ -343,9 +343,9 @@ const Carteira: React.FC = () => {
                               viewBox="0 0 24 24" 
                               fill="none" 
                               xmlns="http://www.w3.org/2000/svg"
-                              className="w-4 h-4 text-green-500 absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                              className="w-4 h-4 text-[#F25790] absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                             >
-                              <path d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z" fill="#10b981"/>
+                              <path d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z" fill="#F25790"/>
                             </svg>
                           </div>
                           <span className="text-white font-medium text-lg">
