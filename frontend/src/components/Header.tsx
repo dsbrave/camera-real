@@ -299,6 +299,12 @@ export default function Header() {
                   Favoritos
                 </Link>
                 <Link
+                  href="/perfil-usuario"
+                  className="hover:text-[#F25790] font-medium transition-colors"
+                >
+                  Perfil
+                </Link>
+                <Link
                   href="/suporte"
                   className="hover:text-[#F25790] font-medium transition-colors"
                 >
@@ -406,6 +412,12 @@ export default function Header() {
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-48 py-2 bg-gray-900 rounded-lg shadow-xl z-50">
                     <Link
+                      href="/perfil-usuario"
+                      className="block px-4 py-2 text-white hover:bg-gray-800"
+                    >
+                      Perfil
+                    </Link>
+                    <Link
                       href="/carteira"
                       className="block px-4 py-2 text-white hover:bg-gray-800"
                     >
@@ -470,6 +482,13 @@ export default function Header() {
             <div className="w-full max-w-xs mx-auto">
               {isLoggedIn && (
                 <>
+                  <Link
+                    href="/perfil-usuario"
+                    className="block py-2 text-white hover:text-[#F25790] font-medium transition-colors"
+                    onClick={closeMobileMenu}
+                  >
+                    Perfil
+                  </Link>
                   <Link
                     href="/explorar"
                     className="block py-2 text-white hover:text-[#F25790] font-medium transition-colors"
@@ -635,10 +654,12 @@ export default function Header() {
           isOpen={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
           profileData={{
-            username: userData.username || "",
-            email: userData.email || "",
-            phone: userData.phone || "",
-            profilePic: userData.photo || "",
+            name: userData?.name || "",
+            username: userData?.username || "",
+            email: userData?.email || "",
+            phone: userData?.phone || "",
+            profilePic: userData?.photo || "",
+            bio: userData?.bio || "",
           }}
           onSave={handleUpdateProfile}
         />

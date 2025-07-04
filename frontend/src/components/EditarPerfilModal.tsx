@@ -5,13 +5,17 @@ interface EditarPerfilModalProps {
   isOpen: boolean;
   onClose: () => void;
   profileData: {
+    name?: string;
     username: string;
     email: string;
     phone: string;
     profilePic: string;
+    bio?: string;
   };
   onSave: (data: any) => void;
 }
+
+const MAX_BIO = 160;
 
 const EditarPerfilModal: React.FC<EditarPerfilModalProps> = ({
   isOpen,
@@ -20,26 +24,48 @@ const EditarPerfilModal: React.FC<EditarPerfilModalProps> = ({
   onSave,
 }) => {
   const [formData, setFormData] = useState({
+    name: profileData.name || '',
     username: profileData.username,
     email: profileData.email,
     phone: profileData.phone,
     profilePic: profileData.profilePic,
+    bio: profileData.bio || '',
     password: "",
     confirmPassword: "",
   });
+  const [previewPic, setPreviewPic] = useState<string | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        setPreviewPic(ev.target?.result as string);
+        setFormData((prev) => ({
+          ...prev,
+          profilePic: ev.target?.result as string,
+          photo: ev.target?.result as string,
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSave = () => {
-    // Validação simples
     if (formData.password && formData.password !== formData.confirmPassword) {
       alert("As senhas não coincidem!");
       return;
     }
-    onSave(formData);
+    onSave({
+      ...formData,
+      photo: formData.profilePic,
+      profilePic: formData.profilePic,
+    });
     onClose();
   };
 
@@ -80,9 +106,9 @@ const EditarPerfilModal: React.FC<EditarPerfilModalProps> = ({
           <div className="flex flex-col items-center mb-6">
             <div className="relative mb-2">
               <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-[#F25790] bg-gray-700 flex items-center justify-center">
-                {formData.profilePic ? (
+                {previewPic || formData.profilePic ? (
                   <Image
-                    src={formData.profilePic}
+                    src={previewPic || formData.profilePic}
                     alt="Foto de perfil"
                     width={96}
                     height={96}
@@ -90,22 +116,33 @@ const EditarPerfilModal: React.FC<EditarPerfilModalProps> = ({
                   />
                 ) : (
                   <span className="text-white text-4xl font-bold">
-                    {formData.username?.charAt(0).toUpperCase() || "U"}
+                    {formData.name?.charAt(0).toUpperCase() || formData.username?.charAt(0).toUpperCase() || "U"}
                   </span>
                 )}
               </div>
-              {/* Botão de editar foto (futuro upload) */}
-              <button className="absolute bottom-0 right-0 bg-[#F25790] text-white text-xs py-1 px-3 rounded-full shadow">
+              {/* Botão de editar foto */}
+              <label className="absolute bottom-0 right-0 bg-[#F25790] text-white text-xs py-1 px-3 rounded-full shadow cursor-pointer">
                 Editar
-              </button>
+                <input type="file" accept="image/*" className="hidden" onChange={handlePhotoChange} />
+              </label>
             </div>
           </div>
 
-          {/* Campos de edição */}
+          {/* Campo Nome */}
           <div className="mb-4">
-            <label className="block text-gray-300 text-sm mb-1">
-              Nome de usuário
-            </label>
+            <label className="block text-gray-300 text-sm mb-1">Nome</label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full p-3 rounded-lg bg-gray-800 text-white focus:outline-none border border-gray-700 mb-2"
+              placeholder="Seu nome"
+            />
+          </div>
+          {/* Campo Nome de usuário */}
+          <div className="mb-4">
+            <label className="block text-gray-300 text-sm mb-1">Nome de usuário</label>
             <input
               type="text"
               name="username"
@@ -115,6 +152,21 @@ const EditarPerfilModal: React.FC<EditarPerfilModalProps> = ({
               placeholder="@Nick_name_aqui"
             />
           </div>
+          {/* Campo Bio */}
+          <div className="mb-4">
+            <label className="block text-gray-300 text-sm mb-1">Biografia</label>
+            <textarea
+              name="bio"
+              value={formData.bio}
+              onChange={handleChange}
+              maxLength={MAX_BIO}
+              rows={3}
+              className="w-full p-3 rounded-lg bg-gray-800 text-white focus:outline-none border border-gray-700 mb-1 resize-none"
+              placeholder="Fale um pouco sobre você..."
+            />
+            <div className="text-xs text-gray-400 text-right">{formData.bio.length}/{MAX_BIO}</div>
+          </div>
+          {/* Email */}
           <div className="mb-4">
             <label className="block text-gray-300 text-sm mb-1">Email</label>
             <input
@@ -126,6 +178,7 @@ const EditarPerfilModal: React.FC<EditarPerfilModalProps> = ({
               placeholder="Seu email"
             />
           </div>
+          {/* Telefone */}
           <div className="mb-4">
             <label className="block text-gray-300 text-sm mb-1">Telefone</label>
             <input
@@ -137,10 +190,9 @@ const EditarPerfilModal: React.FC<EditarPerfilModalProps> = ({
               placeholder="Seu telefone"
             />
           </div>
+          {/* Nova senha */}
           <div className="mb-4">
-            <label className="block text-gray-300 text-sm mb-1">
-              Nova senha
-            </label>
+            <label className="block text-gray-300 text-sm mb-1">Nova senha</label>
             <input
               type="password"
               name="password"
@@ -150,10 +202,9 @@ const EditarPerfilModal: React.FC<EditarPerfilModalProps> = ({
               placeholder="Nova senha"
             />
           </div>
+          {/* Confirmar nova senha */}
           <div className="mb-6">
-            <label className="block text-gray-300 text-sm mb-1">
-              Confirmar nova senha
-            </label>
+            <label className="block text-gray-300 text-sm mb-1">Confirmar nova senha</label>
             <input
               type="password"
               name="confirmPassword"

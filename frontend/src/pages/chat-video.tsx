@@ -18,6 +18,14 @@ interface Gift {
   color?: string;
 }
 
+// Adicionar tipo para partículas
+interface GiftParticle {
+  id: string;
+  x: number;
+  y: number;
+  gift: Gift;
+}
+
 export default function ChatVideo() {
   // ... outros estados ...
   const [showGiftModal, setShowGiftModal] = useState(false);
@@ -297,8 +305,8 @@ export default function ChatVideo() {
     { name: 'Rosa', price: 5, image: '/icons/maps/local_florist.svg' },
     { name: 'Pizza', price: 10, image: '/icons/maps/local_pizza.svg' },
     { name: 'Fogo', price: 15, image: '/icons/social/whatshot.svg' },
-    { name: 'Drink', price: 25, image: '/icons/maps/wine_bar.svg' },
-    { name: 'Coroa', price: 50, image: '/icons/Vector.svg', color: '#F25790' }, // coroa rosa neon
+    { name: 'Coração', price: 25, image: '/icons/action/favorite_border.svg' },
+    { name: 'Coroa', price: 50, image: '/icons/Vector.svg' },
   ];
 
   // Pacotes de créditos
@@ -526,11 +534,7 @@ export default function ChatVideo() {
   };
 
   const [customGiftValue, setCustomGiftValue] = useState(0);
-  const [giftAnimations, setGiftAnimations] = useState<Array<{
-    id: number;
-    gift: Gift;
-    timestamp: number;
-  }>>([]);
+  const [giftParticles, setGiftParticles] = useState<GiftParticle[]>([]);
 
   // Novo estado para fila de presentes
   const [giftQueue, setGiftQueue] = useState<Array<{
@@ -557,7 +561,11 @@ export default function ChatVideo() {
     };
     setGiftQueue(prev => [...prev, giftObj]);
     setCurrentGift(giftObj);
+    // Disparar partículas/flutuantes
+    setGiftParticles(prev => [...prev, { id: `${animationId}`, x: Math.random() * 60 + 20, y: Math.random() * 30 + 55, gift }]);
     setTimeout(() => setCurrentGift(null), 2200); // efeito central dura 2.2s
+    // Remover animação de partículas após 2.8s
+    setTimeout(() => setGiftParticles(prev => prev.filter(p => p.id !== `${animationId}`)), 2800);
   };
 
   // Efeito para mostrar um presente da fila por vez
@@ -593,6 +601,7 @@ export default function ChatVideo() {
         setShowGiftModal(false);
         // triggerGiftAnimation(gift); // Remover
         triggerGiftLineAnimation(gift); // Novo
+        triggerGiftParticles(gift);
       } else {
         setMessages(prev => [...prev, { 
           id: Date.now(), 
@@ -648,6 +657,36 @@ export default function ChatVideo() {
     setShowFreeMinuteModal(false);
     setIsCallActive(false);
     setMessages(prev => [...prev, { id: Date.now(), text: `Você saiu do chat.`, sender: 'system', timestamp: new Date() }]);
+  };
+
+  // Função para embaralhar array
+  function shuffleArray<T>(array: T[]): T[] {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  // Função para disparar partículas ao enviar presente
+  const triggerGiftParticles = (gift: Gift) => {
+    const numParticles = 40;
+    // Divida a largura em faixas e embaralhe
+    const faixas = shuffleArray(Array.from({ length: numParticles }, (_, i) => i));
+    const faixaLargura = 80 / numParticles; // 80% de largura dividida em faixas
+    const particles: GiftParticle[] = faixas.map((faixa, i) => {
+      // x: faixa inicial + deslocamento aleatório dentro da faixa
+      const x = 10 + faixa * faixaLargura + Math.random() * faixaLargura;
+      const y = Math.random() * 40 + 40; // 40% a 80% da altura
+      return {
+        id: `${Date.now()}-${i}`,
+        x,
+        y,
+        gift,
+      };
+    });
+    setGiftParticles(particles);
+    setTimeout(() => setGiftParticles([]), 6000); // duração igual à animação
   };
 
   return (
@@ -1063,7 +1102,16 @@ export default function ChatVideo() {
                     >
                         {msg.type === 'gift' ? (
                           <div className="flex items-center gap-2">
-                            <Image src={msg.gift.image} alt={msg.gift.name} width={24} height={24} className="w-6 h-6 filter invert" />
+                            <Image 
+                              src={msg.gift.image} 
+                              alt={msg.gift.name} 
+                              width={24} 
+                              height={24} 
+                              className={`w-6 h-6 ${msg.gift.name === 'Coroa' ? '' : 'filter invert'}`}
+                              style={msg.gift.name === 'Coroa' 
+                                ? { filter: 'invert(62%) sepia(99%) saturate(1200%) hue-rotate(312deg) brightness(104%) contrast(101%) drop-shadow(0 0 6px #F25790)' } 
+                                : {}}
+                            />
                             <span className="text-sm font-medium text-yellow-300">{msg.username} enviou {msg.gift.name}</span>
                             <span className="text-xs text-yellow-200 font-bold">+{msg.gift.price}</span>
                           </div>
@@ -1595,63 +1643,52 @@ export default function ChatVideo() {
       </div>
       
       {/* Animações de Presentes - SOBRE TUDO */}
-      {giftAnimations.map((animation) => (
-        <div key={animation.id} className="fixed inset-0 pointer-events-none z-[100000]">
-          {[...Array(6)].map((_, index) => {
-            const randomX = Math.random() * 80 + 10;
-            const randomY = Math.random() * 70 + 10;
-            const randomDelay = Math.random() * 0.8;
-            const randomDuration = 2.2 + Math.random() * 1.2;
-            return (
-              <div
-                key={`${animation.id}-${index}`}
-                className="absolute animate-giftNeonFloat"
-                style={{
-                  left: `${randomX}%`,
-                  top: `${randomY}%`,
-                  animationDelay: `${randomDelay}s`,
-                  animationDuration: `${randomDuration}s`,
-                }}
-              >
-                <Image
-                  src={animation.gift.image}
-                  alt={animation.gift.name}
-                  width={40}
-                  height={40}
-                  className={`w-10 h-10 filter invert drop-shadow-[0_0_12px_#F25790] ${animation.gift.name === 'Coroa' ? 'drop-shadow-[0_0_16px_#F25790]' : ''}`}
-                  style={animation.gift.name === 'Coroa' ? { filter: 'invert(62%) sepia(99%) saturate(1200%) hue-rotate(312deg) brightness(104%) contrast(101%) drop-shadow(0 0 16px #F25790)' } : {}}
-                />
-              </div>
-            );
-          })}
+      {giftParticles.length > 0 && (
+        <div className="fixed inset-0 pointer-events-none z-[100000]">
+          {giftParticles.map((particle) => (
+            <div
+              key={particle.id}
+              className="absolute animate-giftFloatFade"
+              style={{
+                left: `${particle.x}%`,
+                top: `${particle.y}%`,
+                animationDuration: '6s',
+                willChange: 'transform, opacity',
+              }}
+            >
+              <Image
+                src={particle.gift.name === 'Coroa' ? '/icons/Vector.svg' : particle.gift.image}
+                alt={particle.gift.name}
+                width={40}
+                height={40}
+                className={`w-10 h-10 filter invert drop-shadow-[0_0_16px_#F25790] ${particle.gift.name === 'Coroa' ? 'drop-shadow-[0_0_24px_#F25790]' : ''}`}
+                style={particle.gift.name === 'Coroa' ? { filter: 'invert(62%) sepia(99%) saturate(1200%) hue-rotate(312deg) brightness(104%) contrast(101%) drop-shadow(0 0 24px #F25790)' } : {}}
+              />
+            </div>
+          ))}
         </div>
-      ))}
-      
+      )}
       <style>{`
-        @keyframes giftNeonFloat {
+        @keyframes giftFloatFade {
           0% {
             opacity: 0;
-            transform: translateY(20px) scale(0.8);
-            filter: blur(2px) brightness(1.2);
+            transform: translateY(0);
           }
           10% {
             opacity: 1;
-            transform: translateY(0px) scale(1.1);
-            filter: blur(0px) brightness(1.4);
+            transform: translateY(0);
           }
           80% {
             opacity: 1;
-            transform: translateY(-20px) scale(1);
-            filter: blur(0px) brightness(1.2);
+            transform: translateY(-180px);
           }
           100% {
             opacity: 0;
-            transform: translateY(-40px) scale(0.8);
-            filter: blur(2px) brightness(1);
+            transform: translateY(-200px);
           }
         }
-        .animate-giftNeonFloat {
-          animation: giftNeonFloat 2.8s cubic-bezier(.4,1.2,.6,1) both;
+        .animate-giftFloatFade {
+          animation: giftFloatFade 6s cubic-bezier(.4,1.2,.6,1) both;
         }
       `}</style>
       
@@ -1660,7 +1697,7 @@ export default function ChatVideo() {
         <div className="fixed left-0 bottom-24 w-full flex justify-start items-end pointer-events-none z-[9999]">
           <div className="ml-6 animate-giftLineInOut bg-black/80 backdrop-blur-md rounded-2xl px-6 py-3 border border-[#F25790]/40 shadow-[0_0_20px_rgba(242,87,144,0.3)] flex items-center gap-4 min-w-[220px] max-w-xs">
             <Image
-              src={currentGift.gift.image}
+              src={currentGift.gift.name === 'Coroa' ? '/icons/Vector.svg' : currentGift.gift.image}
               alt={currentGift.gift.name}
               width={40}
               height={40}
