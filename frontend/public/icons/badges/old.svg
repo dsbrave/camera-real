@@ -1,0 +1,7 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="2" y="2" width="20" height="20" rx="3" fill="#8B4513"/>
+  <rect x="2" y="2" width="20" height="20" rx="3" stroke="#654321" stroke-width="2"/>
+  <circle cx="12" cy="8" r="3" fill="#D2691E"/>
+  <path d="M6 18c0-3.314 2.686-6 6-6s6 2.686 6 6" fill="#D2691E"/>
+  <text x="12" y="21" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="3" font-weight="bold">ANTIGO</text>
+</svg> 

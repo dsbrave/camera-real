@@ -44,7 +44,7 @@ const Navbar = () => {
                 </button>
               </div>
             </Link>
-            <Link href="/perfil">
+            <Link href="/perfil-usuario">
               <div className="w-8 h-8 rounded-full bg-gray-600 overflow-hidden">
                 {/* Placeholder para avatar do usuário */}
                 <div className="w-full h-full bg-gradient-to-br from-[#F25790] to-purple-600"></div>
@@ -97,8 +97,8 @@ const Navbar = () => {
               Histórico
             </Link>
             <Link 
-              href="/perfil" 
-              className={`font-medium px-4 py-2 rounded-lg ${isActive('/perfil') ? 'bg-[#F25790] bg-opacity-20 text-[#F25790]' : 'text-white'}`}
+              href="/perfil-usuario" 
+              className={`font-medium px-4 py-2 rounded-lg ${isActive('/perfil-usuario') ? 'bg-[#F25790] bg-opacity-20 text-[#F25790]' : 'text-white'}`}
               onClick={() => setIsMenuOpen(false)}
             >
               Perfil
