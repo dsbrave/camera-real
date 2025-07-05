@@ -132,9 +132,9 @@ export default function ProfileEditModal({ isOpen, onClose, userData, onUpdatePr
 
   const handleRemovePhoto = () => {
     setPreviewPhoto(null);
-    const updatedUser = { ...localUserData, photo: '' };
+    const updatedUser = { ...localUserData, photo: "/images/default-avatar.png" };
     setLocalUserData(updatedUser);
-    onUpdateProfile({ photo: '' });
+    onUpdateProfile({ photo: "/images/default-avatar.png" });
   };
 
   return (
@@ -186,7 +186,7 @@ export default function ProfileEditModal({ isOpen, onClose, userData, onUpdatePr
             <div className="flex justify-center mb-6 sm:mb-8">
               <div className="relative">
                 <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-700 flex items-center justify-center overflow-hidden">
-                  {(previewPhoto || localUserData.photo) ? (
+                  {(previewPhoto || (localUserData.photo && localUserData.photo !== "/images/default-avatar.png")) ? (
                     <Image 
                       src={previewPhoto || localUserData.photo} 
                       alt="Foto de perfil" 
@@ -195,9 +195,11 @@ export default function ProfileEditModal({ isOpen, onClose, userData, onUpdatePr
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <span className="text-white text-xl sm:text-2xl font-bold">
-                      {localUserData.name?.charAt(0) || 'U'}
-                    </span>
+                    <div className="w-full h-full bg-gray-600 flex items-center justify-center">
+                      <span className="text-white text-xl sm:text-2xl font-bold">
+                        {localUserData.name?.charAt(0).toUpperCase() || localUserData.username?.charAt(0).toUpperCase() || "U"}
+                      </span>
+                    </div>
                   )}
                 </div>
                 <div className="absolute bottom-0 right-0 flex gap-1">
@@ -208,7 +210,7 @@ export default function ProfileEditModal({ isOpen, onClose, userData, onUpdatePr
                   >
                     Editar
                   </button>
-                  {(previewPhoto || localUserData.photo) && (
+                  {(previewPhoto || (localUserData.photo && localUserData.photo !== "/images/default-avatar.png")) && (
                     <button 
                       onClick={handleRemovePhoto}
                       className="bg-red-600 hover:bg-red-700 text-white text-xs px-2 py-1 rounded-full transition-colors ml-1"

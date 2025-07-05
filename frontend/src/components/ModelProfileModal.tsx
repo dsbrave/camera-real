@@ -201,9 +201,15 @@ export default function ModelProfileModal({ isOpen, onClose, model }: ModelProfi
 
                 {/* Botões de Ação */}
                 <div className="space-y-3">
+                  <Link href={`/perfil/m${model.id}`} className="block">
+                    <button className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-3 rounded-xl transition-all duration-300 border border-blue-500/30">
+                      Ver Perfil Completo
+                    </button>
+                  </Link>
+                  
                   <Link href={`/chat-video?id=${model.id}`} className="block">
                     <button className="w-full bg-gradient-to-r from-[#F25790] to-[#d93d75] hover:from-[#d93d75] hover:to-[#c12d65] text-white font-bold py-3 rounded-xl transition-all duration-300 shadow-[0_0_15px_rgba(242,87,144,0.4)] hover:shadow-[0_0_25px_rgba(242,87,144,0.6)] hover:scale-105 active:scale-95">
-                      {model.online ? 'Conversar Agora' : 'Ver Perfil Completo'}
+                      {model.online ? 'Conversar Agora' : 'Iniciar Chat'}
                     </button>
                   </Link>
                   

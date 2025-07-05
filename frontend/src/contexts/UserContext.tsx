@@ -23,7 +23,7 @@ interface UserProviderProps {
 }
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-  const [userCredits, setUserCredits] = useState<number>(200000);
+  const [userCredits, setUserCredits] = useState<number>(0);
   const [isClient, setIsClient] = useState(false);
 
   // Verificar se estamos no cliente
@@ -33,7 +33,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
   // Função para carregar créditos do localStorage
   const loadCreditsFromStorage = () => {
-    if (!isClient) return;
+    if (!isClient) return 0;
     
     try {
       const userStorage = localStorage.getItem('user');
@@ -42,12 +42,19 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         if (user && typeof user.creditos === 'number') {
           setUserCredits(user.creditos);
           return user.creditos;
+        } else {
+          // Se há usuário mas sem créditos, dar 200.000 créditos iniciais
+          const credits = 200000;
+          user.creditos = credits;
+          localStorage.setItem('user', JSON.stringify(user));
+          setUserCredits(credits);
+          return credits;
         }
       }
     } catch (error) {
       console.error('Erro ao carregar créditos do localStorage:', error);
     }
-    return 200000; // Valor padrão de 200.000 créditos para teste
+    return 0; // Sem usuário = 0 créditos
   };
 
   // Função para salvar créditos no localStorage
@@ -60,14 +67,6 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         const user = JSON.parse(userStorage);
         user.creditos = credits;
         localStorage.setItem('user', JSON.stringify(user));
-      } else {
-        // Se não existe usuário, criar um básico
-        const newUser = {
-          creditos: credits,
-          name: 'Usuário',
-          email: 'usuario@exemplo.com'
-        };
-        localStorage.setItem('user', JSON.stringify(newUser));
       }
     } catch (error) {
       console.error('Erro ao salvar créditos no localStorage:', error);
@@ -77,17 +76,34 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   // Carregar créditos na inicialização
   useEffect(() => {
     if (isClient) {
-      const credits = loadCreditsFromStorage();
-      // FORÇAR 200.000 créditos para todos os usuários durante teste
-      console.log('Forçando 200.000 créditos para teste');
-      setUserCredits(200000);
-      saveCreditsToStorage(200000);
+      loadCreditsFromStorage();
+    }
+  }, [isClient]);
+
+  // Listener para logout
+  useEffect(() => {
+    if (isClient) {
+      const handleUserDataUpdate = (event: any) => {
+        if (event.detail === null) {
+          // Logout - limpar créditos
+          setUserCredits(0);
+        } else if (event.detail && event.detail.creditos !== undefined) {
+          // Atualização de dados - atualizar créditos
+          setUserCredits(event.detail.creditos);
+        }
+      };
+
+      window.addEventListener('userDataUpdated', handleUserDataUpdate);
+      
+      return () => {
+        window.removeEventListener('userDataUpdated', handleUserDataUpdate);
+      };
     }
   }, [isClient]);
 
   // Salvar créditos sempre que mudarem
   useEffect(() => {
-    if (isClient) {
+    if (isClient && userCredits > 0) {
       saveCreditsToStorage(userCredits);
     }
   }, [userCredits, isClient]);
@@ -115,10 +131,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   };
 
   const refreshCredits = useCallback(() => {
-    // FORÇAR 200.000 créditos durante teste
-    console.log('RefreshCredits: Forçando 200.000 créditos');
-    setUserCredits(200000);
-    saveCreditsToStorage(200000);
+    loadCreditsFromStorage();
   }, [isClient]);
 
   return (

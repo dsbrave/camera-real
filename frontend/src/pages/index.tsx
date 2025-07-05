@@ -322,16 +322,19 @@ export default function Home() {
   const faltamParaMeta = metaMinutos - minutosHoje;
   const feedbacks = [
     {
-      nome: "Cliente123",
-      comentario: "Adorei a transmissão, muito simpática!",
+      usuario: "Carlos Silva",
+      foto: "/images/default-avatar.png",
+      texto: "Linda transmissão, adorei!",
       nota: 5,
+      perfil: "/perfil/u1",
     },
     {
-      nome: "VIP2024",
-      comentario: "Ótima energia, voltarei mais vezes!",
+      usuario: "Ana Costa",
+      foto: "/images/default-avatar.png",
+      texto: "Muito simpática e divertida!",
       nota: 5,
+      perfil: "/perfil/u2",
     },
-    { nome: "Anônimo", comentario: "Atendimento excelente!", nota: 4 },
   ];
   const notificacoes = [
     {
@@ -400,18 +403,18 @@ export default function Home() {
     ];
     const feedbacks = [
       {
-        usuario: "ClienteTeste",
-        foto: "/images/avatar1.png",
+        usuario: "Carlos Silva",
+        foto: "/images/default-avatar.png",
         texto: "Linda transmissão, adorei!",
         nota: 5,
-        perfil: "/perfil/cliente-teste",
+        perfil: "/perfil/u1",
       },
       {
-        usuario: "VIP2024",
-        foto: "/images/avatar2.png",
+        usuario: "Ana Costa",
+        foto: "/images/default-avatar.png",
         texto: "Muito simpática e divertida!",
         nota: 5,
-        perfil: "/perfil/vip2024",
+        perfil: "/perfil/u2",
       },
     ];
     return (

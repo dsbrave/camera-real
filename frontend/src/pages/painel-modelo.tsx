@@ -9,6 +9,7 @@ import ModelCard from "@/components/ModelCard";
 import UserPreferencesModal, {
   UserPreferences,
 } from "@/components/UserPreferencesModal";
+import ConfiguracoesModal from "@/components/ConfiguracoesModal";
 
 export default function PainelModelo() {
   const router = useRouter();
@@ -27,6 +28,7 @@ export default function PainelModelo() {
   const [favoriteModels, setFavoriteModels] = useState<any[]>([]);
   const [recentChats, setRecentChats] = useState<any[]>([]);
   const [showPreferencesModal, setShowPreferencesModal] = useState(false);
+  const [showConfigModal, setShowConfigModal] = useState(false);
   const [userPreferences, setUserPreferences] =
     useState<UserPreferences | null>(null);
 
@@ -230,18 +232,20 @@ export default function PainelModelo() {
                 <div className="bg-gray-900 rounded-xl p-4 sm:p-6 mb-6">
                   <div className="flex flex-col items-center text-center">
                     <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-700 flex items-center justify-center mb-4 overflow-hidden flex-shrink-0">
-                      {userData.photo ? (
+                      {userData.photo && userData.photo !== "/images/default-avatar.png" ? (
                         <Image
                           src={userData.photo}
-                          alt={userData.name || "Usuário"}
+                          alt="Foto de perfil"
                           width={96}
                           height={96}
                           className="w-full h-full object-cover rounded-full"
                         />
                       ) : (
-                        <span className="text-white text-xl sm:text-2xl font-bold">
-                          {userData.name?.charAt(0) || "U"}
-                        </span>
+                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-600 flex items-center justify-center border-2 border-[#F25790]/50">
+                          <span className="text-white text-xl sm:text-2xl font-bold">
+                            {userData.name?.charAt(0).toUpperCase() || userData.username?.charAt(0).toUpperCase() || "U"}
+                          </span>
+                        </div>
                       )}
                     </div>
                     <h2 className="text-lg sm:text-xl font-bold text-white mb-1">
@@ -359,6 +363,29 @@ export default function PainelModelo() {
                         Explorar Modelos
                       </span>
                     </Link>
+
+                    <button
+                      onClick={() => setShowConfigModal(true)}
+                      className="w-full flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-800 transition-all group text-left"
+                    >
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-5 h-5 text-white"
+                      >
+                        <path
+                          d="M12 15.5A3.5 3.5 0 0 1 8.5 12A3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97 0-.33-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.31-.61-.22l-2.49 1c-.52-.39-1.06-.73-1.69-.98l-.37-2.65A.506.506 0 0 0 14 2h-4c-.25 0-.46.18-.5.42l-.37 2.65c-.63.25-1.17.59-1.69.98l-2.49-1c-.22-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1 0 .33.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.06.74 1.69.99l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.63-.26 1.17-.59 1.69-.99l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.66Z"
+                          fill="white"
+                        />
+                      </svg>
+                      <span className="group-hover:text-[#F25790] transition-colors">
+                        Configurações
+                      </span>
+                    </button>
+
                     <button
                       onClick={() => setShowPreferencesModal(true)}
                       className="w-full flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-800 transition-all group text-left"
@@ -377,26 +404,9 @@ export default function PainelModelo() {
                         />
                       </svg>
                       <span className="group-hover:text-[#F25790] transition-colors">
-                        {userPreferences
-                          ? "Editar Preferências"
-                          : "Configurar Preferências"}
+                        Editar Preferências
                       </span>
                     </button>
-                    <Link
-                      href="/chat-video?id=m1"
-                      className="flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-800 transition-all group"
-                    >
-                      <Image
-                        src="/icons/audio_video/videocam.svg"
-                        alt="Iniciar Chat"
-                        width={20}
-                        height={20}
-                        className="w-5 h-5 filter brightness-0 invert"
-                      />
-                      <span className="group-hover:text-[#F25790] transition-colors">
-                        Iniciar Chat
-                      </span>
-                    </Link>
                   </div>
                 </div>
               </aside>
@@ -667,6 +677,12 @@ export default function PainelModelo() {
         isOpen={showPreferencesModal}
         onClose={() => setShowPreferencesModal(false)}
         onSavePreferences={handleSavePreferences}
+      />
+
+      {/* Modal de Configurações */}
+      <ConfiguracoesModal
+        isOpen={showConfigModal}
+        onClose={() => setShowConfigModal(false)}
       />
     </>
   );

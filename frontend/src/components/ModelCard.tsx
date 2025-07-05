@@ -53,6 +53,11 @@ export default function ModelCard({
   const isFavorite = favoriteModels.includes(model.id);
 
   const handleCardClick = () => {
+    router.push(`/perfil/m${model.id}`);
+  };
+
+  const handleChatClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
     router.push(`/chat-video?id=${model.id}`);
   };
 
@@ -211,11 +216,9 @@ export default function ModelCard({
             <span className="text-gray-300">Chat privado:</span>
             <span className="text-[#F25790] font-bold">{modelPrivatePrice} créditos/min</span>
           </div>
-          <Link href={`/chat-video?id=${model.id}`} onClick={(e) => e.stopPropagation()}>
-            <button className={`w-full bg-gradient-to-r from-[#F25790] to-[#d93d75] hover:from-[#d93d75] hover:to-[#c12d65] text-white font-medium ${currentSize.button} rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-[#F25790]/25 backdrop-blur-sm mt-6`}>
-              Conversar
-            </button>
-          </Link>
+          <button className={`w-full bg-gradient-to-r from-[#F25790] to-[#d93d75] hover:from-[#d93d75] hover:to-[#c12d65] text-white font-medium ${currentSize.button} rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-[#F25790]/25 backdrop-blur-sm mt-6`} onClick={handleChatClick}>
+            Conversar
+          </button>
         </div>
       </div>
     </div>

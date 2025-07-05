@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
+import { userStorage } from "../utils/userStorage";
 
 interface EditarPerfilModalProps {
   isOpen: boolean;
@@ -7,8 +8,6 @@ interface EditarPerfilModalProps {
   profileData: {
     name?: string;
     username: string;
-    email: string;
-    phone: string;
     profilePic: string;
     bio?: string;
   };
@@ -26,12 +25,8 @@ const EditarPerfilModal: React.FC<EditarPerfilModalProps> = ({
   const [formData, setFormData] = useState({
     name: profileData.name || '',
     username: profileData.username,
-    email: profileData.email,
-    phone: profileData.phone,
     profilePic: profileData.profilePic,
     bio: profileData.bio || '',
-    password: "",
-    confirmPassword: "",
   });
   const [previewPic, setPreviewPic] = useState<string | null>(null);
 
@@ -57,15 +52,16 @@ const EditarPerfilModal: React.FC<EditarPerfilModalProps> = ({
   };
 
   const handleSave = () => {
-    if (formData.password && formData.password !== formData.confirmPassword) {
-      alert("As senhas não coincidem!");
-      return;
-    }
-    onSave({
-      ...formData,
+    // Preparar dados para salvar
+    const dataToSave = {
+      name: formData.name,
+      username: formData.username,
       photo: formData.profilePic,
       profilePic: formData.profilePic,
-    });
+      bio: formData.bio,
+    };
+    
+    onSave(dataToSave);
     onClose();
   };
 
@@ -106,7 +102,7 @@ const EditarPerfilModal: React.FC<EditarPerfilModalProps> = ({
           <div className="flex flex-col items-center mb-6">
             <div className="relative mb-2">
               <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-[#F25790] bg-gray-700 flex items-center justify-center">
-                {previewPic || formData.profilePic ? (
+                {(previewPic || (formData.profilePic && formData.profilePic !== "/images/default-avatar.png")) ? (
                   <Image
                     src={previewPic || formData.profilePic}
                     alt="Foto de perfil"
@@ -115,9 +111,11 @@ const EditarPerfilModal: React.FC<EditarPerfilModalProps> = ({
                     className="object-cover w-full h-full"
                   />
                 ) : (
-                  <span className="text-white text-4xl font-bold">
-                    {formData.name?.charAt(0).toUpperCase() || formData.username?.charAt(0).toUpperCase() || "U"}
-                  </span>
+                  <div className="w-full h-full bg-gray-600 flex items-center justify-center">
+                    <span className="text-white text-3xl font-bold">
+                      {formData.name?.charAt(0).toUpperCase() || formData.username?.charAt(0).toUpperCase() || "U"}
+                    </span>
+                  </div>
                 )}
               </div>
               {/* Botão de editar foto */}
@@ -140,6 +138,7 @@ const EditarPerfilModal: React.FC<EditarPerfilModalProps> = ({
               placeholder="Seu nome"
             />
           </div>
+
           {/* Campo Nome de usuário */}
           <div className="mb-4">
             <label className="block text-gray-300 text-sm mb-1">Nome de usuário</label>
@@ -152,8 +151,9 @@ const EditarPerfilModal: React.FC<EditarPerfilModalProps> = ({
               placeholder="@Nick_name_aqui"
             />
           </div>
+
           {/* Campo Bio */}
-          <div className="mb-4">
+          <div className="mb-6">
             <label className="block text-gray-300 text-sm mb-1">Biografia</label>
             <textarea
               name="bio"
@@ -165,54 +165,6 @@ const EditarPerfilModal: React.FC<EditarPerfilModalProps> = ({
               placeholder="Fale um pouco sobre você..."
             />
             <div className="text-xs text-gray-400 text-right">{formData.bio.length}/{MAX_BIO}</div>
-          </div>
-          {/* Email */}
-          <div className="mb-4">
-            <label className="block text-gray-300 text-sm mb-1">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full p-3 rounded-lg bg-gray-800 text-white focus:outline-none border border-gray-700 mb-2"
-              placeholder="Seu email"
-            />
-          </div>
-          {/* Telefone */}
-          <div className="mb-4">
-            <label className="block text-gray-300 text-sm mb-1">Telefone</label>
-            <input
-              type="text"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              className="w-full p-3 rounded-lg bg-gray-800 text-white focus:outline-none border border-gray-700 mb-2"
-              placeholder="Seu telefone"
-            />
-          </div>
-          {/* Nova senha */}
-          <div className="mb-4">
-            <label className="block text-gray-300 text-sm mb-1">Nova senha</label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full p-3 rounded-lg bg-gray-800 text-white focus:outline-none border border-gray-700 mb-2"
-              placeholder="Nova senha"
-            />
-          </div>
-          {/* Confirmar nova senha */}
-          <div className="mb-6">
-            <label className="block text-gray-300 text-sm mb-1">Confirmar nova senha</label>
-            <input
-              type="password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              className="w-full p-3 rounded-lg bg-gray-800 text-white focus:outline-none border border-gray-700 mb-2"
-              placeholder="Repetir nova senha"
-            />
           </div>
 
           {/* Botão de ação */}

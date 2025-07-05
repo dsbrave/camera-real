@@ -299,18 +299,20 @@ const Carteira: React.FC = () => {
                 <div className="bg-gray-900 rounded-xl p-4 sm:p-6 mb-6">
                   <div className="flex flex-col items-center text-center">
                     <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-700 flex items-center justify-center mb-4 overflow-hidden flex-shrink-0">
-                      {userData.photo ? (
-                        <Image 
-                          src={userData.photo} 
-                          alt={userData.name || 'Usuário'} 
-                          width={96} 
+                      {userData.photo && userData.photo !== "/images/default-avatar.png" ? (
+                        <Image
+                          src={userData.photo}
+                          alt="Foto de perfil"
+                          width={96}
                           height={96}
                           className="w-full h-full object-cover rounded-full"
                         />
                       ) : (
-                        <span className="text-white text-xl sm:text-2xl font-bold">
-                          {userData.name?.charAt(0) || 'U'}
-                        </span>
+                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-600 flex items-center justify-center border-2 border-[#F25790]/50">
+                          <span className="text-white text-xl sm:text-2xl font-bold">
+                            {userData.name?.charAt(0).toUpperCase() || "U"}
+                          </span>
+                        </div>
                       )}
                     </div>
                     <h2 className="text-lg sm:text-xl font-bold text-white mb-1">

@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import ConfiguracoesModal from './ConfiguracoesModal';
 
 const Navbar = () => {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showConfigModal, setShowConfigModal] = useState(false);
   
   const isActive = (path: string) => router.pathname === path;
 
@@ -110,16 +112,24 @@ const Navbar = () => {
             >
               Notificações
             </Link>
-            <Link 
-              href="/configuracoes" 
-              className={`font-medium px-4 py-2 rounded-lg ${isActive('/configuracoes') ? 'bg-[#F25790] bg-opacity-20 text-[#F25790]' : 'text-white'}`}
-              onClick={() => setIsMenuOpen(false)}
+            <button
+              onClick={() => {
+                setShowConfigModal(true);
+                setIsMenuOpen(false);
+              }}
+              className="font-medium px-4 py-2 rounded-lg text-white hover:bg-[#F25790] hover:bg-opacity-20 hover:text-[#F25790] transition-colors text-left"
             >
               Configurações
-            </Link>
+            </button>
           </div>
         </div>
       )}
+      
+      {/* Modal de Configurações */}
+      <ConfiguracoesModal
+        isOpen={showConfigModal}
+        onClose={() => setShowConfigModal(false)}
+      />
     </nav>
   );
 };

@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import UserAvatar from "@/components/UserAvatar";
 import EditarPerfilModal from "@/components/EditarPerfilModal";
 
 export default function PerfilUsuario() {
@@ -144,30 +146,30 @@ export default function PerfilUsuario() {
 
   // Mock de seguidores
   const followersData = [
-    { id: "f1", name: "Carlos Silva", photo: "/images/default-avatar.png", badge: 1 },
-    { id: "f2", name: "Ana Costa", photo: "/images/default-avatar.png", badge: 2 },
-    { id: "f3", name: "Pedro Santos", photo: "/images/default-avatar.png", badge: 0 },
-    { id: "f4", name: "Maria Oliveira", photo: "/images/default-avatar.png", badge: 1 },
-    { id: "f5", name: "João Pereira", photo: "/images/default-avatar.png", badge: 2 },
-    { id: "f6", name: "Lucia Fernandes", photo: "/images/default-avatar.png", badge: 0 },
-    { id: "f7", name: "Rafael Lima", photo: "/images/default-avatar.png", badge: 1 },
-    { id: "f8", name: "Sofia Rodrigues", photo: "/images/default-avatar.png", badge: 0 },
-    { id: "f9", name: "Bruno Alves", photo: "/images/default-avatar.png", badge: 2 },
-    { id: "f10", name: "Camila Souza", photo: "/images/default-avatar.png", badge: 1 },
-    { id: "f11", name: "Diego Martins", photo: "/images/default-avatar.png", badge: 0 },
-    { id: "f12", name: "Isabella Cruz", photo: "/images/default-avatar.png", badge: 1 },
+    { id: "1", name: "Carlos Silva", photo: "/images/default-avatar.png", badge: 1 },
+    { id: "2", name: "Ana Costa", photo: "/images/default-avatar.png", badge: 2 },
+    { id: "3", name: "Pedro Santos", photo: "/images/default-avatar.png", badge: 0 },
+    { id: "4", name: "Maria Oliveira", photo: "/images/default-avatar.png", badge: 1 },
+    { id: "5", name: "João Pereira", photo: "/images/default-avatar.png", badge: 2 },
+    { id: "1", name: "Carlos Silva", photo: "/images/default-avatar.png", badge: 1 },
+    { id: "2", name: "Ana Costa", photo: "/images/default-avatar.png", badge: 2 },
+    { id: "3", name: "Pedro Santos", photo: "/images/default-avatar.png", badge: 0 },
+    { id: "4", name: "Maria Oliveira", photo: "/images/default-avatar.png", badge: 1 },
+    { id: "5", name: "João Pereira", photo: "/images/default-avatar.png", badge: 2 },
+    { id: "1", name: "Carlos Silva", photo: "/images/default-avatar.png", badge: 1 },
+    { id: "2", name: "Ana Costa", photo: "/images/default-avatar.png", badge: 2 },
   ];
 
   // Mock de seguindo
   const followingData = [
-    { id: "fo1", name: "Luna Silva", photo: "/images/high-quality_fashion_studio_photo_of_a_fit_brazilian-inspired_model_in_a_streaming_room_setup_the_m_zogrxbsso7f5cot9iywg_3.png", badge: 3, isModel: true },
-    { id: "fo2", name: "Jade Almeida", photo: "/images/high-quality_fashion_studio_photo_of_a_fit_brazilian-inspired_model_in_a_streaming_room_setup_the_m_xcuvvf5mb98aiguyg0ar_3.png", badge: 2, isModel: true },
-    { id: "fo3", name: "Mia Oliveira", photo: "/images/high-quality_fashion_studio_photo_of_a_fit_brazilian-inspired_model_in_a_streaming_room_setup_the_m_qhcvmpojebov1lic1cwu_0.png", badge: 3, isModel: true },
-    { id: "fo4", name: "Carlos Silva", photo: "/images/default-avatar.png", badge: 1, isModel: false },
-    { id: "fo5", name: "Ana Costa", photo: "/images/default-avatar.png", badge: 2, isModel: false },
-    { id: "fo6", name: "Pedro Santos", photo: "/images/default-avatar.png", badge: 0, isModel: false },
-    { id: "fo7", name: "Maria Oliveira", photo: "/images/default-avatar.png", badge: 1, isModel: false },
-    { id: "fo8", name: "João Pereira", photo: "/images/default-avatar.png", badge: 2, isModel: false },
+    { id: "1", name: "Luna Silva", photo: "/images/high-quality_fashion_studio_photo_of_a_fit_brazilian-inspired_model_in_a_streaming_room_setup_the_m_zogrxbsso7f5cot9iywg_3.png", badge: 3, isModel: true },
+    { id: "2", name: "Jade Almeida", photo: "/images/high-quality_fashion_studio_photo_of_a_fit_brazilian-inspired_model_in_a_streaming_room_setup_the_m_xcuvvf5mb98aiguyg0ar_3.png", badge: 2, isModel: true },
+    { id: "3", name: "Mia Oliveira", photo: "/images/high-quality_fashion_studio_photo_of_a_fit_brazilian-inspired_model_in_a_streaming_room_setup_the_m_qhcvmpojebov1lic1cwu_0.png", badge: 3, isModel: true },
+    { id: "1", name: "Carlos Silva", photo: "/images/default-avatar.png", badge: 1, isModel: false },
+    { id: "2", name: "Ana Costa", photo: "/images/default-avatar.png", badge: 2, isModel: false },
+    { id: "3", name: "Pedro Santos", photo: "/images/default-avatar.png", badge: 0, isModel: false },
+    { id: "4", name: "Maria Oliveira", photo: "/images/default-avatar.png", badge: 1, isModel: false },
+    { id: "5", name: "João Pereira", photo: "/images/default-avatar.png", badge: 2, isModel: false },
   ];
 
   // Carregar dados reais do usuário do localStorage ao montar
@@ -221,7 +223,15 @@ export default function PerfilUsuario() {
             </button>
             
             <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-[#F25790] bg-gray-700 flex items-center justify-center mb-2">
-              <Image src={userData.photo || "/images/default-avatar.png"} alt="Foto de perfil" width={128} height={128} className="object-cover w-full h-full" />
+              {userData.photo && userData.photo !== "/images/default-avatar.png" ? (
+                <Image src={userData.photo} alt="Foto de perfil" width={128} height={128} className="object-cover w-full h-full" />
+              ) : (
+                <div className="w-full h-full bg-gray-600 flex items-center justify-center">
+                  <span className="text-white text-4xl font-bold">
+                    {userData.name?.charAt(0).toUpperCase() || userData.username?.charAt(0).toUpperCase() || "U"}
+                  </span>
+                </div>
+              )}
             </div>
             <h2 className="text-2xl font-bold text-white mt-2 mb-4">{userData.name}</h2>
             
@@ -474,39 +484,32 @@ export default function PerfilUsuario() {
                 
                 <div className="space-y-3 max-h-96 overflow-y-auto">
                   {followersData.map((follower) => (
-                    <div key={follower.id} className="flex items-center space-x-3 bg-gray-700/50 rounded-lg p-3 hover:bg-gray-600/50 transition-colors">
-                      <img 
-                        src={follower.photo} 
-                        alt={follower.name}
-                        className="w-10 h-10 rounded-full object-cover"
+                    <Link key={follower.id} href={`/perfil/u${follower.id}`} className="flex items-center gap-3 bg-gray-800/50 rounded-xl p-4 border border-gray-700 hover:bg-gray-700/50 transition-colors">
+                      <UserAvatar 
+                        photo={follower.photo} 
+                        name={follower.name} 
+                        size="lg"
                       />
                       <div className="flex-1">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-white font-medium text-sm">{follower.name}</span>
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-white font-medium">{follower.name}</span>
                           <Image 
                             src={badgeSystem[follower.badge].icon} 
                             alt={badgeSystem[follower.badge].name} 
                             width={16} 
                             height={16}
                             style={{
-                              filter: badgeSystem[follower.badge].level === 0 
+                              filter: follower.badge === 0 
                                 ? 'brightness(0) saturate(100%) invert(29%) sepia(19%) saturate(1077%) hue-rotate(23deg) brightness(95%) contrast(90%)'
-                                : badgeSystem[follower.badge].level === 1 
+                                : follower.badge === 1 
                                 ? 'brightness(0) saturate(100%) invert(89%) sepia(0%) saturate(0%) hue-rotate(223deg) brightness(100%) contrast(100%)'
-                                : badgeSystem[follower.badge].level === 2 
-                                ? 'brightness(0) saturate(100%) invert(77%) sepia(56%) saturate(1392%) hue-rotate(3deg) brightness(103%) contrast(103%)'
-                                : badgeSystem[follower.badge].level === 3 
-                                ? 'brightness(0) saturate(100%) invert(93%) sepia(3%) saturate(0%) hue-rotate(223deg) brightness(100%) contrast(100%)'
-                                : 'brightness(0) saturate(100%) invert(85%) sepia(58%) saturate(350%) hue-rotate(170deg) brightness(108%) contrast(108%)'
+                                : 'brightness(0) saturate(100%) invert(77%) sepia(56%) saturate(1392%) hue-rotate(3deg) brightness(103%) contrast(103%)'
                             }}
                           />
                         </div>
-                        <span className="text-gray-400 text-xs">{badgeSystem[follower.badge].name}</span>
+                        <p className="text-gray-400 text-sm">Badge: {badgeSystem[follower.badge].name}</p>
                       </div>
-                      <button className="bg-[#F25790] hover:bg-[#d93d75] text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors">
-                        Ver Perfil
-                      </button>
-                    </div>
+                    </Link>
                   ))}
                 </div>
                 
@@ -540,30 +543,28 @@ export default function PerfilUsuario() {
                 
                 <div className="space-y-3 max-h-96 overflow-y-auto">
                   {followingData.map((following) => (
-                    <div key={following.id} className="flex items-center space-x-3 bg-gray-700/50 rounded-lg p-3 hover:bg-gray-600/50 transition-colors">
-                      <img 
-                        src={following.photo} 
-                        alt={following.name}
-                        className="w-10 h-10 rounded-full object-cover"
+                    <Link key={following.id} href={`/perfil/${following.isModel ? 'm' : 'u'}${following.id}`} className="flex items-center gap-3 bg-gray-800/50 rounded-xl p-4 border border-gray-700 hover:bg-gray-700/50 transition-colors">
+                      <UserAvatar 
+                        photo={following.photo} 
+                        name={following.name} 
+                        size="lg"
                       />
                       <div className="flex-1">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-white font-medium text-sm">{following.name}</span>
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-white font-medium">{following.name}</span>
                           <Image 
                             src={badgeSystem[following.badge].icon} 
                             alt={badgeSystem[following.badge].name} 
                             width={16} 
                             height={16}
                             style={{
-                              filter: badgeSystem[following.badge].level === 0 
+                              filter: following.badge === 0 
                                 ? 'brightness(0) saturate(100%) invert(29%) sepia(19%) saturate(1077%) hue-rotate(23deg) brightness(95%) contrast(90%)'
-                                : badgeSystem[following.badge].level === 1 
+                                : following.badge === 1 
                                 ? 'brightness(0) saturate(100%) invert(89%) sepia(0%) saturate(0%) hue-rotate(223deg) brightness(100%) contrast(100%)'
-                                : badgeSystem[following.badge].level === 2 
+                                : following.badge === 2 
                                 ? 'brightness(0) saturate(100%) invert(77%) sepia(56%) saturate(1392%) hue-rotate(3deg) brightness(103%) contrast(103%)'
-                                : badgeSystem[following.badge].level === 3 
-                                ? 'brightness(0) saturate(100%) invert(93%) sepia(3%) saturate(0%) hue-rotate(223deg) brightness(100%) contrast(100%)'
-                                : 'brightness(0) saturate(100%) invert(85%) sepia(58%) saturate(350%) hue-rotate(170deg) brightness(108%) contrast(108%)'
+                                : 'brightness(0) saturate(100%) invert(93%) sepia(3%) saturate(0%) hue-rotate(223deg) brightness(100%) contrast(100%)'
                             }}
                           />
                           {following.isModel && (
@@ -572,12 +573,9 @@ export default function PerfilUsuario() {
                             </span>
                           )}
                         </div>
-                        <span className="text-gray-400 text-xs">{badgeSystem[following.badge].name}</span>
+                        <p className="text-gray-400 text-sm">Badge: {badgeSystem[following.badge].name}</p>
                       </div>
-                      <button className="bg-red-600 hover:bg-red-700 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors">
-                        Deixar de Seguir
-                      </button>
-                    </div>
+                    </Link>
                   ))}
                 </div>
                 
@@ -626,12 +624,12 @@ export default function PerfilUsuario() {
             <h3 className="text-white font-bold mb-2 text-lg">Modelos Favoritas</h3>
             <div className="flex gap-4 overflow-x-auto pb-2">
               {favoriteModels.map((model) => (
-                <div key={model.id} className="flex flex-col items-center">
+                <Link key={model.id} href={`/perfil/m${model.id}`} className="flex flex-col items-center hover:opacity-75 transition-opacity">
                   <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#F25790] mb-1">
                     <Image src={model.photo} alt={model.name} width={64} height={64} className="object-cover w-full h-full" />
                   </div>
                   <span className="text-xs text-white text-center max-w-[60px] truncate">{model.name}</span>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
@@ -699,11 +697,21 @@ export default function PerfilUsuario() {
             <div className="space-y-3">
               {userData.comments.map((comment) => (
                 <div key={comment.id} className="flex items-start gap-3 bg-gray-800/50 rounded-xl p-4 border border-gray-700">
-                  <img 
-                    src={comment.avatar} 
-                    alt={comment.author}
-                    className="w-12 h-12 rounded-full object-cover flex-shrink-0"
-                  />
+                  <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+                    {comment.avatar && comment.avatar !== "/images/default-avatar.png" ? (
+                      <img 
+                        src={comment.avatar} 
+                        alt={comment.author}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gray-600 flex items-center justify-center">
+                        <span className="text-white text-sm font-bold">
+                          {comment.author.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                    )}
+                  </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       <span className="text-white font-medium">{comment.author}</span>
@@ -753,10 +761,8 @@ export default function PerfilUsuario() {
           profileData={{
             name: userData.name,
             username: userData.username,
-            email: userData.email,
-            phone: userData.phone,
             profilePic: userData.photo,
-            bio: userData.bio,
+            bio: (userData as any).bio || "",
           }}
           onSave={(data) => {
             const newPhoto = data.profilePic || data.photo;

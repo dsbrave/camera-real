@@ -1,9 +1,9 @@
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/router";
+import { userStorage } from "../utils/userStorage";
 import { useUser } from "@/contexts/UserContext";
-import EditarPerfilModal from "../components/EditarPerfilModal";
 
 // Para evitar sobreposição do conteúdo pelo header fixo, adicione <div className="header-spacer" /> logo após o <Header /> em cada página principal.
 export default function Header() {
@@ -11,10 +11,8 @@ export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState<any>(null);
   const { userCredits, setUserCredits, refreshCredits } = useUser();
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
-  const [updateTrigger, setUpdateTrigger] = useState(0);
   const [isModel, setIsModel] = useState(false);
 
   // Verificar se estamos no cliente
@@ -30,59 +28,42 @@ export default function Header() {
   // Verificar se estamos na página de chat para manter logo pequena
   const isChatPage = router.pathname === "/chat-video";
 
-  // Debug: Log quando userData muda
-  useEffect(() => {
-    if (userData) {
-      console.log("Header - userData atualizado:", userData);
-    }
-  }, [userData]);
-
   // Função para testar a mudança de cor do ícone da carteira
   const handleTestWalletColor = (amount: number) => {
     setUserCredits(amount);
   };
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Verificar se o usuário está logado através do localStorage
     const checkLoginStatus = () => {
-      if (!isClient) return;
-
-      try {
-        const userStorage = localStorage.getItem("user");
-        if (userStorage) {
-          const user = JSON.parse(userStorage);
-          // Verificar se o objeto do usuário tem as propriedades necessárias E se está logado
-          if (user && typeof user === "object" && user.isLoggedIn === true) {
-            setIsLoggedIn(true); // Se temos dados do usuário E está logado
-            setUserData(user);
-            // Sincronizar créditos com o contexto global usando refreshCredits
-            refreshCredits();
-            setIsModel(!!user.isModel);
-          } else {
-            // Dados inválidos ou usuário não está logado
+      if (typeof window !== "undefined") {
+        const user = localStorage.getItem("user");
+        if (user) {
+          try {
+            const userData = JSON.parse(user);
+            setIsLoggedIn(true);
+            setUserData(userData);
+            setIsModel(userData.isModel || false);
+            if (userData.credits !== undefined) {
+              setUserCredits(userData.credits);
+            } else {
+              refreshCredits();
+            }
+          } catch (error) {
+            console.error("Erro ao fazer parse dos dados do usuário:", error);
+            localStorage.removeItem("user");
             setIsLoggedIn(false);
             setUserData(null);
-            if (!user.isLoggedIn) {
-              // Se o usuário existe mas não está logado, não remover os dados
-              // apenas marcar como deslogado
-            } else {
-              localStorage.removeItem("user"); // Limpar dados inválidos
-            }
+            setUserCredits(0);
+            setIsModel(false);
           }
         } else {
-          // Não há dados do usuário no localStorage
           setIsLoggedIn(false);
           setUserData(null);
-        }
-      } catch (error) {
-        console.error("Erro ao verificar login:", error);
-        setIsLoggedIn(false);
-        setUserData(null);
-        if (isClient) {
-          localStorage.removeItem("user"); // Limpar dados inválidos em caso de erro
+          setUserCredits(0);
+          setIsModel(false);
         }
       }
     };
@@ -92,7 +73,7 @@ export default function Header() {
 
       // Adicionar listener para mudanças no localStorage
       const handleStorageChange = (e: StorageEvent) => {
-        if (e.key === "user") {
+        if (e.key === 'user') {
           checkLoginStatus();
         }
       };
@@ -102,60 +83,78 @@ export default function Header() {
         checkLoginStatus();
       };
 
+      // Fechar dropdown quando clicar fora dele
+      const handleClickOutside = (event: MouseEvent) => {
+        if (
+          dropdownRef.current &&
+          !dropdownRef.current.contains(event.target as Node)
+        ) {
+          setIsDropdownOpen(false);
+        }
+      };
+
       window.addEventListener("storage", handleStorageChange);
       window.addEventListener("userDataUpdated", handleCustomStorageChange);
+      document.addEventListener("mousedown", handleClickOutside);
 
       return () => {
         window.removeEventListener("storage", handleStorageChange);
-        window.removeEventListener(
-          "userDataUpdated",
-          handleCustomStorageChange,
-        );
+        window.removeEventListener("userDataUpdated", handleCustomStorageChange);
+        document.removeEventListener("mousedown", handleClickOutside);
       };
     }
+  }, [isClient, refreshCredits]);
 
-    // Fechar dropdown quando clicar fora dele
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsDropdownOpen(false);
+  // Simplificar o segundo useEffect para apenas lidar com atualizações de perfil
+  useEffect(() => {
+    // Listener para mudanças nos dados do usuário (apenas para atualizações de perfil)
+    const handleUserDataUpdate = (event: any) => {
+      console.log('Header - Dados do usuário atualizados:', event.detail);
+      if (event.detail) {
+        setUserData(event.detail);
+        setIsLoggedIn(true);
+        setIsModel(event.detail.isModel || false);
+        if (event.detail.credits !== undefined) {
+          setUserCredits(event.detail.credits);
+        }
+      } else {
+        // Se detail é null, significa logout
+        console.log('Header - Logout detectado via evento');
+        setIsLoggedIn(false);
+        setUserData(null);
+        setUserCredits(0);
+        setIsModel(false);
       }
     };
 
-    if (isClient) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
+    window.addEventListener('userDataUpdated', handleUserDataUpdate);
+    
     return () => {
-      if (isClient) {
-        document.removeEventListener("mousedown", handleClickOutside);
-      }
+      window.removeEventListener('userDataUpdated', handleUserDataUpdate);
     };
-  }, [isClient, refreshCredits, updateTrigger]);
+  }, [setUserCredits]);
 
   const handleLogout = () => {
+    // Limpar localStorage primeiro
     if (typeof window !== "undefined") {
       localStorage.removeItem("user");
     }
+    
+    // Limpar todos os estados
     setIsLoggedIn(false);
     setUserData(null);
     setUserCredits(0);
+    setIsModel(false);
     setIsDropdownOpen(false);
     setIsMobileMenuOpen(false);
 
-    // Garantir redirecionamento para a página principal
-    router
-      .push("/")
-      .then(() => {
-        // Forçar reload da página para garantir que o estado seja limpo
-        window.location.reload();
-      })
-      .catch(() => {
-        // Fallback caso o router.push falhe
-        window.location.href = "/";
-      });
+    // Disparar evento personalizado para notificar outros componentes
+    window.dispatchEvent(
+      new CustomEvent("userDataUpdated", { detail: null })
+    );
+
+    // Redirecionamento simples sem reload forçado
+    router.push("/");
   };
 
   const closeMobileMenu = () => {
@@ -163,43 +162,18 @@ export default function Header() {
   };
 
   const handleUpdateProfile = (updatedData: any) => {
-    // Atualizar os dados do usuário no localStorage
-    if (typeof window !== "undefined") {
-      try {
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-          const parsedUser = JSON.parse(storedUser);
-          // Atualizar também a foto e garantir que a inicial aparece se não houver foto
-          const updatedUser = { ...parsedUser, ...updatedData };
-          localStorage.setItem("user", JSON.stringify(updatedUser));
-          setUserData(updatedUser);
-          setUpdateTrigger((prev) => prev + 1);
-          window.dispatchEvent(new CustomEvent("userDataUpdated"));
-          console.log("Perfil atualizado:", updatedUser); // Debug log
+    const success = userStorage.saveUserData(updatedData);
+    if (success) {
+      const updatedUser = userStorage.getUserData();
+      if (updatedUser) {
+        setUserData(updatedUser);
+        setIsLoggedIn(true);
+        setIsModel(updatedUser.isModel || false);
+        if (updatedUser.credits !== undefined) {
+          setUserCredits(updatedUser.credits);
         }
-      } catch (error) {
-        console.error("Erro ao atualizar dados do usuário:", error);
       }
     }
-  };
-
-  const openEditModal = () => {
-    // Garantir que temos os dados mais recentes do localStorage
-    if (typeof window !== "undefined") {
-      try {
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-          const parsedUser = JSON.parse(storedUser);
-          setUserData(parsedUser);
-        }
-      } catch (error) {
-        console.error("Erro ao carregar dados do usuário para edição:", error);
-      }
-    }
-
-    setIsEditModalOpen(true);
-    setIsDropdownOpen(false);
-    setIsMobileMenuOpen(false);
   };
 
   // Renderização condicional para evitar flash durante hidratação
@@ -390,7 +364,7 @@ export default function Header() {
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 >
                   <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center overflow-hidden">
-                    {userData?.photo ? (
+                    {userData?.photo && userData.photo !== "/images/default-avatar.png" ? (
                       <Image
                         src={userData.photo}
                         alt={userData.name || "Usuário"}
@@ -399,9 +373,11 @@ export default function Header() {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <span className="text-white text-sm font-bold">
-                        {userData?.name?.charAt(0) || "U"}
-                      </span>
+                      <div className="w-full h-full bg-gray-600 flex items-center justify-center">
+                        <span className="text-white text-sm font-bold">
+                          {userData?.name?.charAt(0).toUpperCase() || "U"}
+                        </span>
+                      </div>
                     )}
                   </div>
                   <span className="text-white font-medium">
@@ -412,31 +388,28 @@ export default function Header() {
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-48 py-2 bg-gray-900 rounded-lg shadow-xl z-50">
                     <Link
-                      href="/perfil-usuario"
-                      className="block px-4 py-2 text-white hover:bg-gray-800"
-                    >
-                      Perfil
-                    </Link>
-                    <Link
                       href="/carteira"
                       className="block px-4 py-2 text-white hover:bg-gray-800"
+                      onClick={() => setIsDropdownOpen(false)}
                     >
                       Carteira
+                    </Link>
+                    <Link
+                      href="/perfil-usuario"
+                      className="block px-4 py-2 text-white hover:bg-gray-800"
+                      onClick={() => setIsDropdownOpen(false)}
+                    >
+                      Perfil
                     </Link>
                     <Link
                       href={
                         userData?.isModel ? "/painel-modelo" : "/painel-usuario"
                       }
                       className="block px-4 py-2 text-white hover:bg-gray-800"
+                      onClick={() => setIsDropdownOpen(false)}
                     >
                       {userData?.isModel ? "Painel da Modelo" : "Meu Painel"}
                     </Link>
-                    <button
-                      onClick={openEditModal}
-                      className="block w-full text-left px-4 py-2 text-white hover:bg-gray-800"
-                    >
-                      Editar Perfil
-                    </button>
                     <hr className="my-1 border-gray-700" />
                     <button
                       onClick={handleLogout}
@@ -592,46 +565,23 @@ export default function Header() {
                     <span className="text-gray-300 text-sm">Créditos</span>
                   </Link>
 
-                  <div className="flex items-center space-x-3 mb-4">
-                    <div className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center overflow-hidden">
-                      {userData?.photo ? (
-                        <Image
-                          src={userData.photo}
-                          alt={userData.name || "Usuário"}
-                          width={40}
-                          height={40}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <span className="text-white text-sm font-bold">
-                          {userData?.name?.charAt(0) || "U"}
-                        </span>
-                      )}
-                    </div>
-                    <div>
-                      <p className="text-white font-medium break-words max-w-[120px] truncate">
-                        {userData?.name || "Usuário"}
-                      </p>
-                      <p className="text-gray-400 text-sm break-words max-w-[160px] truncate">
-                        {userData?.email}
-                      </p>
-                    </div>
-                  </div>
-
                   <Link
-                    href="/carteira"
+                    href={
+                      userData?.isModel ? "/painel-modelo" : "/painel-usuario"
+                    }
                     className="block py-2 text-white hover:text-[#F25790] transition-colors"
                     onClick={closeMobileMenu}
                   >
-                    Carteira
+                    {userData?.isModel ? "Painel da Modelo" : "Meu Painel"}
                   </Link>
 
-                  <button
-                    onClick={openEditModal}
-                    className="block w-full text-left py-2 text-white hover:text-[#F25790] transition-colors"
+                  <Link
+                    href="/perfil-usuario"
+                    className="block py-2 text-white hover:text-[#F25790] transition-colors"
+                    onClick={closeMobileMenu}
                   >
-                    Editar Perfil
-                  </button>
+                    Perfil
+                  </Link>
 
                   <hr className="my-2 border-gray-700" />
 
@@ -648,22 +598,8 @@ export default function Header() {
         )}
       </header>
 
-      {/* Profile Edit Modal */}
-      {isEditModalOpen && userData && (
-        <EditarPerfilModal
-          isOpen={isEditModalOpen}
-          onClose={() => setIsEditModalOpen(false)}
-          profileData={{
-            name: userData?.name || "",
-            username: userData?.username || "",
-            email: userData?.email || "",
-            phone: userData?.phone || "",
-            profilePic: userData?.photo || "",
-            bio: userData?.bio || "",
-          }}
-          onSave={handleUpdateProfile}
-        />
-      )}
+      {/* Configurações Modal */}
+      {/* Removido - modal não é mais usado no dropdown */}
     </>
   );
 }

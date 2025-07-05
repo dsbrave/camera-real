@@ -9,6 +9,8 @@ import ModelCard from "@/components/ModelCard";
 import UserPreferencesModal, {
   UserPreferences,
 } from "@/components/UserPreferencesModal";
+import ConfiguracoesModal from "@/components/ConfiguracoesModal";
+import EditarPerfilModal from "@/components/EditarPerfilModal";
 
 export default function PainelUsuario() {
   const router = useRouter();
@@ -27,6 +29,8 @@ export default function PainelUsuario() {
   const [favoriteModels, setFavoriteModels] = useState<any[]>([]);
   const [recentChats, setRecentChats] = useState<any[]>([]);
   const [showPreferencesModal, setShowPreferencesModal] = useState(false);
+  const [showConfigModal, setShowConfigModal] = useState(false);
+  const [showEditProfileModal, setShowEditProfileModal] = useState(false);
   const [userPreferences, setUserPreferences] =
     useState<UserPreferences | null>(null);
 
@@ -251,18 +255,20 @@ export default function PainelUsuario() {
                 <div className="bg-gray-900 rounded-xl p-4 sm:p-6 mb-6">
                   <div className="flex flex-col items-center text-center">
                     <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-700 flex items-center justify-center mb-4 overflow-hidden flex-shrink-0">
-                      {userData.photo ? (
+                      {userData.photo && userData.photo !== "/images/default-avatar.png" ? (
                         <Image
                           src={userData.photo}
-                          alt={userData.name || "Usuário"}
+                          alt="Foto de perfil"
                           width={96}
                           height={96}
                           className="w-full h-full object-cover rounded-full"
                         />
                       ) : (
-                        <span className="text-white text-xl sm:text-2xl font-bold">
-                          {userData.name?.charAt(0) || "U"}
-                        </span>
+                        <div className="w-full h-full bg-gray-600 flex items-center justify-center">
+                          <span className="text-white text-xl sm:text-2xl font-bold">
+                            {userData.name?.charAt(0).toUpperCase() || userData.username?.charAt(0).toUpperCase() || "U"}
+                          </span>
+                        </div>
                       )}
                     </div>
                     <h2 className="text-lg sm:text-xl font-bold text-white mb-1">
@@ -281,34 +287,23 @@ export default function PainelUsuario() {
                         <div className="flex items-center space-x-2">
                           <div className="relative w-4 h-4">
                             {/* Ícone branco padrão */}
-                            <svg
-                              width="16"
-                              height="16"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="w-4 h-4 text-white absolute top-0 left-0 group-hover:opacity-0 transition-opacity duration-200"
-                            >
-                              <path
-                                d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z"
-                                fill="white"
-                              />
-                            </svg>
+                            <Image
+                              src="/icons/action/account_balance_wallet.svg"
+                              alt="Créditos"
+                              width={16}
+                              height={16}
+                              className="w-4 h-4 filter brightness-0 invert absolute top-0 left-0 group-hover:opacity-0 transition-opacity duration-200"
+                            />
 
                             {/* Ícone rosa no hover */}
-                            <svg
-                              width="16"
-                              height="16"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="w-4 h-4 text-[#F25790] absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                            >
-                              <path
-                                d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z"
-                                fill="#F25790"
-                              />
-                            </svg>
+                            <Image
+                              src="/icons/action/account_balance_wallet.svg"
+                              alt="Créditos"
+                              width={16}
+                              height={16}
+                              className="w-4 h-4 absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                              style={{filter: 'brightness(0) saturate(100%) invert(25%) sepia(91%) saturate(7494%) hue-rotate(326deg) brightness(91%) contrast(96%)'}}
+                            />
                           </div>
                           <span className="text-white font-medium text-lg">
                             {userData?.credits || 200000}
@@ -323,19 +318,13 @@ export default function PainelUsuario() {
                         className="w-full py-3 bg-gradient-to-r from-[#F25790]/40 to-[#d93d75]/40 hover:from-[#F25790]/60 hover:to-[#d93d75]/60 text-white font-bold rounded-xl transition-all duration-300 shadow-[0_0_15px_rgba(242,87,144,0.4)] hover:shadow-[0_0_25px_rgba(242,87,144,0.6)] hover:scale-105 active:scale-95 border border-[#F25790]/30"
                       >
                         <div className="flex items-center justify-center gap-2">
-                          <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="w-4 h-4 text-white"
-                          >
-                            <path
-                              d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z"
-                              fill="white"
-                            />
-                          </svg>
+                          <Image
+                            src="/icons/action/account_balance_wallet.svg"
+                            alt="Comprar créditos"
+                            width={16}
+                            height={16}
+                            className="w-4 h-4 filter brightness-0 invert"
+                          />
                           <span>Comprar créditos</span>
                         </div>
                       </button>
@@ -351,19 +340,13 @@ export default function PainelUsuario() {
                       href="/carteira"
                       className="flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-800 transition-all group"
                     >
-                      <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-5 h-5 text-white"
-                      >
-                        <path
-                          d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z"
-                          fill="white"
-                        />
-                      </svg>
+                      <Image
+                        src="/icons/action/account_balance_wallet.svg"
+                        alt="Carteira"
+                        width={20}
+                        height={20}
+                        className="w-5 h-5 filter brightness-0 invert"
+                      />
                       <span className="group-hover:text-[#F25790] transition-colors">
                         Carteira
                       </span>
@@ -374,7 +357,7 @@ export default function PainelUsuario() {
                       className="flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-800 transition-all group"
                     >
                       <Image
-                        src="/icons/action/search.svg"
+                        src="/icons/action/explore.svg"
                         alt="Explorar"
                         width={20}
                         height={20}
@@ -386,26 +369,50 @@ export default function PainelUsuario() {
                     </Link>
 
                     <button
+                      onClick={() => setShowEditProfileModal(true)}
+                      className="w-full flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-800 transition-all group text-left"
+                    >
+                      <Image
+                        src="/icons/action/account_circle.svg"
+                        alt="Editar Perfil"
+                        width={20}
+                        height={20}
+                        className="w-5 h-5 filter brightness-0 invert"
+                      />
+                      <span className="group-hover:text-[#F25790] transition-colors">
+                        Editar Perfil
+                      </span>
+                    </button>
+
+                    <button
+                      onClick={() => setShowConfigModal(true)}
+                      className="w-full flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-800 transition-all group text-left"
+                    >
+                      <Image
+                        src="/icons/action/settings.svg"
+                        alt="Configurações"
+                        width={20}
+                        height={20}
+                        className="w-5 h-5 filter brightness-0 invert"
+                      />
+                      <span className="group-hover:text-[#F25790] transition-colors">
+                        Configurações
+                      </span>
+                    </button>
+
+                    <button
                       onClick={() => setShowPreferencesModal(true)}
                       className="w-full flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-800 transition-all group text-left"
                     >
-                      <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-5 h-5 text-white"
-                      >
-                        <path
-                          d="M12 15.5A3.5 3.5 0 0 1 8.5 12A3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97 0-.33-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.31-.61-.22l-2.49 1c-.52-.39-1.06-.73-1.69-.98l-.37-2.65A.506.506 0 0 0 14 2h-4c-.25 0-.46.18-.5.42l-.37 2.65c-.63.25-1.17.59-1.69.98l-2.49-1c-.22-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1 0 .33.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.06.74 1.69.99l.37 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.37-2.65c.63-.26 1.17-.59 1.69-.99l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.66Z"
-                          fill="white"
-                        />
-                      </svg>
+                      <Image
+                        src="/icons/action/tune.svg"
+                        alt="Preferências"
+                        width={20}
+                        height={20}
+                        className="w-5 h-5 filter brightness-0 invert"
+                      />
                       <span className="group-hover:text-[#F25790] transition-colors">
-                        {userPreferences
-                          ? "Editar Preferências"
-                          : "Configurar Preferências"}
+                        Editar Preferências
                       </span>
                     </button>
 
@@ -435,19 +442,13 @@ export default function PainelUsuario() {
                   <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-[#F25790] transition-all">
                     <div className="flex items-center justify-between mb-4">
                       <div className="p-3">
-                        <svg
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="w-6 h-6 text-white"
-                        >
-                          <path
-                            d="M21 18V19C21 20.1 20.1 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.9 3.89 3 5 3H19C20.1 3 21 3.9 21 5V6H12C10.89 6 10 6.9 10 8V16C10 17.1 10.89 18 12 18H21ZM12 16H22V8H12V16ZM16 13.5C15.17 13.5 14.5 12.83 14.5 12C14.5 11.17 15.17 10.5 16 10.5C16.83 10.5 17.5 11.17 17.5 12C17.5 12.83 16.83 13.5 16 13.5Z"
-                            fill="white"
-                          />
-                        </svg>
+                        <Image
+                          src="/icons/action/account_balance_wallet.svg"
+                          alt="Créditos"
+                          width={24}
+                          height={24}
+                          className="w-6 h-6 filter brightness-0 invert"
+                        />
                       </div>
                       <span className="text-3xl font-bold text-[#F25790]">
                         {userData.credits || 200000}
@@ -698,6 +699,35 @@ export default function PainelUsuario() {
         isOpen={showPreferencesModal}
         onClose={() => setShowPreferencesModal(false)}
         onSavePreferences={handleSavePreferences}
+      />
+
+      {/* Modal de Configurações */}
+      <ConfiguracoesModal
+        isOpen={showConfigModal}
+        onClose={() => setShowConfigModal(false)}
+      />
+
+      {/* Modal de Edição de Perfil */}
+      <EditarPerfilModal
+        isOpen={showEditProfileModal}
+        onClose={() => setShowEditProfileModal(false)}
+        profileData={{
+          name: userData.name,
+          username: userData.username,
+          profilePic: userData.photo,
+          bio: (userData as any).bio || ""
+        }}
+        onSave={(data) => {
+          const updatedUser = {
+            ...userData,
+            ...data
+          };
+          localStorage.setItem("user", JSON.stringify(updatedUser));
+          setUserData(updatedUser);
+          
+          // Disparar evento para atualizar outros componentes
+          window.dispatchEvent(new Event("userDataUpdated"));
+        }}
       />
     </>
   );
